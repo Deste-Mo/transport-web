@@ -81,6 +81,5 @@ export default {
       icon: "32px",
     },
   },
-  //E6E6E6 : white
   plugins: [],
 }
