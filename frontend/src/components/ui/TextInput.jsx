@@ -45,7 +45,7 @@ const TextInput = ({
         name={name}
         value={value}
         autoComplete="off"
-        required={false}
+        required={true}
       />
       {error && value && (
         <small className="text-small text-danger ">{errorMsg}</small>

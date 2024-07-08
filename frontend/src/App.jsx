@@ -52,17 +52,35 @@ export default function App() {
   }
 
 
+  // Register handler
+  const [inputs, setinputs] = useState({
+    firstname: "",
+    lastname: "",
+    usercin: "",
+    companynumber: "",
+    phone: "",
+    adress: "",
+    email: "",
+    bio: "",
+    profileimage: "",
+    accountid: 0,
+    password: "",
+    confirmPassword: ""
+});
+
+const { firstname, lastname, usercin, companynumber, phone, adress, email, bio, profileimage, accountid, password, confirmPassword } = inputs;
+
 
   return (
     <div className="App">
       <Routes>
         <Route path='/' element={!isAuth ? <Login setAuth={setAuth} /> : <Home setAuth={setAuth} Information={infosPersonnel}/>}></Route>
         <Route path='/login' element={!isAuth ? <Login setAuth={setAuth} getInformation={getInformation} /> : <Navigate to='/' />}></Route>
-        <Route path='/register' element={!isAuth ? <Register /> : <Navigate to='/login' />}></Route>
-        <Route path='/registerEntr' element={!isAuth ? <RegisterEntr /> : <Navigate to='/registerCam' />}></Route>
-        <Route path='/registerCam' element={!isAuth ? <RegisterCli /> : <Navigate to='/registerCli' />}></Route>
-        <Route path='/registerCli' element={!isAuth ? <RegisterCli /> : <Navigate to='/' />}></Route>
-        <Route path='/registerPass' element={!isAuth ? <RegisterPass /> : <Navigate to='/login' />}></Route>
+        <Route path='/register' element={!isAuth ? <Register inputs={inputs} setinputs={setinputs} /> : <Navigate to='/login' />}></Route>
+        <Route path='/registerEntr' element={!isAuth && accountid != 0 ? <RegisterEntr inputs={inputs} setinputs={setinputs} /> : <Navigate to='/register' />}></Route>
+        <Route path='/registerCam' element={!isAuth && accountid != 0 ? <RegisterCli inputs={inputs} setinputs={setinputs} /> : <Navigate to='/register' />}></Route>
+        <Route path='/registerCli' element={!isAuth && accountid != 0 ? <RegisterCli inputs={inputs} setinputs={setinputs} /> : <Navigate to='/register' />}></Route>
+        <Route path='/registerPass' element={!isAuth && accountid != 0 ? <RegisterPass inputs={inputs} setinputs={setinputs} setAuth={setAuth} getInformation={getInformation}/> : <Navigate to='/register' />}></Route>
       </Routes>
     </div>
   );
