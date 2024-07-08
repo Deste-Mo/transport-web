@@ -1,6 +1,6 @@
 // Main import
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 // Constants
 import { SERVERLINK } from './constants';
@@ -12,7 +12,6 @@ import RegisterCli from "./pages/Register/CamCLi/RegisterCli";
 import RegisterEntr from "./pages/Register/Entreprise/RegisterEntr";
 import RegisterPass from "./pages/Register/RegisterPass";
 import Home from './pages/Home';
-
 
 
 export default function App() {
@@ -50,8 +49,6 @@ export default function App() {
 
     setInfosPersonnel(parseRes);
   }
-
-
 
   return (
     <div className="App">
