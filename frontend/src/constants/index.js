@@ -1,0 +1,1 @@
+export const SERVERLINK = 'http://localhost:3000';
