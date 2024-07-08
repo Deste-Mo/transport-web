@@ -1,5 +1,6 @@
 import { Button, TextInput } from "../../../styles/components";
 import { SERVERLINK } from "../../../constants";
+import { useAuth } from "../../../context/AuthProvider";
 
 const RegisterPass = () => {
   const {inputs, setInputs, setAuth, getInformation} = useAuth();
@@ -19,20 +20,7 @@ const RegisterPass = () => {
     confirmPassword,
   } = inputs;
 
-  console.log({
-    firstname,
-    lastname,
-    usercin,
-    companynumber,
-    phone,
-    adress,
-    email,
-    bio,
-    profileimage,
-    accountid,
-    password,
-    confirmPassword,
-  });
+  console.log(inputs);
 
   const handleChange = (e) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });

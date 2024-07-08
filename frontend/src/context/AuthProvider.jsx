@@ -4,7 +4,7 @@ import {SERVERLINK} from "../constants/index.js";
 export const AuthContext = createContext({});
 
 const AuthProvider = ({ children }) => {
-    const [accountId, setAccountId] = useState(1);
+    // const [accountId, setAccountId] = useState(1);
     const [isAuth, setIsAuth] = useState(false);
     const [infosPersonnel, setInfosPersonnel] = useState([]);
 
@@ -12,14 +12,14 @@ const AuthProvider = ({ children }) => {
     const [inputs, setInputs] = useState({
         firstname: "",
         lastname: "",
-        usercin: "",
-        companynumber: "",
+        userCin: "",
+        companyNumber: "",
         phone: "",
         adress: "",
         email: "",
         bio: "",
-        profileimage: "",
-        accountid: 0,
+        profileImage: "",
+        accountId: 0,
         password: "",
         confirmPassword: "",
     });
@@ -27,14 +27,14 @@ const AuthProvider = ({ children }) => {
     const [errorData, setErrorData] = useState({
         firstname: true,
         lastname: true,
-        usercin: true,
-        companynumber: true,
+        userCin: true,
+        companyNumber: true,
         phone: true,
         adress: true,
         email: true,
         bio: true,
-        profileimage: true,
-        accountid: true,
+        profileImage: true,
+        accountId: true,
         password: true,
         confirmPassword: true
     })
@@ -76,8 +76,6 @@ const AuthProvider = ({ children }) => {
     return (
         <AuthContext.Provider
             value={{
-                accountId,
-                setAccountId,
                 isAuth,
                 setAuth,
                 infosPersonnel,

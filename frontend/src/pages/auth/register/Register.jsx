@@ -13,7 +13,7 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    switch (inputs.accountid) {
+    switch (inputs.accountId) {
       case "Camionneur":
         navigate("/registerCam");
         break;
@@ -44,7 +44,7 @@ const Register = () => {
             <div className="flex flex-col items-center justify-center">
               <SelectInput
                 title="Compte pour"
-                name="accountid"
+                name="accountId"
                 variant="fill"
                 options={accountTypes.map((accountType) => ({
                   option: accountType,

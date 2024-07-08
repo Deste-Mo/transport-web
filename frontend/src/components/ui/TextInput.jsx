@@ -14,7 +14,7 @@ const TextInput = ({
   size = globalInputVariants.size.default,
   rounded = globalInputVariants.rounded.default,
   isValid = true,
-  pattern = /./,
+  pattern = /^.+$/,
   block = false,
   onChange = () => {},
   onError = () => {},

@@ -6,7 +6,7 @@ export const FormContext = createContext({});
 const FormProvider = ({ children }) => {
   const [isSubmiting, setIsSubmiting] = useState(false);
   const [isOptionLoading, setIsOptionLoading] = useState(false);
-  const [fieldError, setFieldError] = useState({});
+  const [fieldError, setFieldError] = useState(false);
   const userRef = useRef(null);
 
   const checkFieldError = (errorData) => {
@@ -32,6 +32,7 @@ const FormProvider = ({ children }) => {
   const extractId = (param, index = 0) => {
     return param.split(":")[index];
   };
+
   const handleSelectionChange = (setFormData) => (selected, name) => {
     setFormData((prevForm) => ({ ...prevForm, [name]: selected }));
   };

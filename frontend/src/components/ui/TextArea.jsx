@@ -6,7 +6,6 @@ import { globalInputVariants } from "../../styles/globals.input";
 const TextArea = ({
   className = "",
   variant = "fill",
-  type = "text",
   placeholder = "Indication here ...",
   title = "",
   errorMsg = "",
@@ -36,8 +35,7 @@ const TextArea = ({
       <p className="text-black dark:text-white">{title}</p>
       <textarea
         ref={inputRef}
-        type={type}
-        className={`${globalInputVariants.constant} ${
+        className={`h-[128px] ${globalInputVariants.constant} ${
           globalInputVariants.rounded[rounded]
         } ${globalInputVariants.variant[variant]} ${
           globalInputVariants.size[size]
@@ -62,7 +60,6 @@ const TextArea = ({
 TextArea.propTypes = {
   className: PropTypes.string,
   variant: PropTypes.string,
-  type: PropTypes.string,
   placeholder: PropTypes.string,
   title: PropTypes.string,
   errorMsg: PropTypes.string,
