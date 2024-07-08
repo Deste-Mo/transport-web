@@ -1,4 +1,3 @@
-import{ Fragment } from 'react';
 import Button from '../components/ui/Button';
 
 const Home = ({ setAuth, Information }) => {
@@ -11,8 +10,7 @@ const Home = ({ setAuth, Information }) => {
     const user = Information;
 
     return (
-        <Fragment>
-            <div>
+            <section>
                 <h1>Home</h1>
                 <div>
                     <p>
@@ -21,8 +19,7 @@ const Home = ({ setAuth, Information }) => {
                     </p>
                 </div>
                 <Button className='p-1 w-[140px] h-[40px] rounded-[0px] mt-3 bg-danger-80' onClick={clearLocal}>Logout</Button>
-            </div>
-        </Fragment>
+            </section>
     )
 }
 

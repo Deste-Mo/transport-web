@@ -5,14 +5,15 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 // Constants
 import { SERVERLINK } from './constants';
 
-// Components
-import Login from "./pages/Login/Login";
-import Register from "./pages/Register/Register";
-import RegisterCli from "./pages/Register/CamCLi/RegisterCli";
-import RegisterEntr from "./pages/Register/Entreprise/RegisterEntr";
-import RegisterPass from "./pages/Register/RegisterPass";
-import Home from './pages/Home';
-import Labo from './pages/labo/Labo';
+import AuthLayout, {
+  Login,
+  Register,
+  RegisterCli,
+  RegisterEntr,
+  RegisterPass,
+} from './pages/auth/AuthLayout';
+
+import Home from './pages/home';
 
 
 export default function App() {
@@ -74,6 +75,11 @@ const { firstname, lastname, usercin, companynumber, phone, adress, email, bio, 
   return (
     <div className="App">
       <Routes>
+
+        <Route element={<AuthLayout/>}>
+        
+        </Route>
+        
         <Route path='/' element={!isAuth ? <Login setAuth={setAuth} /> : <Home setAuth={setAuth} Information={infosPersonnel}/>}></Route>
         <Route path='/login' element={!isAuth ? <Login setAuth={setAuth} getInformation={getInformation} /> : <Navigate to='/' />}></Route>
         <Route path='/register' element={!isAuth ? <Register inputs={inputs} setinputs={setinputs} /> : <Navigate to='/login' />}></Route>
@@ -84,7 +90,6 @@ const { firstname, lastname, usercin, companynumber, phone, adress, email, bio, 
 
         {/* Labo routes */}
         <Route path='/labo' element={<Labo/>}></Route>
-
       </Routes>
     </div>
   );
