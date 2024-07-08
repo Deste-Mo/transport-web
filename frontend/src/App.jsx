@@ -20,6 +20,7 @@ export default function App() {
   return (
     <div className="App">
       <Routes>
+        
         {/* Auth */}
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<Login/>}></Route>
