@@ -50,7 +50,7 @@ const Login = ({ setAuth, getInformation }) => {
             <div className="flex mt-5 ml-3 relative">
                 <span className="w-[5px] h-[100px] bg-maintr-100 mr-2"></span>
                 <div>
-                    <p className="text-subtitle-2 boxShadow text-gray-100">Connectez-vous pour commencer a utiliser</p><br />
+                    <p className="text-subtitle-2 boxShadow text-black-100">Connectez-vous pour commencer a utiliser</p><br />
                     <p className="text-subtitle-1">Media <span className="text-maintr-100">Trans</span></p>
                 </div>
             </div>
