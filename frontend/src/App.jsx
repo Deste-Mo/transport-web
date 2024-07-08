@@ -1,23 +1,86 @@
-import Button from "./components/ui/Button";
+// Main import
+import { useState, useEffect } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+
+// Constants
+import { SERVERLINK } from './constants';
+
+// Components
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
+import RegisterCli from "./pages/Register/CamCLi/RegisterCli";
+import RegisterEntr from "./pages/Register/Entreprise/RegisterEntr";
+import RegisterPass from "./pages/Register/RegisterPass";
+import Home from './pages/Home';
+
 
 export default function App() {
-  return (
-    <section className="flex flex-col gap-6 items-center justify-center">
-      <h1 className="w-full text-center text-title-1 font-bold underline">
-        Component Integrated
-      </h1>
-      <Button
-        onClick={() => window.open(
-          "https://github.com/NathanRael/React_components",
-          "_blank"
-        )}
-        variant="primary"
-      >
-        Learn how to use it
-      </Button>
-      <h1>
 
-      </h1>
-    </section>
+
+  const [isAuth, setisAuth] = useState(false);
+
+
+  const setAuth = boolean => {
+    setisAuth(boolean)
+  }
+
+  const [infosPersonnel, setInfosPersonnel] = useState([]);
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      setAuth(true);
+      getInformation();
+    }
+  }, []);
+
+  const getInformation = async () => {
+
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(SERVERLINK + "/api/auth/me", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "token": token
+      }
+    });
+
+    const parseRes = await response.json();
+
+    setInfosPersonnel(parseRes);
+  }
+
+
+  // Register handler
+  const [inputs, setinputs] = useState({
+    firstname: "",
+    lastname: "",
+    usercin: "",
+    companynumber: "",
+    phone: "",
+    adress: "",
+    email: "",
+    bio: "",
+    profileimage: "",
+    accountid: 0,
+    password: "",
+    confirmPassword: ""
+});
+
+const { firstname, lastname, usercin, companynumber, phone, adress, email, bio, profileimage, accountid, password, confirmPassword } = inputs;
+
+
+  return (
+    <div className="App">
+      <Routes>
+        <Route path='/' element={!isAuth ? <Login setAuth={setAuth} /> : <Home setAuth={setAuth} Information={infosPersonnel}/>}></Route>
+        <Route path='/login' element={!isAuth ? <Login setAuth={setAuth} getInformation={getInformation} /> : <Navigate to='/' />}></Route>
+        <Route path='/register' element={!isAuth ? <Register inputs={inputs} setinputs={setinputs} /> : <Navigate to='/login' />}></Route>
+        <Route path='/registerEntr' element={!isAuth && accountid != 0 ? <RegisterEntr inputs={inputs} setinputs={setinputs} /> : <Navigate to='/register' />}></Route>
+        <Route path='/registerCam' element={!isAuth && accountid != 0 ? <RegisterCli inputs={inputs} setinputs={setinputs} /> : <Navigate to='/register' />}></Route>
+        <Route path='/registerCli' element={!isAuth && accountid != 0 ? <RegisterCli inputs={inputs} setinputs={setinputs} /> : <Navigate to='/register' />}></Route>
+        <Route path='/registerPass' element={!isAuth && accountid != 0 ? <RegisterPass inputs={inputs} setinputs={setinputs} setAuth={setAuth} getInformation={getInformation}/> : <Navigate to='/register' />}></Route>
+      </Routes>
+    </div>
   );
 }

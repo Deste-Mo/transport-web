@@ -13,7 +13,6 @@ export default {
     },
     colors: {
       primary: {
-        // 100: "#1877f2",
         100: "#FBCB34",
         80: "#FBCB34cc", // 80% opacity
         60: "#FBCB3499", // 60% opacity
