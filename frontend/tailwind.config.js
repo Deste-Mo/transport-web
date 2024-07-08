@@ -78,7 +78,7 @@ export default {
       "small-1": "14px",
       "small-2": "12px",
       "small-3" : "10px",
-      icon: "32px",
+      icon: "24px",
     },
   },
   plugins: [],
