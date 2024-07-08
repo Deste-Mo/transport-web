@@ -23,12 +23,12 @@ export default {
       },
       dark: "#000",
       black: {
-        100: "#1e1e1e",
-        80: "#1e1e1ecc", // 80% opacity
-        60: "#1e1e1e99", // 60% opacity
-        40: "#1e1e1e66", // 40% opacity
-        20: "#1e1e1e33", // 20% opacity
-        10: "#1e1e1e1a", // 10% opacity
+        100: "#2E2B2B",
+        80: "#2E2B2Bcc", // 80% opacity
+        60: "#2E2B2B99", // 60% opacity
+        40: "#2E2B2B66", // 40% opacity
+        20: "#2E2B2B33", // 20% opacity
+        10: "#8888881a", // 10% opacity
       },
       white: {
         100: "#ffffff",

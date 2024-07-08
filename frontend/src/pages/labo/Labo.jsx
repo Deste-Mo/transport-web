@@ -91,7 +91,7 @@ const Labo = ({ setAuth, getInformation }) => {
           Vous n'avez pas encore de compte?
         </p>
         <Link to="/register">
-          <Button variant="secondary" block>Créer un compte</Button>
+          <Button block >Créer un compte</Button>
         </Link>
       </div>
     </section>

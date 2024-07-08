@@ -9,7 +9,7 @@ const globalButtonVariants = {
         primary: "bg-primary-100 hover:bg-primary-40 text-white  font-RobotoMd",
         danger: "bg-danger hover:bg-danger-60 text-white  font-RobotoMd",
         secondary:
-            "bg-black-10 text-primary hover:bg-primary hover:text-white  font-RobotoMd",
+            "bg-black-10 text-black-100 hover:bg-primary-20 hover:text-black-100  font-RobotoMd",
         success: "bg-success hover:bg-success-60 text-white  font-RobotoMd",
         outline:
             " border-1 border text-black dark:text-white font-RobotoMd hover:bg-white hover:text-black",

@@ -12,6 +12,7 @@ import RegisterCli from "./pages/Register/CamCLi/RegisterCli";
 import RegisterEntr from "./pages/Register/Entreprise/RegisterEntr";
 import RegisterPass from "./pages/Register/RegisterPass";
 import Home from './pages/Home';
+import Labo from './pages/labo/Labo';
 
 
 export default function App() {
@@ -80,6 +81,10 @@ const { firstname, lastname, usercin, companynumber, phone, adress, email, bio, 
         <Route path='/registerCam' element={!isAuth && accountid != 0 ? <RegisterCli inputs={inputs} setinputs={setinputs} /> : <Navigate to='/register' />}></Route>
         <Route path='/registerCli' element={!isAuth && accountid != 0 ? <RegisterCli inputs={inputs} setinputs={setinputs} /> : <Navigate to='/register' />}></Route>
         <Route path='/registerPass' element={!isAuth && accountid != 0 ? <RegisterPass inputs={inputs} setinputs={setinputs} setAuth={setAuth} getInformation={getInformation}/> : <Navigate to='/register' />}></Route>
+
+        {/* Labo routes */}
+        <Route path='/labo' element={<Labo/>}></Route>
+
       </Routes>
     </div>
   );
