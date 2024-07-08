@@ -1,26 +1,26 @@
 import { Link, Route, redirect, useNavigate } from "react-router-dom";
-import Button from "../../components/ui/Button";
+import { Button } from "../../../styles/components";
 import { useState } from "react";
-
-const Register = ({inputs, setinputs}) => {
-
+import {useAuth} from "../../../context/AuthProvider.jsx";
+const Register = () => {
+    const {inputs, setInputs} = useAuth();
+    
     const navigate = useNavigate();
-
     const [account, setAcc] = useState(1);
 
     const handleChange = (e) => {
         setAcc(e.target.value);
-        setinputs({ ...inputs, [e.target.name]: e.target.value });
+        setInputs({ ...inputs, [e.target.name]: e.target.value });
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if(account == 1) {
+        if(account === 1) {
             navigate('/registerCam');
-        }else if(account == 2){
+        }else if(account === 2){
             navigate('/registerEntr');
-        }else if(account == 3){
+        }else if(account === 3){
             navigate('/registerCli');
         }else{
             navigate('/register');

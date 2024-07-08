@@ -1,11 +1,17 @@
-import TextInput from "../../components/ui/TextInput";
-import Button from "../../components/ui/Button";
-import { Link } from "react-router-dom";
-import { SERVERLINK } from "../../constants";
+import {
+Button,
+TextInput
+} from "../../../styles/components";
+import {Link, useNavigate} from "react-router-dom";
+import { SERVERLINK } from "../../../constants";
 import { useState } from "react";
+import {useAuth} from "../../../context/AuthProvider.jsx";
 
-const Labo = ({ setAuth, getInformation }) => {
-  const [inputs, setinputs] = useState({
+const Login = () => {
+  const {setAuth, getInformation} = useAuth();
+  const navigate = useNavigate();
+  
+  const [inputs, setInputs] = useState({
     email: "",
     password: "",
   });
@@ -15,7 +21,7 @@ const Labo = ({ setAuth, getInformation }) => {
   const { email, password } = inputs;
 
   const inputsOnChange = (e) => {
-    setinputs({ ...inputs, [e.target.name]: e.target.value });
+    setInputs({ ...inputs, [e.target.name]: e.target.value });
     setError("");
   };
 
@@ -35,6 +41,7 @@ const Labo = ({ setAuth, getInformation }) => {
       localStorage.setItem("token", parseRs.token);
       setAuth(true);
       getInformation();
+      navigate("/");
     }
     setError(parseRs.error);
     console.log(parseRs);
@@ -54,6 +61,7 @@ const Labo = ({ setAuth, getInformation }) => {
           </p>
         </div>
       </div>
+      
       {/* Main Form */}
       <div className="flex flex-col items-center justify-center">
         <form
@@ -81,7 +89,7 @@ const Labo = ({ setAuth, getInformation }) => {
           <a href="\mdp" className="text-small-1 underline text-primary-100">
             Mot de passe oublié
           </a>
-          <Button block>Se connecter</Button>
+          <Button block >Se connecter</Button>
         </form>
       </div>
 
@@ -98,4 +106,4 @@ const Labo = ({ setAuth, getInformation }) => {
   );
 };
 
-export default Labo;
+export default Login;
