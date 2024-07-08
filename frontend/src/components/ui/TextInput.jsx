@@ -28,7 +28,7 @@ const TextInput = ({
   
   return (
     <div className={`flex  flex-col gap-2 ${block ? 'w-full' : globalInputVariants.width}`}>
-      <p className="text-black dark:text-white">{title}</p>
+      <p className="text-black-100 dark:text-white-100">{title}</p>
       <input
         ref={inputRef}
         type={type}
@@ -45,7 +45,6 @@ const TextInput = ({
         name={name}
         value={value}
         autoComplete="off"
-        required={true}
       />
       {error && value && (
         <small className="text-small text-danger ">{errorMsg}</small>
