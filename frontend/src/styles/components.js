@@ -12,9 +12,11 @@ import TextInput from "../components/ui/TextInput";
 import Toast from "../components/ui/Toast";
 import CheckBox from "../components/ui/Checkbox";
 import Switchbox from "../components/ui/Switchbox";
+import TextArea from "../components/ui/TextArea";
 
 export {
   AutoCompleteInput,
+  TextArea,
   Badge,
   Button,
   Empty,

@@ -11,14 +11,14 @@ const globalCheckboxVariants = {
         primary: `
     bg-white
     checked:border-0
-    checked:bg-primary
-    focus:ring-primary
-    border-primary
+    checked:bg-primary-100
+    focus:ring-primary-100
+    border-primary-100
     `,
 
         outline: `
     border
-    border-white
+    border-white-100
     checked:border-0
     
     `,
