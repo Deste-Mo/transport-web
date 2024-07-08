@@ -24,3 +24,9 @@
   src: url("../assets/font/Roboto-Bold.ttf");
 }
 
+
+@layer base {
+  .auth-section {
+    @apply px-16 py-6
+  }
+}

@@ -14,7 +14,7 @@ import AuthLayout, {
 } from "./pages/auth/AuthLayout";
 
 import Home from "./pages/Home";
-import Labo from "./pages/auth/login/Login";
+import Labo from "./pages/labo/Labo.jsx";
 
 export default function App() {
   return (

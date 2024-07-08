@@ -49,24 +49,15 @@ const Login = () => {
   };
 
   return (
-    <section className="w-fullscreen relative">
-      <div className="flex mt-5 ml-3 relative">
-        <span className="w-[5px] h-[100px] bg-maintr-100 mr-2"></span>
-        <div>
-          <p className="text-subtitle-2 boxShadow text-black-100">
-            Connectez-vous pour commencer a utiliser
-          </p>
-          <br />
-          <p className="text-subtitle-1 text-primary-100">
-            Media <span className="text-maintr-100">Trans</span>
-          </p>
-        </div>
+    <section className="w-fullscreen bg-gray-80 auth-section space-y-[128px] absolute top-[128px] left-1/2 -translate-x-1/2 ">
+      <div className="h1 text-subtitle-1 w-full text-center">
+        Connecter vous dans votre compte
+        <span className="text-primary-100"> Media Trans</span>
       </div>
-      
       {/* Main Form */}
       <div className="flex flex-col items-center justify-center">
         <form
-          className="flex flex-col  items-start justify-center gap-[32px] w-fit p-4 border border-black-20 rounded-xl"
+          className="flex flex-col  items-start justify-center gap-[32px] w-fit p-6 border border-black-20 rounded-xl"
           onSubmit={handleLogin}
         >
           <div className="flex flex-col items-center w-full justify-center gap-6">
@@ -90,18 +81,14 @@ const Login = () => {
           <a href="\mdp" className="text-small-1 underline text-primary-100">
             Mot de passe oublié
           </a>
-          <Button block >Se connecter</Button>
+          <Button block>Se connecter</Button>
+          <p className="text-small-1 text-black-80">
+            Pas encore de compte ?{" "}
+            <Link to="/register" className="text-primary-100 underline">
+              Créer un compte
+            </Link>
+          </p>
         </form>
-      </div>
-
-      {/*  */}
-      <div className="flex flex-col gap-10 rounded-xl border border-black-20 p-4 w-fit absolute top-[512px] right-[512px]">
-        <p className="text-lead text-center text-black-80 font-thin">
-          Vous n'avez pas encore de compte?
-        </p>
-        <Link to="/register">
-          <Button variant="secondary" block>Créer un compte</Button>
-        </Link>
       </div>
     </section>
   );

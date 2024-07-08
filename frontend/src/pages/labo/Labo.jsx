@@ -1,101 +1,142 @@
-import TextInput from "../../components/ui/TextInput";
-import Button from "../../components/ui/Button";
-import { Link } from "react-router-dom";
-import { SERVERLINK } from "../../constants";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button, SelectInput } from "../../styles/components";
+import { useAuth } from "../../context/AuthProvider.jsx";
+import { useForm } from "../../context/FormProvider.jsx";
 
-const Labo = ({ setAuth, getInformation }) => {
-  const [inputs, setinputs] = useState({
-    email: "",
-    password: "",
-  });
+const Labo = () => {
+  const { inputs, setInputs } = useAuth();
 
-  const [error, setError] = useState("");
-
-  const { email, password } = inputs;
-
-  const inputsOnChange = (e) => {
-    setinputs({ ...inputs, [e.target.name]: e.target.value });
-    setError("");
+  const handleChange = (e) => {
+    setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
 
-  const handleLogin = async (e) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    const body = { email, password };
-    const response = await fetch(SERVERLINK + "/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-
-    const parseRs = await response.json();
-
-    if (!parseRs.error) {
-      localStorage.setItem("token", parseRs.token);
-      setAuth(true);
-      getInformation();
-    }
-    setError(parseRs.error);
-    console.log(parseRs);
+    navigate("/registerPass");
   };
 
   return (
-    <section className="w-fullscreen relative">
-      <div className="flex mt-5 ml-3 relative">
+    <section className="w-fullscreen">
+      <div className="flex mt-5 ml-3">
         <span className="w-[5px] h-[100px] bg-maintr-100 mr-2"></span>
         <div>
-          <p className="text-subtitle-2 boxShadow text-black-100">
-            Connectez-vous pour commencer a utiliser
+          <p className="text-subtitle-2 boxShadow text-gray-100">
+            Creez votre compte
           </p>
           <br />
-          <p className="text-subtitle-1 text-primary-100">
+          <p className="text-subtitle-1">
             Media <span className="text-maintr-100">Trans</span>
           </p>
         </div>
       </div>
-      {/* Main Form */}
-      <div className="flex flex-col items-center justify-center">
-        <form
-          className="flex flex-col  items-start justify-center gap-[32px] w-fit p-4 border border-black-20 rounded-xl"
-          onSubmit={handleLogin}
-        >
-          <div className="flex flex-col items-center w-full justify-center gap-6">
-            <TextInput
-              title="Email"
-              type="text"
-              placeholder="Entrer votre email"
-              name="email"
-              id="email"
-              onChange={(e) => inputsOnChange(e)}
-            />
-            <TextInput
-              title="Mot de passe"
-              type="password"
-              placeholder="Entrer votre mot de passe"
-              name="password"
-              id="password"
-              onChange={(e) => inputsOnChange(e)}
-            />
+      <form
+        className="mt-[10px] flex justify-center items-center"
+        onSubmit={handleSubmit}
+      >
+        <div className="h-[400px] flex">
+          <div className="flex justify-arround items-center">
+            <div className="mr-[200px] text-subtitle-2">
+              <a className="bi bi-arrow-left py-2 px-4 bg-primary-60 rounded-[50%]"></a>
+            </div>
+            <div>
+              <h2 className="text-subtitle-3">Identification</h2>
+              <div className="mb-5 mt-3">
+                <label
+                  htmlFor="companynumber"
+                  className="text-small-1 text-gray-100"
+                >
+                  Company Number
+                </label>
+                <TextInput
+                  onChange={(e) => handleChange(e)}
+                  className="w-[275px]"
+                  type="text"
+                  placeholder=""
+                  name="companynumber"
+                  id="companynumber"
+                />
+              </div>
+              <div className="mb-5">
+                <label
+                  htmlFor="firstname"
+                  className="text-small-1 text-gray-100"
+                >
+                  Nom Entreprise
+                </label>
+                <TextInput
+                  onChange={(e) => handleChange(e)}
+                  className="w-[275px]"
+                  type="text"
+                  placeholder=""
+                  name="firstname"
+                  id="firstname"
+                />
+              </div>
+              <div className="mb-5">
+                <label htmlFor="email" className="text-small-1 text-gray-100">
+                  Email
+                </label>
+                <TextInput
+                  onChange={(e) => handleChange(e)}
+                  className="w-[275px]"
+                  type="text"
+                  placeholder=""
+                  name="email"
+                  id="email"
+                />
+              </div>
+              <div className="mb-5">
+                <label htmlFor="phone" className="text-small-1 text-gray-100">
+                  Telephone
+                </label>
+                <TextInput
+                  onChange={(e) => handleChange(e)}
+                  className="w-[275px]"
+                  type="text"
+                  placeholder=""
+                  name="phone"
+                  id="phone"
+                />
+              </div>
+            </div>
+            <div>
+              <div className="mb-5">
+                <label htmlFor="adress" className="text-small-1 text-gray-100">
+                  Address
+                </label>
+                <TextInput
+                  onChange={(e) => handleChange(e)}
+                  className="w-[275px]"
+                  type="text"
+                  placeholder=""
+                  name="adress"
+                  id="adress"
+                />
+              </div>
+              <div className="mb-5">
+                <label htmlFor="bio" className="text-small-1 text-gray-100">
+                  Description
+                </label>
+                <br />
+                <textarea
+                  onChange={(e) => handleChange(e)}
+                  className="w-[275px] bg-black-10 border-none outline-none p-2 rounded-[10px] text-gray-100"
+                  placeholder=""
+                  name="bio"
+                  id="bio"
+                />
+              </div>
+              <Button className="w-[275px] mt-5">Suivant</Button>
+            </div>
           </div>
-          <a href="\mdp" className="text-small-1 underline text-primary-100">
-            Mot de passe oublié
-          </a>
-          <Button block>Se connecter</Button>
-        </form>
-      </div>
-
-      {/*  */}
-      <div className="flex flex-col gap-10 rounded-xl border border-black-20 p-4 w-fit absolute top-[512px] right-[512px]">
-        <p className="text-lead text-center text-black-80 font-thin">
-          Vous n'avez pas encore de compte?
-        </p>
-        <Link to="/register">
-          <Button block >Créer un compte</Button>
-        </Link>
-      </div>
+        </div>
+      </form>
     </section>
   );
 };
+
 
 export default Labo;

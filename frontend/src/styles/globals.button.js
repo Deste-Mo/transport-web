@@ -14,7 +14,7 @@ const globalButtonVariants = {
         outline:
             " border-1 border text-black dark:text-white font-RobotoMd hover:bg-white hover:text-black",
         ghost: "text-white hover:bg-white hover:text-black",
-        disabled: "bg-white-40 text-white-40 border-none cursor-not-allowed",
+        disabled: "bg-black-40 text-black-100 border-none cursor-not-allowed",
         "modern-1":
             "relative border border-2 border-[#000] text-black  shadow-dark-1 bg-white active:shadow-none   active:translate-y-[4px] active:translate-x-[4px]   font-RobotoMd ",
         "modern-2":

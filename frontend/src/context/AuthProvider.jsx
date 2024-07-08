@@ -24,6 +24,21 @@ const AuthProvider = ({ children }) => {
         confirmPassword: "",
     });
 
+    const [errorData, setErrorData] = useState({
+        firstname: true,
+        lastname: true,
+        usercin: true,
+        companynumber: true,
+        phone: true,
+        adress: true,
+        email: true,
+        bio: true,
+        profileimage: true,
+        accountid: true,
+        password: true,
+        confirmPassword: true
+    })
+
     const setAuth = (boolean) => {
         setIsAuth(boolean);
     };
@@ -70,6 +85,8 @@ const AuthProvider = ({ children }) => {
                 getInformation,
                 inputs,
                 setInputs,
+                errorData,
+                setErrorData,
             }}
         >
             {children}
