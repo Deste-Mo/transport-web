@@ -2,7 +2,7 @@ import { Link, Route, redirect, useNavigate } from "react-router-dom";
 import Button from "../../components/ui/Button";
 import { useState } from "react";
 
-const Register = () => {
+const Register = ({inputs, setinputs}) => {
 
     const navigate = useNavigate();
 
@@ -10,9 +10,12 @@ const Register = () => {
 
     const handleChange = (e) => {
         setAcc(e.target.value);
+        setinputs({ ...inputs, [e.target.name]: e.target.value });
     }
 
-    const handleButton = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
         if(account == 1) {
             navigate('/registerCam');
         }else if(account == 2){
@@ -23,10 +26,6 @@ const Register = () => {
             navigate('/register');
         }
     }
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     setType(account)
-    // }
 
 
     return (
@@ -38,18 +37,18 @@ const Register = () => {
                     <p className="text-subtitle-1">Media <span className="text-maintr-100">Trans</span></p>
                 </div>
             </div>
-            <form className="flex justify-center items-center">
+            <form className="flex justify-center items-center" onSubmit={handleSubmit}>
                 <div className="bg-white-80 py-[40px] px-[20px] rounded-[20px]">
                     <div>
                         <span href="\mdp" className="text-lead text-black-100">Type de compte</span><br />
                         <span className="text-small-1 mt-5 block text-black-80">Compte pour</span>
-                        <select className="w-[275px] p-3 border-none mt-3 text-gray-100 outline-none bg-black-10 rounded-[10px]" onChange={handleChange}>
+                        <select className="w-[275px] p-3 border-none mt-3 text-gray-100 outline-none bg-black-10 rounded-[10px]" name="accountid" id="accountid" onChange={handleChange}>
                             <option value="1" className="p-3">Camionneur</option>
                             <option value="2" className="p-3">Entreprise</option>
                             <option value="3" className="p-3">Client</option>
                         </select>
                     </div>
-                    <Button className="w-[275px] mt-5" onClick={handleButton}>Creer un compte</Button>
+                    <Button className="w-[275px] mt-5">Creer un compte</Button>
                 </div>
                 <div className="ml-5 mt-[300px] bg-white-80 py-[40px] px-[20px] rounded-[20px]">
                     <div>
