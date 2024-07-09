@@ -15,6 +15,7 @@ import AuthLayout, {
 
 import Home from "./pages/Home";
 import Labo from "./pages/labo/Labo.jsx";
+import Notif from "./pages/notif/Notif_now.jsx";
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/registerCam" element={<RegisterCli/>}></Route>
           <Route path="/registerCli" element={<RegisterCli/>}></Route>
           <Route path="/registerPass" element={<RegisterPass/>}></Route>
+          <Route path='/notification' element={<Notif /> }></Route>
         </Route>
 
         <Route path="/" element={<Home/>}></Route>
