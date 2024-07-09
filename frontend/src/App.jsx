@@ -31,7 +31,11 @@ export default function App() {
           <Route path="/registerCam" element={<RegisterCli/>}></Route>
           <Route path="/registerCli" element={<RegisterCli/>}></Route>
           <Route path="/registerPass" element={<RegisterPass/>}></Route>
+
+          {/* Notification */}
           <Route path='/notification' element={<Notif /> }></Route>
+          <Route path='/notification1' element={<Notif /> }></Route>
+          
         </Route>
 
         <Route path="/" element={<Home/>}></Route>

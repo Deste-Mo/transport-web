@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Notif_list from './Notif_list';
+import { Link } from 'react-router-dom';
 
 const Notifications = () => {
     const [showPopup, setShowPopup] = useState(false);
@@ -43,10 +44,10 @@ const Notifications = () => {
                     </div>
                     <ul>
                         {notifications.map((notif) => (
-                            <li key={notif.id} className="py-3 px-4 flex items-start justify-between border-b border-gray-200 last:border-b-0">
+                            <Link to="id_notification" key={notif.id} className="py-3 px-4 flex items-start justify-between border-b border-gray-200 last:border-b-0">
                                 <Notif_list {...notif} />
                                 <span className={`h-2 w-2 rounded-full ${notif.online ? 'bg-green-500' : 'bg-gray-400'}`}></span>
-                            </li>
+                            </Link>
                         ))}
                     </ul>
                     <div className="bg-gray-100 px-4 py-3">

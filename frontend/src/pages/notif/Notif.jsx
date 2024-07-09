@@ -5,9 +5,6 @@ const Notif = () => {
   return (
     <div>
       <Headers />
-      <div>
-        {/* Main content here */}
-      </div>
     </div>
   );
 };
