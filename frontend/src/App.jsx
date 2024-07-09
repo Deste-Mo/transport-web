@@ -15,7 +15,8 @@ import AuthLayout, {
 
 import Home from "./pages/Home";
 import Labo from "./pages/labo/Labo.jsx";
-import Notif from "./pages/notif/Notif_now.jsx";
+// import Notif_now from "./pages/notif/Notif_now.jsx";
+import Notif from "./pages/notif/Notif.jsx";
 
 export default function App() {
   return (
