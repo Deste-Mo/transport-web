@@ -1,7 +1,6 @@
 import React from 'react';
-import Headers from './Headers';
 
-const Notif = ({ user, action, target, time }) => {
+const Notif_list = ({ user, action, target, time }) => {
     return (
         <div className="flex items-start">
             <div className="relative">
@@ -11,8 +10,8 @@ const Notif = ({ user, action, target, time }) => {
                     className="w-10 h-10 rounded-full object-cover"
                 />
             </div>
-            <div className="ml-3">
-                <p className="text-sm font-medium">
+            <div className="ml-3 flex-1">
+                <p className="text-sm font-medium leading-tight">
                     <span className="text-blue-600">{user}</span>{" "}
                     {action} dans{" "}
                     <span className="text-blue-600">{target}</span>
@@ -23,4 +22,4 @@ const Notif = ({ user, action, target, time }) => {
     );
 };
 
-export default Notif;
+export default Notif_list;

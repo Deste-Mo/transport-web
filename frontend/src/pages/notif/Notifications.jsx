@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import NotifList from './NotifList';
+import Notif_list from './Notif_list';
 
 const Notifications = () => {
     const [showPopup, setShowPopup] = useState(false);
@@ -32,12 +32,10 @@ const Notifications = () => {
                 <div className="absolute top-0 right-0 h-3 w-3 bg-red-500 rounded-full"></div>
             )}
 
-            {/* Icône de cloche avec gestion du clic */}
             <div className="text-secondary text-2xl cursor-pointer" onClick={togglePopup}>
                 <i className="bi bi-bell"></i>
             </div>
 
-            {/* Popup de notifications */}
             {showPopup && (
                 <div className="absolute top-12 right-0 w-72 bg-white shadow-md rounded-lg overflow-hidden z-20">
                     <div className="py-2 px-4 bg-primary text-white text-lg font-semibold">
@@ -46,7 +44,7 @@ const Notifications = () => {
                     <ul>
                         {notifications.map((notif) => (
                             <li key={notif.id} className="py-3 px-4 flex items-start justify-between border-b border-gray-200 last:border-b-0">
-                                <NotifList {...notif} />
+                                <Notif_list {...notif} />
                                 <span className={`h-2 w-2 rounded-full ${notif.online ? 'bg-green-500' : 'bg-gray-400'}`}></span>
                             </li>
                         ))}
