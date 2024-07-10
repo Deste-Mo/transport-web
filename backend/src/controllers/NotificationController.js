@@ -1,6 +1,6 @@
 import pool from '../db/connexion.js';
 
-// Nouvelle notification
+// Nouvelle publication ainsi que les notifications pour ses abonnée
 export const createNotification = async (req, res) => {
     try {
         const { userId, content } = req.body;
@@ -91,7 +91,7 @@ export const deleteNotification = async (req, res) => {
             return res.status(404).json({ error: "Notification non trouvée" });
         }
 
-        return res.status(204).send(); // Réponse 204 No Content pour indiquer succès sans contenu
+        return res.status(204).send();
 
     } catch (error) {
         console.error("Erreur lors de la suppression de la notification :", error.message);
@@ -150,4 +150,3 @@ export const markAllNotificationsAsViewed = async (req, res) => {
         return res.status(500).send("Erreur serveur : " + error.message);
     }
 };
-

@@ -1,27 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Notif_list from './Notif_list';
 import { Link } from 'react-router-dom';
 
 const Notifications = () => {
     const [showPopup, setShowPopup] = useState(false);
-    const [notifications, setNotifications] = useState([
-        { 
-            id: 1, 
-            user: "Ismael", 
-            action: "a réagi à votre publication", 
-            target: "Boum boum tam tam", 
-            time: "il y a quelques secondes",
-            online: true  //état en ligne
-        },
-        { 
-            id: 2, 
-            user: "TOLOJANAHARY Modeste", 
-            action: "a réagi à votre publication", 
-            target: "Boum boum tam tam", 
-            time: "il y a quelques secondes",
-            online: false  //état hors ligne
-        },
-    ]);
+    const [notifications, setNotifications] = useState([]);
+
+    useEffect(() => {
+        // Fetch notifications from backend
+        const fetchNotifications = async () => {
+            try {
+                const response = await fetch('/api/notifications'); 
+                const data = await response.json();
+                setNotifications(data);
+            } catch (error) {
+                console.error("Error fetching notifications:", error);
+            }
+        };
+
+        fetchNotifications();
+    }, []);
 
     const togglePopup = () => {
         setShowPopup(!showPopup);
