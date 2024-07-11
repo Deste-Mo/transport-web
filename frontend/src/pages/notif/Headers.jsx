@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Notifications from './Notifications'; // Importez le composant Notifications
+import Options from '../Parametre/Options';
 
 const Headers = () => {
+    const [activePopup, setActivePopup] = useState(null);
+
+    const handleTogglePopup = (popupName) => {
+        setActivePopup(popupName === activePopup ? null : popupName);
+    };
+
     return (
         <div className="bg-white shadow-md fixed w-full top-0 left-0 z-10">
             <div className="max-w-6xl mx-auto px-4">
@@ -42,18 +49,25 @@ const Headers = () => {
                     {/* Section droite */}
                     <div className="flex items-center space-x-4">
                         {/* Composant Notifications */}
-                        <Notifications />
+                        <Notifications togglePopup={() => handleTogglePopup('notifications')} />
 
                         <div className="text-secondary text-2xl cursor-pointer">
                             <i className="bi bi-chat-dots"></i>
                         </div>
-                        <div className="text-secondary text-2xl cursor-pointer">
-                            <i className="bi bi-caret-down"></i>
-                        </div>
                         
+                        <Options togglePopup={() => handleTogglePopup('options')} />
+
                     </div>
                 </div>
             </div>
+
+            {/* Overlay pour fermer les pop-ups */}
+            {activePopup && (
+                <div
+                    className="fixed inset-0 bg-black opacity-50 z-20"
+                    onClick={() => setActivePopup(null)}
+                ></div>
+            )}
         </div>
     );
 };
