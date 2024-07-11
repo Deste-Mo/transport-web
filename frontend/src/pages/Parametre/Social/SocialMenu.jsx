@@ -5,14 +5,14 @@ const SocialMenu = () => {
     return (
         <li className="py-3">
             Social
-            <ul className="ml-6">
+            <ul className="ml-6 w-[90%]">
                 <li className="py-2 flex items-center">
                     <i className="bi bi-calendar-event mr-2 text-gray-500"></i>
                     <Link to="/social/events" className="block text-sm text-gray-800 hover:text-blue-500">
                         Événements
                         <br />
-                        <span className="text-[gray] text-base">
-                            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                        <span className="text-[grey] text-base">
+                            Lorem ipsum dolor smet consectetur, adipisicing elit.
                         </span>
                     </Link>
                 </li>
