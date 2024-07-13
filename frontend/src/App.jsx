@@ -17,6 +17,7 @@ import Home from "./pages/Home";
 import Labo from "./pages/labo/Labo.jsx";
 // import Notif_now from "./pages/notif/Notif_now.jsx";
 import Notif from "./pages/notif/Notif.jsx";
+import Publication from "./pages/Parametre/Creates/Publication.jsx";
 
 export default function App() {
   return (
@@ -34,7 +35,7 @@ export default function App() {
 
           {/* Notification */}
           <Route path='/notification' element={<Notif /> }></Route>
-          <Route path='/notification1' element={<Notif /> }></Route>
+          <Route path='/publication' element={<Publication /> }></Route>
           
         </Route>
 

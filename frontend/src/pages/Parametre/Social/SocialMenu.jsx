@@ -32,7 +32,7 @@ const SocialMenu = () => {
                         Groupes
                         <br />
                         <span className="text-[gray] text-base">
-                            Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                            Lorem ipsum dolor sit amet consecteturkl, adipisicing elit.
                         </span>
                     </Link>
                 </li>

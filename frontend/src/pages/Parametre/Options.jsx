@@ -30,36 +30,41 @@ const Options = () => {
                         </ul>
                         <ul className="w-1/2 p-4 mr-[10px] bg-[whitesmoke] overflow-y-auto">
                             <li className="py-3">
+                                <div>
+                                    Créer
+                                </div>
+                            </li>
+                            <li className="py-3 ml-6">
                                 <Link to="/publication" className="block text-sm text-gray-800 hover:text-blue-500">
                                     <i className="bi bi-journal-text mr-2 text-gray-500"></i>
                                     Publication
                                 </Link>
                             </li>
-                            <li className="py-3">
+                            <li className="py-3 ml-6">
                                 <Link to="/story" className="block text-sm text-gray-800 hover:text-blue-500">
                                     <i className="bi bi-journal-bookmark mr-2 text-gray-500"></i>
                                     Story
                                 </Link>
                             </li>
-                            <li className="py-3">
+                            <li className="py-3 ml-6">
                                 <Link to="/reel" className="block text-sm text-gray-800 hover:text-blue-500">
                                     <i className="bi bi-film mr-2 text-gray-500"></i>
                                     Reel
                                 </Link>
                             </li>
-                            <li className="py-3">
+                            <li className="py-3 ml-6">
                                 <Link to="/highlight-event" className="block text-sm text-gray-800 hover:text-blue-500">
                                     <i className="bi bi-calendar-event mr-2 text-gray-500"></i>
                                     Événement marquant
                                 </Link>
                             </li>
-                            <li className="py-3">
+                            <li className="py-3 ml-6">
                                 <Link to="/page" className="block text-sm text-gray-800 hover:text-blue-500">
                                     <i className="bi bi-file-text mr-2 text-gray-500"></i>
                                     Page
                                 </Link>
                             </li>
-                            <li className="py-3">
+                            <li className="py-3 ml-6">
                                 <Link to="/ads" className="block text-sm text-gray-800 hover:text-blue-500">
                                     <i className="bi bi-megaphone mr-2 text-gray-500"></i>
                                     Publicité
