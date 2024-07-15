@@ -6,7 +6,7 @@ const SocialMenu = () => {
         <li className="py-3">
             Social
             <ul className="ml-6 w-[90%]">
-                <li className="py-2 flex items-center">
+                {/* <li className="py-2 flex items-center">
                     <i className="bi bi-calendar-event mr-2 text-gray-500"></i>
                     <Link to="/social/events" className="block text-sm text-gray-800 hover:text-blue-500">
                         Événements
@@ -15,10 +15,10 @@ const SocialMenu = () => {
                             Lorem ipsum dolor smet consectetur, adipisicing elit.
                         </span>
                     </Link>
-                </li>
+                </li> */}
                 <li className="py-2 flex items-center">
                     <i className="bi bi-people mr-2 text-gray-500"></i>
-                    <Link to="/social/friends" className="block text-sm text-gray-800 hover:text-blue-500">
+                    <Link to="/friends" className="block text-sm text-gray-800 hover:text-blue-500">
                         Amis
                         <br />
                         <span className="text-[gray] text-base">
@@ -26,7 +26,7 @@ const SocialMenu = () => {
                         </span>
                     </Link>
                 </li>
-                <li className="py-2 flex items-center">
+                {/* <li className="py-2 flex items-center">
                     <i className="bi bi-people mr-2 text-gray-500"></i>
                     <Link to="/social/groups" className="block text-sm text-gray-800 hover:text-blue-500">
                         Groupes
@@ -35,7 +35,7 @@ const SocialMenu = () => {
                             Lorem ipsum dolor sit amet consecteturkl, adipisicing elit.
                         </span>
                     </Link>
-                </li>
+                </li> */}
                 <li className="py-2 flex items-center">
                     <i className="bi bi-newspaper mr-2 text-gray-500"></i>
                     <Link to="/social/news-feed" className="block text-sm text-gray-800 hover:text-blue-500">

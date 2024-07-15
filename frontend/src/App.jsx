@@ -1,8 +1,6 @@
-// Main import
 import { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
-// Constants
 import { SERVERLINK } from "./constants";
 
 import AuthLayout, {
@@ -15,9 +13,12 @@ import AuthLayout, {
 
 import Home from "./pages/Home";
 import Labo from "./pages/labo/Labo.jsx";
-// import Notif_now from "./pages/notif/Notif_now.jsx";
+import Option_li from "./pages/Parametre/Option_li.jsx";
 import Notif from "./pages/notif/Notif.jsx";
-import Publication from "./pages/Parametre/Creates/Publication.jsx";
+import FriendOption from "./pages/Parametre/Social/friend/FriendOption.jsx";
+import Invitation from "./pages/Parametre/Social/friend/Invitation.jsx";
+import Suggestion from "./pages/Parametre/Social/friend/Suggestion.jsx";
+import All_friend from "./pages/Parametre/Social/friend/All_friend.jsx";
 
 export default function App() {
   return (
@@ -32,12 +33,18 @@ export default function App() {
           <Route path="/registerCam" element={<RegisterCli/>}></Route>
           <Route path="/registerCli" element={<RegisterCli/>}></Route>
           <Route path="/registerPass" element={<RegisterPass/>}></Route>
-
-          {/* Notification */}
-          <Route path='/notification' element={<Notif /> }></Route>
-          <Route path='/publication' element={<Publication /> }></Route>
-          
         </Route>
+
+        {/* Notification */}
+        <Route path='/notification' element={<Notif /> }></Route>
+        <Route path='/options' element={<Option_li /> }></Route>
+
+        {/* Option amis */}
+        <Route path="/friends" element={<FriendOption/>}></Route>
+        <Route path="/invitation" element={<Invitation/>}></Route>
+        <Route path="/suggestion" element={<Suggestion/>}></Route>
+        <Route path="/all-friends" element={<All_friend/>}></Route>
+        
 
         <Route path="/" element={<Home/>}></Route>
 
