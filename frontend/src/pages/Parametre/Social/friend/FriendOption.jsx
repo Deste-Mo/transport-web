@@ -49,7 +49,7 @@ const FriendOption = () => {
                         <div className="max-w-6xl mx-auto px-4 py-4 overflow-y-auto">
                             <ul className="space-y-2">
                                 <li className="flex items-center">
-                                    <Link to="/friends" className="flex items-center text-blue-600 hover:text-blue-800">
+                                    <Link to="/friends" className="flex items-center font-bold text-blue-600 hover:text-blue-800">
                                         <i className="bi bi-house-door mr-2"></i>
                                         <span>Accueil</span>
                                     </Link>
@@ -87,7 +87,7 @@ const FriendOption = () => {
                             </div>
                         </div>
                         <div className="max-w-6xl mx-auto px-4 py-4 overflow-y-auto">
-                            {loading ? (
+                            {/* {loading ? (
                                 <p>Loading...</p>
                             ) : (
                                 <>
@@ -121,7 +121,7 @@ const FriendOption = () => {
                                         ))}
                                     </ul>
                                 </>
-                            )}
+                            )} */}
                         </div>
                     </div>
                 </div>
