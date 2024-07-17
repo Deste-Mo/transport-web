@@ -1,0 +1,28 @@
+{
+    "files.associations": {
+        "*.embeddedhtml": "html",
+        "plyconfig.json": "jsonc"
+    },
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "192.168.0.110",
+            "port": 5432,
+            "askForPassword": true,
+            "driver": "PostgreSQL",
+            "name": "root",
+            "group": "postgres",
+            "database": "media_transport",
+            "username": "alexis"
+        },
+        {
+            "previewLimit": 50,
+            "server": "192.168.0.110",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "transport_database",
+            "database": "transport_database",
+            "username": "postgres"
+        }
+    ]
+}

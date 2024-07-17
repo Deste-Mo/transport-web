@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Initailization */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+/* Loading fonts */
+@font-face {
+  font-family: "RobotoMd";
+  src: url("../assets/font/Roboto-Medium.ttf");
+}
+
+@font-face {
+  font-family: "RobotoSm";
+  src: url("../assets/font/Roboto-Light.ttf");
+}
+
+@font-face {
+  font-family: "RobotoBold";
+  src: url("../assets/font/Roboto-Bold.ttf");
+}
+
+
+@layer base {
+  .auth-section {
+    @apply px-16 py-6
+  }
+
+  .app-container {
+    @apply px-4 py-4
+  }
+
+  .nav-page-container {
+    @apply px-4 py-0
+  }
+}
+
+@layer components {
+  .else {
+    align-self: start;
+  }
+
+  .mine {
+    align-self: end;
+  }
+}

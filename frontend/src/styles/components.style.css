@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components{
+   
+}
+
+@layer utilities{
+   .hide-scroll::-webkit-scrollbar{
+      @apply w-0
+   }
+}
