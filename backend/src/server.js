@@ -1,24 +1,11 @@
-import express from 'express';
-import cors from 'cors';
-import authRoutes from './routes/authRoutes.js';
-import messageRoutes from './routes/messageRoutes.js';
-import notificationsRoutes from './routes/notificationsRoutes.js';
-
+const express = require('express');
+const friendsRouter = require('./routes/friendsRouter');
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
-app.use(cors());
+app.use('/api/friends', friendsRouter); // Utilisation des routes définies dans friendsRouter
 
-app.use((req, res, next) => {
-    req.user = { id: 'some-user-id' }; 
-    next();
-});
-
-app.use('/api/auth', authRoutes);
-app.use('/api/messages', messageRoutes);
-app.use('/api/notifications', notificationsRoutes);
-
-app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
+app.listen(PORT, () => {
+    console.log(`Serveur backend en cours d'exécution sur le port ${PORT}`);
 });

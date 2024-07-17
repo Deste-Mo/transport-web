@@ -20,6 +20,7 @@ pool.query('SELECT NOW()', (err, res) => {
     pool.end(); 
 });
 
-
-backend/src/db/connexion.js
-backend/src/routes/notificationsRoutes.js
+// backend/src/db/.env
+// backend/src/db/connexion.js
+// backend/src/routes/friendsRouter.js
+// frontend/src/pages/Parametre/Social/friend/FriendOption.jsx

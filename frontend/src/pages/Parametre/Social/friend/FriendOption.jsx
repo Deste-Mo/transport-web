@@ -7,11 +7,12 @@ const FriendOption = () => {
     const [truckDriverInvitations, setTruckDriverInvitations] = useState([]);
     const [companyInvitations, setCompanyInvitations] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
         const fetchInvitations = async () => {
             try {
-                const response = await fetch('/api/friends'); // Assuming '/api/friends' is your endpoint
+                const response = await fetch('/api/friends'); // Endpoint pour les invitations
                 const invitations = await response.json();
                 const clients = invitations.filter(invitation => invitation.accountType === 'Client');
                 const truckDrivers = invitations.filter(invitation => invitation.accountType === 'Camionneur');
@@ -20,14 +21,25 @@ const FriendOption = () => {
                 setClientInvitations(clients);
                 setTruckDriverInvitations(truckDrivers);
                 setCompanyInvitations(companies);
-                setLoading(false);
             } catch (error) {
-                console.error('Error fetching data:', error);
+                console.error('Erreur lors de la récupération des invitations:', error);
+            } finally {
                 setLoading(false);
             }
         };
 
+        const fetchUsersByType = async (accountType) => {
+            try {
+                const response = await fetch(`/api/friends/users/${accountType}`); // Endpoint pour les utilisateurs par type de compte
+                const users = await response.json();
+                setUsers(users);
+            } catch (error) {
+                console.error('Erreur lors de la récupération des utilisateurs par type:', error);
+            }
+        };
+
         fetchInvitations();
+        fetchUsersByType('Client'); // Exemple : Récupérer les clients
     }, []);
 
     return (
@@ -87,41 +99,14 @@ const FriendOption = () => {
                             </div>
                         </div>
                         <div className="max-w-6xl mx-auto px-4 py-4 overflow-y-auto">
-                            {/* {loading ? (
-                                <p>Loading...</p>
-                            ) : (
-                                <>
-                                    <h2 className="text-xl font-semibold mb-4">Clients</h2>
-                                    <ul className="space-y-2">
-                                        {clientInvitations.map(invitation => (
-                                            <li key={invitation.userId} className="flex items-center">
-                                                <span className="mr-2">{invitation.firstName} {invitation.lastName}</span>
-                                                <span className="text-gray-500">({invitation.accountType})</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-
-                                    <h2 className="text-xl font-semibold mt-8 mb-4">Camionneurs</h2>
-                                    <ul className="space-y-2">
-                                        {truckDriverInvitations.map(invitation => (
-                                            <li key={invitation.userId} className="flex items-center">
-                                                <span className="mr-2">{invitation.firstName} {invitation.lastName}</span>
-                                                <span className="text-gray-500">({invitation.accountType})</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-
-                                    <h2 className="text-xl font-semibold mt-8 mb-4">Entreprises</h2>
-                                    <ul className="space-y-2">
-                                        {companyInvitations.map(invitation => (
-                                            <li key={invitation.userId} className="flex items-center">
-                                                <span className="mr-2">{invitation.firstName} {invitation.lastName}</span>
-                                                <span className="text-gray-500">({invitation.accountType})</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </>
-                            )} */}
+                            {/* Affichage de la liste des utilisateurs */}
+                            <ul className="space-y-2">
+                                {users.map(user => (
+                                    <li key={user.userId} className="flex items-center">
+                                        <span>{user.firstName} {user.lastName}</span>
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
                     </div>
                 </div>
