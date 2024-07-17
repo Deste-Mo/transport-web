@@ -67,7 +67,7 @@ const AppProvider = ({ children }) => {
 
         const allFriends = await conversationsRes.json();
 
-        console.log(allFriends.friends);
+        // console.log(allFriends.friends);
 
         setFriends(await allFriends.friends);
     }
@@ -84,7 +84,7 @@ const AppProvider = ({ children }) => {
 
         const count = await conversationsRes.json();
 
-        console.log(count.unread);
+        // console.log(count.unread);
 
         setCountUnread(await count.unread);
     }
@@ -101,7 +101,7 @@ const AppProvider = ({ children }) => {
 
         const count = await conversationsRes.json();
 
-        console.log(count.count);
+        // console.log(count.count);
 
         setCountFollow(await count.count);
     }

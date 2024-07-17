@@ -1,7 +1,7 @@
 import express from 'express';
 // protected route
 
-import {protectedRoute}  from '../middlewares/protectedRoute.js';
+import protectedRoute  from '../middlewares/protectedRoute.js';
 
 // image uploader
 import upload from '../middlewares/uploadMiddle.js';
@@ -24,7 +24,7 @@ const router = express.Router();
 
 // Route for the publications offers
 // router.post('/newpublication',protectedRoute,upload.single('imgUrl'),newPublication);
-router.post('/newpublication', protectedRoute,newPublication);
+router.post('/newpublication', protectedRoute,upload.single('imgUrl'),newPublication);
 router.get('/gethomepageoffers', protectedRoute, getHomePageOffersForUser);
 router.get('/suggestionoffers', suggestionOffers);
 router.get('/allofferforuser', protectedRoute,allOffersForUser);

@@ -15,31 +15,59 @@ import {createOffer,
 
 export const newPublication = async (req, res) => {
     try {
-
-        // const userId = req.user.userId;
-        const userId = 1;
-        // use a key table for obtaining the data in the request
-        const keys = ['title', 'capacity', 'depart','destination', 'scheduledDate', 'imgUrl'];
-        const formData = {};
-        keys.map(key => {
-            let value = req.body[key];
-
-            // verify if the imgUrl is not empty
-
-            if (key === 'imgUrl' && ( value === '' || value.trim() === '')) value = null;
-
-            formData[key] = value;
-        });
         
-        formData.userId = userId;
+        const userId = req.user.userid
 
-        //create a table with this object
-        const data = Object.values(formData);
+        const {
+            title,
+            description,
+            depart,
+            destination,
+            capacity,
+            scheduledDate
+        } = req.body;
+
+        // return res.json(req.file)
+
+        // return res.json(req.body);
+
+        var data = [];
+
+        if(req.file) {
+            const file = req.file.filename;
+
+            data = [
+                title,
+                capacity,
+                depart,
+                destination,
+                scheduledDate,
+                description,
+                file,
+                userId
+            ]
+        }else{
+            data = [
+                title,
+                capacity,
+                depart,
+                destination,
+                date,
+                desc,
+                userId
+            ]
+        }
+
+        // return res.json(data);
+
         // create a new offer
         const offer = await createOffer(data);
 
-        res.status(200).json(offer);
-
+        if (offer) {
+            return res.status(200).json({user: offer});
+        } else {
+            return res.status(400).json({error: "Erreur lors de la modification de l'image de profile"});
+        }
         
     } catch (error) {
 

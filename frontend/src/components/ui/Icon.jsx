@@ -20,6 +20,7 @@ const Icon = ({
 }) => {
   return (
     <button
+    type="button"
       disabled={disabled}
       className={` ${globalIconVariants.constant}  ${
         disabled ? globalIconVariants.variant.disabled : globalIconVariants.variant[variant]

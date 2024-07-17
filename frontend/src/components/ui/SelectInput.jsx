@@ -21,6 +21,7 @@ const SelectInput = ({
   block = false,
   onChange = () => {},
   onError = () => {},
+  value = "",
 }) => {
   const error = options.length <= 0 || loading;
   const [selectedItem, setSelectedItem] = useState(
@@ -149,6 +150,7 @@ SelectInput.propTypes = {
   block: PropTypes.bool,
   onChange: PropTypes.func,
   onError: PropTypes.func,
+  value: PropTypes.string,
 };
 
 export default SelectInput;

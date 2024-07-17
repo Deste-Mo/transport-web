@@ -11,10 +11,11 @@ const port = process.env.PORT || 3000;
 import authRoutes from './routes/authRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
+import offreRoute from './routes/offreRoute.js';
 
 import { app, server } from './socket/socket.js';
 
-const allowedOrigins = 'http://192.168.0.110:5173';
+const allowedOrigins = 'http://localhost:5173';
 const corsOptions = {
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {
@@ -40,6 +41,7 @@ app.use(cookieParser())
 app.use('/api/auth', authRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/offres', offreRoute);
 
 server.listen(port, () => {
     console.log(`server listening on port ${port}`);

@@ -17,6 +17,7 @@ const Button = ({
   disabled = false,
   block = false,
   loading = false,
+  type = ""
 }) => {
   const buttonClass = `${globalButtonVariants.constants} ${globalButtonVariants.radious[rounded]} ${
     block ? "w-full" : "w-fit"
@@ -27,7 +28,7 @@ const Button = ({
   } overflow-hidden select-none flex items-center justify-center text-base font-RobotoMd`;
 
   return (
-    <button disabled={disabled} onClick={onClick} className={buttonClass}>
+    <button disabled={disabled} type={type} onClick={onClick} className={buttonClass}>
       {loading ? (
         <i className="animate-spin bi-hourglass-top"></i>
       ) : icon ? (
@@ -55,6 +56,7 @@ Button.propTypes = {
   block: PropTypes.bool,
   loading: PropTypes.bool,
   disabled: PropTypes.bool,
+  type: PropTypes.string
 };
 
 export default Button;

@@ -1,10 +1,18 @@
-import pool from '../config/connexionDB.js';
+import pool from '../db/connexion.js';
 
 // create a new offer publication, this function takes a table for this parameter and returns the inserted values
 
- export const createOffer = async(data)=>{
+ export const createOffer = async (data) => {
 
-    const result = await pool.query('INSERT INTO Offer( title, capacity, depart, dest, scheduledDate, description, imgUrl, userId) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) returning *',data);
+    var query = ""
+    
+    data.length > 7 
+    ? 
+    query = "INSERT INTO Offer( title, capacity, depart, dest, scheduledDate, description, imgUrl, userId) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) returning *" 
+    : 
+    query = "INSERT INTO Offer( title, capacity, depart, dest, scheduledDate, description, userId) VALUES ($1,$2,$3,$4,$5,$6,$7) returning *";
+
+    const result = await pool.query(query,data);
 
     return result.rows[0];
 }
