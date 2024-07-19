@@ -1,0 +1,18 @@
+{
+    "sourceFile": "frontend/src/App.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1720428286257,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1720428286257,
+            "name": "Commit-0",
+            "content": "// Main import\nimport { useState, useEffect } from 'react';\nimport { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';\n\n// Constants\nimport { SERVERLINK } from './constants';\n\n// Components\nimport Login from \"./pages/Login/Login\";\nimport Register from \"./pages/Register/Register\";\nimport RegisterCli from \"./pages/Register/CamCLi/RegisterCli\";\nimport RegisterEntr from \"./pages/Register/Entreprise/RegisterEntr\";\nimport RegisterPass from \"./pages/Register/RegisterPass\";\nimport Home from './pages/Home';\n\n\n\nexport default function App() {\n\n\n  const [isAuth, setisAuth] = useState(false);\n\n\n  const setAuth = boolean => {\n    setisAuth(boolean)\n  }\n\n  const [infosPersonnel, setInfosPersonnel] = useState([]);\n\n  useEffect(() => {\n    if (localStorage.getItem(\"token\")) {\n      setAuth(true);\n      getInformation();\n    }\n  }, []);\n\n  const getInformation = async () => {\n\n    const token = localStorage.getItem(\"token\");\n\n    const response = await fetch(SERVERLINK + \"/api/auth/me\", {\n      method: \"GET\",\n      headers: {\n        \"Content-Type\": \"application/json\",\n        \"token\": token\n      }\n    });\n\n    const parseRes = await response.json();\n\n    setInfosPersonnel(parseRes);\n  }\n\n\n  // Register handler\n  const [inputs, setinputs] = useState({\n    firstname: \"\",\n    lastname: \"\",\n    usercin: \"\",\n    companynumber: \"\",\n    phone: \"\",\n    adress: \"\",\n    email: \"\",\n    bio: \"\",\n    profileimage: \"\",\n    accountid: 0,\n    password: \"\",\n    confirmPassword: \"\"\n});\n\nconst { firstname, lastname, usercin, companynumber, phone, adress, email, bio, profileimage, accountid, password, confirmPassword } = inputs;\n\n\n  return (\n    <div className=\"App\">\n      <Routes>\n        <Route path='/' element={!isAuth ? <Login setAuth={setAuth} /> : <Home setAuth={setAuth} Information={infosPersonnel}/>}></Route>\n        <Route path='/login' element={!isAuth ? <Login setAuth={setAuth} getInformation={getInformation} /> : <Navigate to='/' />}></Route>\n        <Route path='/register' element={!isAuth ? <Register inputs={inputs} setinputs={setinputs} /> : <Navigate to='/login' />}></Route>\n        <Route path='/registerEntr' element={!isAuth && accountid != 0 ? <RegisterEntr inputs={inputs} setinputs={setinputs} /> : <Navigate to='/register' />}></Route>\n        <Route path='/registerCam' element={!isAuth && accountid != 0 ? <RegisterCli inputs={inputs} setinputs={setinputs} /> : <Navigate to='/register' />}></Route>\n        <Route path='/registerCli' element={!isAuth && accountid != 0 ? <RegisterCli inputs={inputs} setinputs={setinputs} /> : <Navigate to='/register' />}></Route>\n        <Route path='/registerPass' element={!isAuth && accountid != 0 ? <RegisterPass inputs={inputs} setinputs={setinputs} setAuth={setAuth} getInformation={getInformation}/> : <Navigate to='/register' />}></Route>\n      </Routes>\n    </div>\n  );\n}\n"
+        }
+    ]
+}

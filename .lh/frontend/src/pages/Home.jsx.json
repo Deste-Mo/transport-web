@@ -1,0 +1,90 @@
+{
+    "sourceFile": "frontend/src/pages/Home.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 18,
+            "patches": [
+                {
+                    "date": 1720605275312,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1720605283575,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n import Button from \"../components/ui/Button\";\r\n import { useAuth } from \"../context/AuthProvider.jsx\";\r\n import { REGISRATION_STEPS, SERVERLINK } from \"../constants/index.js\";\r\n \r\n-const Home = ({ }) => {\r\n+const Home = () => {\r\n   const { personalInformation, logout, setRegistrationStep } = useAuth();\r\n   const user = personalInformation;\r\n \r\n   return (\r\n"
+                },
+                {
+                    "date": 1720605940224,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n import Button from \"../components/ui/Button\";\r\n import { useAuth } from \"../context/AuthProvider.jsx\";\r\n import { REGISRATION_STEPS, SERVERLINK } from \"../constants/index.js\";\r\n \r\n-const Home = () => {\r\n+const Home = ({ }) => {\r\n   const { personalInformation, logout, setRegistrationStep } = useAuth();\r\n   const user = personalInformation;\r\n \r\n   return (\r\n"
+                },
+                {
+                    "date": 1720605945738,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n import Button from \"../components/ui/Button\";\r\n import { useAuth } from \"../context/AuthProvider.jsx\";\r\n import { REGISRATION_STEPS, SERVERLINK } from \"../constants/index.js\";\r\n \r\n-const Home = ({ }) => {\r\n+const Home = ({) => {\r\n   const { personalInformation, logout, setRegistrationStep } = useAuth();\r\n   const user = personalInformation;\r\n \r\n   return (\r\n"
+                },
+                {
+                    "date": 1720605951729,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n import Button from \"../components/ui/Button\";\r\n import { useAuth } from \"../context/AuthProvider.jsx\";\r\n import { REGISRATION_STEPS, SERVERLINK } from \"../constants/index.js\";\r\n \r\n-const Home = ({) => {\r\n+const Home = ({ }) => {\r\n   const { personalInformation, logout, setRegistrationStep } = useAuth();\r\n   const user = personalInformation;\r\n \r\n   return (\r\n"
+                },
+                {
+                    "date": 1720607096500,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,12 +2,14 @@\n import Button from \"../components/ui/Button\";\r\n import { useAuth } from \"../context/AuthProvider.jsx\";\r\n import { REGISRATION_STEPS, SERVERLINK } from \"../constants/index.js\";\r\n \r\n-const Home = ({ }) => {\r\n+const Home = () => {\r\n   const { personalInformation, logout, setRegistrationStep } = useAuth();\r\n   const user = personalInformation;\r\n \r\n+  use\r\n+\r\n   return (\r\n     <section>\r\n       <h1>Home</h1>\r\n       <div>\r\n"
+                },
+                {
+                    "date": 1720607103487,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n const Home = () => {\r\n   const { personalInformation, logout, setRegistrationStep } = useAuth();\r\n   const user = personalInformation;\r\n \r\n-  use\r\n+  useEffect(() => )\r\n \r\n   return (\r\n     <section>\r\n       <h1>Home</h1>\r\n"
+                },
+                {
+                    "date": 1720607120805,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,34 @@\n+import { useEffect } from \"react\";\r\n+import Button from \"../components/ui/Button\";\r\n+import { useAuth } from \"../context/AuthProvider.jsx\";\r\n+import { REGISRATION_STEPS, SERVERLINK } from \"../constants/index.js\";\r\n+\r\n+const Home = () => {\r\n+  const { personalInformation, logout, setRegistrationStep } = useAuth();\r\n+  const user = get;\r\n+\r\n+  useEffect(() => {\r\n+\r\n+  })\r\n+\r\n+  return (\r\n+    <section>\r\n+      <h1>Home</h1>\r\n+      <div>\r\n+        <p>\r\n+          name: {user?.fullName} <br />\r\n+          account type: {user?.accounttype} <br />\r\n+          <img className=\"w-[200px] h-[200px]\" src={SERVERLINK + '/' + user?.profile} />\r\n+        </p>\r\n+      </div>\r\n+      <Button\r\n+        className=\"p-1 w-[140px] h-[40px] rounded-[0px] mt-3 bg-danger-80\"\r\n+        onClick={logout}\r\n+      >\r\n+        Logout\r\n+      </Button>\r\n+    </section>\r\n+  );\r\n+};\r\n+\r\n+export default Home;\r\n"
+                },
+                {
+                    "date": 1720607130947,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,12 +1,13 @@\n import { useEffect } from \"react\";\r\n import Button from \"../components/ui/Button\";\r\n import { useAuth } from \"../context/AuthProvider.jsx\";\r\n import { REGISRATION_STEPS, SERVERLINK } from \"../constants/index.js\";\r\n+import { getInformation } from \"../../../backend/src/models/users.js\";\r\n \r\n const Home = () => {\r\n   const { personalInformation, logout, setRegistrationStep } = useAuth();\r\n-  const user = get;\r\n+  const user = await getInformation();\r\n \r\n   useEffect(() => {\r\n \r\n   })\r\n@@ -31,36 +32,4 @@\n   );\r\n };\r\n \r\n export default Home;\r\n-import { useEffect } from \"react\";\r\n-import Button from \"../components/ui/Button\";\r\n-import { useAuth } from \"../context/AuthProvider.jsx\";\r\n-import { REGISRATION_STEPS, SERVERLINK } from \"../constants/index.js\";\r\n-\r\n-const Home = () => {\r\n-  const { personalInformation, logout, setRegistrationStep } = useAuth();\r\n-  const user = personalInformation;\r\n-\r\n-  useEffect(() => )\r\n-\r\n-  return (\r\n-    <section>\r\n-      <h1>Home</h1>\r\n-      <div>\r\n-        <p>\r\n-          name: {user?.fullName} <br />\r\n-          account type: {user?.accounttype} <br />\r\n-          <img className=\"w-[200px] h-[200px]\" src={SERVERLINK + '/' + user?.profile} />\r\n-        </p>\r\n-      </div>\r\n-      <Button\r\n-        className=\"p-1 w-[140px] h-[40px] rounded-[0px] mt-3 bg-danger-80\"\r\n-        onClick={logout}\r\n-      >\r\n-        Logout\r\n-      </Button>\r\n-    </section>\r\n-  );\r\n-};\r\n-\r\n-export default Home;\r\n"
+                },
+                {
+                    "date": 1720607137328,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n import { useAuth } from \"../context/AuthProvider.jsx\";\r\n import { REGISRATION_STEPS, SERVERLINK } from \"../constants/index.js\";\r\n import { getInformation } from \"../../../backend/src/models/users.js\";\r\n \r\n-const Home = () => {\r\n+const Home = async () => {\r\n   const { personalInformation, logout, setRegistrationStep } = useAuth();\r\n   const user = await getInformation();\r\n \r\n   useEffect(() => {\r\n"
+                },
+                {
+                    "date": 1720607147091,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import { useEffect } from \"react\";\r\n import Button from \"../components/ui/Button\";\r\n import { useAuth } from \"../context/AuthProvider.jsx\";\r\n import { REGISRATION_STEPS, SERVERLINK } from \"../constants/index.js\";\r\n-import { getInformation } from \"../../../backend/src/models/users.js\";\r\n+import {  } from \"../../../backend/src/models/users.js\";\r\n \r\n const Home = async () => {\r\n   const { personalInformation, logout, setRegistrationStep } = useAuth();\r\n   const user = await getInformation();\r\n"
+                },
+                {
+                    "date": 1720607152210,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,34 @@\n+import { useEffect } from \"react\";\r\n+import Button from \"../components/ui/Button\";\r\n+import { useAuth } from \"../context/AuthProvider.jsx\";\r\n+import { REGISRATION_STEPS, SERVERLINK } from \"../constants/index.js\";\r\n+\r\n+const Home = async () => {\r\n+  const { personalInformation, logout, setRegistrationStep, getInformation } = useAuth();\r\n+  const user = await getInformation();\r\n+\r\n+  useEffect(() => {\r\n+\r\n+  })\r\n+\r\n+  return (\r\n+    <section>\r\n+      <h1>Home</h1>\r\n+      <div>\r\n+        <p>\r\n+          name: {user?.fullName} <br />\r\n+          account type: {user?.accounttype} <br />\r\n+          <img className=\"w-[200px] h-[200px]\" src={SERVERLINK + '/' + user?.profile} />\r\n+        </p>\r\n+      </div>\r\n+      <Button\r\n+        className=\"p-1 w-[140px] h-[40px] rounded-[0px] mt-3 bg-danger-80\"\r\n+        onClick={logout}\r\n+      >\r\n+        Logout\r\n+      </Button>\r\n+    </section>\r\n+  );\r\n+};\r\n+\r\n+export default Home;\r\n"
+                },
+                {
+                    "date": 1720607159201,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,8 +4,9 @@\n import { REGISRATION_STEPS, SERVERLINK } from \"../constants/index.js\";\r\n \r\n const Home = async () => {\r\n   const { personalInformation, logout, setRegistrationStep, getInformation } = useAuth();\r\n+  \r\n   const user = await getInformation();\r\n \r\n   useEffect(() => {\r\n \r\n@@ -31,39 +32,4 @@\n   );\r\n };\r\n \r\n export default Home;\r\n-import { useEffect } from \"react\";\r\n-import Button from \"../components/ui/Button\";\r\n-import { useAuth } from \"../context/AuthProvider.jsx\";\r\n-import { REGISRATION_STEPS, SERVERLINK } from \"../constants/index.js\";\r\n-import {  } from \"../../../backend/src/models/users.js\";\r\n-\r\n-const Home = async () => {\r\n-  const { personalInformation, logout, setRegistrationStep } = useAuth();\r\n-  const user = await getInformation();\r\n-\r\n-  useEffect(() => {\r\n-\r\n-  })\r\n-\r\n-  return (\r\n-    <section>\r\n-      <h1>Home</h1>\r\n-      <div>\r\n-        <p>\r\n-          name: {user?.fullName} <br />\r\n-          account type: {user?.accounttype} <br />\r\n-          <img className=\"w-[200px] h-[200px]\" src={SERVERLINK + '/' + user?.profile} />\r\n-        </p>\r\n-      </div>\r\n-      <Button\r\n-        className=\"p-1 w-[140px] h-[40px] rounded-[0px] mt-3 bg-danger-80\"\r\n-        onClick={logout}\r\n-      >\r\n-        Logout\r\n-      </Button>\r\n-    </section>\r\n-  );\r\n-};\r\n-\r\n-export default Home;\r\n"
+                },
+                {
+                    "date": 1720607167259,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,13 +4,13 @@\n import { REGISRATION_STEPS, SERVERLINK } from \"../constants/index.js\";\r\n \r\n const Home = async () => {\r\n   const { personalInformation, logout, setRegistrationStep, getInformation } = useAuth();\r\n-  \r\n+\r\n   const user = await getInformation();\r\n \r\n   useEffect(() => {\r\n-\r\n+    \r\n   })\r\n \r\n   return (\r\n     <section>\r\n"
+                },
+                {
+                    "date": 1720607177713,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,12 +5,12 @@\n \r\n const Home = async () => {\r\n   const { personalInformation, logout, setRegistrationStep, getInformation } = useAuth();\r\n \r\n-  const user = await getInformation();\r\n+  \r\n \r\n   useEffect(() => {\r\n-    \r\n+\r\n   })\r\n \r\n   return (\r\n     <section>\r\n"
+                },
+                {
+                    "date": 1720607186525,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,14 +5,12 @@\n \r\n const Home = async () => {\r\n   const { personalInformation, logout, setRegistrationStep, getInformation } = useAuth();\r\n \r\n-  \r\n-\r\n   useEffect(() => {\r\n+    const user = await getInformation();\r\n+  }, [])\r\n \r\n-  })\r\n-\r\n   return (\r\n     <section>\r\n       <h1>Home</h1>\r\n       <div>\r\n"
+                },
+                {
+                    "date": 1720607192939,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n const Home = async () => {\r\n   const { personalInformation, logout, setRegistrationStep, getInformation } = useAuth();\r\n \r\n   useEffect(() => {\r\n-    const user = await getInformation();\r\n+    const user = getInformation();\r\n   }, [])\r\n \r\n   return (\r\n     <section>\r\n"
+                },
+                {
+                    "date": 1720607208249,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n import { REGISRATION_STEPS, SERVERLINK } from \"../constants/index.js\";\r\n \r\n const Home = async () => {\r\n   const { personalInformation, logout, setRegistrationStep, getInformation } = useAuth();\r\n-  \r\n+  c\r\n   useEffect(() => {\r\n     const user = getInformation();\r\n   }, [])\r\n \r\n"
+                },
+                {
+                    "date": 1720607215941,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,33 @@\n+import { useEffect } from \"react\";\r\n+import Button from \"../components/ui/Button\";\r\n+import { useAuth } from \"../context/AuthProvider.jsx\";\r\n+import { REGISRATION_STEPS, SERVERLINK } from \"../constants/index.js\";\r\n+\r\n+const Home = async () => {\r\n+  const { personalInformation, logout, setRegistrationStep, getInformation } = useAuth();\r\n+  const [user, setUser]\r\n+  useEffect(() => {\r\n+    const user = getInformation();\r\n+  }, [])\r\n+\r\n+  return (\r\n+    <section>\r\n+      <h1>Home</h1>\r\n+      <div>\r\n+        <p>\r\n+          name: {user?.fullName} <br />\r\n+          account type: {user?.accounttype} <br />\r\n+          <img className=\"w-[200px] h-[200px]\" src={SERVERLINK + '/' + user?.profile} />\r\n+        </p>\r\n+      </div>\r\n+      <Button\r\n+        className=\"p-1 w-[140px] h-[40px] rounded-[0px] mt-3 bg-danger-80\"\r\n+        onClick={logout}\r\n+      >\r\n+        Logout\r\n+      </Button>\r\n+    </section>\r\n+  );\r\n+};\r\n+\r\n+export default Home;\r\n"
+                }
+            ],
+            "date": 1720605275312,
+            "name": "Commit-0",
+            "content": "import { useEffect } from \"react\";\r\nimport Button from \"../components/ui/Button\";\r\nimport { useAuth } from \"../context/AuthProvider.jsx\";\r\nimport { REGISRATION_STEPS, SERVERLINK } from \"../constants/index.js\";\r\n\r\nconst Home = ({ }) => {\r\n  const { personalInformation, logout, setRegistrationStep } = useAuth();\r\n  const user = personalInformation;\r\n\r\n  return (\r\n    <section>\r\n      <h1>Home</h1>\r\n      <div>\r\n        <p>\r\n          name: {user?.fullName} <br />\r\n          account type: {user?.accounttype} <br />\r\n          <img className=\"w-[200px] h-[200px]\" src={SERVERLINK + '/' + user?.profile} />\r\n        </p>\r\n      </div>\r\n      <Button\r\n        className=\"p-1 w-[140px] h-[40px] rounded-[0px] mt-3 bg-danger-80\"\r\n        onClick={logout}\r\n      >\r\n        Logout\r\n      </Button>\r\n    </section>\r\n  );\r\n};\r\n\r\nexport default Home;\r\n"
+        }
+    ]
+}

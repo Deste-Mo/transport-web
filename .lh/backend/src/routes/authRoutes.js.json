@@ -1,0 +1,18 @@
+{
+    "sourceFile": "backend/src/routes/authRoutes.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1720605046490,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1720605046490,
+            "name": "Commit-0",
+            "content": "import express from 'express';\r\nimport { getMe, login, refreshAccessToken, signup, setImageProfile } from '../controllers/authController.js';\r\nimport protectedRoute from '../middlewares/protectedRoute.js';\r\nimport upload from '../middlewares/uploadMiddle.js';\r\n\r\nconst router = express.Router();\r\n\r\n\r\nrouter.get('/me', protectedRoute, getMe);\r\n\r\nrouter.post('/signup',signup)\r\n\r\nrouter.post('/login',login)\r\n\r\nrouter.post('/token', refreshAccessToken)\r\n\r\nrouter.post('/profileImage', protectedRoute, upload.single('profileImage'), setImageProfile)\r\n\r\nexport default router;"
+        }
+    ]
+}
