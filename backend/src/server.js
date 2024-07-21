@@ -7,7 +7,6 @@ dotenv.config();
 
 const port = process.env.PORT || 3000;
 
-
 import authRoutes from './routes/authRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
@@ -15,7 +14,7 @@ import offreRoute from './routes/offreRoute.js';
 
 import { app, server } from './socket/socket.js';
 
-const allowedOrigins = 'http://localhost:5173';
+const allowedOrigins = [process.env.FRONTEND_HOST];
 const corsOptions = {
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {

@@ -1,5 +1,5 @@
 import Button from "../ui/Button";
-import {SavePublication} from "./SavePublication";
+import SavePublication from "./SavePublication";
 
 export const Offer = ({className, fullName, accountType, postedTime, title, price}) => {
     return (

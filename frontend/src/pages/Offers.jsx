@@ -13,7 +13,7 @@ const Offers = () => {
             <ForAll name="Offres" icon="bi bi-bag" sticky/>
             <div className="flex flex-col items-center justify-center gap-4 w-full">
                 {
-                    [1,2,3,4,5,6].map((item) => (<CardOffer key={item} />))
+                    [1,2,3,4,5,6].map((item) => (<CardOffer />))
                 }
             </div>
         </section>

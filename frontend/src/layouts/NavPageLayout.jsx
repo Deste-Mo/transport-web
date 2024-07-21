@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import { ProfilLeft } from "../components/pages/ProfilLeft.jsx";
 import { ForAll } from "../components/pages/ForAll.jsx";
 import RecentlyFriends from "../components/pages/RecentlyFriends.jsx";
-import { SavePublication } from "../components/pages/SavePublication.jsx";
+import SavePublication from "../components/pages/SavePublication.jsx";
 import { Notification } from "../components/pages/Notification.jsx";
 import { useAuth } from "../context/AuthProvider.jsx";
 import { SERVERLINK } from "../constants/index.js";
@@ -13,11 +13,15 @@ const NavPageLayout = () => {
     const { personalInformation } = useAuth();
     const user = personalInformation;
 
-    const { friends, handleFriends } = useApp();
 
-    useEffect(() => {
-        handleFriends()
-    }, [friends, handleFriends]);
+    const { friends, handleFriends, handleOfferSuggestion, suggestions } = useApp();
+
+/*    useEffect(() => {
+        handleFriends();
+        handleOfferSuggestion();
+
+        // console.log(suggestions);
+    }, [friends, handleFriends]);*/
 
     return (
         <section className="flex items-start  w-full justify-between nav-page-container gap-4">
@@ -39,8 +43,11 @@ const NavPageLayout = () => {
                 </div>
                 <div className="flex flex-col gap-3">
                     <ForAll name="Publication Souvegarder" icon="bi bi-person" />
-                    <SavePublication name="Camion" price="30000Ar" lieu="Fianarantsoa" etat="disponible" />
-                    <SavePublication name="Camion" price="30000Ar" lieu="Fianarantsoa" etat="disponible" />
+                    {
+                        suggestions.map(suggestion =>
+                            (<SavePublication key={suggestion.offerid} capacity={suggestion.capacity} title={suggestion.title} depart={suggestion.depart} destination={suggestion.dest} scheduleddate={suggestion.scheduleddate} />)
+                        )
+                    }
                 </div>
             </div>
 
@@ -64,8 +71,8 @@ const NavPageLayout = () => {
                 <div className="flex flex-col gap-3">
                     <ForAll name="Sugfestions d'offres / Publications" icon="bi bi-robot" />
                     {
-                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(item =>
-                            (<SavePublication key={item} name="Camion" price="30000Ar" lieu="Fianarantsoa" etat="disponible" />)
+                        suggestions.map(suggestion => 
+                            (<SavePublication key={suggestion.offerid} capacity={suggestion.capacity} title={suggestion.title} depart={suggestion.depart} destination={suggestion.dest} scheduleddate={suggestion.sheduleddate} />)
                         )
                     }
                 </div>

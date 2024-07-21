@@ -16,7 +16,7 @@ const MyNavLink = ({ icon, name, number, path, active = false }) => {
             <span className="text-base">{name}</span>
             {
                 number > 0 ?
-                    <span className="absolute top-0 right-3 w-5 h-5 bg-danger-100 rounded-[50%] text-white-100 flex items-center justify-center">{number}</span>
+                    <span className="absolute top-0 right-3 w-5 h-5 bg-danger-100 rounded-[50%] text-black-100 flex items-center justify-center">{number}</span>
                     :
                     null
             }

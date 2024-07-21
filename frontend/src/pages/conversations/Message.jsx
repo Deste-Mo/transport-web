@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { TextArea, TextInput } from "../../styles/components";
+import { TextArea } from "../../styles/components";
 import Mess from "../../components/conversations/message";
 import { useAuth } from "../../context/AuthProvider";
 import { useApp } from "../../context/AppPorvider";
@@ -20,7 +20,7 @@ const Messages = () => {
     const endOfMessagesRef = useRef(null);
 
     const scrollToBottom = () => {
-        endOfMessagesRef.current?.scrollIntoView({behavior: 'hard'});
+        endOfMessagesRef.current?.scrollIntoView({behavior: 'smooth'});
     };
 
     const handleClick = () => {
@@ -69,11 +69,13 @@ const Messages = () => {
         handleShown();
 
         socket?.on("newMessage", (newMessage) => {
-            setMessages([...messages, newMessage])
+            setMessages([...messages, newMessage]);
             handleCountUnread();
+            // handleShowConversation();
         });
 
-        return () => socket?.off("newMessage")
+        return () => socket?.off("newMessage");
+        
     }, [messages, socket]);
 
 

@@ -50,7 +50,6 @@ export default function App() {
                 {/* App */}
                 <Route element={<AppLayout/>}>
                     
-
                     {/*Profile*/}
                     <Route path="profile/" element={<Profile/>}/>
                     <Route path="profile/presentation" element={<ProfilePresentation/>}/>

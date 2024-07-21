@@ -27,6 +27,8 @@ const AppProvider = ({ children }) => {
 
     const [messages, setMessages] = useState([]);
 
+    const [suggestions, setSuggestions] = useState([]); 
+
     const handleShowConversation = async () => {
 
         const conversationsRes = await fetch(SERVERLINK + '/api/messages/conversation', {
@@ -106,6 +108,22 @@ const AppProvider = ({ children }) => {
         setCountFollow(await count.count);
     }
 
+    const handleOfferSuggestion = async () => {
+
+        const sugRes = await fetch(SERVERLINK + '/api/offres/suggestionoffers', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+
+        const suggestionsRes = await sugRes.json();
+
+        // console.log(suggestionsRes.suggestions);
+
+        setSuggestions(await suggestionsRes.suggestions);
+    }
+
 
     return <AppContext.Provider value={{
         userToChat,
@@ -126,7 +144,10 @@ const AppProvider = ({ children }) => {
         handleCountUnread,
         setCountFollow,
         countFollow,
-        handleCountFollow
+        handleCountFollow,
+        suggestions,
+        setSuggestions,
+        handleOfferSuggestion
     }}>
         {children}
     </AppContext.Provider>

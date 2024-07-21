@@ -1,4 +1,5 @@
-import {createOffer,
+import {
+    createOffer,
     getAllOfferById,
     deleteOfferById,
     updateOffer,
@@ -9,13 +10,14 @@ import {createOffer,
     expiredOffer,
     latestOffers,
     getHomepageOffers,
-    getOfferByOfferId} from '../models/offreModel.js';
+    getOfferByOfferId
+} from '../models/offreModel.js';
 
 // handle the offer publication and register the offer for a user in the profile page
 
 export const newPublication = async (req, res) => {
     try {
-        
+
         const userId = req.user.userid
 
         const {
@@ -24,16 +26,16 @@ export const newPublication = async (req, res) => {
             depart,
             destination,
             capacity,
-            scheduledDate
+            scheduleddate
         } = req.body;
 
         // return res.json(req.file)
 
-        // return res.json(req.body);
+        // return res.json({body: req.body });
 
         var data = [];
 
-        if(req.file) {
+        if (req.file) {
             const file = req.file.filename;
 
             data = [
@@ -41,19 +43,19 @@ export const newPublication = async (req, res) => {
                 capacity,
                 depart,
                 destination,
-                scheduledDate,
+                scheduleddate,
                 description,
                 file,
                 userId
             ]
-        }else{
+        } else {
             data = [
                 title,
                 capacity,
                 depart,
                 destination,
-                date,
-                desc,
+                scheduleddate,
+                description,
                 userId
             ]
         }
@@ -64,18 +66,18 @@ export const newPublication = async (req, res) => {
         const offer = await createOffer(data);
 
         if (offer) {
-            return res.status(200).json({user: offer});
+            return res.status(200).json({ user: offer });
         } else {
-            return res.status(400).json({error: "Erreur lors de la modification de l'image de profile"});
+            return res.status(400).json({ error: "Erreur lors de la modification de l'image de profile" });
         }
-        
+
     } catch (error) {
 
         console.error(error);
-        res.status(500).json({error: error.message});
-        
+        res.status(500).json({ error: error.message });
+
     }
-    
+
 };
 
 
@@ -90,11 +92,11 @@ export const getHomePageOffersForUser = async (req, res) => {
         const result = await getHomepageOffers(userId);
 
         return res.status(200).json(result);
-        
+
     } catch (error) {
         console.error(error);
-        res.status(500).json({error: error.message});
-        
+        res.status(500).json({ error: error.message });
+
     }
 }
 
@@ -103,12 +105,14 @@ export const getHomePageOffersForUser = async (req, res) => {
 export const suggestionOffers = async (req, res) => {
 
     try {
-         const result = await latestOffers();
+        const result = await latestOffers();
 
-         return res.status(200).json({result});
+        if (!result) return result.json({ error: "No offer availaible" })
+
+        return res.status(200).json({ suggestions: result });
     } catch (error) {
         console.error(error);
-        res.status(500).json({error: error.message});
+        res.status(500).json({ error: error.message });
     }
 }
 
@@ -117,36 +121,36 @@ export const suggestionOffers = async (req, res) => {
 export const allOffersForUser = async (req, res) => {
 
     const userId = req.user.userId;
-     try {
+    try {
 
         const allOffers = await getAllOfferById(userId);
 
         return res.status(200).json(allOffers);
-        
-     } catch (error) {
+
+    } catch (error) {
         console.error(error);
-        res.status(500).json({error: error.message});
-     }
+        res.status(500).json({ error: error.message });
+    }
 
 }
 
 // delete offer by offerId
 
-export const deleteOfferForUser = async(req, res) => {
+export const deleteOfferForUser = async (req, res) => {
 
     try {
         const offerId = req.params.offerId;
-        
+
         const result = await deleteOfferById(offerId);
 
-        if(result) {
-            res.status(200).json({message: "Publication d'offre supprimée"});
-        }else{
-            res.status(404).json({message: "Erreur, publication non trouvée"})
+        if (result) {
+            res.status(200).json({ message: "Publication d'offre supprimée" });
+        } else {
+            res.status(404).json({ message: "Erreur, publication non trouvée" })
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({error: error.message});
+        res.status(500).json({ error: error.message });
     }
 }
 
@@ -158,55 +162,55 @@ export const updateOfferForUser = async (req, res) => {
         const offerId = req.params.offerId;
         // use a key table for obtaining the data in the request
 
-        const keys = ['title', 'capacity', 'depart','destination', 'scheduledDate', 'imgUrl'];
-        const formData ={};
+        const keys = ['title', 'capacity', 'depart', 'destination', 'scheduleddate', 'imgUrl'];
+        const formData = {};
         keys.map(key => {
             let value = req.body[key];
 
             // verify if the imgUrl is not empty
-            if (key === 'imgUrl' && ( value === '' || value.trim() === '')) value = null;
+            if (key === 'imgUrl' && (value === '' || value.trim() === '')) value = null;
 
             formData[key] = value;
         });
-        
-       formData.offerId = offerId;
-       // create a table with this object
-       const data = Object.values(formData);
+
+        formData.offerId = offerId;
+        // create a table with this object
+        const data = Object.values(formData);
         // create a new offer
         const result = await updateOffer(data);
 
-        if(result) {
-            res.status(200).json({message: "Publication d'offre modifiée avec succès"});
-        }else{
-            res.status(404).json({message: "Erreur, publication non trouvée"})
+        if (result) {
+            res.status(200).json({ message: "Publication d'offre modifiée avec succès" });
+        } else {
+            res.status(404).json({ message: "Erreur, publication non trouvée" })
         }
 
-        
+
     } catch (error) {
 
         console.error(error);
-        res.status(500).json({error: error.message});
-        
+        res.status(500).json({ error: error.message });
+
     }
-    
+
 };
 
 //set unavailable the user offer
 
 export const setUnavailableOfferForUser = async (req, res) => {
     try {
-        const offerId= req.params.offerId;
+        const offerId = req.params.offerId;
 
         const result = await setunavailableOffer(offerId);
 
-        if(result) {
-            res.status(200).json({message: "Publication indisponible maintenant."});
-        }else{
-            res.status(404).json({message: "Erreur, publication non trouvée"})
+        if (result) {
+            res.status(200).json({ message: "Publication indisponible maintenant." });
+        } else {
+            res.status(404).json({ message: "Erreur, publication non trouvée" })
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({error: error.message});
+        res.status(500).json({ error: error.message });
     }
 }
 
@@ -219,10 +223,10 @@ export const availableOfferForUser = async (req, res) => {
         const result = await allAvailableOffer(userId);
 
         return res.status(200).json(result);
-        
+
     } catch (error) {
         console.error(error);
-        res.status(500).json({error: error.message});
+        res.status(500).json({ error: error.message });
     }
 }
 
@@ -236,10 +240,10 @@ export const unavailableOfferForUser = async (req, res) => {
         const result = await allUnavailableOffer(userId);
 
         return res.status(200).json(result);
-        
+
     } catch (error) {
         console.error(error);
-        res.status(500).json({error: error.message});
+        res.status(500).json({ error: error.message });
     }
 }
 
@@ -254,11 +258,11 @@ export const ongoingOffersForUser = async (req, res) => {
         const result = await ongoingOffer(userId);
 
         return res.status(200).json(result);
-        
+
     } catch (error) {
         console.error(error);
-        res.status(500).json({error: error.message});
-        
+        res.status(500).json({ error: error.message });
+
     }
 }
 
@@ -272,17 +276,17 @@ export const expiredOffersForUser = async (req, res) => {
         const result = await expiredOffer(userId);
 
         return res.status(200).json(result);
-        
+
     } catch (error) {
         console.error(error);
-        res.status(500).json({error: error.message});
-        
+        res.status(500).json({ error: error.message });
+
     }
 }
 
 // function to handle offer page after click on the notification
 
-export const handleOfferAfterNotifClick = async (req, res)=>{
+export const handleOfferAfterNotifClick = async (req, res) => {
     try {
         const offerId = req.params.offerId;
         const result = await getOfferByOfferId(offerId);
@@ -290,7 +294,7 @@ export const handleOfferAfterNotifClick = async (req, res)=>{
         return res.status(200).json(result);
     } catch (error) {
         console.error(error);
-        res.status(500).json({error: error.message});
+        res.status(500).json({ error: error.message });
     }
 }
 

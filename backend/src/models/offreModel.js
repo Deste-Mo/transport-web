@@ -150,7 +150,7 @@ export const getHomepageOffers = async (userId) => {
 
 export const latestOffers = async () => {
 
-    const query = "SELECT o.*, u.lastName, u.firstName, u.phone, a.accountType FROM Offer o JOIN User u ON o.userId = u.userId  JOIN Account a ON u.accountId = a.accountId WHERE o.dispo = TRUE ORDER BY o.publicaitonDate DESC LIMIT 10"
+    const query = "SELECT o.*, u.lastName, u.firstName, u.phone, a.accountType FROM Offer o INNER JOIN users u ON o.userId = u.userId  INNER JOIN Account a ON u.accountId = a.accountId WHERE o.dispo = TRUE ORDER BY o.offerid DESC LIMIT 10"
 
     const result = await pool.query(query);
 

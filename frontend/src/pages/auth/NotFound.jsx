@@ -4,7 +4,7 @@ const NotFound = () => {
   const navigate = useNavigate();
   return (
     <section className="mt-20">
-      <p className="text-center text-black-100 dark:text-white-100 text-title-2">
+      <p className="text-center text-black-100 dark:text-black-100 text-title-2">
         {" "}
         404{" "}
       </p>
