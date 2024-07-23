@@ -55,21 +55,16 @@ export default function App() {
                     <Route path="profile/presentation" element={<ProfilePresentation/>}/>
                     <Route path="profile/edit/:id" element={<ProfileEdit/>}/>
                     
-                    <Route path="/securite" element = {<Security/>} />
-                    <Route path="/vehicleadd" element = {<VehicleAdd/>} />
-                    <Route path = "/cardoffer" element = {<CardOffer/>}/>
-                    <Route path = "/littlecardoffer" element = {<LittleCardOffer/>}/>
-
-
+                    
                     
                     <Route element={<NavPageLayout/>}>
                         {/*Home*/}
                         <Route path="/" element={<Home/>}></Route>
                         
-                        {/* Offer*/}
+                        {/* Offers*/}
                         <Route path="/offer" element={<Offers/>}/>
 
-                        {/* Friend*/}
+                        {/* Friends*/}
                         <Route path="/friend" element={<Friends/>}/>
 
                         {/* Notifications*/}
@@ -89,6 +84,12 @@ export default function App() {
                 <Route path="*" element={<NotFound/>}/>
                 <Route path="/forbidden" element={<Forbidden/>}/>
                 <Route path="/unauthorized" element={<Unauthorized/>}/>
+
+                
+                {/*Not implemented routes and components*/}
+                <Route path="/securite" element = {<Security/>} />
+                <Route path="/vehicleadd" element = {<VehicleAdd/>} />
+                <Route path = "/littlecardoffer" element = {<LittleCardOffer/>}/>
 
                 {/* Labo (Only for testing components)*/}
                 <Route path="/labo" element={<Labo/>}></Route>

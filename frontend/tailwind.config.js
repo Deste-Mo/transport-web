@@ -39,7 +39,7 @@ export default {
         10: "#ffffff1a", // 10% opacity
       },
       gray: {
-        100: "#F2F2F2",
+        100: "#f5f5f5",
       },
       success: {
         100: "#48DA5F",

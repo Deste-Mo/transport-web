@@ -10,7 +10,7 @@ import { SERVERLINK } from '../../constants';
 import { useApp } from '../../context/AppPorvider';
 
 
-export default function Profiler() {
+export default function Profile() {
 
 
   const { personalInformation } = useAuth();
