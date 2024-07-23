@@ -1,6 +1,6 @@
 
 import { useAuth } from "../context/AuthProvider.jsx";
-import { ForAll } from "../components/pages/ForAll.jsx";
+import { SubHeader } from "../components/pages/SubHeader.jsx";
 import RecentlyFriends from "../components/pages/RecentlyFriends.jsx";
 import { useApp } from "../context/AppPorvider.jsx";
 import { useEffect } from "react";
@@ -19,7 +19,7 @@ const Friends = () => {
 
     return (
         <section className="flex flex-col items-center justify-center gap-6 w-full">
-            <ForAll name="Amis" icon="bi bi-person" />
+            <SubHeader name="Amis" icon="bi bi-person" />
             <div className="flex flex-col items-center justify-center gap-4 w-full">
                 {console.log(friends)}
                 {friends.length > 0 ?
@@ -30,7 +30,7 @@ const Friends = () => {
                     <div>No Friends</div>
                 }
             </div>
-            <ForAll name="Suggestion d'amis" icon="bi bi-person" />
+            <SubHeader name="Suggestion d'amis" icon="bi bi-person" />
             <div className="flex flex-col items-center justify-center gap-4 w-full">
                 {
                     users.length > 0 ?

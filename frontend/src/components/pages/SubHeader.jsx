@@ -4,24 +4,21 @@ import { useEffect } from "react";
 import { useApp } from "../../context/AppPorvider";
 
 const sizeVariants = {
-    "md": "px-4 py-3",
+    "md": "px-6 py-4",
     "lg": "p-4",
 }
 
-
-export function ForAll({ key, name, icon, disableButton = false, sticky = false, size = "md", profile = false, className }) {
-
+export function SubHeader({ key, name, icon, disableButton = false, sticky = false, size = "md", profile = false, className }) {
     const { countFollow, handleCountFollow } = useApp()
-
-
+    
     useEffect(() => {
         handleCountFollow()
     }, [countFollow, handleCountFollow]);
 
 
     return (
-        <div key={key} className={`flex w-full justify-between items-center z-40  rounded-md  bg-white-100 sticky top-0  ${sticky && "sticky"} ${sizeVariants[size]}`}>
-            <div className="flex items-center gap-4">
+        <div key={key} className={`flex w-full justify-between items-center z-40  rounded-xl border border-black-20  bg-white-100 sticky top-0  ${sticky && "sticky"} ${sizeVariants[size]}`}>
+            <div className="flex items-center gap-4 text-subtitle-3">
                 <i className={icon + " text-icon"}></i>
                 <span>{name}</span>
             </div>
@@ -31,7 +28,7 @@ export function ForAll({ key, name, icon, disableButton = false, sticky = false,
     )
 }
 
-ForAll.propTypes = {
+SubHeader.propTypes = {
     name: PropTypes.string.isRequired,
     icon: PropTypes.string.isRequired
 }

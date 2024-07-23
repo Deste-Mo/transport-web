@@ -9,7 +9,7 @@ import {
   TextArea,
   Icon,
 } from '../../styles/components'
-import { ForAll } from '../../components/pages/ForAll'
+import { SubHeader } from '../../components/pages/SubHeader'
 
 const ProfileEdit = ({onClick}) => {
   const { handleInputChange, checkFieldError, handleError } = useForm()
@@ -49,7 +49,7 @@ const ProfileEdit = ({onClick}) => {
       <section id="profilmodification">
         <div className=" shadow-lg rounded-2xl">
           <form className={globalFormStyle.display}>
-            <ForAll icon='bi bi-info-circle' name='Modifier les informations'/>
+            <SubHeader icon='bi bi-info-circle' name='Modifier les informations'/>
             <div className='bg-white-100 p-4 rounded-lg flex flex-col gap-4'>
             <div className="w-full  h-60 bg-black-10 rounded-xl flex flex-col justify-center items-center overflow-hidden">
               <img

@@ -1,17 +1,17 @@
 import {useNavigate} from 'react-router-dom'
-import ProfileImage from "../../assets/images/OIP.jpg";
-import OfferImage from "../../assets/images/voiture.jpg";
+import ProfileImage from "../../../assets/images/OIP.jpg";
+import OfferImage from "../../../assets/images/voiture.jpg";
 import React, {useState} from "react";
-import Button from "../../components/ui/Button.jsx";
+import Button from "../../ui/Button.jsx";
 
 const OfferCard = ({className}) => {
-    
+
     const [detailed, setDetailed] = useState(false);
 
     const navigate = useNavigate()
 
     return (
-        <div className={`flex flex-col gap-4 w-[612px] items-center ${className}`}>
+        <div className={`flex flex-col gap-3 w-full items-center ${className}`}>
             <div
                 className="w-full flex items-center justify-between bg-white-100 rounded-2xl py-4 px-6 border border-black-20">
                 <div className="flex items-center gap-2">
@@ -41,7 +41,7 @@ const OfferCard = ({className}) => {
                 </div>
                 {
                     detailed &&
-                    <p className="text-small-1 text-black-80 text-center">
+                    <p className="text-small-1 text-black-80 ">
                         Lorem ipsum dolor sit amet,
                         Lorem ipsum dolor sit amet
                         Lorem ipsum dolor sit amet
@@ -57,7 +57,7 @@ const OfferCard = ({className}) => {
                 </button>
             </div>
             <img src={OfferImage} className="w-full h-[256px] object-cover rounded-2xl"/>
-            <Button block icon="bi bi-chat-dots">Contacter</Button>    
+            <Button block icon="bi bi-chat-dots">Contacter</Button>
         </div>
     )
 }

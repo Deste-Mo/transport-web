@@ -6,6 +6,7 @@ import {SERVERLINK} from "./src/constants/index.js";
 export default defineConfig({
   plugins: [react()],
   server:{
+    port : 5173,
     proxy:{
       "/api":{
         target:SERVERLINK,

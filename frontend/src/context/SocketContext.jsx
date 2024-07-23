@@ -15,7 +15,7 @@ export const SocketContext = createContext();
 
 const SocketContextProvider = ({ children }) => {
 
-    const [onlineUsers, setOnlineUsers] = useState([]);
+    const [ActiveUsers, setActiveUsers] = useState([]);
 
     const [socket, setSocket] = useState(null);
 
@@ -34,8 +34,8 @@ const SocketContextProvider = ({ children }) => {
 
             // socketRef.current = socket;
 
-            socket.on("getOnlineUsers", (users) => {
-                setOnlineUsers(users);
+            socket.on("getActiveUsers", (users) => {
+                setActiveUsers(users);
             });
 
             return () => socket.close();
@@ -51,7 +51,7 @@ const SocketContextProvider = ({ children }) => {
         <SocketContext.Provider value={
             {
                 socket,
-                onlineUsers
+                ActiveUsers
             }
         }>
             {children}

@@ -30,7 +30,7 @@ io.on("connection", (socket) => {
 
 
     //io.emit() utiliser pour envoyer des evenement a tout les utilisateur connecter
-    io.emit("getOnlineUsers", Object.keys(userSocketMap));
+    io.emit("getActiveUsers", Object.keys(userSocketMap));
 
 
     // socket.on() utiliser pour ecouter des evenement a la fois utilisable cote server et client 
@@ -38,7 +38,7 @@ io.on("connection", (socket) => {
         console.log("user disconnected", socket.id);
         delete userSocketMap[userId];
 
-        io.emit("getOnlineUsers", Object.keys(userSocketMap));
+        io.emit("getActiveUsers", Object.keys(userSocketMap));
     });
 
 });

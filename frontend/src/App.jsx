@@ -27,10 +27,9 @@ import NavPageLayout from "./layouts/NavPageLayout.jsx";
 
 import Security from './pages/profile/Security';
 import VehicleAdd from './pages/profile/VehicleAdd';
-import CardOffer from './pages/offer/CardOffer';
-import LittleCardOffer from './pages/offer/LittleCardOffer';
 import Messages from "./pages/conversations/Message.jsx";
 import MessageList from "./pages/conversations/MessageList.jsx";
+import LittleOfferCard from "./components/pages/Offer/LittleOfferCard.jsx";
 
 
 export default function App() {
@@ -89,7 +88,7 @@ export default function App() {
                 {/*Not implemented routes and components*/}
                 <Route path="/securite" element = {<Security/>} />
                 <Route path="/vehicleadd" element = {<VehicleAdd/>} />
-                <Route path = "/littlecardoffer" element = {<LittleCardOffer/>}/>
+                <Route path = "/littleOfferCard" element = {<LittleOfferCard/>}/>
 
                 {/* Labo (Only for testing components)*/}
                 <Route path="/labo" element={<Labo/>}></Route>

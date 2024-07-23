@@ -6,7 +6,7 @@ import { useApp } from "../../context/AppPorvider";
 
 
 
-export const ProfilLeft = ({ name, account, profile = false, email, image, phone, date, onClick }) => {
+export const ProfileLeft = ({ name, account, profile = false, email, image, phone, date, onClick }) => {
 
     const navigate = useNavigate();
 
@@ -18,26 +18,28 @@ export const ProfilLeft = ({ name, account, profile = false, email, image, phone
     }, [countFollow, handleCountFollow]);
 
     return (
-        <div className="flex flex-col gap-6 rounded-lg p-4 bg-white-100 w-full">
+        <div className="flex flex-col gap-6 rounded-xl border border-black-20 p-4 bg-white-100 w-full">
             <div className={profile ? "flex justify-between items-start" : null}>
                 {profile ? <i className="disabled:bi-0-circle"></i> : null}
-                <div className="flex flex-col items-center justify-center">
-                    <img src={image} alt="" className="h-16 w-16 rounded-full" />
-                    <span>{name}</span>
-                    <span className="text-primary-100">{account}</span>
+                <div className="flex flex-col items-center justify-center gap-4">
+                    <img src={image} alt="" className={`${profile ? 'size-[128px]' : 'size-[84px]'} bg-black-20 rounded-full`} />
+                    <div className="flex flex-col gap-1 items-center justify-center text-lead">
+                        <span>{name}</span>
+                        <span className="text-black-60 text-small-1 font-light">{account}</span>
+                    </div>
                 </div>
                 {profile ? <i className="bi bi-three-dots-vertical"></i> : null}
             </div>
-            <div className={`flex gap-4 ${!profile ? "flex-col" : "items-center justify-between"}`}>
-                <div className="flex items-center justify-between gap-2">
+            <div className={`flex gap-4 text-base text-black-100 ${!profile ? "flex-col" : "items-center justify-between"}`}>
+                <div className="flex items-center justify-between  gap-2">
                     {profile ? <i className="bi bi-envelope-at"></i> : null}
                     {profile ? <span>{email}</span> : <span>Publication</span>}
-                    {!profile ? <span className="rounded-lg p-2 bg-primary-40">32</span> : null}
+                    {!profile ? <span className="">32</span> : null}
                 </div>
-                <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center  justify-between gap-2">
                     {profile ? <i className="bi bi-phone-flip"></i> : null}
                     {profile ? <span>{phone}</span> : <span>Amis</span>}
-                    {!profile ? <span className="rounded-lg p-2 bg-primary-40">{countFollow}</span> : null}
+                    {!profile ? <span className="">{countFollow}</span> : null}
                 </div>
                 {profile ?
                     <div className="flex items-center justify-between gap-2">
@@ -46,14 +48,7 @@ export const ProfilLeft = ({ name, account, profile = false, email, image, phone
                     </div>
                     : null}
             </div>
-            {profile ? <Button block onClick={onClick} >Modifier les informations</Button> : <Button block variant="secondary" onClick={() => navigate("/profile")}>Voir mon profil</Button>}
+            {profile ? <Button block onClick={onClick} >Modifier les informations</Button> : <Button block variant="secondary" onClick={() => navigate("/profile")}>Voir mon profile</Button>}
         </div>
     )
 }
-
-/*
-ProfilLeft.propTypes = {
-    name: PropTypes.string.isRequired,
-    account: PropTypes.string.isRequired,
-  };
-  */

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import Button from "../ui/Button"
-import { ForAll } from "./ForAll"
+import { SubHeader } from "./SubHeader"
 import { useAuth } from "../../context/AuthProvider"
 import { SERVERLINK } from "../../constants"
 import { useApp } from "../../context/AppPorvider"
@@ -13,14 +13,14 @@ const RecentlyFriends = ({ spec, image, name, account, message = false, retire =
 
     const { handleFriends, handleUsersToShow } = useApp();
 
-    const { onlineUsers } = useSocketContext();
+    const { ActiveUsers } = useSocketContext();
 
 
     const navigate = useNavigate();
 
     const id = spec;
 
-    const isOnline = onlineUsers.includes(id);
+    const isOnline = ActiveUsers.includes(id);
 
     const handleFollow = async () => {
 
@@ -72,7 +72,7 @@ const RecentlyFriends = ({ spec, image, name, account, message = false, retire =
             </div>
             <div className="flex items-center gap-8">
                 {message ? <i onClick={handleClick} className="bi bi-chat-dots text-icon cursor-pointer"></i> : null}
-                <Button rounded="md" onClick={() => navigate("/profile/:id")}>Profile</Button>
+                <Button variant={"secondary"} onClick={() => navigate("/profile/:id")}>Profile</Button>
                 {ajouter ? <Button rounded="md" className="bg-white-100 border-primary-100 border text-primary-100 hover:text-black-100" onClick={handleFollow}>Suivre</Button> : null}
                 {retire ? <Button rounded="md" variant="danger" onClick={handleUnfollow} className="border-danger-100 border text-danger-100 hover:text-black-100">Retirer</Button> : null}
             </div>

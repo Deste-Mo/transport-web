@@ -20,7 +20,7 @@ export function Header({profileImage}) {
         handleCountUnread()
     }, [countUnread, handleCountUnread])
 
-    return <header className={`flex justify-between items-center bg-white-100 shadow-md py-4 px-8 fixed left-0 top-0 right-0 z-50`}>
+    return <header className={`flex justify-between items-center bg-white-100 border-0 border-b border-b-black-20 py-4 px-8 fixed left-0 top-0 right-0 z-50`}>
         <div className="flex items-center gap-14 logo">
             <h1 className="text-subtitle-2">Media <span className="text-primary-100">Trans</span></h1>
             <SearchBar variant="fill"  placeholder="Recherche sur media trans" size="lg"/>

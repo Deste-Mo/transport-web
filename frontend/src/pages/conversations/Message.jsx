@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { TextArea } from "../../styles/components";
-import Mess from "../../components/conversations/message";
 import { useAuth } from "../../context/AuthProvider";
 import { useApp } from "../../context/AppPorvider";
 import { useEffect, useRef, useState } from "react";
 import { useSocketContext } from "../../context/SocketContext";
 import { SERVERLINK } from "../../constants";
+import Mess from "../../components/pages/conversations/Message.jsx";
 
 const Messages = () => {
 

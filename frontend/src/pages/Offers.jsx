@@ -1,7 +1,6 @@
 import {useAuth} from "../context/AuthProvider.jsx";
-import {ForAll} from "../components/pages/ForAll.jsx";
-import {Offer} from "../components/pages/Offer.jsx";
-import CardOffer from "./offer/CardOffer.jsx";
+import {SubHeader} from "../components/pages/SubHeader.jsx";
+import OfferCard from "../components/pages/Offer/OfferCard.jsx";
 
 const Offers = () => {
     const {personalInformation, logout, setRegistrationStep} = useAuth();
@@ -10,10 +9,10 @@ const Offers = () => {
     return (
         <section className="flex flex-col items-center justify-center w-full gap-6">
 
-            <ForAll name="Offres" icon="bi bi-bag" sticky/>
-            <div className="flex flex-col items-center justify-center gap-4 w-full">
+            <SubHeader name="Offres" icon="bi bi-bag" sticky/>
+            <div className="flex flex-col items-center justify-center gap-6 w-full">
                 {
-                    [1,2,3,4,5,6].map((item) => (<CardOffer />))
+                    [1,2,3,4,5,6].map((item) => (<OfferCard />))
                 }
             </div>
         </section>

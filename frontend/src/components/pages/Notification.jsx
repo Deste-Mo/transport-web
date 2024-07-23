@@ -1,24 +1,27 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom";
+import {useState} from "react"
+import {useNavigate} from "react-router-dom";
 
-export function Notification({ propos, heures, icon = false, vue = false}){
-    const [vues, setVues] = useState(false);
-
+export function Notification({propos, time, icon = false, viewed = false}) {
     const navigate = useNavigate()
 
-    const onClick = () => { navigate("/notification/:id"); setVues(true); console.log("vues") }
+    const handleClick = () => {
+        navigate("/notification/:id");
+        setVues(true);
+        console.log("vues")
+    }
     return (
-        <div onClick={onClick} className={(vue || vues)? "flex flex-col gap-6 rounded-lg p-4 bg-white-100 cursor-pointer hover:shadow-lg hover:scale-105 hover:transition-all" : "flex flex-col gap-6 rounded-lg p-4 bg-primary-40 cursor-pointer hover:shadow-lg hover:scale-105 hover:transition-all"}>
+        <div onClick={handleClick}
+             className={`flex flex-col gap-6 rounded-lg p-4 cursor-pointer hover:bg-primary-60 transition-color duration-300  border  ${viewed ? "bg-white-100 border-black-20" : "bg-primary-40 border-primary-40"}`}>
             <div className="flex items-center justify-between w-full">
-                <div className="flex items-center gap-2">
-                    <div className="flex flex-col">
-                        <span>{propos}</span>
-                        <div>
-                            {(vue || vues) ? <span className="flex items-center gap-1"><span className="w-3 h-3 bg-black-60 rounded-full"></span>{"Il y a " + heures}</span> : <span className="flex items-center gap-1"><span className="w-3 h-3 bg-primary-100 rounded-full"></span>{"Il y a " + heures}</span>}
-                        </div>
+                <div className="flex items-start gap-2 flex-col">
+                    <p className="text-base text-black-100">{propos}</p>
+                    <div className="flex  gap-1  justify-start items-center">
+                        <div className={`size-2 rounded-full ${viewed ? 'bg-black-60' : 'bg-primary-100'}`}></div>
+                        <p className="text-small-1 text-black-60">Il y a {time} </p>
                     </div>
+
                 </div>
-                {icon?  <i className="bi bi-x text-icon"></i> : null}
+                {icon ? <i className="bi bi-x text-icon"></i> : null}
             </div>
         </div>
     )
