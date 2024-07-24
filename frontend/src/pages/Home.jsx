@@ -8,9 +8,9 @@ const Home = () => {
     const user = personalInformation;
 
     return (
-        <section className="flex flex-col items-center justify-center w-full gap-6">
+        <section className="flex flex-col items-center justify-center w-full gap-6 ">
             <SubHeader name="Actualites" icon="bi bi-grid"/>
-            <div className="flex flex-col items-center justify-center gap-10 w-full">
+            <div className="flex flex-col items-center justify-center gap-10 w-full ">
                 {
                     [1,2,3,4,5,6].map((item) => (<OfferCard key={item}/>))
                 }

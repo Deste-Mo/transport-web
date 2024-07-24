@@ -22,7 +22,7 @@ export function SubHeader({ key, name, icon, disableButton = false, sticky = fal
                 <i className={icon + " text-icon"}></i>
                 <span>{name}</span>
             </div>
-            {profile ? <span className="bg-primary-40 p-2 rounded-lg">{countFollow}</span> : null}
+            {profile ? <span className="text-black-80">{countFollow}</span> : null}
             {disableButton ? <Button >Tout Effacer</Button> : null}
         </div>
     )

@@ -18,20 +18,19 @@ const Friends = () => {
     }, [])
 
     return (
-        <section className="flex flex-col items-center justify-center gap-6 w-full">
+        <section className="flex flex-col items-center justify-center gap-6 w-full pb-10">
             <SubHeader name="Amis" icon="bi bi-person" />
-            <div className="flex flex-col items-center justify-center gap-4 w-full">
-                {console.log(friends)}
+            <div className="flex flex-col items-center justify-center gap-6 p-4 w-full bg-white-100 rounded-xl">
                 {friends.length > 0 ?
                     friends.map(friend => (
                         <RecentlyFriends className="w-full" key={friend.userid} spec={friend.userid} account={friend.accounttype} name={friend.firstname + " " + friend.lastname} image={SERVERLINK + "/" + friend.profileimage} message retire />
                     ))
                     :
-                    <div>No Friends</div>
+                    <div>Pas d'ami</div>
                 }
             </div>
             <SubHeader name="Suggestion d'amis" icon="bi bi-person" />
-            <div className="flex flex-col items-center justify-center gap-4 w-full">
+            <div className="flex flex-col items-center justify-center gap-6 p-4 w-full bg-white-100 rounded-xl">
                 {
                     users.length > 0 ?
                     users.map(us => (

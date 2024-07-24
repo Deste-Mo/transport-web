@@ -62,19 +62,19 @@ const RecentlyFriends = ({ spec, image, name, account, message = false, retire =
     }
 
     return (
-        <div className={`flex items-center justify-between gap-4 bg-white-100 p-2 rounded-lg ${className}`}>
+        <div className={`flex items-center justify-between gap-4 bg-white-100 p-4 rounded-xl ${className}`}>
             <div className="flex items-center relative gap-2">
                 <img src={image} alt="" className="h-12 w-12 rounded-full" />
                 <div className="flex flex-col">
-                    <span>{name}{isOnline ? <span className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-success-100 inline-block" ></span> : null}</span>
-                    <span className="rounded-lg p-1 bg-primary-40 w-fit">{account}</span>
+                    <span>{name} {isOnline && <span className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-success-100 inline-block" ></span>}</span>
+                    <span className="text-black-80 text-small-1">{account}</span>
                 </div>
             </div>
             <div className="flex items-center gap-8">
                 {message ? <i onClick={handleClick} className="bi bi-chat-dots text-icon cursor-pointer"></i> : null}
                 <Button variant={"secondary"} onClick={() => navigate("/profile/:id")}>Profile</Button>
-                {ajouter ? <Button rounded="md" className="bg-white-100 border-primary-100 border text-primary-100 hover:text-black-100" onClick={handleFollow}>Suivre</Button> : null}
-                {retire ? <Button rounded="md" variant="danger" onClick={handleUnfollow} className="border-danger-100 border text-danger-100 hover:text-black-100">Retirer</Button> : null}
+                {ajouter ? <Button variant={"ghost"}  className="text-primary-100" onClick={handleFollow}>Suivre</Button> : null}
+                {retire ? <Button  variant="ghost" onClick={handleUnfollow} className="text-danger-100">Retirer</Button> : null}
             </div>
         </div>
     )
