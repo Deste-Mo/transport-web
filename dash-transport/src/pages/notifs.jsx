@@ -8,7 +8,7 @@ export default function NotifsPage() {
   return (
     <>
       <Helmet>
-        <title> Type des notifications | Transport </title>
+        <title> Notifications | Transport </title>
       </Helmet>
 
       <NotifsView />

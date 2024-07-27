@@ -18,24 +18,19 @@ const navConfig = [
     icon: icon('ic_user'),
   },
   {
-    title: 'Notification',
+    title: 'Notifications',
     path: '/notifs',
-    icon: icon('ic_notification'),
+    icon: icon('bell-bing-bold-duotone'),
   },
   {
-    title: 'blog',
-    path: '/blog',
-    icon: icon('ic_blog'),
+    title: 'signalement',
+    path: '/signalement',
+    icon: icon('ic_signalement'),
   },
   {
-    title: 'login',
+    title: 'Deconnexion',
     path: '/login',
     icon: icon('ic_lock'),
-  },
-  {
-    title: 'Not found',
-    path: '/404',
-    icon: icon('ic_disabled'),
   },
 ];
 

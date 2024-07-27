@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { BlogView } from 'src/sections/blog/view';
+import { SignalementView } from 'src/sections/signalement/view';
 
 // ----------------------------------------------------------------------
 
-export default function BlogPage() {
+export default function SignalementPage() {
   return (
     <>
       <Helmet>
-        <title> Blog | Transport </title>
+        <title> Signalement | Transport </title>
       </Helmet>
 
-      <BlogView />
+      <SignalementView />
     </>
   );
 }

@@ -6,7 +6,7 @@ const POST_TITLES = [
   'Whiteboard Templates By Industry Leaders',
   'Tesla Cybertruck-inspired camper trailer for Tesla fans who can’t just wait for the truck!',
   'Designify Agency Landing Page Design',
-  '✨What is Done is Done ✨',
+  '✨ What is Done is Done ✨',
   'Fresh Prince',
   'Six Socks Studio',
   'vincenzo de cotiis’ crossing over showcases a research on contamination',
