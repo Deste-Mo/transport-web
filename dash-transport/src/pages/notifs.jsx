@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { ProductsView } from 'src/sections/products/view';
+import { NotifsView } from 'src/sections/notifs/view';
 
 // ----------------------------------------------------------------------
 
-export default function ProductsPage() {
+export default function NotifsPage() {
   return (
     <>
       <Helmet>
-        <title> Products | Transport </title>
+        <title> Type des notifications | Transport </title>
       </Helmet>
 
-      <ProductsView />
+      <NotifsView />
     </>
   );
 }
