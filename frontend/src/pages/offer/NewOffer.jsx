@@ -10,6 +10,7 @@ import {
 } from '../../styles/components'
 import { SERVERLINK } from '../../constants'
 import { useAuth } from '../../context/AuthProvider'
+import {SubHeader} from "../../components/pages/SubHeader.jsx";
 
 const Offer = () => {
   const { handleInputChange, checkFieldError, handleError } = useForm()
@@ -81,24 +82,12 @@ const Offer = () => {
   }, [errorData])
 
   return (
-    <>
-      <div className=" flex flex-row justify-center w-full">
         <section
-          id="offrePublication"
-          className="flex flex-col p-6  items-center rounded-2xl"
+          className="flex flex-col rounded-2xl gap-4 overflow-x-hidden overflow-y-scroll h-full scrollbar-none"
         >
-
-
-          <form className='flex flex-col gap-5' onSubmit={e => handleCreateOffer(e)}>
-            <div className='shadow rounded-md p-2 flex gap-6 items-center bg-white-100'>
-              <div>
-                <Icon size='md' icon='bi bi-plus' className='text-subtitle-1' />
-              </div>
-              <p className=' text-lead'>Nouvelle Publication</p>
-            </div>
-
+          <SubHeader name="Nouvel Offre" icon="bi bi-plus-circle-fill"/>
+          <form className='flex flex-col gap-6 p-2 ' onSubmit={e => handleCreateOffer(e)}>
             {/* formulaire parties */}
-            <div className='bg-white-100 p-4 rounded-lg'>
               <div className=" flex flex-col gap-4">
 
                 <div className="w-full  h-60 bg-black-10 rounded-xl flex flex-col justify-center items-center overflow-hidden">
@@ -143,7 +132,7 @@ const Offer = () => {
                 />
               </div>
 
-              <div className='flex gap-2'>
+              <div className='flex gap-4'>
                 <TextInput
                   className="w-[45]"
                   name="depart"
@@ -163,7 +152,7 @@ const Offer = () => {
                 />
 
               </div>
-              <div className='flex gap-2'>
+              <div className='flex gap-4'>
                 <TextInput
                   className=""
                   name="capacity"
@@ -178,19 +167,12 @@ const Offer = () => {
                   title='Date prévue de départ'
                 />
               </div>
-              <div className='flex flex-col gap-4 w-full mt-[1em]'>
-                <Button className='w-full' type='submit' children='Publier' />
-                <Button className='w-full' variant='outline' type='button' children='Annuler' />
+              <div className='flex flex-col gap-4 w-full'>
+                <Button block  children='Publier' />
+                <Button block variant="secondary" children='Annuler' />
               </div>
-            </div>
-
           </form>
-
-
-
         </section>
-      </div>
-    </>
   )
 }
 export default Offer

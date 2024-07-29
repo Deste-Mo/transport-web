@@ -1,7 +1,7 @@
-import React from 'react';
-
-const LittlerOfferCard = () =>{
-
-
+const LittleOfferCard = () => {
+  return (
+      
+  )  
 }
-export default LittlerOfferCard
+
+export default LittleOfferCard;
