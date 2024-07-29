@@ -1,5 +1,5 @@
 import { conversationExist, createConversation, createNewMessage, getAll, getAllConversation, getAllMessages, messageAllSeen, unreadConversation } from "../models/messages.js";
-import { getReceiverSocketId } from "../socket/socket.js";
+import { getReceiverSocketId, io } from "../socket/socket.js";
 
 
 export const sendMessage = async (req, res)  => {
@@ -7,18 +7,18 @@ export const sendMessage = async (req, res)  => {
 
         const { message } = await req.body;
         const senderId = await req.user.userid;
-        const { receiverId } = req.params;
+        const { receiverId } = await req.params;
 
         const conversation = 
-                !await conversationExist(senderId, receiverId) 
+                !await conversationExist(senderId, receiverId)
                     ? 
-                await createConversation(senderId, receiverId) 
+                await createConversation(senderId, receiverId)
                     : 
                 await conversationExist(senderId, receiverId);
 
         if(!conversation) return res.status(400).json({error: "Erreur lors de la generation du conversation"});
 
-        const createMessage = await createNewMessage(message, conversation.idconversation, receiverId);
+        const createMessage = await createNewMessage(message, conversation.idconversation, receiverId, senderId);
 
         if(!createMessage) return res.status(400).json({error: "Erreur lors de l'envoie du message"});
 
@@ -28,7 +28,6 @@ export const sendMessage = async (req, res)  => {
 
         
         if(receiverSocketId){
-            // 
             io.to(receiverSocketId).emit("newMessage", createMessage)
         }
 
@@ -61,6 +60,7 @@ export const getMessages = async (req, res) => {
     try {
 
         const senderId = await req.user.userid;
+
         const { userIdToChat } = await req.params; 
 
         const allMessage = await getAllMessages(senderId, userIdToChat);
@@ -117,9 +117,6 @@ export const countUnread = async (req, res) => {
 
         const unread = await unreadConversation(senderId);
 
-        // return res.json(unread.length)
-
-        // console.log(unread)
 
         return res.status(200).json({unread: unread.length});
 

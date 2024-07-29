@@ -68,7 +68,7 @@ const RegisterIdentification = () => {
 
     return (
         <section
-            className="absolute left-1/2 -translate-x-1/2 w-fullscreen bg-gray-80 auth-section space-y-[128px] top-[128px]">
+            className="absolute left-1/2 -translate-x-1/2 w-fullscreen  auth-section space-y-[64px] top-[64px]">
             <div className="flex flex-col items-center justify-center gap-4">
                 <div className="flex w-full items-center justify-center">
                     <Icon
@@ -84,7 +84,7 @@ const RegisterIdentification = () => {
                 </div>
             </div>
             <form
-                className="flex w-fit flex-col items-start justify-center rounded-xl border p-4 border-black-20 bg-white-100 gap-[32px]"
+                className="flex w-fit flex-col items-start justify-center rounded-xl border p-6 border-black-0 bg-white-100 gap-[32px]"
                 onSubmit={handleSubmit}
             >
                 <div className="flex w-full flex-col items-start justify-center gap-6">

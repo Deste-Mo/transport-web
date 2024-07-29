@@ -104,7 +104,7 @@ const RegisterSecurity = () => {
                 </div>
             </div>
             <form
-                className="flex w-fit flex-col items-start justify-center rounded-xl border p-4 border-black-20 bg-white-100 gap-[32px]"
+                className="flex w-fit flex-col items-start justify-center rounded-xl border p-4 border-black-0 bg-white-100 gap-[32px]"
                 onSubmit={handleSubmit}
             >
                 <div className="flex w-full flex-col items-start justify-center gap-6">
@@ -127,6 +127,7 @@ const RegisterSecurity = () => {
                             type="password"
                             isValid={inputs.confirmPassword === inputs.password}
                             placeholder="Confirmer votre mot de passe"
+                            errorMsg={"Le mot de passe ne correspond pas"}
                             onError={handleError(setErrorData)}
                             onChange={(e) => handleInputChange(setInputs, e)}
                             value={inputs.confirmPassword}

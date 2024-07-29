@@ -20,7 +20,7 @@ import pool from "../db/connexion.js";
 
         const result = await pool.query(query, data);
     }catch (err){
-        console.log(`err : ${err.message}`);
+        (`err : ${err.message}`);
     }
     
     

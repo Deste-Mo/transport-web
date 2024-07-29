@@ -26,7 +26,7 @@ const router = express.Router();
 // router.post('/newpublication',protectedRoute,upload.single('imgUrl'),newPublication);
 router.post('/newpublication', protectedRoute,upload.single('imgUrl'),newPublication);
 router.get('/gethomepageoffers', protectedRoute, getHomePageOffersForUser);
-router.get('/suggestionoffers', suggestionOffers);
+router.get('/suggestionoffers', protectedRoute, suggestionOffers);
 router.get('/allofferforuser', protectedRoute,allOffersForUser);
 router.delete('/deleteofferforuser/:offerId',deleteOfferForUser);
 router.put('/updateofferforuser/:offerId',upload.single('imgUrl'),updateOfferForUser);

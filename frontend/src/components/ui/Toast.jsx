@@ -5,31 +5,31 @@ const Toast = ({
   className = "",
   error = false,
   message = "message",
-  handleClick = () => {},
+  onClick = () => {},
 }) => {
   return (
     <div
-      className={`flex items-center gap-6  py-1 px-3 rounded-lg justify-between w-fit ${
+      className={`flex items-center gap-6 bg-white-100 border border-black-0  py-3 px-6 rounded-xl justify-between w-fit ${
         !error
-          ? "dark:text-success dark:bg-success-40 bg-success text-white"
-          : "dark:text-danger bg-danger text-white dark:bg-danger-40"
+          ? "bg-success-100 text-black-100"
+          : "bg-danger-100 text-black-100"
       }  ${className} `}
     >
       <i
         className={`${
-          !error ? "bi bi-check-lg" : "bi bi-exclamation-lg"
+          !error ? "bi bi-check-circle-fill text-success-100" : "bi bi-exclamation-circle-fill text-danger-100"
         } text-icon`}
       ></i>
       <div className="flex flex-col">
         {/* <p className="text-lead">{error ? "success" : "Error"}</p> */}
-        <p className={`text-small-1 text-white-60 font-FuturaThin`}>
+        <p className={`text-base text-black-80`}>
           {message || "Some message"}
         </p>
       </div>
       <Icon
-        onClick={handleClick}
+        onClick={onClick}
         className="text-white"
-        size="md"
+        size="sm"
         icon="bi-x-lg"
         variant="transparent"
       />
@@ -39,7 +39,7 @@ const Toast = ({
 
 Toast.propTypes = {
   className : PropTypes.string,
-  error : PropTypes.string,
+  error : PropTypes.bool,
   message : PropTypes.string,
   handleClick : PropTypes.func
 }

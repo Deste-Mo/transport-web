@@ -1,4 +1,4 @@
-import { radiousVariant } from "./globals";
+import {radiousVariant} from "./globals";
 
 const globalButtonVariants = {
     constants: `
@@ -9,7 +9,7 @@ const globalButtonVariants = {
         primary: "bg-primary-100 hover:bg-primary-40 text-white  font-RobotoMd",
         danger: "bg-danger hover:bg-danger-60 text-white  font-RobotoMd",
         secondary:
-            "bg-black-10 text-black-100 hover:bg-primary-20 hover:text-black-100  font-RobotoMd",
+            "bg-black-10 text-black-100 hover:bg-black-20   font-RobotoMd",
         success: "bg-success hover:bg-success-60 text-white  font-RobotoMd",
         outline:
             " border-1 border text-black dark:text-white font-RobotoMd hover:bg-white hover:text-black",
@@ -27,10 +27,19 @@ const globalButtonVariants = {
     size: {
         md: "px-6 py-3 gap-3",
         lg: "px-8 py-4 gap-4",
-        sm:' px-4 py-2 gap-2',
+        sm: ' px-4 py-2 gap-2',
     },
-
-    radious: { ...radiousVariant },
+    textSize: {
+        md: "text-base",
+        lg: "text-base",
+        sm: "text-small-2",
+    },
+    iconSize: {
+        md: "",
+        lg: "text-icon",
+        sm: "",
+    },
+    radious: {...radiousVariant},
 };
 
 

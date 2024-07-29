@@ -26,7 +26,7 @@ export const newPublication = async (req, res) => {
             depart,
             destination,
             capacity,
-            scheduleddate
+            scheduledDate
         } = req.body;
 
         // return res.json(req.file)
@@ -43,7 +43,7 @@ export const newPublication = async (req, res) => {
                 capacity,
                 depart,
                 destination,
-                scheduleddate,
+                scheduledDate,
                 description,
                 file,
                 userId
@@ -54,7 +54,7 @@ export const newPublication = async (req, res) => {
                 capacity,
                 depart,
                 destination,
-                scheduleddate,
+                scheduledDate,
                 description,
                 userId
             ]
@@ -73,7 +73,7 @@ export const newPublication = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
+        // console.error(error);
         res.status(500).json({ error: error.message });
 
     }
@@ -85,16 +85,18 @@ export const newPublication = async (req, res) => {
 
 export const getHomePageOffersForUser = async (req, res) => {
 
-    try {
+    const userId = await req.user.userid;
 
-        const userId = req.user.userId;
+    try {
 
         const result = await getHomepageOffers(userId);
 
-        return res.status(200).json(result);
+        if(!result[0]) return res.status(200).json({offers: {}})
+
+        return res.status(200).json({offers: result});
 
     } catch (error) {
-        console.error(error);
+        // console.error(error);
         res.status(500).json({ error: error.message });
 
     }
@@ -104,14 +106,16 @@ export const getHomePageOffersForUser = async (req, res) => {
 
 export const suggestionOffers = async (req, res) => {
 
+    const userId = await req.user.userid;
+
     try {
-        const result = await latestOffers();
+        const result = await latestOffers(userId);
 
         if (!result) return result.json({ error: "No offer availaible" })
 
         return res.status(200).json({ suggestions: result });
     } catch (error) {
-        console.error(error);
+        // console.error(error);
         res.status(500).json({ error: error.message });
     }
 }
@@ -120,15 +124,19 @@ export const suggestionOffers = async (req, res) => {
 
 export const allOffersForUser = async (req, res) => {
 
-    const userId = req.user.userId;
+    const userId = req.user.userid;
     try {
 
         const allOffers = await getAllOfferById(userId);
 
-        return res.status(200).json(allOffers);
+        // console.log("AllOffersBack: " + allOffers)
+
+        if(!allOffers.rows[0]) return res.status(200).json({all: {}})
+
+        return res.status(200).json({ all: allOffers });
 
     } catch (error) {
-        console.error(error);
+        // console.error(error);
         res.status(500).json({ error: error.message });
     }
 
@@ -149,7 +157,7 @@ export const deleteOfferForUser = async (req, res) => {
             res.status(404).json({ message: "Erreur, publication non trouvée" })
         }
     } catch (error) {
-        console.error(error);
+        // console.error(error);
         res.status(500).json({ error: error.message });
     }
 }
@@ -162,7 +170,7 @@ export const updateOfferForUser = async (req, res) => {
         const offerId = req.params.offerId;
         // use a key table for obtaining the data in the request
 
-        const keys = ['title', 'capacity', 'depart', 'destination', 'scheduleddate', 'imgUrl'];
+        const keys = ['title', 'capacity', 'depart', 'destination', 'scheduledDate', 'imgUrl'];
         const formData = {};
         keys.map(key => {
             let value = req.body[key];
@@ -188,7 +196,7 @@ export const updateOfferForUser = async (req, res) => {
 
     } catch (error) {
 
-        console.error(error);
+        // console.error(error);
         res.status(500).json({ error: error.message });
 
     }
@@ -209,7 +217,7 @@ export const setUnavailableOfferForUser = async (req, res) => {
             res.status(404).json({ message: "Erreur, publication non trouvée" })
         }
     } catch (error) {
-        console.error(error);
+        // console.error(error);
         res.status(500).json({ error: error.message });
     }
 }
@@ -225,7 +233,7 @@ export const availableOfferForUser = async (req, res) => {
         return res.status(200).json(result);
 
     } catch (error) {
-        console.error(error);
+        // console.error(error);
         res.status(500).json({ error: error.message });
     }
 }
@@ -242,7 +250,7 @@ export const unavailableOfferForUser = async (req, res) => {
         return res.status(200).json(result);
 
     } catch (error) {
-        console.error(error);
+        // console.error(error);
         res.status(500).json({ error: error.message });
     }
 }
@@ -260,7 +268,7 @@ export const ongoingOffersForUser = async (req, res) => {
         return res.status(200).json(result);
 
     } catch (error) {
-        console.error(error);
+        // console.error(error);
         res.status(500).json({ error: error.message });
 
     }
@@ -278,7 +286,7 @@ export const expiredOffersForUser = async (req, res) => {
         return res.status(200).json(result);
 
     } catch (error) {
-        console.error(error);
+        // console.error(error);
         res.status(500).json({ error: error.message });
 
     }
@@ -293,7 +301,7 @@ export const handleOfferAfterNotifClick = async (req, res) => {
 
         return res.status(200).json(result);
     } catch (error) {
-        console.error(error);
+        // console.error(error);
         res.status(500).json({ error: error.message });
     }
 }

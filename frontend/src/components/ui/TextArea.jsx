@@ -35,7 +35,7 @@ const TextArea = ({
       <p className="text-black dark:text-white">{title}</p>
       <textarea
         ref={inputRef}
-        className={`h-[128px] ${globalInputVariants.constant} ${
+        className={`h-[128px]  ${globalInputVariants.constant} ${
           globalInputVariants.rounded[rounded]
         } ${globalInputVariants.variant[variant]} ${
           globalInputVariants.size[size]

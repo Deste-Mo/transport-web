@@ -12,7 +12,7 @@ import { SERVERLINK } from '../../constants'
 import { useAuth } from '../../context/AuthProvider'
 import {SubHeader} from "../../components/pages/SubHeader.jsx";
 
-const Offer = () => {
+const NewOffer = () => {
   const { handleInputChange, checkFieldError, handleError } = useForm()
   const [formData, setFormData] = useState({
     imgUrl: '',
@@ -175,4 +175,4 @@ const Offer = () => {
         </section>
   )
 }
-export default Offer
+export default NewOffer

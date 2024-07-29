@@ -22,3 +22,8 @@ export const ACCOUNT_TYPES = {
     society : "Entreprise",
     client : "Client",
 }
+
+export const TOAST_TYPE = {
+    success : "success",
+    error : "error",
+}

@@ -80,7 +80,6 @@ export const signup = async (req, res) => {
         // Verifier si l'utilisateur existe deja dans la base de donnees
         const user = await getUser(email, usercin, companynumber, phone);
 
-
         if (user) {
             return res.status(400).json({error: "L'utilisateur existe Dejas"});
         }
@@ -95,8 +94,6 @@ export const signup = async (req, res) => {
         const createUsers = await createUser(data, accountid);
 
         if (createUsers) {
-            // generer un token
-
             const token = generateAccessToken(createUsers, res);
             const refToken = await generateRefreshToken(createUsers);
 
@@ -108,7 +105,6 @@ export const signup = async (req, res) => {
         }
 
     } catch (error) {
-        console.log("Erreur au niveau du signupController: ", error.message)
         return res.status(500).send("Server error: " + error.message);
     }
 };
@@ -116,12 +112,7 @@ export const signup = async (req, res) => {
 
 export const setImageProfile = async (req, res) => {
     try {
-
-
         const id = req.user.userid;
-
-
-        console.log(id);
 
         if (!req.file) {
             return res.status(400).json({error: "Aucun fichier sélectionné"});
@@ -139,7 +130,6 @@ export const setImageProfile = async (req, res) => {
 
 
     } catch (error) {
-        console.log(error);
         return res.status(500).send("Server error: " + error);
     }
 }
@@ -180,7 +170,6 @@ export const login = async (req, res) => {
         // return res.json({ accessToken, refToken });
         return res.json({accessToken});
     } catch (error) {
-        console.log(error)
         return res.status(500).json({error: "Server error: " + error.message});
     }
 };
@@ -208,8 +197,6 @@ export const getMe = async (req, res) => {
             return res.status(500).json({error: "L'utilisateur existe pas"});
         }
 
-        console.log(user)
-
         let fullname = "";
 
         if (!user.lastname) {
@@ -229,7 +216,6 @@ export const getMe = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error)
         return res.status(401).json({error: "Token error: " + error});
     }
 

@@ -38,7 +38,7 @@ const RegisterAccountType = () => {
       </div>
       <div className="flex flex-col items-center justify-center">
         <form
-          className="flex w-fit flex-col items-start justify-center rounded-xl border p-4 border-black-20 bg-white-100 gap-[32px]"
+          className="flex w-fit flex-col items-start justify-center rounded-xl border p-4 border-black-0 bg-white-100 gap-[32px]"
           onSubmit={handleSubmit}
         >
           <div className="flex w-full flex-col items-start justify-center gap-6">

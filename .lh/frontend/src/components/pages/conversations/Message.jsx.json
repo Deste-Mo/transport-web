@@ -1,0 +1,18 @@
+{
+    "sourceFile": "frontend/src/components/pages/conversations/Message.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1722234445605,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1722234445605,
+            "name": "Commit-0",
+            "content": "const Mess = ({message, idOther}) => {\r\n    return (\r\n        <div className={`flex break-words flex-col mb-3 ${message.receiverid === idOther ? 'mine' : 'else'}`} >\r\n            <span className=\"text-small-3 text-black-40 text-center\">{new Date(message.sentdate).toLocaleString()}</span>\r\n            <span className={`text-small-2 font-sans max-w-40 w-fit h-max block py-2 px-5 text-wrap rounded-lg ${message.receiverid === idOther ? 'bg-primary-80 text-black-100' : 'bg-white-80 text-black-80'}`}>{message.content}</span>\r\n        </div>\r\n    )\r\n}\r\n\r\nexport default Mess;"
+        }
+    ]
+}

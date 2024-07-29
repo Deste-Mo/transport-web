@@ -21,23 +21,22 @@ export const createConversation = async (senderId, receiverId) => {
 
 }
 
-export const createNewMessage = async (message, conversationId, receiverId) => {
+export const createNewMessage = async (message, conversationId, receiverId, senderId) => {
 
     const query = "INSERT INTO message (content, idConversation, receiverId) VALUES ($1, $2, $3) RETURNING *";
 
-    const update = "UPDATE conversation SET lastupdate = (SELECT MAX(sentdate) FROM message WHERE message.idconversation = $1 GROUP BY message.idconversation) WHERE idconversation = $1"
+    const update = "UPDATE conversation SET lastupdate = (SELECT MAX(sentdate) FROM message WHERE message.idconversation = $1 GROUP BY message.idconversation), lastmessage = $2, lastsender = $3 WHERE idconversation = $1 RETURNING *"
 
-
-    const answer = await pool.query(update, [conversationId]);
-
+    
     const { rows } = await pool.query(query, [message, conversationId, receiverId]);
-
+    
+    const answer = await pool.query(update, [conversationId, message, senderId]);
+    
     return rows[0];
-
 }
 
 export const getAllConversation = async (reqSenderId) => { // Envoyeur de requette
-    const query = "WITH LastConversations AS (SELECT idsender, idreceiver, MAX(lastupdate) AS lastdate FROM conversation WHERE idsender = $1 OR idreceiver = $1 GROUP BY idsender, idreceiver ) SELECT users.*, account.accounttype, c.lastdate FROM users INNER JOIN account ON users.accountid = account.accountid LEFT JOIN LastConversations c ON (users.userid = c.idsender AND c.idreceiver = $1) OR (users.userid = c.idreceiver AND c.idsender = $1) WHERE users.userid != $1 AND (users.userid IN(SELECT idsender FROM conversation WHERE idreceiver = $1) OR users.userid IN(SELECT idreceiver FROM conversation WHERE idsender = $1)) ORDER BY c.lastdate DESC";
+    const query = "WITH LastConversations AS (SELECT idsender, idreceiver, lastmessage, lastsender, MAX(lastupdate) AS lastdate FROM conversation WHERE idsender = $1 OR idreceiver = $1 GROUP BY idsender, idreceiver, lastmessage,lastsender ) SELECT users.*, account.accounttype, c.lastdate, c.lastmessage, c.lastsender FROM users INNER JOIN account ON users.accountid = account.accountid LEFT JOIN LastConversations c ON (users.userid = c.idsender AND c.idreceiver = $1) OR (users.userid = c.idreceiver AND c.idsender = $1) WHERE users.userid != $1 AND (users.userid IN(SELECT idsender FROM conversation WHERE idreceiver = $1) OR users.userid IN(SELECT idreceiver FROM conversation WHERE idsender = $1)) ORDER BY c.lastdate DESC";
 
     const { rows } = await pool.query(query, [reqSenderId]);
 
@@ -66,9 +65,6 @@ export const getAllMessages = async (reqSenderId, userIdToChat) => {
 }
 
 export const messageAllSeen = async (senderId, userToChat) => {
-    // const query = "SELECT idconversation,COUNT(viewed) FROM message WHERE receiverid = $1 AND viewed = 'F' GROUP BY idconversation";
-
-    // console.log(senderId, userToChat);
 
     const query = "SELECT COUNT(viewed) AS number FROM message WHERE viewed = 'F' AND receiverid = $1 AND idconversation = (SELECT idconversation FROM conversation WHERE (idsender = $1 AND idreceiver = $2) OR (idsender = $2 AND idreceiver = $1)) GROUP BY (idConversation)";
 
@@ -78,9 +74,6 @@ export const messageAllSeen = async (senderId, userToChat) => {
 }
 
 export const unreadConversation = async (senderId) => {
-    // const query = "SELECT idconversation,COUNT(viewed) FROM message WHERE receiverid = $1 AND viewed = 'F' GROUP BY idconversation";
-
-    // console.log(senderId, userToChat);
 
     const query = "SELECT COUNT(idconversation) AS number FROM message WHERE viewed = 'F' AND receiverid = $1 GROUP BY (idconversation)";
 

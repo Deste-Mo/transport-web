@@ -7,14 +7,16 @@ dotenv.config();
 
 const port = process.env.PORT || 3000;
 
+
 import authRoutes from './routes/authRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 import offreRoute from './routes/offreRoute.js';
+import notifsRoute from './routes/notifsRoutes.js';
 
-import { app, server } from './socket/socket.js';
+import { app, io, server } from './socket/socket.js';
 
-const allowedOrigins = [process.env.FRONTEND_HOST];
+const allowedOrigins = 'http://localhost:5173';
 const corsOptions = {
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {
@@ -41,6 +43,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/offres', offreRoute);
+app.use('/api/notifs', notifsRoute);
 
 server.listen(port, () => {
     console.log(`server listening on port ${port}`);

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { createContext, useContext, useState } from "react";
 import { useAuth } from "./AuthProvider";
 import { SERVERLINK } from "../constants";
@@ -16,7 +17,6 @@ const AppProvider = ({ children }) => {
 
     const [users, setUsers] = useState([]);
 
-
     const [conversations, setConversations] = useState([]);
 
     const [friends, setFriends] = useState([]);
@@ -27,7 +27,13 @@ const AppProvider = ({ children }) => {
 
     const [messages, setMessages] = useState([]);
 
-    const [suggestions, setSuggestions] = useState([]); 
+    const [suggestions, setSuggestions] = useState([]);
+
+    const [homeoffers, setHomeoffers] = useState([]);
+    
+    const [allOffers, setAllOffers] = useState([]);
+
+    const [notifications, setNotifications] = useState([]);
 
     const handleShowConversation = async () => {
 
@@ -44,6 +50,22 @@ const AppProvider = ({ children }) => {
         setConversations(await allConversations.conversations);
     }
 
+
+    const handleNotificationShow = async () => {
+
+        const notificationsRes = await fetch(SERVERLINK + '/api/notifs/getnotifs', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "token": token
+            }
+        })
+
+        const allNotifs = await notificationsRes.json();
+
+        setNotifications(await allNotifs.notifications);
+    }
+
     const handleUsersToShow = async () => {
         const conversationsRes = await fetch(SERVERLINK + '/api/messages/users', {
             method: "GET",
@@ -58,6 +80,37 @@ const AppProvider = ({ children }) => {
         setUsers(await allUsers.allUsers);
     }
 
+    const handleShown = async (endOfMessagesRef) => {
+
+        const scrollToBottom = () => {
+            endOfMessagesRef.current?.scrollIntoView();
+        };
+
+        const user = await JSON.parse(localStorage.getItem('userToChat'));
+
+        setUserToChat({
+            id: user.id,
+            fullName: user.fullName,
+            accountType: user.accountType,
+            pic: user.pic
+        })
+
+        const messagesRes = await fetch(SERVERLINK + '/api/messages/' + await user.id, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "token": token
+            }
+        })
+
+        const allMessages = await messagesRes.json();
+
+        setMessages(await allMessages.messages);
+
+        scrollToBottom();
+
+    }
+
     const handleFriends = async () => {
         const conversationsRes = await fetch(SERVERLINK + '/api/profile/friends', {
             method: "GET",
@@ -68,8 +121,6 @@ const AppProvider = ({ children }) => {
         })
 
         const allFriends = await conversationsRes.json();
-
-        // console.log(allFriends.friends);
 
         setFriends(await allFriends.friends);
     }
@@ -86,8 +137,6 @@ const AppProvider = ({ children }) => {
 
         const count = await conversationsRes.json();
 
-        // console.log(count.unread);
-
         setCountUnread(await count.unread);
     }
 
@@ -103,8 +152,6 @@ const AppProvider = ({ children }) => {
 
         const count = await conversationsRes.json();
 
-        // console.log(count.count);
-
         setCountFollow(await count.count);
     }
 
@@ -113,16 +160,70 @@ const AppProvider = ({ children }) => {
         const sugRes = await fetch(SERVERLINK + '/api/offres/suggestionoffers', {
             method: "GET",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "token": token
             }
-        })
+        });
 
         const suggestionsRes = await sugRes.json();
 
-        // console.log(suggestionsRes.suggestions);
-
         setSuggestions(await suggestionsRes.suggestions);
     }
+
+    const handleHomeOffers = async () => {
+
+        const homeRes = await fetch(SERVERLINK + '/api/offres/gethomepageoffers', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "token": token
+            }
+        })
+
+        const homeoffersRes = await homeRes.json();
+
+        setHomeoffers(await homeoffersRes.offers);
+    }
+
+    const handleOffersForUser = async () => {
+
+        console.log("My token: " + token)
+
+        const homeRes = await fetch(SERVERLINK + '/api/offres/allofferforuser', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "token": token
+            }
+        })
+
+        const offerRes = await homeRes.json();
+
+        console.log(await offerRes)
+
+        setAllOffers(await offerRes.all);
+    }
+
+    const timeSince = (date, max) => {
+        const now = new Date();
+        const secondsPast = Math.floor((now - new Date(date)) / 1000);
+        const maximum = max * 24 * 3600;
+
+        if (secondsPast < 60) {
+            return `il y a ${secondsPast} secondes`;
+        }
+        if (secondsPast < 3600) {
+            return `il y a ${Math.floor(secondsPast / 60)} minutes`;
+        }
+        if (secondsPast < 86400) {
+            return `il y a ${Math.floor(secondsPast / 3600)} heures`;
+        }
+        if (secondsPast < maximum) { // 7 jours
+            return `il y a ${Math.floor(secondsPast / 86400)} jours`;
+        }
+
+        return new Date(date).toLocaleDateString();
+    };
 
 
     return <AppContext.Provider value={{
@@ -147,7 +248,18 @@ const AppProvider = ({ children }) => {
         handleCountFollow,
         suggestions,
         setSuggestions,
-        handleOfferSuggestion
+        handleOfferSuggestion,
+        notifications,
+        setNotifications,
+        handleNotificationShow,
+        handleShown,
+        homeoffers,
+        setHomeoffers,
+        handleHomeOffers,
+        timeSince,
+        handleOffersForUser,
+        allOffers,
+        setAllOffers
     }}>
         {children}
     </AppContext.Provider>

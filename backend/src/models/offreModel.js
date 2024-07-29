@@ -77,85 +77,91 @@ export const expiredOffer = async(userId) => {
 
 }
 
+
 // get homepage offers with specified critaria( the critaria is : random offer, 50% opposite account type, 14% same account type but followed, the rest opposite account type and followed )
 
 export const getHomepageOffers = async (userId) => {
 
-  const query = `
-            WITH CurrentUser AS (
-                SELECT a.accountType 
-                FROM Account a 
-                JOIN Users u ON u.accountId = a.accountId 
-                WHERE u.userId = $1
-            ), 
-            OppositeOffers AS (
-                SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType 
-                FROM Offer o 
-                JOIN Users u ON o.userId = u.userId 
-                JOIN Account a ON a.accountId = u.accountId 
-                WHERE o.dispo = TRUE 
-                AND o.scheduledDate <= CURRENT_DATE 
-                AND (
-                    (a.accountType IN ('Camionneur', 'Entreprise camionneur') AND (SELECT accountType FROM CurrentUser) IN ('Client', 'Entreprise'))
-                    OR
-                    (a.accountType IN ('Client', 'Entreprise') AND (SELECT accountType FROM CurrentUser) IN ('Camionneur', 'Entreprise camionneur'))
-                )
-                ORDER BY RANDOM() 
-                LIMIT 25
-            ), 
-            SameTypeFollowedOffers AS (
-                SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType 
-                FROM Offer o 
-                JOIN Users u ON o.userId = u.userId 
-                JOIN Follow f ON u.userId = f.followeeId 
-                JOIN Account a ON u.accountId = a.accountId 
-                WHERE o.dispo = TRUE 
-                AND o.scheduledDate <= CURRENT_DATE 
-                AND f.followerId = $1 
-                AND a.accountType = (SELECT accountType FROM CurrentUser) 
-                ORDER BY RANDOM() 
-                LIMIT 7
-            ), 
-            OppositeFollowedOffers AS (
-                SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType 
-                FROM Offer o 
-                JOIN Users u ON o.userId = u.userId 
-                JOIN Follow f ON u.userId = f.followeeId 
-                JOIN Account a ON u.accountId = a.accountId 
-                WHERE o.dispo = TRUE 
-                AND o.scheduledDate <= CURRENT_DATE 
-                AND f.followerId = $1  
-                AND (
-                    (a.accountType IN ('Camionneur', 'Entreprise camionneur') AND (SELECT accountType FROM CurrentUser) IN ('Client', 'Entreprise'))
-                    OR
-                    (a.accountType IN ('Client', 'Entreprise') AND (SELECT accountType FROM CurrentUser) IN ('Camionneur', 'Entreprise camionneur'))
-                )
-                ORDER BY RANDOM() 
-                LIMIT 18
-            ) 
-            SELECT * FROM OppositeOffers 
-            UNION 
-            SELECT * FROM SameTypeFollowedOffers 
-            UNION
-            SELECT * FROM OppositeFollowedOffers;
-        `;
-
-        const result = await pool.query(query, [userId]);
-
-
-    return result.rows;
-}
+    // const todaydate = new Date();    
+  
+    const query = `
+              WITH CurrentUser AS (
+                  SELECT a.accountType 
+                  FROM Account a 
+                  JOIN Users u ON u.accountId = a.accountId 
+                  WHERE u.userId = $1
+              ), 
+              OppositeOffers AS (
+                  SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType 
+                  FROM Offer o 
+                  JOIN Users u ON o.userId = u.userId 
+                  JOIN Account a ON a.accountId = u.accountId 
+                  WHERE o.dispo = TRUE 
+                  AND u.userId <> $1
+                  AND o.scheduledDate >= current_date 
+                  AND (
+                      (a.accountType IN ('Camionneur') AND (SELECT accountType FROM CurrentUser) IN ('Client', 'Entreprise'))
+                      OR
+                      (a.accountType IN ('Client', 'Entreprise') AND (SELECT accountType FROM CurrentUser) IN ('Camionneur'))
+                  )
+                  ORDER BY RANDOM() 
+                  LIMIT 50
+              ), 
+              SameTypeFollowedOffers AS (
+                  SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType 
+                  FROM Offer o 
+                  JOIN Users u ON o.userId = u.userId 
+                  JOIN Follow f ON u.userId = f.followeeId 
+                  JOIN Account a ON u.accountId = a.accountId 
+                  WHERE o.dispo = TRUE
+                  AND u.userId <> $1 
+                  AND o.scheduledDate >= current_date 
+                  AND f.followerId = $1 
+                  AND a.accountType = (SELECT accountType FROM CurrentUser) 
+                  ORDER BY RANDOM() 
+                  LIMIT 15
+              ), 
+              OppositeFollowedOffers AS (
+                  SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType 
+                  FROM Offer o 
+                  JOIN Users u ON o.userId = u.userId 
+                  JOIN Follow f ON u.userId = f.followeeId 
+                  JOIN Account a ON u.accountId = a.accountId 
+                  WHERE o.dispo = TRUE 
+                  AND u.userId <> $1
+                  AND o.scheduledDate >= current_date 
+                  AND f.followerId = $1  
+                  AND (
+                      (a.accountType IN ('Camionneur') AND (SELECT accountType FROM CurrentUser) IN ('Client', 'Entreprise'))
+                      OR
+                      (a.accountType IN ('Client', 'Entreprise') AND (SELECT accountType FROM CurrentUser) IN ('Camionneur'))
+                  )
+                  ORDER BY RANDOM() 
+                  LIMIT 35
+              ) 
+              SELECT * FROM OppositeOffers 
+              UNION  
+              SELECT * FROM SameTypeFollowedOffers 
+              UNION 
+              SELECT * FROM OppositeFollowedOffers;
+          `;
+  
+          const result = await pool.query(query, [userId]);
+  
+  
+      return result.rows;
+  }
 
 // get the latest offers published
 
-export const latestOffers = async () => {
+export const latestOffers = async (userId) => {
+    const query = "SELECT o.*, u.lastname, u.firstname, u.profileimage, u.phone, a.accountType FROM Offer o INNER JOIN users u ON o.userId = u.userId  INNER JOIN Account a ON u.accountId = a.accountId WHERE o.dispo = TRUE AND u.userId <> $1 ORDER BY o.offerid DESC"
 
-    const query = "SELECT o.*, u.lastName, u.firstName, u.phone, a.accountType FROM Offer o INNER JOIN users u ON o.userId = u.userId  INNER JOIN Account a ON u.accountId = a.accountId WHERE o.dispo = TRUE ORDER BY o.offerid DESC LIMIT 10"
-
-    const result = await pool.query(query);
+    const result = await pool.query(query, [userId]);
 
     return result.rows;
 }
+
 
 
 //get an offer by ID OFFER
@@ -168,20 +174,3 @@ export const getOfferByOfferId = async (offerId) => {
 
     return result.rows[0];
 }
-
-
-// exportation of all function for manipulate offer data in the database
-// module.exports = {
-//     createOffer,
-//     getAllOfferById,
-//     deleteOfferById,
-//     updateOffer,
-//     setunavailableOffer,
-//     allAvailableOffer,
-//     allUnavailableOffer,
-//     ongoingOffer,
-//     expiredOffer,
-//     getHomepageOffers,
-//     latestOffers,
-//     getOfferByOfferId,
-// };
