@@ -1,7 +1,8 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import Profile from "../pages/profile/Profile.jsx";
 import { appVariants } from "../animations/variants.js";
 import { motion } from "framer-motion";
+import { useAuth } from "../context/AuthProvider.jsx";
 
 const ProfileLayout = () => {
 
@@ -15,7 +16,7 @@ const ProfileLayout = () => {
       viewport={{ once: true }}
     >
       <div className="w-full basis-[46%] overflow-x-hidden scrollbar-none rounded-xl">
-        <Profile />
+        <Profile  />
       </div>
       <div className="w-full overflow-x-hidden h-full basis-[50%] scrollbar-none">
         <Outlet />

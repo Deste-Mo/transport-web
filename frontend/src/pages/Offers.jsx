@@ -5,7 +5,7 @@ import {Icon} from "../styles/components.js";
 import {appVariants} from "../animations/variants.js";
 import {motion} from "framer-motion";
 
-const Offers = () => {
+const Offers = ({userId = null}) => {
     const {personalInformation, logout, setRegistrationStep} = useAuth();
     const user = personalInformation;
 

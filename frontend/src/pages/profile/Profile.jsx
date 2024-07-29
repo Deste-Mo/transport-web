@@ -8,6 +8,7 @@ import { SERVERLINK } from "../../constants";
 import { useApp } from "../../context/AppPorvider";
 import OfferCard from "../../components/pages/Offer/OfferCard.jsx";
 import { useNavigate, useParams } from "react-router-dom";
+import ProfileCard from "../../components/pages/profile/ProfileCard.jsx";
 
 export default function Profile() {
   const { personalInformation } = useAuth();
@@ -27,7 +28,7 @@ export default function Profile() {
     <div className="flex flex-col gap-6 w-full overflow-x-hidden overflow-y-scroll  scrollbar-none h-[86vh] rounded-xl">
       <div className="flex flex-col gap-6">
         <SubHeader icon="bi bi-person-fill" name="Profile" />
-        <ProfileLeft
+        <ProfileCard
           account={user?.accounttype}
           countFollow={countFollow}
           name={user?.fullName}
@@ -35,7 +36,7 @@ export default function Profile() {
           email={user?.email}
           image={SERVERLINK + "/" + user?.profile}
           phone={user?.phone}
-          profile
+          forCurrentUser={user.id === id}
         />
       </div>
       <div className="flex flex-col gap-6">
@@ -63,36 +64,41 @@ export default function Profile() {
           </Button>
         </div>
       </div>
-      <div className="flex flex-col gap-6">
-        <SubHeader
-          name="Offres Sauvegardés"
-          icon="bi bi-bookmarks-fill"
-          rightContent={<p>4</p>}
-        />
-        <div className="flex flex-col gap-4 rounded-lg">
-          {[1, 2, 3].map((item) => (
-            <OfferCard key={item} saved />
-          ))}
-        </div>
-      </div>
-      <div className="flex flex-col gap-6">
-        <SubHeader
-          name="Vos Offres"
-          icon="bi bi-briefcase-fill"
-          rightContent={
-            <Icon
-              onClick={() => navigate(`/profile`)}
-              size="sm"
-              icon="bi bi-plus-lg"
+      {/* For the current user */}
+      {user.id === id && (
+        <>
+          <div className="flex flex-col gap-6">
+            <SubHeader
+              name="Offres Sauvegardés"
+              icon="bi bi-bookmarks-fill"
+              rightContent={<p>4</p>}
             />
-          }
-        />
-        <div className="flex flex-col gap-4 rounded-lg">
-          {[1, 2, 3].map((item) => (
-            <OfferCard key={item} />
-          ))}
-        </div>
-      </div>
+            <div className="flex flex-col gap-4 rounded-lg">
+              {[1, 2, 3].map((item) => (
+                <OfferCard key={item} saved />
+              ))}
+            </div>
+          </div>
+          <div className="flex flex-col gap-6">
+            <SubHeader
+              name="Vos Offres"
+              icon="bi bi-briefcase-fill"
+              rightContent={
+                <Icon
+                  onClick={() => navigate(`/profile`)}
+                  size="sm"
+                  icon="bi bi-plus-lg"
+                />
+              }
+            />
+            <div className="flex flex-col gap-4 rounded-lg">
+              {[1, 2, 3].map((item) => (
+                <OfferCard key={item} />
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

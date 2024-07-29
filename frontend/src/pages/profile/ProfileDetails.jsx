@@ -15,7 +15,7 @@ const ProfileDetails = () => {
 
   return (
     <section className="w-full">
-      {currentUser.id === id ? <NewOffer /> : <Offers />}
+      {currentUser.id === id ? <NewOffer /> : <Offers userId={id}/>}
     </section>
   );
 };
