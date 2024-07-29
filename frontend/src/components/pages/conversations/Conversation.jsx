@@ -46,7 +46,7 @@ const Conv = ({ id, userToChat }) => {
     }, [])
 
     return (
-        <div className={`flex items-center justify-between cursor-pointer w-full hover:bg-primary-20 p-6 rounded-xl ${isViewed ? 'bg-white-100' : 'bg-primary-20'}`} onClick={handleClick}>
+        <div className={`flex select-none items-center justify-between cursor-pointer w-full hover:bg-primary-20 p-6 rounded-xl ${isViewed ? 'bg-white-100' : 'bg-primary-20'}`} onClick={handleClick}>
             <div className="flex items-center gap-2">
                 <img className="size-[40px] object-cover rounded-full" src={image || '../../assets/images/OIP.jpg'}/>
                 <div className="flex flex-col gap-1 items-start">

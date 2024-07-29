@@ -27,7 +27,8 @@ const AppProvider = ({ children }) => {
 
     const [messages, setMessages] = useState([]);
 
-    const [suggestions, setSuggestions] = useState([]); 
+    const [suggestions, setSuggestions] = useState([]);
+    
 
     const handleShowConversation = async () => {
 
@@ -123,8 +124,9 @@ const AppProvider = ({ children }) => {
 
         setSuggestions(await suggestionsRes.suggestions);
     }
+    
 
-
+    
     return <AppContext.Provider value={{
         userToChat,
         setUserToChat,
@@ -147,7 +149,7 @@ const AppProvider = ({ children }) => {
         handleCountFollow,
         suggestions,
         setSuggestions,
-        handleOfferSuggestion
+        handleOfferSuggestion,
     }}>
         {children}
     </AppContext.Provider>

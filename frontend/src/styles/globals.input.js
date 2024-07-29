@@ -3,7 +3,7 @@ import {radiousVariant} from "./globals";
 export const globalInputVariants = {
     constant : `
     text-base outline-none
-    flex  justify-between
+    flex  justify-between resize-none
     `
     ,
     variant : {

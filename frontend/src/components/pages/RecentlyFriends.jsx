@@ -7,7 +7,7 @@ import { useApp } from "../../context/AppPorvider"
 import { useSocketContext } from "../../context/SocketContext"
 //import PropTypes from "prop-types";
 
-const RecentlyFriends = ({ spec, image, name, account, message = false, retire = false, ajouter = false, className }) => {
+const RecentlyFriends = ({ spec, image, name, account, showMessageButton = false, showRemoveFriendButton = false, showAddFriendButton = false, showProfileButton = true, className }) => {
 
     const { token } = useAuth();
 
@@ -62,19 +62,20 @@ const RecentlyFriends = ({ spec, image, name, account, message = false, retire =
     }
 
     return (
-        <div className={`flex items-center justify-between gap-4 bg-white-100 p-4 rounded-xl ${className}`}>
+        <div className={`flex items-center justify-between gap-4 bg-white-100 p-4 hover:bg-primary-20 group rounded-xl ${className}`}>
             <div className="flex items-center relative gap-2">
                 <img src={image} alt="" className="h-12 w-12 rounded-full" />
                 <div className="flex flex-col">
-                    <span>{name} {isOnline && <span className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-success-100 inline-block" ></span>}</span>
-                    <span className="text-black-80 text-small-1">{account}</span>
+                    <span className="group-hover:underline cursor-pointer">{name} {isOnline && <span className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-success-100 inline-block" ></span>}</span>
+                    <span className="text-black-80 text-small-1 ">{account}</span>
                 </div>
             </div>
             <div className="flex items-center gap-8">
-                {message ? <i onClick={handleClick} className="bi bi-chat-dots text-icon cursor-pointer"></i> : null}
-                <Button variant={"secondary"} onClick={() => navigate("/profile/:id")}>Profile</Button>
-                {ajouter ? <Button variant={"ghost"}  className="text-primary-100" onClick={handleFollow}>Suivre</Button> : null}
-                {retire ? <Button  variant="ghost" onClick={handleUnfollow} className="text-danger-100">Retirer</Button> : null}
+                {showProfileButton && <Button variant={"secondary"} onClick={() => navigate("/profile/:id")}>Profile</Button>}
+                
+                {showMessageButton &&  <i onClick={handleClick} className="bi bi-chat text-icon cursor-pointer"></i> }
+                {showAddFriendButton && <Button variant={"ghost"}  className="text-primary-100" onClick={handleFollow}>Suivre</Button>}
+                {showRemoveFriendButton && <Button  variant="ghost" onClick={handleUnfollow} className="text-danger-100">Retirer</Button> }
             </div>
         </div>
     )

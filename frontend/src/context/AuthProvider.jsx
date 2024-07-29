@@ -1,8 +1,9 @@
 import {createContext, useContext, useEffect, useLayoutEffect, useState} from "react";
-import {ACCOUNT_TYPES, REGISRATION_STEPS, SERVERLINK} from "../constants/index.js";
+import {ACCOUNT_TYPES, REGISRATION_STEPS, SERVERLINK, TOAST_TYPE} from "../constants/index.js";
 import {useLocation, useNavigate} from "react-router-dom";
 import api from "../utils/api.js";
 import axios from "axios";
+import {useAnimation} from "./AnimationProvider.jsx";
 axios.defaults.withCredentials = true;
 export const AuthContext = createContext({});
 
@@ -15,6 +16,7 @@ const AuthProvider = ({children}) => {
     const [loading, setLoading] = useState(true);
     const [token, setToken] = useState(null);
     const [isAuth, setIsAuth] = useState(false);
+
 
     const navigate = useNavigate();
 

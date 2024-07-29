@@ -97,7 +97,7 @@ const SelectInput = ({
           )}
         </div>
         <ul
-          className={`absolute z-40 bg-gray-100 ${block ? "w-full" : globalInputVariants.width} ${
+          className={`absolute z-40 bg-gray-100 shadow-md ${block ? "w-full" : globalInputVariants.width} ${
             globalSelectvariants.variant[variant]
           } ${size === "md" ? "top-[54px]" : "top-[64px]"} ${
             opened

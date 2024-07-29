@@ -6,7 +6,7 @@ export const NAV_LINKS = [
     },
     {
         name: "Discussion",
-        icon: "bi bi-chat-dots",
+        icon: "bi bi-chat",
         path: "/discussion"
     },
     {
@@ -25,3 +25,11 @@ export const NAV_LINKS = [
         path: "/notification"
     },
 ]
+
+export const NAVIGATIONS = {
+    home : "/",
+    discussion : "/discussion",
+    offer : "/offer",
+    friend : "/friend",
+    notification : "/notification",
+}

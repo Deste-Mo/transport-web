@@ -18,7 +18,7 @@ const ActiveUser = ({ friend }) => {
     return (
         <div className="cursor-pointer mx-3 flex flex-col justify-center relative items-center" onClick={e => handleClick(e)}>
             <img src={SERVERLINK + "/" + friend.profileimage} alt="" className="size-[46px] rounded-full" />
-            <span className="text-small-1 text-center text-black-80">{friend.firstname.toUpperCase().slice(0,1) + friend.firstname.toLowerCase().slice(1)}</span>
+            <span className="text-small-1 text-center text-black-80 select-none">{friend.firstname.toUpperCase().slice(0,1) + friend.firstname.toLowerCase().slice(1)}</span>
             {isOnline ? <span className="size-[10px] rounded-[50%] bg-primary-100 block absolute right-0 top-0" ></span> : null}
         </div>
     )
