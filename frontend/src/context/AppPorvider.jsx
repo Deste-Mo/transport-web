@@ -25,15 +25,23 @@ const AppProvider = ({ children }) => {
 
     const [countUnread, setCountUnread] = useState(0)
 
+    const [countNotifUnread, setCountNotifUnread] = useState(0)
+
     const [messages, setMessages] = useState([]);
 
     const [suggestions, setSuggestions] = useState([]);
 
     const [homeoffers, setHomeoffers] = useState([]);
-    
-    const [allOffers, setAllOffers] = useState([]);
+
+    const [myOffers, setMyOffers] = useState([]);
+
+    const [savedOffers, setSavedOffers] = useState([]);
 
     const [notifications, setNotifications] = useState([]);
+
+    const [ pubNumber, setPubNumber ] = useState(0);
+
+    const [ savedPubNumber, setSavedPubNumber ] = useState(0);
 
     const handleShowConversation = async () => {
 
@@ -186,22 +194,39 @@ const AppProvider = ({ children }) => {
     }
 
     const handleOffersForUser = async () => {
+        // console.log("My token: " + token)
 
-        console.log("My token: " + token)
-
-        const homeRes = await fetch(SERVERLINK + '/api/offres/allofferforuser', {
+        const response = await fetch(SERVERLINK + '/api/offres/allofferforuser', {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
                 "token": token
             }
-        })
+        });
 
-        const offerRes = await homeRes.json();
+        const offerRes = await response.json();
 
-        console.log(await offerRes)
+        setPubNumber(await offerRes.all.length);
+        // console.log(await offerRes)
+        setMyOffers(await offerRes.all);
+    }
 
-        setAllOffers(await offerRes.all);
+    const handleOffersSaved = async () => {
+        // console.log("My token: " + token)
+
+        const response = await fetch(SERVERLINK + '/api/offres/savedoffers', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "token": token
+            }
+        });
+
+        const offerRes = await response.json();
+
+        // console.log(await offerRes)
+        setSavedPubNumber(await offerRes.saved.length)
+        setSavedOffers(await offerRes.saved);
     }
 
     const timeSince = (date, max) => {
@@ -218,12 +243,54 @@ const AppProvider = ({ children }) => {
         if (secondsPast < 86400) {
             return `il y a ${Math.floor(secondsPast / 3600)} heures`;
         }
-        if (secondsPast < maximum) { // 7 jours
+        if (secondsPast < maximum) { // selon le nombre de jour voulu
             return `il y a ${Math.floor(secondsPast / 86400)} jours`;
         }
 
         return new Date(date).toLocaleDateString();
     };
+
+    const saveOffer = async (offerId) => {
+
+        const response = await fetch(SERVERLINK + '/api/offres/saveoffer/' + await offerId, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "token": token
+            }
+        });
+
+        await response.json();
+    }
+
+    const retireOffer = async (offerId) => {
+
+        const response = await fetch(SERVERLINK + '/api/offres/retireoffer/' + await offerId, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "token": token
+            }
+        });
+
+        await response.json();
+    }
+
+    const handleCountNotifUnread = async () => {
+        const response = await fetch(SERVERLINK + '/api/notifs/unreadnotif', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "token": token
+            }
+        });
+
+        const notifRes = await response.json();
+
+        // console.log(await offerRes)
+
+        setCountNotifUnread(await notifRes.count);
+    }
 
 
     return <AppContext.Provider value={{
@@ -258,8 +325,18 @@ const AppProvider = ({ children }) => {
         handleHomeOffers,
         timeSince,
         handleOffersForUser,
-        allOffers,
-        setAllOffers
+        myOffers,
+        setMyOffers,
+        handleOffersSaved,
+        savedOffers,
+        setSavedOffers,
+        saveOffer,
+        retireOffer,
+        handleCountNotifUnread,
+        setCountNotifUnread,
+        countNotifUnread,
+        pubNumber,
+        savedPubNumber,
     }}>
         {children}
     </AppContext.Provider>

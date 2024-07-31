@@ -18,10 +18,12 @@ const NavPageLayout = () => {
 
     const pathname = useLocation().pathname;
 
-    const { handleFriends, handleOfferSuggestion, suggestions } = useApp();
+    const { handleFriends, handleOfferSuggestion, suggestions, handleOffersSaved, handleOffersForUser, savedOffers } = useApp();
 
     useEffect(() => {
         handleOfferSuggestion();
+        handleOffersSaved();
+        handleOffersForUser();
     }, [])
 
     return (
@@ -52,12 +54,12 @@ const NavPageLayout = () => {
                 <div className="flex flex-col gap-4 w-full">
                     <SubHeader name="Publication Sauvegardées" icon="bi bi-person-fill" size="md" />
                     {
-                        suggestions.length > 0 ? (
-                            suggestions.map(suggestion =>
-                            (<SavePublication key={suggestion.offerid} capacity={suggestion.capacity}
-                                title={suggestion.title} depart={suggestion.depart}
-                                destination={suggestion.dest}
-                                scheduleddate={suggestion.sheduleddate} />)
+                        savedOffers.length > 0 ? (
+                            savedOffers.map(savedOffer =>
+                            (<SavePublication key={savedOffer.offerid} capacity={savedOffer.capacity}
+                                title={savedOffer.title} depart={savedOffer.depart}
+                                destination={savedOffer.dest}
+                                scheduleddate={savedOffer.scheduleddate} />)
                             )
                         ) : (
                             <p className="w-full px-4 py-10 text-center text-black-80 bg-white-100 border border-black-0 rounded-xl ">Pas
@@ -66,10 +68,10 @@ const NavPageLayout = () => {
                     }
                 </div>
                 <div className="flex flex-col gap-6">
-                    <SubHeader name="Sugfestions d'offres" icon="bi bi-robot" />
+                    <SubHeader name="Suggestions d'offres" icon="bi bi-robot" />
                     {suggestions.length > 0 ? (
                         suggestions.map(suggestion => (
-                            <LittleOfferCard key={suggestion.offerid} sug={suggestion}/>
+                            <LittleOfferCard key={suggestion.offerid} sug={suggestion} saved={ savedOffers.length > 0 ? savedOffers.find(offer => offer.offerid === suggestion.offerid) : false }/>
                         ))
                     )
                         :

@@ -57,7 +57,7 @@ const AuthProvider = ({children}) => {
     }
 
     const getInformation = async (accessToken) => {
-        console.log(`Access token : ${accessToken}`)
+        // console.log(`Access token : ${accessToken}`)
         api.get(`${SERVERLINK}/api/auth/me`, {
             headers: {
                 token: accessToken,
@@ -65,7 +65,7 @@ const AuthProvider = ({children}) => {
         })
             .then(res => {
                 setPersonalInformation(res.data);
-                console.log(res.data)
+                // console.log(res.data)
             })
             .catch(e => {
                 console.log(`Erreur : ${e.response.data.error}`);
@@ -78,7 +78,7 @@ const AuthProvider = ({children}) => {
     const logout = () => {
         axios.post(`${SERVERLINK}/api/auth/logout`)
             .then(res => {
-                console.log(res.data.success);
+                // console.log(res.data.success);
                 setToken(null);
                 navigate("/login");
             })
@@ -99,7 +99,7 @@ const AuthProvider = ({children}) => {
         const refreshToken = async () => {
             axios.get(`${SERVERLINK}/api/auth/token`)
                 .then(res => {
-                    console.log(`New access token : ${res.data.accessToken}`);
+                    // console.log(`New access token : ${res.data.accessToken}`);
                     setToken(res.data.accessToken);
                     getInformation(res.data.accessToken);
                 })
@@ -113,7 +113,7 @@ const AuthProvider = ({children}) => {
         };
         refreshToken();
         
-    }, []);
+    }, [token]);
     
 
     

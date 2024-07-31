@@ -9,11 +9,14 @@ import { useApp } from "../context/AppPorvider.jsx";
 const AppLayout = () => {
     const {token, loading, personalInformation} = useAuth();
     const user = personalInformation;
-    const { handleCountUnread, countUnread, handleNotificationShow, handleOffersForUser } = useApp();
+    const { handleCountUnread, countUnread, handleNotificationShow, handleOffersForUser, handleFriends} = useApp();
 
     const { socket } = useSocketContext();
 
     useEffect(() => {
+
+        // handleFriends()
+
         socket?.on("newMessage", () => {
             handleCountUnread();
         });

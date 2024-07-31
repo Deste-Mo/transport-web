@@ -1,4 +1,4 @@
-import { allNotifs, createNotifs, createNotifsOne, deleteAllNotifications, deleteNotificationById, setViewNotification } from "../models/notifModel.js";
+import { allNotifs, createNotifs, createNotifsOne, deleteAllNotifications, deleteNotificationById, getCountNotifUnread, setAllViewNotification, setViewNotification } from "../models/notifModel.js";
 import { getReceiverSocketId, io } from "../socket/socket.js";
 
 
@@ -130,5 +130,39 @@ export const setNotificationViewed = async (req, res) => {
 
     } catch (error) {
         return res.status(500).json({ "ViewOneNotifsError": error.message });
+    }
+}
+
+export const setAllNotificationViewed = async (req, res) => {
+
+    const userId = req.user.userid;
+
+    try {
+
+        const setV = await setAllViewNotification(userId);
+
+        if(!setV) return res.status(400).json({error: "Erreur lors de la mise en vue de la notification"});
+
+        return res.status(200).json({success: "La notif est vue desormais", view: setV.viewed});
+
+    } catch (error) {
+        return res.status(500).json({ "ViewOneNotifsError": error.message });
+    }
+}
+
+export const getNotificationViewed = async (req, res) => {
+
+    const userId = req.user.userid;
+
+    try {
+
+        const getV = await getCountNotifUnread(userId);
+
+        if(!getV) return res.status(400).json({error: "Erreur lors de la prise de nombre de non vue des notification"});
+
+        return res.status(200).json({success: "Le nombre de unread notif est obtenu", count: getV.count});
+
+    } catch (error) {
+        return res.status(500).json({ "getCountUnreadNotifsError": error.message });
     }
 }

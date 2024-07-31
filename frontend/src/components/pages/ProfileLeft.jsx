@@ -10,7 +10,7 @@ export const ProfileLeft = ({ name, account, profile = false, email, image, phon
 
     const navigate = useNavigate();
 
-    const { countFollow, handleCountFollow } = useApp()
+    const { countFollow, handleCountFollow, pubNumber } = useApp()
 
 
     useEffect(() => {
@@ -34,7 +34,7 @@ export const ProfileLeft = ({ name, account, profile = false, email, image, phon
                 <div className="flex items-center justify-between  gap-2">
                     {profile && <i className="bi bi-envelope-at"></i>}
                     {profile ? <span>{email}</span> : <span>Publication</span>}
-                    {!profile && <span className="">32</span>}
+                    {!profile && <span className="">{ pubNumber }</span>}
                 </div>
                 <div className="flex items-center  justify-between gap-2">
                     {profile && <i className="bi bi-phone-flip"></i>}

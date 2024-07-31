@@ -12,10 +12,11 @@ const Home = () => {
     const { personalInformation, logout, setRegistrationStep } = useAuth();
     const user = personalInformation;
 
-    const { handleOfferSuggestion, suggestions } = useApp();
+    const { handleHomeOffers, homeoffers, handleOffersSaved, savedOffers } = useApp();
 
     useEffect(() => {
-        handleOfferSuggestion();
+        handleHomeOffers();
+        handleOffersSaved();
     }, [])
 
 
@@ -24,8 +25,8 @@ const Home = () => {
             <SubHeader name="Actualites" icon="bi bi-grid-fill" rightContent={<Icon size="sm" variant="secondary" icon="bi bi-search" />} />
             <div className="flex flex-col items-center justify-center gap-[64px] w-full ">
                 {
-                    suggestions.length > 0 ? (
-                        suggestions.map((suggestion) => (<OfferCard key={suggestion.offerid} sug={suggestion} />))
+                    homeoffers.length > 0 ? (
+                        homeoffers.map((homeoffer) => (<OfferCard key={homeoffer.offerid} sug={homeoffer} saved={ savedOffers.length > 0 ? savedOffers.find(offer => offer.offerid === homeoffer.offerid) : false }/>))
                     ) :
                         <div>No offers</div>
                 }

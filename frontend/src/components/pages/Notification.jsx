@@ -12,7 +12,7 @@ export function Notification({propos, date, spec, icon = false, vue = false}) {
 
     const { token } = useAuth();
 
-    const { handleNotificationShow, timeSince } = useApp();
+    const { handleNotificationShow, timeSince, handleCountNotifUnread } = useApp();
 
     const navigate = useNavigate()
 
@@ -30,6 +30,7 @@ export function Notification({propos, date, spec, icon = false, vue = false}) {
         setVues(await verification.view);
 
         handleNotificationShow();
+        handleCountNotifUnread();
     }
 
     const handleDelete = async () => {
@@ -44,6 +45,7 @@ export function Notification({propos, date, spec, icon = false, vue = false}) {
         const verification = await response.json();
 
         handleNotificationShow();
+        handleCountNotifUnread();
     }
 
     useEffect(() => {

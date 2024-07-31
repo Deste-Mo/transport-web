@@ -1,136 +1,213 @@
 import globalFormStyle from '../../styles/global.form'
-import {useForm} from '../../context/FormProvider'
-import {useState, useEffect} from 'react'
+import { useForm } from '../../context/FormProvider'
+import { useState, useEffect } from 'react'
 import {
-    TextInput,
-    SelectInput,
-    FileInput,
-    Button,
-    TextArea,
-    Icon,
+  TextInput,
+  SelectInput,
+  FileInput,
+  Button,
+  TextArea,
+  Icon,
 } from '../../styles/components'
-import {SubHeader} from '../../components/pages/SubHeader'
+import { SubHeader } from '../../components/pages/SubHeader'
+import { useAuth } from '../../context/AuthProvider'
+import { SERVERLINK } from '../../constants'
 
-const ProfileEdit = ({onClick}) => {
-    const {handleInputChange, checkFieldError, handleError} = useForm()
+const ProfileEdit = ({ onClick }) => {
+  const { handleInputChange, checkFieldError, handleError } = useForm()
 
-    const [formData, setFormData] = useState({
-        imgUrl: '',
-        lastname: '',
-        firstname: '',
-        usercin: '',
-        phone: '',
-        address: '',
-        email: '',
-        bio: '',
-    })
-    const [errorData, setErrorData] = useState({
-        imgUrl: false,
-        lastname: false,
-        firstname: false,
-        usercin: false,
-        phone: false,
-        address: false,
-        email: false,
-        bio: false,
-    })
+  const { personalInformation, token, getInformation } = useAuth()
 
-    const [file, setFile] = useState({
-        name: '',
-        path: '',
-    })
+  const [formData, setFormData] = useState({
+    profileimage: null,
+    firstname: personalInformation?.firstname,
+    lastname: personalInformation?.lastname,
+    usercin: personalInformation?.usercin,
+    companynumber: personalInformation?.companynumber,
+    phone: personalInformation?.phone,
+    address: personalInformation?.address,
+    email: personalInformation?.email,
+    bio: personalInformation?.bio,
+  })
 
-    useEffect(() => {
-        checkFieldError(errorData)
-    }, [errorData])
+  const [profile, setP] = useState(null)
 
-    return (
-                <section className="space-y-6">
-                    <SubHeader icon='bi bi-info-circle' name='Modifier les informations'/>
-                    
-                    <form className={`flex flex-col gap-4 shadow`}>
-                        <div className='rounded-lg flex flex-col gap-4'>
-                            <div
-                                className="w-full  h-60 bg-black-10 rounded-xl flex flex-col justify-center items-center overflow-hidden">
-                                <img
-                                    className="w-full h-full object-cover rounded-xl"
-                                    src={file.path}
-                                    alt="Choisez une image"
-                                />
-                            </div>
-                            <FileInput
-                                className="w-full"
-                                name="imgUrl"
-                                setFile={setFile}
-                                onChange={(e) => handleInputChange(setFormData, e)}
-                                onError={handleError(setErrorData)}
-                                block
-                            />
+  const [errorData, setErrorData] = useState({
+    profileimage: false,
+    lastname: false,
+    firstname: false,
+    usercin: false,
+    phone: false,
+    address: false,
+    email: false,
+    bio: false,
+  })
 
-                            <TextInput
-                                title="Nom"
-                                name="lastname"
-                                size="md"
-                                className="w-full"
-                                onError={handleError(setErrorData)}
-                                onChange={(e) => handleInputChange(setFormData, e)}
-                                block
-                            />
-                            <TextInput
-                                title="Prenom"
-                                name="firstname"
-                                size="md"
-                                className="w-full"
-                                onError={handleError(setErrorData)}
-                                onChange={(e) => handleInputChange(setFormData, e)}
-                                block
-                            />
-                            <TextInput
-                                title="Contact"
-                                name="phone"
-                                size="md"
-                                className="w-full"
-                                onError={handleError(setErrorData)}
-                                onChange={(e) => handleInputChange(setFormData, e)}
-                                block
-                            />
-                            <TextInput
-                                title="Email"
-                                name="email"
-                                size="md"
-                                className="w-full"
-                                onError={handleError(setErrorData)}
-                                onChange={(e) => handleInputChange(setFormData, e)}
-                                block
-                            />
-                            <TextInput
-                                title="Adresse"
-                                name="address"
-                                size="md"
-                                className="w-full"
-                                onError={handleError(setErrorData)}
-                                onChange={(e) => handleInputChange(setFormData, e)}
-                                block
-                            />
-                            <TextArea
-                                className="w-full"
-                                name="bio"
-                                title="Bio"
-                                placeholder="Ecrivez une petite déscription de vous"
-                                resize={true}
-                                onError={handleError(setErrorData)}
-                                onChange={(e) => handleInputChange(setFormData, e)}
-                                value={formData.bio}
-                                block
-                            />
+  const [file, setFile] = useState({
+    name: '',
+    path: '',
+  })
 
-                            <div className='flex flex-col justify-between w-full gap-2'>
-                                <Button block>Enregistrer</Button>
-                                <Button variant='secondary' block onClick={onClick}>Annuler</Button>
-                            </div>
-                        </div>
-                    </form>
-                </section>
-    )
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    try {
+      const data = new FormData()
+
+      for (const key in formData) {
+        data.append(key, formData[key])
+      }
+
+      const response = await fetch(SERVERLINK + '/api/profile/updateprofile', {
+        method: 'POST',
+        headers: {
+          token: token,
+        },
+        body: data,
+      })
+
+      const res = await response.json()
+
+      getInformation(token)
+      setFormData({...formData, ["profileimage"] : null});
+
+      if (!res.error) {
+        alert('Enregistrement réussie !')
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    checkFieldError(errorData)
+  }, [errorData])
+
+  useEffect(() => {
+    getInformation(token);
+    setP(personalInformation?.profile)
+  }, [])
+  return (
+    <section className="space-y-6">
+      <SubHeader icon="bi bi-info-circle" name="Modifier les informations" />
+
+      <form className={`flex flex-col gap-4 shadow`} onSubmit={handleSubmit}>
+        <div className="rounded-lg flex flex-col gap-4">
+          <div className="w-full  h-60 bg-black-10 rounded-xl flex flex-col justify-center items-center overflow-hidden">
+            <img
+              className="w-full h-full  object-contain rounded-xl"
+              src={file.path ? file.path : SERVERLINK + '/' + profile}
+              alt="Choisez une image"
+            />
+          </div>
+          <FileInput
+            className="w-full"
+            name="profileimage"
+            setFile={setFile}
+            onChange={(e) => handleInputChange(setFormData, e)}
+            onError={handleError(setErrorData)}
+            block
+            value={formData.profileimage}
+          />
+
+          <TextInput
+            title="Nom"
+            name="firstname"
+            size="md"
+            className="w-full"
+            onError={handleError(setErrorData)}
+            onChange={(e) => handleInputChange(setFormData, e)}
+            block
+            value={formData.firstname}
+          />
+          {personalInformation?.accounttype === 1 ? (
+            <TextInput
+              title="NIF"
+              name="companynumber"
+              size="md"
+              className="w-full"
+              onError={handleError(setErrorData)}
+              onChange={(e) => handleInputChange(setFormData, e)}
+              block
+              value={formData.companynumber}
+            />
+          ) : (
+            <TextInput
+              title="CIN"
+              name="usercin"
+              size="md"
+              className="w-full"
+              onError={handleError(setErrorData)}
+              onChange={(e) => handleInputChange(setFormData, e)}
+              block
+              value={formData.usercin}
+            />
+          )}
+          {personalInformation?.accounttype != 1 && (
+            <TextInput
+              title="Prenom"
+              name="lastname"
+              size="md"
+              className="w-full"
+              onError={handleError(setErrorData)}
+              onChange={(e) => handleInputChange(setFormData, e)}
+              block
+              value={formData.lastname}
+            />
+          )}
+          <TextInput
+            title="Contact"
+            name="phone"
+            size="md"
+            className="w-full"
+            onError={handleError(setErrorData)}
+            onChange={(e) => handleInputChange(setFormData, e)}
+            block
+            value={formData.phone}
+          />
+          <TextInput
+            title="Email"
+            name="email"
+            size="md"
+            className="w-full"
+            onError={handleError(setErrorData)}
+            onChange={(e) => handleInputChange(setFormData, e)}
+            block
+            value={formData.email}
+          />
+          <TextInput
+            title="Adresse"
+            name="address"
+            size="md"
+            className="w-full"
+            onError={handleError(setErrorData)}
+            onChange={(e) => handleInputChange(setFormData, e)}
+            block
+            value={formData.address}
+          />
+          <TextArea
+            className="w-full"
+            name="bio"
+            title="Bio"
+            placeholder="Ecrivez une petite déscription de vous"
+            resize={true}
+            onError={handleError(setErrorData)}
+            onChange={(e) => handleInputChange(setFormData, e)}
+            value={formData.bio}
+            block
+          />
+
+          <div className="flex flex-col justify-between w-full gap-2">
+            <Button type="submit" block>
+              Enregistrer
+            </Button>
+            <Button type="button" variant="secondary" block onClick={onClick}>
+              Annuler
+            </Button>
+          </div>
+        </div>
+      </form>
+    </section>
+  )
 }
 export default ProfileEdit

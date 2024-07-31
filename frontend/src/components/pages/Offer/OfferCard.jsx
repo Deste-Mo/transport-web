@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useNavigate } from 'react-router-dom'
 import ProfileImage from "../../../assets/images/OIP.jpg";
 import OfferImage from "../../../assets/images/voiture.jpg";
@@ -8,10 +9,11 @@ import OfferDetailBadge from "./OfferDetailBadge.jsx";
 import { useApp } from '../../../context/AppPorvider.jsx';
 import { SERVERLINK } from '../../../constants/index.js';
 
-const OfferCard = ({ className, saved = false, sug }) => {
+const OfferCard = ({ className, saved = false, sug, mine = false }) => {
 
     const [detailed, setDetailed] = useState(true);
 
+    const { saveOffer, handleOffersSaved, retireOffer } = useApp();
 
     const navigate = useNavigate()
 
@@ -24,6 +26,16 @@ const OfferCard = ({ className, saved = false, sug }) => {
     const handleClick = () => {
         localStorage.setItem('userToChat', JSON.stringify({ id: sug.userid, fullName: sug.firstname + " " + sug.lastname, accounttype: sug.accounttype, pic: image }))
         navigate('/message')
+    }
+
+    const handleSaveOffer = async () => {
+        await saveOffer(await sug.offerid);
+        await handleOffersSaved();
+    }
+
+    const handleRetireSaveOffer = async () => {
+        await retireOffer(sug.offerid);
+        await handleOffersSaved();
     }
 
 
@@ -53,9 +65,14 @@ const OfferCard = ({ className, saved = false, sug }) => {
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-col gap-2 items-center">
-                        <Icon size="sm" variant="ghost" icon="bi bi-three-dots-vertical" />
-                    </div>
+                    {
+                        mine ?
+                            <div className="flex flex-col gap-2 items-center">
+                                <Icon size="sm" variant="ghost" icon="bi bi-three-dots-vertical" />
+                            </div>
+                            :
+                            null
+                    }
                 </div>
                 <div
                     className="w-full flex flex-col gap-4 items-start justify-cente bg-white-100 rounded-2xl  ">
@@ -73,15 +90,21 @@ const OfferCard = ({ className, saved = false, sug }) => {
                 <img src={offerImage} className="w-full h-[256px] object-cover rounded-xl" />
                 <div className="flex items-center w-full gap-6 jusify-start">
                     {/*<Icon variant="secondary" icon="bi bi-chat" size="sm"/>*/}
-                    <Button onClick={handleClick} size='sm' variant="secondary" icon="bi bi-chat" rounded="full">Contacter</Button>
                     {
-                        saved ? (
-                            <Button size="sm" variant="danger" icon="bi bi-bookmark-dash" rounded="full">Retirer</Button>
+                        !mine ?
+                            <Button onClick={handleClick} size='sm' variant="secondary" icon="bi bi-chat" rounded="full">Contacter</Button>
+                            :
+                            null
+                    }
+                    {
+                        saved && !mine ? (
+                            <Button size="sm" onClick={handleRetireSaveOffer} variant="danger" icon="bi bi-bookmark-dash" rounded="full">Retirer</Button>
 
-                        ) : (
-                            <Button size="sm" variant="secondary" icon="bi bi-bookmark" rounded="full">Sauvegarder</Button>
+                        ) : !mine ? (
+                            <Button size="sm" onClick={handleSaveOffer} variant="secondary" icon="bi bi-bookmark" rounded="full">Sauvegarder</Button>
 
-                        )
+                        ) :
+                            null
                     }
                 </div>
             </div>

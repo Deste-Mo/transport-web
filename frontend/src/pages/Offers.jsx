@@ -10,12 +10,12 @@ import { useEffect } from "react";
 const Offers = () => {
     const { personalInformation, logout, setRegistrationStep } = useAuth();
 
-    const { handleOfferSuggestion, suggestions } = useApp();
+    const { handleOfferSuggestion, suggestions, handleOffersSaved, savedOffers } = useApp();
 
     useEffect(() => {
         handleOfferSuggestion();
+        handleOffersSaved();
     }, [])
-
 
     const user = personalInformation;
 
@@ -26,9 +26,9 @@ const Offers = () => {
             <div className="flex flex-col items-center justify-center gap-6 w-full">
                 {
                     suggestions.length > 0 ? (
-                        suggestions.map((suggestion) => (<OfferCard key={suggestion.offerid} sug={suggestion} />))
-                    ) : 
-                    <div>No offers</div>
+                        suggestions.map((suggestion) => (<OfferCard key={suggestion.offerid} sug={suggestion} saved={ savedOffers.length > 0 ? savedOffers.find(offer => offer.offerid === suggestion.offerid) : false } />))
+                    ) :
+                        <div>No offers</div>
                 }
             </div>
         </motion.section>

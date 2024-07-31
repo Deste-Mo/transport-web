@@ -11,27 +11,27 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function Profile() {
-    const { personalInformation } = useAuth();
+    const { personalInformation, getInformation, token } = useAuth();
     const user = personalInformation;
     const navigate = useNavigate();
 
-    const { friends, handleFriends, countFollow, handleCountFollow, allOffers, handleOfferSuggestion, suggestions } = useApp();
+    const { friends, handleFriends, countFollow, handleCountFollow, allOffers, handleOffersSaved, savedOffers, handleOffersForUser, myOffers, savedPubNumber } = useApp();
 
     const [update, setUpdate] = useState(false)
 
+    useEffect(() => {
+        handleOffersSaved()
+        handleOffersForUser();
+    }, []);
+
     const onClick = () => {
+        getInformation(token);
         setUpdate(true);
     }
-
-    useEffect(() => {
-        handleOfferSuggestion();
-    }, [])
 
     const annuler = () => {
         setUpdate(false)
     }
-
-    console.log("My offers: " + allOffers);
 
     useEffect(() => {
         handleFriends();
@@ -57,19 +57,19 @@ export default function Profile() {
                                     name={friend.firstname + " " + friend.lastname}
                                     image={SERVERLINK + "/" + friend.profileimage} message retire />
                             )) :
-                            <div>No friends</div>
+                            <div className='text-subtitle-2 text-black-40 text-center'>No Friend</div>
                     }
                     <Button variant='secondary' block>Voir plus</Button>
                 </div>
             </div>
             <div className="flex flex-col gap-6">
-                <SubHeader name="Offres Sauvegardés" icon="bi bi-bookmarks-fill" rightContent={<p>4</p>} />
+                <SubHeader name="Offres Sauvegardés" icon="bi bi-bookmarks-fill" rightContent={<p>{ savedPubNumber }</p>} />
                 <div className="flex flex-col gap-4 rounded-lg">
                     {
-                        suggestions.length > 0 ? (
-                            suggestions.map((suggestion) => (<OfferCard key={suggestion.offerid} sug={suggestion} />))
+                        savedOffers.length > 0 ? (
+                            savedOffers.map((savedOffer) => (<OfferCard key={savedOffer.saveid} sug={savedOffer} saved />))
                         ) :
-                            <div>No offers</div>
+                            <div className='text-subtitle-2 text-black-40 text-center'>No offers</div>
                     }
                 </div>
             </div>
@@ -77,10 +77,10 @@ export default function Profile() {
                 <SubHeader name="Vos Offres" icon="bi bi-briefcase-fill" rightContent={<Icon onClick={() => navigate(`/profile`)} size='sm' icon="bi bi-plus-lg" />} />
                 <div className="flex flex-col gap-4 rounded-lg">
                     {
-                        suggestions.length > 0 ? (
-                            suggestions.map((suggestion) => (<OfferCard key={suggestion.offerid} sug={suggestion} />))
+                        myOffers.length > 0 ? (
+                            myOffers.map((offer) => (<OfferCard key={offer.offerid} sug={offer} mine />))
                         ) :
-                            <div>No offers</div>
+                            <div className='text-subtitle-2 text-black-40 text-center'>No offers</div>
                     }
                 </div>
             </div>

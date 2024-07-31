@@ -208,7 +208,13 @@ export const getMe = async (req, res) => {
         return res.status(200).json({
             id: user.userid,
             fullName: fullname,
+            firstname: user.firstname,
+            lastname: user.lastname,
             accounttype: user.accounttype,
+            usercin: user.usercin,
+            companynumber: user.companynumber,
+            address: user.address,
+            bio: user.bio,
             profile: user.profileimage,
             email: user.email,
             phone: user.phone,

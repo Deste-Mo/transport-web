@@ -1,0 +1,22 @@
+{
+    "sourceFile": "backend/src/routes/notifsRoutes.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1722270933548,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1722270939233,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n \r\n const router = express.Router();\r\n \r\n router.get(\"/getnotifs\", protectedRoute, getAllNotifs);\r\n-router.get(\"/unread\", protectedRoute, getAllNotifs);\r\n+router.get(\"/unreadn\", protectedRoute, getAllNotifs);\r\n router.post(\"/sendnotifs/:userId\", protectedRoute, sendNotifs);\r\n router.post(\"/viewnotifs/:notifid\", protectedRoute, setNotificationViewed);\r\n router.post(\"/sendnotifs\", protectedRoute, sendNotifsNewPub);\r\n router.post(\"/delallnotifs\", protectedRoute, delAllNotifications);\r\n"
+                }
+            ],
+            "date": 1722270933548,
+            "name": "Commit-0",
+            "content": "import express from 'express';\r\nimport protectedRoute from '../middlewares/protectedRoute.js';\r\nimport { delAllNotifications, deleteNotifications, getAllNotifs, sendNotifs, sendNotifsNewPub, setNotificationViewed } from '../controllers/notifController.js';\r\n\r\nconst router = express.Router();\r\n\r\nrouter.get(\"/getnotifs\", protectedRoute, getAllNotifs);\r\nrouter.get(\"/getnotifs\", protectedRoute, getAllNotifs);\r\nrouter.post(\"/sendnotifs/:userId\", protectedRoute, sendNotifs);\r\nrouter.post(\"/viewnotifs/:notifid\", protectedRoute, setNotificationViewed);\r\nrouter.post(\"/sendnotifs\", protectedRoute, sendNotifsNewPub);\r\nrouter.post(\"/delallnotifs\", protectedRoute, delAllNotifications);\r\nrouter.post(\"/delnotif/:notifid\", protectedRoute, deleteNotifications);\r\n\r\nexport default router;"
+        }
+    ]
+}

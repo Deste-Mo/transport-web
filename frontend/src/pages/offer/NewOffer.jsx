@@ -70,11 +70,28 @@ const NewOffer = () => {
         body: data
       })
 
-      console.log(await response.json());
+      setFormData({
+        imgUrl: '',
+        title: '',
+        description: '',
+        depart: '',
+        destination: '',
+        capacity: '',
+        scheduledDate: ''
+      });
+
+      setFile({
+        name: '',
+        path: '',
+      });
 
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
+  }
+
+  const handleDateInput = (e) => {
+    setFormData({...formData, [e.target.name] : e.target.value});
   }
 
   useEffect(() => {
@@ -91,7 +108,7 @@ const NewOffer = () => {
               <div className=" flex flex-col gap-4">
 
                 <div className="w-full  h-60 bg-black-10 rounded-xl flex flex-col justify-center items-center overflow-hidden">
-                  <img className='w-full h-full object-cover rounded-xl' src={file.path} alt="Choisez une image" />
+                  <img className='w-full h-full object-cover rounded-xl' src={file.path ? file.path : SERVERLINK + "/defaultCar.jpg"} alt="Choisez une image" />
                 </div>
                 <FileInput className='w-full'
                   name='imgUrl'
@@ -111,7 +128,7 @@ const NewOffer = () => {
                   variant="fill"
                   size="lg"
                   options={titreData.map((titre) => ({
-                    option:titre
+                    option:titre,
                   }))}
                   icon="bi bi-caret-down-fill"
                   onError={handleError(setErrorData)}
@@ -156,16 +173,13 @@ const NewOffer = () => {
                 <TextInput
                   className=""
                   name="capacity"
-                  pattern={/^\d+(\.\d+)?\s?(kg|tonne|tonnes)$/}
+                  pattern={/^\d+(\.\d+)?\s?(kg|tonne|tonnes|Kg)$/}
                   title="capacité/Quantité"
                   onError={handleError(setErrorData)}
                   onChange={(e) => handleInputChange(setFormData, e)}
                   value={formData.capacity}
                 />
-                <TextInput
-                  type='date'
-                  title='Date prévue de départ'
-                />
+                <input type="date" name="scheduledDate" id="scheduledDate" onChange={handleDateInput} value={formData.scheduledDate} className='h-[1px] w-[50%] py-[30px] pl-4 outline-none bg-black-10 text-black-60 my-5 rounded-xl'/>
               </div>
               <div className='flex flex-col gap-4 w-full'>
                 <Button block  children='Publier' />

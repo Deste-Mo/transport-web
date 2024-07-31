@@ -75,3 +75,20 @@ export const deleteAllNotifications = async (userId) =>{
  
     return result.rows[0];
  }
+
+ export const setAllViewNotification = async (userId) => {
+    const query = "UPDATE sendnotification SET viewed = TRUE WHERE userId = $1 RETURNING *";
+ 
+    const result = await pool.query(query, [userId]);
+ 
+    return result.rows[0];
+ }
+
+ // GET count de notif unread
+ export const getCountNotifUnread = async (userId) => {
+    const query = "SELECT count(sendnotifid) as count FROM sendnotification WHERE userid = $1 AND viewed = false";
+ 
+    const result = await pool.query(query, [userId]);
+ 
+    return result.rows[0];
+ }

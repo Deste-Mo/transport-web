@@ -11,11 +11,19 @@ import { profilePopupVariants } from "../../animations/variants.js";
 export function Header({ profileImage }) {
     const location = useLocation();
 
-    const { countUnread, handleCountUnread } = useApp()
+    const { countUnread, handleCountUnread, handleFriends, handleCountNotifUnread, countNotifUnread } = useApp()
 
     useEffect(() => {
-        handleCountUnread()
+        handleCountUnread();
     }, [countUnread, handleCountUnread])
+
+    useEffect(() => {
+        handleCountNotifUnread();
+    }, [countNotifUnread, handleCountNotifUnread]);
+
+    useEffect(() => {
+        handleFriends();
+    }, []);
 
 
     return <header className={`flex justify-between items-center bg-white-100 shadow-md py-4 px-8 fixed left-0 top-0 right-0 z-50`}>
@@ -29,7 +37,7 @@ export function Header({ profileImage }) {
                 <MyNavLink icon={"bi bi-chat-dots"} name={"Discussion"} path={"/discussion"} number={countUnread} active={"/discussion" === location.pathname.toLowerCase()} />
                 <MyNavLink icon={"bi bi-briefcase"} name={"Offres"} path={"/offer"} number={0} active={"/offer" === location.pathname.toLowerCase()} />
                 <MyNavLink icon={"bi bi-person"} name={"Amis"} path={"/friend"} number={0} active={"/friend" === location.pathname.toLowerCase()} />
-                <MyNavLink icon={"bi bi-bell"} name={"Notifications"} path={"/notification"} number={0} active={"/notification" === location.pathname.toLowerCase()} />
+                <MyNavLink icon={"bi bi-bell"} name={"Notifications"} path={"/notification"} number={countNotifUnread} active={"/notification" === location.pathname.toLowerCase()} />
             </ul>
         </div>
         <Profile profileImage={profileImage} />
