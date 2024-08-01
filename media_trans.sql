@@ -1,7 +1,5 @@
 CREATE SCHEMA IF NOT EXISTS "public";
 
-CREATE EXTENSION "uuid-ossp";
-
 CREATE SEQUENCE "public".account_accountid_seq AS integer START WITH 1 INCREMENT BY 1;
 
 CREATE SEQUENCE "public".conversation_idconversation_seq START WITH 1 INCREMENT BY 1;
@@ -105,6 +103,8 @@ CREATE  TABLE "public".message (
 	content              text    ,
 	idconversation       bigint    ,
 	receiverid           uuid    ,
+	refmessage           text    ,
+	filecontent          text    ,
 	CONSTRAINT message_pkey PRIMARY KEY ( messageid ),
 	CONSTRAINT fk_message_conversation FOREIGN KEY ( idconversation ) REFERENCES "public".conversation( idconversation ) ON DELETE CASCADE ON UPDATE CASCADE ,
 	CONSTRAINT fk_message_users FOREIGN KEY ( receiverid ) REFERENCES "public".users( userid ) ON DELETE CASCADE ON UPDATE CASCADE 
@@ -256,58 +256,35 @@ INSERT INTO "public".users( userid, firstname, lastname, usercin, companynumber,
 INSERT INTO "public".users( userid, firstname, lastname, usercin, companynumber, phone, address, email, bio, profileimage, "password", registerdate, accountid, subid, enrdate, accessday ) VALUES ( '19c31c51-8982-473b-a767-9535850a8934', 'Fandreseko', 'Ismael', '222222222222', null, '0346179950', 'Andrainjato Fianarantsoa', 'fandreseko@gmail.com', 'Bonjour', 'default.png', '$2a$10$oiFCqWfAv6Wkf67FhzfZZ.ZKy.XW2ofwCpG8BjlkAyAYWJqvVwD9e', '2024-07-16', 3, null, null, 2);
 INSERT INTO "public".users( userid, firstname, lastname, usercin, companynumber, phone, address, email, bio, profileimage, "password", registerdate, accountid, subid, enrdate, accessday ) VALUES ( 'dd592338-ca50-491e-afcf-44f563ae0d6e', 'Rael', 'Nathan', '123452123456', null, '0346712308', 'Nathan', 'ralaivoavy.natanael@gmail.com', 'admin\n', 'default.png', '$2a$10$SWue6oPs6Y7uxs4jvTvkSuzoABtZY/fakaH4CXMRK3.yUPwc4ax.S', '2024-07-16', 3, null, null, 2);
 INSERT INTO "public".users( userid, firstname, lastname, usercin, companynumber, phone, address, email, bio, profileimage, "password", registerdate, accountid, subid, enrdate, accessday ) VALUES ( '761cdd81-0e1d-4271-b1b5-734f1d972762', 'hery', null, null, '212121212121', '0348188887', 'Andrainjato Fianarantsoa', 'hery@gmail.com', 'Ismael', 'X.jpg', '$2a$10$QM0Jo3.kkhKy3LMepPOUy.34Fd9c0fHWvprDTsEadzxbURgp3.6Y2', '2024-07-17', 1, null, null, 2);
-INSERT INTO "public".conversation( idsender, idreceiver, idconversation, lastupdate, lastmessage, lastsender ) VALUES ( '89ed4dfe-33af-438d-911f-285c85619c0a', '933bad13-88f2-4dd9-a220-0f2bb1714af3', 34, '2024-07-28 10:24:54 PM', 'dommage', '89ed4dfe-33af-438d-911f-285c85619c0a');
+INSERT INTO "public".conversation( idsender, idreceiver, idconversation, lastupdate, lastmessage, lastsender ) VALUES ( '933bad13-88f2-4dd9-a220-0f2bb1714af3', 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44', 32, '2024-07-26 08:34:52 AM', 'fffff\n', '933bad13-88f2-4dd9-a220-0f2bb1714af3');
+INSERT INTO "public".conversation( idsender, idreceiver, idconversation, lastupdate, lastmessage, lastsender ) VALUES ( '89ed4dfe-33af-438d-911f-285c85619c0a', '933bad13-88f2-4dd9-a220-0f2bb1714af3', 34, '2024-08-01 01:42:14 PM', 'tout roule', '933bad13-88f2-4dd9-a220-0f2bb1714af3');
 INSERT INTO "public".conversation( idsender, idreceiver, idconversation, lastupdate, lastmessage, lastsender ) VALUES ( '933bad13-88f2-4dd9-a220-0f2bb1714af3', '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', 31, '2024-07-26 09:04:49 AM', 'gggg', null);
 INSERT INTO "public".conversation( idsender, idreceiver, idconversation, lastupdate, lastmessage, lastsender ) VALUES ( 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44', '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', 33, '2024-07-28 09:20:15 PM', 'ttt', 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44');
-INSERT INTO "public".conversation( idsender, idreceiver, idconversation, lastupdate, lastmessage, lastsender ) VALUES ( '933bad13-88f2-4dd9-a220-0f2bb1714af3', 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44', 32, '2024-07-28 09:58:41 PM', 'ahhhhh', 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44');
 INSERT INTO "public".follow( followid, followerid, followeeid, followdate ) VALUES ( 63, 'f38ac467-4030-466e-b7bf-45ed41ed7ef6', 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44', '2024-07-17');
 INSERT INTO "public".follow( followid, followerid, followeeid, followdate ) VALUES ( 67, 'f38ac467-4030-466e-b7bf-45ed41ed7ef6', '89ed4dfe-33af-438d-911f-285c85619c0a', '2024-07-17');
 INSERT INTO "public".follow( followid, followerid, followeeid, followdate ) VALUES ( 188, 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44', '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', '2024-07-28');
-INSERT INTO "public".follow( followid, followerid, followeeid, followdate ) VALUES ( 193, '89ed4dfe-33af-438d-911f-285c85619c0a', '933bad13-88f2-4dd9-a220-0f2bb1714af3', '2024-07-28');
 INSERT INTO "public".follow( followid, followerid, followeeid, followdate ) VALUES ( 141, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', '933bad13-88f2-4dd9-a220-0f2bb1714af3', '2024-07-21');
-INSERT INTO "public".follow( followid, followerid, followeeid, followdate ) VALUES ( 194, '89ed4dfe-33af-438d-911f-285c85619c0a', 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44', '2024-07-28');
+INSERT INTO "public".follow( followid, followerid, followeeid, followdate ) VALUES ( 206, '89ed4dfe-33af-438d-911f-285c85619c0a', '933bad13-88f2-4dd9-a220-0f2bb1714af3', '2024-07-29');
+INSERT INTO "public".follow( followid, followerid, followeeid, followdate ) VALUES ( 214, '933bad13-88f2-4dd9-a220-0f2bb1714af3', '89ed4dfe-33af-438d-911f-285c85619c0a', '2024-07-29');
 INSERT INTO "public".follow( followid, followerid, followeeid, followdate ) VALUES ( 56, 'dd592338-ca50-491e-afcf-44f563ae0d6e', 'f38ac467-4030-466e-b7bf-45ed41ed7ef6', '2024-07-17');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 353, '2024-07-28 09:19:16 PM', 'F', 'salut', 33, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 363, '2024-07-28 10:19:20 PM', 'T', 'okay', 34, '933bad13-88f2-4dd9-a220-0f2bb1714af3');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 357, '2024-07-28 10:03:00 PM', 'T', 'Salut', 34, '933bad13-88f2-4dd9-a220-0f2bb1714af3');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 327, '2024-07-26 08:23:06 AM', 'F', 'fre\na', 31, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 328, '2024-07-26 08:23:09 AM', 'F', 'dada', 31, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 329, '2024-07-26 08:23:11 AM', 'F', 'dadas', 31, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 330, '2024-07-26 08:23:13 AM', 'F', 'dasda', 31, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 332, '2024-07-26 08:23:18 AM', 'F', 'dasdadasd', 31, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 333, '2024-07-26 08:23:20 AM', 'F', 'dasdasdasd', 31, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 359, '2024-07-28 10:04:22 PM', 'T', 'eee ooo', 34, '933bad13-88f2-4dd9-a220-0f2bb1714af3');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 365, '2024-07-28 10:24:04 PM', 'T', 'ca marche', 34, '933bad13-88f2-4dd9-a220-0f2bb1714af3');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 334, '2024-07-26 08:23:22 AM', 'F', 'vsdvsdv', 31, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 338, '2024-07-26 09:05:47 AM', 'F', 'gggg', 31, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 367, '2024-07-28 10:24:54 PM', 'T', 'dommage', 34, '933bad13-88f2-4dd9-a220-0f2bb1714af3');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 342, '2024-07-26 09:25:04 AM', 'T', 'Azonao ve ?', 32, '933bad13-88f2-4dd9-a220-0f2bb1714af3');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 355, '2024-07-28 09:20:15 PM', 'F', 'ttt', 33, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 344, '2024-07-26 09:25:36 AM', 'T', 'Aiii', 32, '933bad13-88f2-4dd9-a220-0f2bb1714af3');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 346, '2024-07-26 09:45:26 AM', 'T', 'qw', 32, '933bad13-88f2-4dd9-a220-0f2bb1714af3');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 348, '2024-07-28 09:08:26 PM', 'T', 'jjjj', 32, '933bad13-88f2-4dd9-a220-0f2bb1714af3');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 349, '2024-07-28 09:15:18 PM', 'T', 'dfsf', 32, '933bad13-88f2-4dd9-a220-0f2bb1714af3');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 351, '2024-07-28 09:18:24 PM', 'T', 'test', 32, '933bad13-88f2-4dd9-a220-0f2bb1714af3');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 356, '2024-07-28 09:58:41 PM', 'T', 'ahhhhh', 32, '933bad13-88f2-4dd9-a220-0f2bb1714af3');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 350, '2024-07-28 09:15:38 PM', 'T', 'vsdvsv', 32, '933bad13-88f2-4dd9-a220-0f2bb1714af3');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 336, '2024-07-26 09:03:59 AM', 'T', 'Test', 32, 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 340, '2024-07-26 09:06:20 AM', 'T', 'oooo', 32, 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 347, '2024-07-26 09:45:36 AM', 'T', 'no no', 32, 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 361, '2024-07-28 10:05:03 PM', 'T', 'oui oui', 34, '89ed4dfe-33af-438d-911f-285c85619c0a');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 358, '2024-07-28 10:04:06 PM', 'T', 'cv?', 34, '933bad13-88f2-4dd9-a220-0f2bb1714af3');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 360, '2024-07-28 10:04:56 PM', 'T', 'tout roule?', 34, '933bad13-88f2-4dd9-a220-0f2bb1714af3');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 366, '2024-07-28 10:24:32 PM', 'T', 'en effet oui', 34, '933bad13-88f2-4dd9-a220-0f2bb1714af3');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 341, '2024-07-26 09:17:38 AM', 'T', 'Valiny', 32, '933bad13-88f2-4dd9-a220-0f2bb1714af3');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 343, '2024-07-26 09:25:23 AM', 'T', 'Sa hoe ahoana ?', 32, '933bad13-88f2-4dd9-a220-0f2bb1714af3');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 354, '2024-07-28 09:19:27 PM', 'T', 'mande', 32, '933bad13-88f2-4dd9-a220-0f2bb1714af3');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 352, '2024-07-28 09:18:38 PM', 'T', 'normale zao', 32, '933bad13-88f2-4dd9-a220-0f2bb1714af3');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 331, '2024-07-26 08:23:16 AM', 'F', 'dasdasd', 31, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 337, '2024-07-26 09:04:49 AM', 'F', 'Ary enao', 31, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 362, '2024-07-28 10:11:57 PM', 'T', 'test', 34, '89ed4dfe-33af-438d-911f-285c85619c0a');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 364, '2024-07-28 10:23:45 PM', 'T', 'autre test', 34, '89ed4dfe-33af-438d-911f-285c85619c0a');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 335, '2024-07-26 08:34:52 AM', 'T', 'fffff\n', 32, 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 339, '2024-07-26 09:06:03 AM', 'T', 'hhhh', 32, 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44');
-INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid ) VALUES ( 345, '2024-07-26 09:26:01 AM', 'T', 'Ao fa tongee', 32, 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44');
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 353, '2024-07-28 09:19:16 PM', 'F', 'salut', 33, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', null, null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 401, '2024-08-01 01:41:36 PM', 'F', '', 34, '89ed4dfe-33af-438d-911f-285c85619c0a', 'Salut', 'fileContent-1722508896730.png');
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 327, '2024-07-26 08:23:06 AM', 'F', 'fre\na', 31, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', null, null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 328, '2024-07-26 08:23:09 AM', 'F', 'dada', 31, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', null, null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 329, '2024-07-26 08:23:11 AM', 'F', 'dadas', 31, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', null, null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 330, '2024-07-26 08:23:13 AM', 'F', 'dasda', 31, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', null, null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 332, '2024-07-26 08:23:18 AM', 'F', 'dasdadasd', 31, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', null, null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 333, '2024-07-26 08:23:20 AM', 'F', 'dasdasdasd', 31, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', null, null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 357, '2024-07-28 10:03:00 PM', 'T', 'Salut', 34, '933bad13-88f2-4dd9-a220-0f2bb1714af3', null, null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 334, '2024-07-26 08:23:22 AM', 'F', 'vsdvsdv', 31, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', null, null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 338, '2024-07-26 09:05:47 AM', 'F', 'gggg', 31, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', null, null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 355, '2024-07-28 09:20:15 PM', 'F', 'ttt', 33, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', null, null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 400, '2024-08-01 01:31:20 PM', 'F', 'oui2', 34, '89ed4dfe-33af-438d-911f-285c85619c0a', 'cv?', null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 331, '2024-07-26 08:23:16 AM', 'F', 'dasdasd', 31, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', null, null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 337, '2024-07-26 09:04:49 AM', 'F', 'Ary enao', 31, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', null, null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 402, '2024-08-01 01:42:14 PM', 'F', 'tout roule', 34, '89ed4dfe-33af-438d-911f-285c85619c0a', 'cv?', null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 358, '2024-07-28 10:04:06 PM', 'T', 'cv?', 34, '933bad13-88f2-4dd9-a220-0f2bb1714af3', null, null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 398, '2024-08-01 01:03:53 PM', 'F', '', 34, '89ed4dfe-33af-438d-911f-285c85619c0a', '', 'fileContent-1722506633292.sql');
 INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 72, 'ADOLPHE Vous suit desormais.', '2024-07-26 10:39:01 AM', 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44', null);
 INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 73, 'Alexis Allel A recemment publié une offre !', '2024-07-26 10:39:44 AM', '933bad13-88f2-4dd9-a220-0f2bb1714af3', null);
 INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 74, 'RAHARISOA Haingonirina Vous suit desormais.', '2024-07-26 11:16:58 AM', '89ed4dfe-33af-438d-911f-285c85619c0a', null);
@@ -321,10 +298,28 @@ INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link 
 INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 82, 'RAHARISOA Haingonirina Vous suit desormais.', '2024-07-28 10:09:11 PM', '89ed4dfe-33af-438d-911f-285c85619c0a', null);
 INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 83, 'RAHARISOA Haingonirina Vous suit desormais.', '2024-07-28 10:10:35 PM', '89ed4dfe-33af-438d-911f-285c85619c0a', null);
 INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 84, 'RAHARISOA Haingonirina Vous suit desormais.', '2024-07-28 10:25:38 PM', '89ed4dfe-33af-438d-911f-285c85619c0a', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 85, 'Alexis Allel Vous suit desormais.', '2024-07-29 08:50:20 AM', '933bad13-88f2-4dd9-a220-0f2bb1714af3', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 86, 'Alexis Allel A recemment publié une offre !', '2024-07-29 08:51:19 AM', '933bad13-88f2-4dd9-a220-0f2bb1714af3', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 87, 'RAHARISOA Haingonirina Vous suit desormais.', '2024-07-29 10:25:50 AM', '89ed4dfe-33af-438d-911f-285c85619c0a', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 88, 'RAHARISOA Haingonirina Vous suit desormais.', '2024-07-29 10:25:58 AM', '89ed4dfe-33af-438d-911f-285c85619c0a', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 89, 'RAHARISOA Haingonirina Vous suit desormais.', '2024-07-29 10:29:58 AM', '89ed4dfe-33af-438d-911f-285c85619c0a', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 90, 'Alexis Allel Vous suit desormais.', '2024-07-29 11:05:00 AM', '933bad13-88f2-4dd9-a220-0f2bb1714af3', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 91, 'Alexis Allel Vous suit desormais.', '2024-07-29 11:05:09 AM', '933bad13-88f2-4dd9-a220-0f2bb1714af3', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 92, 'Alexis Allel Vous suit desormais.', '2024-07-29 11:10:25 AM', '933bad13-88f2-4dd9-a220-0f2bb1714af3', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 93, 'Alexis Allel Vous suit desormais.', '2024-07-29 05:59:34 PM', '933bad13-88f2-4dd9-a220-0f2bb1714af3', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 94, 'Alexis Allel Vous suit desormais.', '2024-07-29 07:22:52 PM', '933bad13-88f2-4dd9-a220-0f2bb1714af3', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 95, 'Alexis Allel Vous suit desormais.', '2024-07-29 07:42:58 PM', '933bad13-88f2-4dd9-a220-0f2bb1714af3', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 96, 'Alexis Allel Vous suit desormais.', '2024-07-29 07:43:24 PM', '933bad13-88f2-4dd9-a220-0f2bb1714af3', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 97, 'Alexis Allel Vous suit desormais.', '2024-07-29 07:43:46 PM', '933bad13-88f2-4dd9-a220-0f2bb1714af3', null);
 INSERT INTO "public".offer( offerid, userid, title, capacity, depart, dest, scheduleddate, description, imgurl, dispo, publicationdate ) VALUES ( 44, '933bad13-88f2-4dd9-a220-0f2bb1714af3', 'Marchandise à transporter', '1 tonne', 'TANA', 'ANTSIRABE', '2024-07-28', 'Des Armes de guerres', 'imgUrl-1721979584866.jpg', true, '2024-07-26 10:39:44 AM');
 INSERT INTO "public".offer( offerid, userid, title, capacity, depart, dest, scheduleddate, description, imgurl, dispo, publicationdate ) VALUES ( 45, 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44', 'Marchandise à transporter', '10 kg', 'TANA', 'FIANARA', '2024-07-28', 'PS 5', 'imgUrl-1721981951882.jpg', true, '2024-07-26 11:19:12 AM');
+INSERT INTO "public".offer( offerid, userid, title, capacity, depart, dest, scheduleddate, description, imgurl, dispo, publicationdate ) VALUES ( 46, '933bad13-88f2-4dd9-a220-0f2bb1714af3', 'Marchandise à transporter', '45 kg', 'dsvdsv', 'vsdvsdv', '2024-08-01', 'vdvsdvd', 'imgUrl-1722232279488.jpg', true, '2024-07-29 08:51:19 AM');
+INSERT INTO "public".offer( offerid, userid, title, capacity, depart, dest, scheduleddate, description, imgurl, dispo, publicationdate ) VALUES ( 47, '933bad13-88f2-4dd9-a220-0f2bb1714af3', '', '56 Kg', 'fwefwef', 'fwefwe', '2024-07-31', 'ggrgerg', 'imgUrl-1722334120874.jpg', true, '2024-07-30 01:08:40 PM');
 INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 44, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', 73, false);
 INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 47, 'f38ac467-4030-466e-b7bf-45ed41ed7ef6', 76, false);
 INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 51, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', 78, false);
-INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 56, '933bad13-88f2-4dd9-a220-0f2bb1714af3', 83, false);
 INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 57, 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44', 84, false);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 60, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', 86, false);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 65, 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44', 91, false);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 67, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', 93, false);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 68, 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44', 94, false);
