@@ -21,14 +21,14 @@ export const createConversation = async (senderId, receiverId) => {
 
 }
 
-export const createNewMessage = async (message, conversationId, receiverId, senderId) => {
+export const createNewMessage = async (message, refMessage, fileContent , conversationId, receiverId, senderId) => {
 
-    const query = "INSERT INTO message (content, idConversation, receiverId) VALUES ($1, $2, $3) RETURNING *";
+    const query = "INSERT INTO message (content, idConversation, receiverId, refmessage, filecontent) VALUES ($1, $2, $3, $4, $5) RETURNING *";
 
     const update = "UPDATE conversation SET lastupdate = (SELECT MAX(sentdate) FROM message WHERE message.idconversation = $1 GROUP BY message.idconversation), lastmessage = $2, lastsender = $3 WHERE idconversation = $1 RETURNING *"
 
     
-    const { rows } = await pool.query(query, [message, conversationId, receiverId]);
+    const { rows } = await pool.query(query, [message, conversationId, receiverId, refMessage, fileContent]);
     
     const answer = await pool.query(update, [conversationId, message, senderId]);
     
@@ -60,6 +60,39 @@ export const getAllMessages = async (reqSenderId, userIdToChat) => {
     const query = "SELECT M.* FROM message M INNER JOIN conversation C ON M.idconversation = C.idconversation WHERE (C.idsender = $1 AND C.idreceiver = $2) OR (C.idsender = $2 AND C.idreceiver = $1) ORDER BY M.sentdate";
 
     const { rows } = await pool.query(query, [reqSenderId, userIdToChat]);
+
+    return rows;
+}
+
+export const deleteMessages = async (messageId, conversationId, myId) => {
+
+    const viewed = "DELETE FROM message WHERE messageid = $1 RETURNING *";
+
+    const lastMessage = "(SELECT M.*, C.idsender, C.idreceiver FROM message M INNER JOIN conversation C ON M.idconversation = C.idconversation WHERE M.idconversation = $1 ORDER BY M.messageId DESC LIMIT 1)"
+
+    const update = "UPDATE conversation SET lastupdate = (SELECT MAX(sentdate) FROM message WHERE message.idconversation = $1 GROUP BY message.idconversation), lastmessage = $3, lastsender = $2 WHERE idconversation = $1 RETURNING *"
+
+    const { rows } = await pool.query(viewed, [messageId]);
+
+    const message = (await pool.query(lastMessage, [conversationId])).rows[0];
+
+    var lastSenderId = null;
+
+    const senderConv = await message.idsender;
+
+    const receiverConv = await message.idreceiver;
+
+    // console.log({ senderConv, receiverConv, myId, receiverId: await message.receiverid, 1: message.receiverId === myId, 2: await senderConv === myId, 3: await receiverConv === myId });
+
+    if( await message.receiverid !== myId ) {
+        lastSenderId = myId
+    }else if( await senderConv === myId ){
+        lastSenderId = await receiverConv
+    }else{
+        lastSenderId = await senderConv
+    }
+
+    const answer = await pool.query(update, [conversationId, lastSenderId, message.content]);
 
     return rows;
 }

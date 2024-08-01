@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import { useNavigate } from "react-router-dom";
-import { Button, TextArea, TextInput } from "../../styles/components";
+import { Button, FileInput, TextArea, TextInput } from "../../styles/components";
 import { useAuth } from "../../context/AuthProvider";
 import { useApp } from "../../context/AppPorvider";
 import { useEffect, useRef, useState } from "react";
@@ -8,9 +10,9 @@ import { SERVERLINK } from "../../constants";
 import Mess from "../../components/pages/conversations/Message.jsx";
 import Icon from "../../components/ui/Icon.jsx";
 import { Input } from "postcss";
+import { useForm } from "../../context/FormProvider.jsx";
 
 const Messages = () => {
-
 
     const navigate = useNavigate();
 
@@ -24,6 +26,27 @@ const Messages = () => {
 
     const { ActiveUsers } = useSocketContext();
 
+    const [answerMess, setAnswer] = useState(null);
+
+    const { handleInputChange, checkFieldError, handleError } = useForm()
+
+    const [formData, setFormData] = useState({
+        fileContent: null,
+        message: "",
+        refMessage: "",
+    })
+
+    const [errorData, setErrorData] = useState({
+        fileContent: false,
+        message: false,
+        refMessage: false,
+    })
+
+    const [file, setFile] = useState({
+        name: '',
+        path: ''
+    });
+
     const isOnline = ActiveUsers.includes(JSON.parse(localStorage.getItem('userToChat')).id);
 
 
@@ -32,7 +55,7 @@ const Messages = () => {
         navigate('/discussion');
     }
 
-    const handleInputChange = (e) => {
+    const handleTextInputChange = (e) => {
         setMessInput(e.target.value)
     }
 
@@ -58,24 +81,40 @@ const Messages = () => {
     const handleSendMessage = async (e) => {
         e.preventDefault();
 
+        const data = new FormData()
+
+        for (const key in formData) {
+            data.append(key, formData[key])
+        }
+
         const userToChat = await JSON.parse(localStorage.getItem('userToChat')).id;
 
         const response = await fetch(SERVERLINK + '/api/messages/send/' + userToChat, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
                 "token": token
             },
-            body: JSON.stringify({ message: messInput })
+            body: data
         });
 
         const answer = await response.json();
 
         handleShown(endOfMessagesRef);
 
-        console.log(answer);
-        setMessInput("");
+        setFormData({
+            fileContent: null,
+            message: "",
+            refMessage: "",
+        })
+
+        setFile({
+            name: '',
+            path: ''
+        })
+
     }
+
+
     return (
         <section
             className="flex flex-col items-center justify-center w-full gap-4  rounded-xl bg-white-100 h-[85vh] relative overflow-hidden">
@@ -104,12 +143,24 @@ const Messages = () => {
                             !(message.receiverid === userToChat.id) ? (
                                 <div className="w-full flex justify-start">
                                     <Message
+                                        conversationId={message.idconversation}
+                                        messageId={message.messageid}
+                                        handleShown={handleShown}
+                                        fileContent={message.filecontent}
+                                        formData={formData}
+                                        setAnswer={setFormData}
+                                        refmessage={message.refmessage}
                                         message={message.content}
                                         sentDate={message.sentdate} />
                                 </div>
                             ) : (
                                 <div className="w-full flex justify-end">
                                     <Message
+                                        conversationId={message.idconversation}
+                                        messageId={message.messageid}
+                                        handleShown={handleShown}
+                                        fileContent={message.filecontent}
+                                        refmessage={message.refmessage}
                                         message={message.content}
                                         sentDate={message.sentdate} sentByCurrentUser />
                                 </div>
@@ -126,14 +177,36 @@ const Messages = () => {
                 <div ref={endOfMessagesRef} />
             </div>
             <div className="border-0 bg-white-100 px-6 py-4 w-full border-t border-t-black-20  bottom-0 z-40">
-                <form className="flex items-center justify-between gap-4" onSubmit={handleSendMessage}>
+                {
+                    formData.refMessage ?
+                        <p className="max-w-[400px] break-words text-small-1 flex items-center justify-start rounded-xl text-black-60 p-1">
+                            <Icon variant="ghost" icon="bi bi-arrow-90deg-down" className="-rotate-90" size="sm" />
+                            {formData.refMessage}
+                        </p>
+                        :
+                        null
+                }
+                {formData.fileContent ?
                     <Icon size="md" variant="ghost" icon="bi bi-image" />
+                    :
+                    null
+                }
+                <form className="flex items-center justify-between gap-4" onSubmit={handleSendMessage}>
+                    <FileInput inputClassName=" hidden " className="w-min"
+                        name="fileContent"
+                        setFile={setFile}
+                        onChange={(e) => handleInputChange(setFormData, e)}
+                        onError={handleError(setErrorData)}
+                        value={formData.fileContent}
+                    />
                     <Icon size="md" variant="ghost" icon="bi bi-emoji-smile" />
                     <TextInput rounded="full" block
                         className="flex-1 outline-none bg-gray-100  text-base text-black-80 px-6 py-3"
                         placeholder="Ecrire un message ...."
-                        onChange={handleInputChange}
-                        value={messInput}
+                        name="message"
+                        onError={handleError(setErrorData)}
+                        onChange={(e) => handleInputChange(setFormData, e)}
+                        value={formData.message}
                     />
                     <Icon onClick={handleSendMessage} icon="bi bi-arrow-up" size="sm" />
                 </form>
@@ -143,21 +216,78 @@ const Messages = () => {
 }
 
 
-const Message = ({ message, sentDate, sentByCurrentUser = false }) => {
+const Message = ({ conversationId, messageId, message, sentDate, sentByCurrentUser = false, setAnswer, formData, refmessage, fileContent, handleShown }) => {
 
-    const { timeSince } = useApp()
+    const { timeSince } = useApp();
 
-    return <div className="space-y-1 max-w-[420px] text-wrap break-words">
-        <div className={`p-4  rounded-2xl space-y-3 w-full ${sentByCurrentUser ? 'bg-primary-20' : 'bg-black-10'}`}>
-            <p className="text-small-2 text-black-80 ">{timeSince(sentDate, 3)}</p>
-            <p className="text-small-1 text-black-100">{message}</p>
-        </div>
+    const { token } = useAuth();
+
+    const answerMessage = () => {
+        setAnswer({ ...formData, ['refMessage']: message });
+    }
+    const handleDelete = async () => {
+        const response = await fetch(SERVERLINK + '/api/messages/delete/' + messageId + "/" + conversationId, {
+            method: "POST",
+            headers: {
+                "token": token
+            }
+        });
+
+        const answer = await response.json();
+
+        handleShown();
+    }
+
+    const fileTypes = ["jpg", "png", "jpeg", "gif"]
+
+    return <div className="space-y-1 mt-3 max-w-[420px] text-wrap break-words">
+        <p className="text-small-2 text-black-80 text-right pr-2">{timeSince(sentDate, 3)}</p>
+        {
+            fileContent
+                ?
+                <div>
+                    {
+                        refmessage ?
+                        <p className="text-small-1 flex items-center justify-start rounded-xl text-black-60 max-w-[300px] p-1"><Icon variant="ghost" icon="bi bi-arrow-90deg-down" className="-rotate-90" size="sm" />{refmessage}</p>
+                            :
+                            null
+                    }
+                    <a href={SERVERLINK + "/" + fileContent}>
+                        {
+                            fileTypes.includes(fileContent.split(".")[1].toLowerCase()) ?
+                                <img src={SERVERLINK + "/" + fileContent} alt={fileContent} className="max-w-[200px] rounded-lg" />
+                                :
+                                <div>
+                                    <Icon variant="ghost" icon="bi bi-file-earmark" size="lg" />
+                                    <span className="text-black-40">{fileContent}</span>
+                                </div>
+                        }
+                    </a>
+                </div>
+                : null
+        }
+        {
+            !message && fileContent ?
+                null
+                :
+                <div>
+                    {
+                        refmessage ?
+                            <p className="text-small-1 flex items-center justify-start rounded-xl text-black-60 max-w-[300px] p-1"><Icon variant="ghost" icon="bi bi-arrow-90deg-down" className="-rotate-90" size="sm" />{refmessage}</p>
+                            :
+                            null
+                    }
+                    <div className={`p-4  rounded-2xl space-y-3 w-full ${sentByCurrentUser ? 'bg-primary-20' : 'bg-black-10'}`}>
+                        <p className="text-small-1 text-black-100">{message}</p>
+                    </div>
+                </div>
+        }
 
         <div className={`flex items-center  w-full gap-2 ${sentByCurrentUser ? 'justify-end' : 'justify-start'}`}>
-            <Icon variant="ghost" icon="bi bi-trash" size="sm" />
+            <Icon onClick={handleDelete} variant="ghost" icon="bi bi-trash" size="sm" />
             {
                 !sentByCurrentUser &&
-                <Icon variant="ghost" icon="bi bi-arrow-90deg-down" className="-rotate-90" size="sm" />
+                <Icon onClick={answerMessage} variant="ghost" icon="bi bi-arrow-90deg-down" className="-rotate-90" size="sm" />
             }
         </div>
     </div>

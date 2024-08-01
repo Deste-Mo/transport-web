@@ -1,11 +1,18 @@
-import { conversationExist, createConversation, createNewMessage, getAll, getAllConversation, getAllMessages, messageAllSeen, unreadConversation } from "../models/messages.js";
+import { conversationExist, createConversation, createNewMessage, deleteMessages, getAll, getAllConversation, getAllMessages, messageAllSeen, unreadConversation } from "../models/messages.js";
 import { getReceiverSocketId, io } from "../socket/socket.js";
 
 
 export const sendMessage = async (req, res)  => {
     try {
 
-        const { message } = await req.body;
+        const { message, refMessage } = await req.body;
+
+        var fileContent = null;
+        
+        if (req.file) {
+            fileContent = req.file.filename;
+        }
+
         const senderId = await req.user.userid;
         const { receiverId } = await req.params;
 
@@ -18,7 +25,7 @@ export const sendMessage = async (req, res)  => {
 
         if(!conversation) return res.status(400).json({error: "Erreur lors de la generation du conversation"});
 
-        const createMessage = await createNewMessage(message, conversation.idconversation, receiverId, senderId);
+        const createMessage = await createNewMessage(message, refMessage, fileContent, conversation.idconversation, receiverId, senderId);
 
         if(!createMessage) return res.status(400).json({error: "Erreur lors de l'envoie du message"});
 
@@ -87,6 +94,25 @@ export const getAllUsers = async (req, res) => {
         
     } catch (error) {
         return res.status(500).json({allUsers:{}, error: error.message });
+    }
+
+}
+
+export const deleteMessageId = async (req, res) => {
+
+    const { messageId, conversationId } = req.params;
+
+    const myId = req.user.userid;
+
+    try {
+        const allMess = await deleteMessages(messageId, conversationId, myId);
+
+        if (!allMess[0]) return res.status(200).json({allMess: {}, success: "Aucun Message"});
+
+        return res.status(200).json({allMess: allMess})
+        
+    } catch (error) {
+        return res.status(500).json({allMess:{}, error: error.message });
     }
 
 }

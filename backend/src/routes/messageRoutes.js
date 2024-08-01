@@ -1,10 +1,12 @@
 import express from 'express';
 import protectedRoute from '../middlewares/protectedRoute.js';
-import { countUnread, getAllUsers, getConversation, getMessages, isViewed, sendMessage } from '../controllers/messageController.js';
+import { countUnread, deleteMessageId, getAllUsers, getConversation, getMessages, isViewed, sendMessage } from '../controllers/messageController.js';
+import uploadMessFile from '../middlewares/uploadMessMiddle.js';
 
 const router = express.Router();
 
-router.post("/send/:receiverId", protectedRoute, sendMessage);
+router.post("/send/:receiverId", protectedRoute, uploadMessFile.single('fileContent'), sendMessage);
+router.post("/delete/:messageId/:conversationId", protectedRoute, deleteMessageId);
 router.get("/conversation", protectedRoute, getConversation);
 router.get("/users", protectedRoute, getAllUsers);
 router.get("/count", protectedRoute, countUnread);
