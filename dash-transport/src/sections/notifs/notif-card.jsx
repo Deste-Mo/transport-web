@@ -13,7 +13,7 @@ import { ColorPreview } from 'src/components/color-utils';
 
 // ----------------------------------------------------------------------
 
-export default function ShopProductCard({ product }) {
+export default function ShopNotifCard({ product }) {
   const renderStatus = (
     <Label
       variant="filled"
@@ -84,6 +84,6 @@ export default function ShopProductCard({ product }) {
   );
 }
 
-ShopProductCard.propTypes = {
+ShopNotifCard.propTypes = {
   product: PropTypes.object,
 };
