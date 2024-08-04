@@ -19,7 +19,7 @@ const TextArea = ({
   onError = () => {},
   inputRef,
   value,
-  resize = false,
+  resize = true,
 }) => {
   const error = !isValid || !pattern.test(value);
   useEffect(() => {
@@ -32,7 +32,7 @@ const TextArea = ({
         block ? "w-full" : globalInputVariants.width
       }`}
     >
-      <p className="text-black dark:text-white">{title}</p>
+      <p className="text-black-100 dark:text-white-100">{title}</p>
       <textarea
         ref={inputRef}
         className={`h-[128px]  ${globalInputVariants.constant} ${

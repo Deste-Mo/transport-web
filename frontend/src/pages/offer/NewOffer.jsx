@@ -11,6 +11,8 @@ import {
 import { SERVERLINK } from '../../constants'
 import { useAuth } from '../../context/AuthProvider'
 import {SubHeader} from "../../components/pages/SubHeader.jsx";
+import {motion} from "framer-motion";
+import { appVariants } from '../../animations/variants.js'
 
 const NewOffer = () => {
   const { handleInputChange, checkFieldError, handleError } = useForm()
@@ -82,10 +84,11 @@ const NewOffer = () => {
   }, [errorData])
 
   return (
-        <section
+        <motion.section
           className="flex flex-col rounded-2xl gap-4 overflow-x-hidden overflow-y-scroll h-full scrollbar-none"
+           variants={appVariants} initial="hidden" whileInView="visible" viewport={{once : true}}
         >
-          <SubHeader name="Nouvel Offre" icon="bi bi-plus-circle-fill"/>
+          <SubHeader sticky name="Nouvel Offre" icon="bi bi-plus-circle-fill"/>
           <form className='flex flex-col gap-6 p-2 ' onSubmit={e => handleCreateOffer(e)}>
             {/* formulaire parties */}
               <div className=" flex flex-col gap-4">
@@ -172,7 +175,7 @@ const NewOffer = () => {
                 <Button block variant="secondary" children='Annuler' />
               </div>
           </form>
-        </section>
+        </motion.section>
   )
 }
 export default NewOffer

@@ -1,8 +1,11 @@
+import ExpandableSearchBar from "../../components/ui/ExpandableSearchBar.jsx";
 import {Toast} from "../../styles/components.js";
 
 const Labo = () => {
     return (
-        <Toast message="Message"/>
+        <div className="p-6">
+            <ExpandableSearchBar />
+        </div>
     )
 }
 

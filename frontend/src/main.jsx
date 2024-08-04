@@ -9,6 +9,7 @@ import AuthProvider from "./context/AuthProvider.jsx";
 import AppProvider from "./context/AppPorvider.jsx";
 import SocketContextProvider from "./context/SocketContext.jsx";
 import AnimationProvider from "./context/AnimationProvider.jsx";
+import UserPreferenceProvider from "./context/UserPreferenceProvider.jsx";
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -16,7 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Router>
             <AuthProvider>
                 <AnimationProvider>
-                
+                <UserPreferenceProvider>
                 <AppProvider>
                         <SocketContextProvider>
                             <FormProvider>
@@ -24,6 +25,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                             </FormProvider>
                         </SocketContextProvider>
                 </AppProvider>
+                </UserPreferenceProvider>
                 </AnimationProvider>
             </AuthProvider>
         </Router>

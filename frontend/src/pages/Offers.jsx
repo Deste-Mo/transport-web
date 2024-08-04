@@ -4,6 +4,7 @@ import OfferCard from "../components/pages/Offer/OfferCard.jsx";
 import {Icon} from "../styles/components.js";
 import {appVariants} from "../animations/variants.js";
 import {motion} from "framer-motion";
+import ExpandableSearchBar from "../components/ui/ExpandableSearchBar.jsx";
 
 const Offers = ({userId = null}) => {
     const {personalInformation, logout, setRegistrationStep} = useAuth();
@@ -12,7 +13,7 @@ const Offers = ({userId = null}) => {
     return (
         <motion.section className="flex flex-col items-center justify-center w-full gap-6" variants={appVariants} initial="hidden" whileInView="visible" viewport={{once : true}}>
 
-            <SubHeader name="Offres" icon="bi bi-briefcase-fill" sticky  rightContent={<Icon size="sm" variant="secondary" icon="bi bi-search"/>}/>
+            <SubHeader name="Offres" icon="bi bi-briefcase-fill" sticky  rightContent={<ExpandableSearchBar/>}/>
             <div className="flex flex-col items-center justify-center gap-6 w-full">
                 {
                     [1,2,3,4,5,6].map((item) => (<OfferCard key={item} />))

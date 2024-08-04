@@ -28,6 +28,7 @@ const NavPageLayout = () => {
       </div>
       <div className="flex flex-col items-start justify-start gap-10 overflow-x-hidden basis-[26%] overflow-y-scroll max-h-full scrollbar-none relative">
         <ProfileLeft
+        id={user.id}
           name={user?.fullName}
           image={SERVERLINK + "/" + user?.profile}
           account={user?.accounttype}
@@ -62,7 +63,7 @@ const NavPageLayout = () => {
               />
             ))
           ) : (
-            <p className="w-full px-4 py-10 text-center text-black-80 bg-white-100 border border-black-0 rounded-xl ">
+            <p className="w-full px-4 py-10 text-center text-black-80 bg-white-100 border border-black-0 rounded-xl dark:border-none dark:bg-black-10 dark:text-white-60">
               Pas de sauvegarde pour l'instant
             </p>
           )}
@@ -87,7 +88,7 @@ const DynamicLeftContent = ({ currentLocation }) => {
       return (
         <>
           <SubHeader name="Amis" icon="bi bi-person" />
-          <div className="flex flex-col gap-3 rounded-lg p-4 bg-white-100">
+          <div className="flex flex-col gap-3 rounded-lg p-4 bg-white-100 dark:bg-black-100">
             {friends.length > 0 ? (
               friends.map((friend) => (
                 <RecentlyFriends
@@ -109,7 +110,7 @@ const DynamicLeftContent = ({ currentLocation }) => {
       return (
         <>
           <SubHeader name="Suggestion d'amis" icon="bi bi-person" />
-          <div className="flex flex-col items-center justify-center gap-6 p-4 w-full bg-white-100 rounded-xl">
+          <div className="flex flex-col items-center justify-center gap-6 p-4 w-full bg-white-100 dark:bg-black-100 rounded-xl">
             {users.length > 0 ? (
               users.map((us) => (
                 <RecentlyFriends
@@ -134,7 +135,7 @@ const DynamicLeftContent = ({ currentLocation }) => {
       return (
         <>
           <SubHeader name="Amis" icon="bi bi-person" />
-          <div className="flex flex-col gap-3 rounded-lg p-4 bg-white-100">
+          <div className="flex flex-col gap-3 rounded-lg p-4 bg-white-100 dark:bg-black-100">
             {friends.length > 0 ? (
               friends.map((friend) => (
                 <RecentlyFriends

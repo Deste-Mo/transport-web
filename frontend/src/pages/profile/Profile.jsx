@@ -29,6 +29,7 @@ export default function Profile() {
       <div className="flex flex-col gap-6">
         <SubHeader icon="bi bi-person-fill" name="Profile" />
         <ProfileCard
+          id={user.id}
           account={user?.accounttype}
           countFollow={countFollow}
           name={user?.fullName}
@@ -41,7 +42,7 @@ export default function Profile() {
       </div>
       <div className="flex flex-col gap-6">
         <SubHeader icon="bi bi-person-fill" name="Amis" profile />
-        <div className="bg-white-100 flex flex-col gap-4 rounded-lg p-2">
+        <div className="bg-white-100 dark:bg-black-100 flex flex-col gap-4 rounded-lg p-2">
           {friends.length > 0 ? (
             friends
               .slice(0, 4)
@@ -57,7 +58,7 @@ export default function Profile() {
                 />
               ))
           ) : (
-            <div>No friends</div>
+            <div>Pas d'amis</div>
           )}
           <Button variant="secondary" block>
             Voir plus
@@ -71,7 +72,7 @@ export default function Profile() {
             <SubHeader
               name="Offres Sauvegardés"
               icon="bi bi-bookmarks-fill"
-              rightContent={<p>4</p>}
+              rightContent={<p className="text-black-80 dark:text-white-100">4</p>}
             />
             <div className="flex flex-col gap-4 rounded-lg">
               {[1, 2, 3].map((item) => (
@@ -85,7 +86,7 @@ export default function Profile() {
               icon="bi bi-briefcase-fill"
               rightContent={
                 <Icon
-                  onClick={() => navigate(`/profile`)}
+                  onClick={() => navigate(`/profile/${id}`)}
                   size="sm"
                   icon="bi bi-plus-lg"
                 />
@@ -93,7 +94,7 @@ export default function Profile() {
             />
             <div className="flex flex-col gap-4 rounded-lg">
               {[1, 2, 3].map((item) => (
-                <OfferCard key={item} />
+                <OfferCard key={item}  forCurrentUser/>
               ))}
             </div>
           </div>

@@ -21,18 +21,18 @@ const LittleOfferCard = ({className, saved = false}) => {
           <OfferDetailBadge text="5 Tonnes" icon="bi bi-truck"/>
         </div>
         <div
-            className={`flex flex-col gap-3 w-full items-center ${className} bg-white-100 rounded-xl p-4 border border-black-0`}>
+            className={`flex flex-col gap-3 w-full items-center ${className} bg-white-100 dark:font-sm text-black-100 dark:bg-white-10 dark:border-none dark:text-white-100 rounded-xl p-4 border border-black-0`}>
           <div
-              className="w-full flex items-center justify-between bg-white-100 rounded-2xl">
+              className="w-full flex items-center justify-between  rounded-2xl">
             <div className="flex items-center gap-2">
               <img className="size-[40px] object-cover rounded-full" src={ProfileImage}/>
               <div className="flex flex-col items-start">
-                <p className="text-black-100 text-small-1">RAHARISOA Haingonirina </p><span
-                  className="text-black-100 text-small-2">Entreprise</span>
+                <p className=" text-small-1 font-md">RAHARISOA Haingonirina </p><span
+                  className=" text-small-2">Entreprise</span>
                 <div className="flex items-center gap-2">
                   <i className="bi bi-clock"></i>
                   <span
-                      className="text-black-80 text-small-2 ">Il y a 30 minutes
+                      className="text-black-80 dark:text-white-100 text-small-2 ">Il y a 30 minutes
                                 </span>
                 </div>
               </div>
@@ -42,10 +42,10 @@ const LittleOfferCard = ({className, saved = false}) => {
             </div>
           </div>
           <div
-              className="w-full flex flex-col gap-4 items-start justify-cente bg-white-100 rounded-2xl  ">
+              className="w-full flex flex-col gap-4 items-start justify-cente  rounded-2xl  ">
             {
                 detailed &&
-                <p className="text-small-1 text-black-100 ">
+                <p className="text-small-1  ">
                   Lorem ipsum dolor sit amet,
                   Lorem ipsum dolor sit amet
                   Lorem ipsum dolor sit amet

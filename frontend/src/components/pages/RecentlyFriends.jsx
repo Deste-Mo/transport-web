@@ -76,7 +76,7 @@ const RecentlyFriends = ({
 
   return (
     <div
-      className={`flex items-center justify-between gap-4 bg-white-100 p-4 hover:bg-primary-20 group rounded-xl ${className}`}
+      className={`flex items-center justify-between gap-4 bg-white-100 p-4 hover:bg-primary-20 group rounded-xl dark:bg-black-100 text-black-100 dark:text-white-100 ${className}`}
     >
       <div className="flex items-center relative gap-2">
         <img src={image} alt="" className="h-12 w-12 rounded-full" />
@@ -87,7 +87,7 @@ const RecentlyFriends = ({
               <span className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-success-100 inline-block"></span>
             )}
           </span>
-          <span className="text-black-80 text-small-1 ">{account}</span>
+          <span className="text-black-80 dark:text-white-80 text-small-1 ">{account}</span>
         </div>
       </div>
       <div className="flex items-center gap-8">

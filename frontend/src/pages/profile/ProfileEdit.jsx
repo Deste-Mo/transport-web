@@ -8,8 +8,10 @@ import {
     Button,
     TextArea,
     Icon,
-} from '../../styles/components'
-import {SubHeader} from '../../components/pages/SubHeader'
+} from '../../styles/components';
+import {SubHeader} from '../../components/pages/SubHeader';
+import {motion} from "framer-motion"
+import { appVariants } from '../../animations/variants';
 
 const ProfileEdit = ({onClick}) => {
     const {handleInputChange, checkFieldError, handleError} = useForm()
@@ -45,10 +47,10 @@ const ProfileEdit = ({onClick}) => {
     }, [errorData])
 
     return (
-                <section className="space-y-6">
+                <motion.section className="space-y-6 px-2"  variants={appVariants} initial="hidden" whileInView="visible" viewport={{once : true}}>
                     <SubHeader icon='bi bi-info-circle' name='Modifier les informations'/>
                     
-                    <form className={`flex flex-col gap-4 shadow`}>
+                    <form className={`flex flex-col gap-4 `}>
                         <div className='rounded-lg flex flex-col gap-4'>
                             <div
                                 className="w-full  h-60 bg-black-10 rounded-xl flex flex-col justify-center items-center overflow-hidden">
@@ -130,7 +132,7 @@ const ProfileEdit = ({onClick}) => {
                             </div>
                         </div>
                     </form>
-                </section>
+                </motion.section>
     )
 }
 export default ProfileEdit

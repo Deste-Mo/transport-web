@@ -7,6 +7,7 @@ import {SERVERLINK} from "../constants/index.js";
 import {Icon} from "../styles/components.js";
 import {appVariants} from "../animations/variants.js";
 import {motion} from "framer-motion";
+import ExpandableSearchBar from "../components/ui/ExpandableSearchBar.jsx";
 
 const Friends = () => {
     const {personalInformation, logout, setRegistrationStep} = useAuth();
@@ -22,8 +23,8 @@ const Friends = () => {
     return (
         <motion.section className="flex flex-col items-center justify-center gap-6 w-full " variants={appVariants} initial="hidden" whileInView="visible" viewport={{once : true}}>
             <SubHeader name="Amis" icon="bi bi-person-fill"
-                       rightContent={<Icon size="sm" variant="secondary" icon="bi bi-search"/>}/>
-            <div className="flex flex-col items-center justify-center gap-6 p-4 w-full bg-white-100 rounded-xl">
+                       rightContent={<ExpandableSearchBar/>}/>
+            <div className="flex flex-col items-center justify-center gap-6 p-4 w-full bg-white-100 dark:bg-black-100 rounded-xl">
                 {friends.length > 0 ?
                     friends.map(friend => (
                         <RecentlyFriends className="w-full" key={friend.userid} spec={friend.userid}

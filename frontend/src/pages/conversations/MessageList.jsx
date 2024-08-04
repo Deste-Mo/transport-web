@@ -40,7 +40,7 @@ const MessageList = () => {
         <motion.section className="flex flex-col items-center justify-start w-full gap-6 relative  min-h-screen" variants={appVariants} initial="hidden" whileInView="visible" viewport={{once : true}}>
             <SubHeader name={"Messages"} icon={"bi bi-chat"}/>
             <div
-                className="w-full h-fit bg-white-100 flex justify-start overflow-auto p-4 border border-black-0 rounded-2xl scrollbar-none ">
+                className="w-full h-fit bg-white-100 dark:bg-black-100 dark:border-none flex justify-start overflow-auto p-4 border border-black-0 rounded-2xl scrollbar-none ">
                 {friends.length > 0 ?
                     friends.map(friend => (
                         <ActiveUser key={friend.userid} friend={friend}/>
@@ -53,14 +53,14 @@ const MessageList = () => {
 
             <SearchBar variant={"fill"} block size={"lg"} placeholder={"Rechercher un ami"}/>
 
-            <div className="w-full  h-[70%] bg-white-100  flex flex-col gap-4 overflow-hidden p-4  rounded-xl border border-black-0">
+            <div className="w-full  h-[70%] bg-white-100 dark:bg-black-10 dark:border-none  flex flex-col gap-4 overflow-hidden p-4  rounded-xl border border-black-0">
                 {conversations.length > 0 ?
                     conversations.map(conversation => (
                             <Conv key={conversation.userid} id={conversation.userid} userToChat={conversation}/>
                         )
                     )
                     :
-                    <p className="text-black-80  text-center">
+                    <p className="text-black-80 dark:text-white-60  text-center">
                         Commencer une conversation !
                     </p>
                 }

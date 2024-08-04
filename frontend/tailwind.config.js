@@ -23,11 +23,11 @@ export default {
       },
       dark: "#000",
       black: {
-        100: "#2E2B2B",
-        80: "#2E2B2Bcc", // 80% opacity
-        60: "#2E2B2B99", // 60% opacity
-        40: "#2E2B2B66", // 40% opacity
-        20: "#2E2B2B33", // 20% opacity
+        100: "#181818",
+        80: "#181818cc", // 80% opacity
+        60: "#18181899", // 60% opacity
+        40: "#18181866", // 40% opacity
+        20: "#18181833", // 20% opacity
         10: "#8888881a", // 10% opacity
         0: "rgba(138,137,137,0.2)", // for border
       },

@@ -101,15 +101,15 @@ const Messages = () => {
     }
     return (
         <section
-            className="flex flex-col items-center justify-center w-full gap-4  rounded-xl bg-white-100 h-[85vh] relative overflow-hidden">
+            className="flex flex-col items-center justify-center w-full gap-4  rounded-xl bg-white-100 dark:bg-black-10 h-[85vh] relative overflow-hidden">
             <div
-                className="flex items-center justify-between w-full py-4 px-6 border-0 border-b border-b-black-20  bg-white-100 top-0 z-40">
+                className="flex items-center justify-between w-full py-4 px-6 border-0 border-b border-b-black-20 dark:bg-black-10 dark:backdrop-blur-sm  bg-white-100 top-0 z-40">
                 <div className="flex items-center justify-between ">
                     <Icon variant="ghost" icon="bi bi-chevron-left " onClick={() => navigate("/discussion")}/>
                     <div className="flex items-center gap-2 cursor-pointer">
                         <img src={userToChat.pic} className={"size-[54px] rounded-full bg-black-20"}/>
-                        <p className={"text-black-100 text-lead"}>{userToChat.fullName}<span
-                            className="text-small-1 text-black-80">({userToChat.accounttype})</span>
+                        <p className={"text-black-100 dark:text-white-100 text-lead"}>{userToChat.fullName}<span
+                            className="text-small-1 text-black-80 dark:text-white-100 dark:font-sm">({userToChat.accounttype})</span>
                         </p>
                     </div>
                 </div>
@@ -145,7 +145,7 @@ const Messages = () => {
                 }
                 <div ref={endOfMessagesRef}/>
             </div>
-            <div className="border-0 bg-white-100 px-6 py-4 w-full border-t border-t-black-20  bottom-0 z-40">
+            <div className="border-0 bg-white-100 dark:bg-black-10 px-6 py-4 w-full border-t border-t-black-20  bottom-0 z-40">
                 <form className="flex items-center justify-between gap-4" onSubmit={handleSendMessage}>
                     <Icon size="md" variant="ghost" icon="bi bi-image"/>
                     <Icon size="md" variant="ghost" icon="bi bi-emoji-smile"/>

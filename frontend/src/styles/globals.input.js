@@ -13,6 +13,7 @@ export const globalInputVariants = {
     },
     width : "w-[320px] md:w-[380px]",
     size : {
+        sm : "px-6 py-2",
         md: "px-6 py-3",
         lg: "px-8 py-4",
         default : "md",

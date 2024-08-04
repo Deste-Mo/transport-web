@@ -30,6 +30,14 @@ import GlobalLayout from "./layouts/GlobalLayout.jsx";
 import ProfileDetails from "./pages/profile/ProfileDetails.jsx";
 
 
+// TODO :
+/*
+  - Animation Skeleton
+  - Theme changer
+  - Settings
+*/
+
+
 export default function App() {
 
     return (

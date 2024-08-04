@@ -4,6 +4,7 @@ import OfferCard from "../components/pages/Offer/OfferCard.jsx";
 import {Icon} from "../styles/components.js";
 import {motion} from "framer-motion";
 import {appVariants} from "../animations/variants.js";
+import ExpandableSearchBar from "../components/ui/ExpandableSearchBar.jsx";
 
 
 const Home = () => {
@@ -12,7 +13,7 @@ const Home = () => {
 
     return (
         <motion.section className="flex flex-col items-center justify-center w-full gap-6" variants={appVariants} initial="hidden" whileInView="visible" viewport={{once : true}}>
-            <SubHeader name="Actualites" icon="bi bi-grid-fill" rightContent={<Icon size="sm" variant="secondary" icon="bi bi-search"/>}/>
+            <SubHeader name="Actualites" icon="bi bi-grid-fill" rightContent={<ExpandableSearchBar/>}/>
             <div className="flex flex-col items-center justify-center gap-[64px] w-full ">
                 {
                     [1,2,3,4,5,6].map((item) => (<OfferCard key={item}/>))

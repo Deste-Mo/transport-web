@@ -31,7 +31,7 @@ const TextInput = ({
 
     return (
         <div className={`flex  flex-col gap-2 ${block ? 'w-full' : globalInputVariants.width}`}>
-            <p className="text-base font-thin text-black-100 dark:text-white">{title}</p>
+            <p className="text-base font-thin text-black-100 dark:text-white-100">{title}</p>
             <input
                 ref={inputRef}
                 type={type}
