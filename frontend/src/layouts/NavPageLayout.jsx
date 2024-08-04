@@ -9,7 +9,7 @@ import { SERVERLINK } from "../constants/index.js";
 import { useApp } from "../context/AppPorvider.jsx";
 import { useEffect } from "react";
 import { NAVIGATIONS } from "../constants/home.js";
-import { Icon } from "../styles/components.js";
+import { Button, Icon } from "../styles/components.js";
 import LittleOfferCard from "../components/pages/Offer/LittleOfferCard.jsx";
 
 const NavPageLayout = () => {
@@ -100,7 +100,7 @@ const DynamicLeftContent = ({ currentLocation }) => {
                 />
               ))
             ) : (
-              <div>No friends</div>
+              <Button block icon="bi bi-plus-lg">Ajouter un ami</Button>
             )}
           </div>
         </>

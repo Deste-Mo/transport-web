@@ -137,7 +137,7 @@ const Messages = () => {
                                 }
                             </>
                         )) : (
-                        <p className="text-black-40 w-full h-screen text-center flex items-center justify-center text-subtitle-3">
+                        <p className="text-black-40  dark:text-white-40 w-full h-screen text-center flex items-center justify-center text-subtitle-3">
                             Envoyer un message!
                         </p>
                     )
@@ -165,9 +165,9 @@ const Messages = () => {
 
 const Message = ({message, sentDate, sentByCurrentUser = false}) => {
     return <div className={`space-y-1 max-w-1/2`}>
-        <div className={`p-4  rounded-2xl space-y-3 w-full ${sentByCurrentUser ? 'bg-primary-20' : 'bg-black-10'}`}>
-            <p className="text-small-2 text-black-80 ">{sentDate}</p>
-            <p className="text-small-1 text-black-100">{message}</p>
+        <div className={`p-4  rounded-2xl space-y-3 w-full ${sentByCurrentUser ? 'bg-primary-20' : 'bg-black-10 dark:bg-white-10'}`}>
+            <p className="text-small-2 text-black-80 dark:text-white-80 font-sm  ">{sentDate}</p>
+            <p className="text-small-1 text-black-100 dark:text-white-100">{message}</p>
         </div>
 
         <div className={`flex items-center  w-full gap-2 ${sentByCurrentUser ? 'justify-end' : 'justify-start'}`}>

@@ -1,11 +1,12 @@
 import {useAuth} from "../context/AuthProvider.jsx";
 import {SubHeader} from "../components/pages/SubHeader.jsx";
-import OfferCard from "../components/pages/Offer/OfferCard.jsx";
 import {Icon} from "../styles/components.js";
 import {motion} from "framer-motion";
 import {appVariants} from "../animations/variants.js";
 import ExpandableSearchBar from "../components/ui/ExpandableSearchBar.jsx";
-
+import { Suspense, lazy } from "react";
+import OfferCardLoading from "../components/loader/OfferCardLoading.jsx";
+const OfferCard = lazy(() => import("../components/pages/Offer/OfferCard.jsx"))
 
 const Home = () => {
     const {personalInformation, logout, setRegistrationStep} = useAuth();
@@ -16,7 +17,11 @@ const Home = () => {
             <SubHeader name="Actualites" icon="bi bi-grid-fill" rightContent={<ExpandableSearchBar/>}/>
             <div className="flex flex-col items-center justify-center gap-[64px] w-full ">
                 {
-                    [1,2,3,4,5,6].map((item) => (<OfferCard key={item}/>))
+                    [1,2,3,4,5,6].map((item) => (
+                        <Suspense fallback={<OfferCardLoading/>}>
+                            <OfferCard key={item}/>
+                        </Suspense>
+                    ))
                 }
             </div>
         </motion.section>

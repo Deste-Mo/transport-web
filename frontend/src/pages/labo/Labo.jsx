@@ -1,10 +1,10 @@
-import ExpandableSearchBar from "../../components/ui/ExpandableSearchBar.jsx";
-import {Toast} from "../../styles/components.js";
+
+import ProfileLeftLoading from "../../components/loader/ProfileLeftLoading.jsx";
 
 const Labo = () => {
     return (
-        <div className="p-6">
-            <ExpandableSearchBar />
+        <div className="p-6 dark:bg-black-100 h-screen">
+            <ProfileLeftLoading />
         </div>
     )
 }

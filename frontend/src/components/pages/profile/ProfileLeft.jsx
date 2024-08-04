@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../../ui/Button";
 import { useEffect, useState } from "react";
 import { useApp } from "../../../context/AppPorvider";
+import ProfileLeftLoading from "../../loader/ProfileLeftLoading";
 //import PropTypes from "prop-types";
 
 export const ProfileLeft = ({
@@ -19,12 +20,14 @@ export const ProfileLeft = ({
   const navigate = useNavigate();
 
   const { countFollow, handleCountFollow } = useApp();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     handleCountFollow();
   }, [countFollow, handleCountFollow]);
 
   return (
+    loading ? <ProfileLeftLoading/> : 
     <div className="flex flex-col gap-6 rounded-xl shadow-sm border border-black-0 p-4 bg-white-100 dark:bg-black-100 dark:border-none w-full">
       <div className={profile && "flex justify-between items-start"}>
         <div className="flex flex-col items-center justify-center gap-4">
@@ -61,5 +64,6 @@ export const ProfileLeft = ({
           Voir mon profile
         </Button>
     </div>
+  
   );
 };

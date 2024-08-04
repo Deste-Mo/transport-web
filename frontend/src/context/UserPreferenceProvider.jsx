@@ -8,6 +8,11 @@ const UserPreferenceProvider = ({children}) => {
 
     useEffect(() => {
         localStorage.setItem('darkMode', darkMode);
+        if (darkMode) {
+            document.documentElement.classList.add("dark");
+          } else {
+            document.documentElement.classList.remove("dark");
+          }
     }, [darkMode]); 
 
   return (<UserPreferenceContext.Provider value={{darkMode, setDarkMode}}>

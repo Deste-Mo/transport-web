@@ -40,6 +40,14 @@
   .nav-page-container {
     @apply px-4 py-0
   }
+
+  /*Loading animation*/
+  .loader-tag-1{
+    @apply bg-black-60 dark:bg-white-40  animate-pulse 
+  }
+  .loader-tag-2{
+    @apply  bg-black-20 dark:bg-white-10  animate-pulse 
+  }
 }
 
 @layer components {
