@@ -9,18 +9,17 @@ export const ProfileLeft = ({
   id,
   name,
   account,
-  profile = false,
-  email,
   image,
-  phone,
-  date,
   onClick,
-  forCurrentUser = false,
 }) => {
   const navigate = useNavigate();
 
   const { countFollow, handleCountFollow } = useApp();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => setLoading(false) , 1000)
+  }, [])
 
   useEffect(() => {
     handleCountFollow();
@@ -29,7 +28,7 @@ export const ProfileLeft = ({
   return (
     loading ? <ProfileLeftLoading/> : 
     <div className="flex flex-col gap-6 rounded-xl shadow-sm border border-black-0 p-4 bg-white-100 dark:bg-black-100 dark:border-none w-full">
-      <div className={profile && "flex justify-between items-start"}>
+
         <div className="flex flex-col items-center justify-center gap-4">
           <img
             src={image}
@@ -44,7 +43,6 @@ export const ProfileLeft = ({
             </span>
           </div>
         </div>
-      </div>
       <div
         className={`flex gap-4 text-base text-black-80  dark:text-white-80
           flex-col

@@ -65,7 +65,6 @@ const AuthProvider = ({children}) => {
         })
             .then(res => {
                 setPersonalInformation(res.data);
-                console.log(res.data)
             })
             .catch(e => {
                 console.log(`Erreur : ${e.response.data.error}`);

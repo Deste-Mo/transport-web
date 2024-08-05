@@ -5,6 +5,8 @@ import { useAuth } from "../../context/AuthProvider";
 import { SERVERLINK } from "../../constants";
 import { useApp } from "../../context/AppPorvider";
 import { useSocketContext } from "../../context/SocketContext";
+import { useEffect, useState } from "react";
+import FriendCardLoading from "../loader/FriendCardLoading";
 //import PropTypes from "prop-types";
 
 const RecentlyFriends = ({
@@ -23,6 +25,8 @@ const RecentlyFriends = ({
   const { handleFriends, handleUsersToShow } = useApp();
 
   const { ActiveUsers } = useSocketContext();
+
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -74,7 +78,13 @@ const RecentlyFriends = ({
     navigate("/message");
   };
 
-  return (
+  useEffect(() => {
+    setTimeout(() => setLoading(false), 1000);
+  }, []);
+
+  return loading ? (
+    <FriendCardLoading />
+  ) : (
     <div
       className={`flex items-center justify-between gap-4 bg-white-100 p-4 hover:bg-primary-20 group rounded-xl dark:bg-black-100 text-black-100 dark:text-white-100 ${className}`}
     >
@@ -87,15 +97,14 @@ const RecentlyFriends = ({
               <span className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-success-100 inline-block"></span>
             )}
           </span>
-          <span className="text-black-80 dark:text-white-80 text-small-1 ">{account}</span>
+          <span className="text-black-80 dark:text-white-80 text-small-1 ">
+            {account}
+          </span>
         </div>
       </div>
       <div className="flex items-center gap-8">
         {showProfileButton && (
-          <Button
-            variant="secondary"
-            onClick={() => navigate(`/profile/1`)}
-          >
+          <Button variant="secondary" onClick={() => navigate(`/profile/1`)}>
             Profile
           </Button>
         )}

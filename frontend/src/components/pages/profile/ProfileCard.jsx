@@ -20,11 +20,16 @@ const ProfileCard = ({
   const navigate = useNavigate();
 
   const { countFollow, handleCountFollow } = useApp();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => setLoading(false), 1000);
+  }, [])
 
   useEffect(() => {
     handleCountFollow();
   }, [countFollow, handleCountFollow]);
+
 
   return (
     loading ? <ProfileCardLoading/> : <div className="flex flex-col gap-6 rounded-xl shadow-sm border text-black-100 dark:text-white-100 border-black-0 p-4 bg-white-100 dark:bg-black-100 dark:border-none w-full">

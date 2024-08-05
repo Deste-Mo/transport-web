@@ -18,8 +18,8 @@ const Home = () => {
             <div className="flex flex-col items-center justify-center gap-[64px] w-full ">
                 {
                     [1,2,3,4,5,6].map((item) => (
-                        <Suspense fallback={<OfferCardLoading/>}>
-                            <OfferCard key={item}/>
+                        <Suspense key={item} fallback={<OfferCardLoading/>}>
+                            <OfferCard/>
                         </Suspense>
                     ))
                 }

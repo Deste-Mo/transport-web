@@ -24,10 +24,10 @@ import NavPageLayout from "./layouts/NavPageLayout.jsx";
 import Security from './pages/profile/Security';
 import Messages from "./pages/conversations/Message.jsx";
 import MessageList from "./pages/conversations/MessageList.jsx";
-import LittleOfferCard from "./components/pages/Offer/LittleOfferCard.jsx";
 import ProfileLayout from "./layouts/ProfileLayout.jsx";
 import GlobalLayout from "./layouts/GlobalLayout.jsx";
 import ProfileDetails from "./pages/profile/ProfileDetails.jsx";
+import OfferCard from "./components/pages/Offer/OfferCard.jsx";
 
 
 // TODO :
@@ -97,7 +97,8 @@ export default function App() {
 
             {/*Not implemented routes and components*/}
             <Route path="/securite" element={<Security />} />
-            <Route path="/littleOfferCard" element={<LittleOfferCard />} />
+
+
 
             {/* Labo (Only for testing components)*/}
             <Route path="/labo" element={<Labo />}></Route>

@@ -14,6 +14,7 @@ const AnimationProvider = ({children}) => {
     })
 
     const setMessagePopup =  (message, type) => {
+        alert("setMess")
         setToast({
             message:  message,
             type : type

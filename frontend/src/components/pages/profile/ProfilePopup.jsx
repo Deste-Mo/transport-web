@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useApp } from "../../../context/AppPorvider.jsx";
 import { useAnimation } from "../../../context/AnimationProvider.jsx";
 import { usePreference } from "../../../context/UserPreferenceProvider.jsx";
+import { useRef } from "react";
 
 const ProfilePopup = ({ className }) => {
   const { logout, personalInformation } = useAuth();
@@ -12,6 +13,8 @@ const ProfilePopup = ({ className }) => {
   const { setTogglePopup } = useAnimation();
 
   const currentUser = personalInformation;
+
+
 
   const handleLogout = () => {
     setTogglePopup(false);

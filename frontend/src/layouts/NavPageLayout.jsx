@@ -10,7 +10,7 @@ import { useApp } from "../context/AppPorvider.jsx";
 import { useEffect } from "react";
 import { NAVIGATIONS } from "../constants/home.js";
 import { Button, Icon } from "../styles/components.js";
-import LittleOfferCard from "../components/pages/Offer/LittleOfferCard.jsx";
+import OfferCard from "../components/pages/Offer/OfferCard.jsx";
 
 const NavPageLayout = () => {
   const { personalInformation } = useAuth();
@@ -28,7 +28,7 @@ const NavPageLayout = () => {
       </div>
       <div className="flex flex-col items-start justify-start gap-10 overflow-x-hidden basis-[26%] overflow-y-scroll max-h-full scrollbar-none relative">
         <ProfileLeft
-        id={user.id}
+          id={user.id}
           name={user?.fullName}
           image={SERVERLINK + "/" + user?.profile}
           account={user?.accounttype}
@@ -71,7 +71,7 @@ const NavPageLayout = () => {
         <div className="flex flex-col gap-6">
           <SubHeader name="Sugfestions d'offres" icon="bi bi-robot" />
           {[1, 2, 3].map((item) => (
-            <LittleOfferCard key={item} />
+            <OfferCard detailedProfile={false} key={item} />
           ))}
         </div>
       </div>

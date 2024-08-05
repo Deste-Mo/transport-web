@@ -15,8 +15,8 @@ import UserPreferenceProvider from "./context/UserPreferenceProvider.jsx";
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <Router>
+        <AnimationProvider>
             <AuthProvider>
-                <AnimationProvider>
                 <UserPreferenceProvider>
                 <AppProvider>
                         <SocketContextProvider>
@@ -26,8 +26,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                         </SocketContextProvider>
                 </AppProvider>
                 </UserPreferenceProvider>
-                </AnimationProvider>
             </AuthProvider>
+            </AnimationProvider>
         </Router>
     </React.StrictMode>
 );
