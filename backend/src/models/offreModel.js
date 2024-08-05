@@ -91,17 +91,18 @@ export const getHomepageOffers = async (userId) => {
             WITH CurrentUser AS (
                 SELECT a.accountType 
                 FROM Account a 
-                JOIN Users u ON u.accountId = a.accountId 
+                INNER JOIN Users u ON u.accountId = a.accountId 
                 WHERE u.userId = $1
             ), 
             OppositeOffers AS (
-                SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType 
+                SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType, EXISTS ( SELECT 1 FROM Follow f WHERE f.followerId = $1 AND f.followeeId = u.userId) AS isfollowed 
                 FROM Offer o 
-                JOIN Users u ON o.userId = u.userId 
-                JOIN Account a ON a.accountId = u.accountId 
+                INNER JOIN Users u ON o.userId = u.userId 
+                INNER JOIN Account a ON a.accountId = u.accountId 
+                
                 WHERE o.dispo = TRUE 
                 AND u.userId <> $1
-                AND o.scheduledDate >= current_date 
+                
                 AND (
                     (a.accountType IN ('Camionneur') AND (SELECT accountType FROM CurrentUser) IN ('Client', 'Entreprise'))
                     OR
@@ -111,28 +112,28 @@ export const getHomepageOffers = async (userId) => {
                 LIMIT 50
             ), 
             SameTypeFollowedOffers AS (
-                SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType 
+                SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType,EXISTS ( SELECT 1 FROM Follow f WHERE f.followerId = $1 AND f.followeeId = u.userId) AS isfollowed
                 FROM Offer o 
-                JOIN Users u ON o.userId = u.userId 
-                JOIN Follow f ON u.userId = f.followeeId 
-                JOIN Account a ON u.accountId = a.accountId 
+                INNER JOIN Users u ON o.userId = u.userId 
+                INNER JOIN Follow f ON u.userId = f.followeeId 
+                INNER JOIN Account a ON u.accountId = a.accountId 
                 WHERE o.dispo = TRUE
                 AND u.userId <> $1 
-                AND o.scheduledDate >= current_date 
+                 
                 AND f.followerId = $1 
                 AND a.accountType = (SELECT accountType FROM CurrentUser) 
                 ORDER BY RANDOM() 
                 LIMIT 15
             ), 
             OppositeFollowedOffers AS (
-                SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType 
+                SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType,EXISTS ( SELECT 1 FROM Follow f WHERE f.followerId = $1 AND f.followeeId = u.userId) AS isfollowed 
                 FROM Offer o 
-                JOIN Users u ON o.userId = u.userId 
-                JOIN Follow f ON u.userId = f.followeeId 
-                JOIN Account a ON u.accountId = a.accountId 
+                INNER JOIN Users u ON o.userId = u.userId 
+                INNER JOIN Follow f ON u.userId = f.followeeId 
+                INNER JOIN Account a ON u.accountId = a.accountId 
                 WHERE o.dispo = TRUE 
                 AND u.userId <> $1
-                AND o.scheduledDate >= current_date 
+                 
                 AND f.followerId = $1  
                 AND (
                     (a.accountType IN ('Camionneur') AND (SELECT accountType FROM CurrentUser) IN ('Client', 'Entreprise'))
@@ -159,7 +160,7 @@ export const getHomepageOffers = async (userId) => {
 // get the latest offers published
 
 export const latestOffers = async (userId) => {
-    const query = "SELECT o.*, u.lastname, u.firstname, u.profileimage, u.phone, a.accountType FROM Offer o INNER JOIN users u ON o.userId = u.userId  INNER JOIN Account a ON u.accountId = a.accountId WHERE o.dispo = TRUE AND u.userId <> $1 ORDER BY o.offerid DESC"
+    const query = "SELECT o.*, u.lastname, u.firstname, u.profileimage, u.phone, a.accountType FROM Offer o INNER JOIN users u ON o.userId = u.userId  INNER JOIN Account a ON u.accountId = a.accountId WHERE o.dispo = TRUE AND u.userId <> $1 ORDER BY o.publicationDate DESC"
 
     const result = await pool.query(query, [userId]);
 

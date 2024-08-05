@@ -55,7 +55,7 @@ const OfferCard = ({ className, saved = false, sug, mine = false }) => {
                     <div className="flex items-center gap-2">
                         <img className="size-[40px] object-cover rounded-full" src={image} />
                         <div className="flex flex-col items-start">
-                            <p className="text-black-100 text-small-1">{sug.firstname + (!sug.lastname ? '' : sug.lastname)}</p><span
+                            <p className="text-black-100 text-small-1">{sug.firstname + (!sug.lastname ? '' :' '+sug.lastname)}</p><span
                                 className="text-black-100 text-small-2">{sug.accounttype}</span>
                             <div className="flex items-center gap-2">
                                 <i className="bi bi-clock"></i>
@@ -87,7 +87,7 @@ const OfferCard = ({ className, saved = false, sug, mine = false }) => {
                         <p className="underline text-small-2">{detailed ? "Moin" : "Plus"} de details</p>
                     </button>
                 </div>
-                <img src={offerImage} className="w-full h-[256px] object-cover rounded-xl" />
+                {(offerImage!= null)?<img src={offerImage} className="w-full h-[256px] object-cover rounded-xl" />: ""}
                 <div className="flex items-center w-full gap-6 jusify-start">
                     {/*<Icon variant="secondary" icon="bi bi-chat" size="sm"/>*/}
                     {
