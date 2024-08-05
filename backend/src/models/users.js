@@ -10,6 +10,20 @@ export const createUser = async (user, accountId) => {
     return rows[0];
 };
 
+export const updateUser = async (data)=>{
+
+    
+    let query = "";
+
+    !data[0] ? query = "UPDATE users SET firstname = $1, companynumber = $2, phone = $3,address= $4, email = $5, bio= $6, lastname=$7, usercin=$8 WHERE userid = $9 RETURNING *" : query = "UPDATE users SET firstname = $2, companynumber = $3, phone = $4,address= $5, email = $6, bio= $7, lastname=$8, usercin=$9, profileimage = $1 WHERE userid = $10 RETURNING *";
+
+    !data[0] && data.shift();
+
+    const result = await pool.query(query, data);
+
+    return result.rows[0];
+}
+
 export const getUser = async (email, cin, nif, phone) => {
     const query = "SELECT * FROM users WHERE email = $1 or phone = $2 or usercin = $3 or companynumber = $4";
     const { rows } = await pool.query(query, [email, phone, cin, nif]);

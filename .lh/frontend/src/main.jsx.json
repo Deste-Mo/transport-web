@@ -1,0 +1,18 @@
+{
+    "sourceFile": "frontend/src/main.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1722239127702,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1722239127702,
+            "name": "Commit-0",
+            "content": "import React from \"react\";\nimport ReactDOM from \"react-dom/client\";\nimport \"bootstrap-icons/font/bootstrap-icons.css\";\nimport App from \"./App.jsx\";\nimport \"./styles/index.css\";\nimport {BrowserRouter as Router} from \"react-router-dom\";\nimport FormProvider from \"./context/FormProvider.jsx\";\nimport AuthProvider from \"./context/AuthProvider.jsx\";\nimport AppProvider from \"./context/AppPorvider.jsx\";\nimport SocketContextProvider from \"./context/SocketContext.jsx\";\nimport AnimationProvider from \"./context/AnimationProvider.jsx\";\n\n\nReactDOM.createRoot(document.getElementById(\"root\")).render(\n    <React.StrictMode>\n        <Router>\n            <AuthProvider>\n                <AnimationProvider>\n                <AppProvider>\n                        <SocketContextProvider>\n                            <FormProvider>\n                                <App/>\n                            </FormProvider>\n                        </SocketContextProvider>\n                </AppProvider>\n                </AnimationProvider>\n            </AuthProvider>\n        </Router>\n    </React.StrictMode>\n);\n"
+        }
+    ]
+}

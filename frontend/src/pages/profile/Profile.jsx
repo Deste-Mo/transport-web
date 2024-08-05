@@ -1,29 +1,44 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "../../context/AuthProvider";
-import { Button, Icon } from "../../styles/components";
-import { SubHeader } from "./../../components/pages/SubHeader";
-import { ProfileLeft } from "../../components/pages/profile/ProfileLeft.jsx";
-import RecentlyFriends from "./../../components/pages/RecentlyFriends";
-import { SERVERLINK } from "../../constants";
-import { useApp } from "../../context/AppPorvider";
+import { useEffect, useState } from 'react';
+import { useAuth } from '../../context/AuthProvider';
+import { Button, Icon } from '../../styles/components';
+import { SubHeader } from './../../components/pages/SubHeader';
+import RecentlyFriends from './../../components/pages/RecentlyFriends';
+import { SERVERLINK } from '../../constants';
+import { useApp } from '../../context/AppPorvider';
 import OfferCard from "../../components/pages/Offer/OfferCard.jsx";
-import { useNavigate, useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import ProfileCard from "../../components/pages/profile/ProfileCard.jsx";
 
+
 export default function Profile() {
-  const { personalInformation } = useAuth();
-  const user = personalInformation;
-  const navigate = useNavigate();
+    const { personalInformation, getInformation, token } = useAuth();
+    const user = personalInformation;
+    const navigate = useNavigate();
 
-  const { id } = useParams(); // Other user id
+    const { friends, handleFriends, countFollow, handleCountFollow, allOffers, handleOffersSaved, savedOffers, handleOffersForUser, myOffers, savedPubNumber } = useApp();
 
-  const { friends, handleFriends, countFollow, handleCountFollow } = useApp();
+    const [update, setUpdate] = useState(false);
+    const {id} = useParams();
 
-  useEffect(() => {
-    handleFriends();
-    handleCountFollow();
-  }, [friends, handleFriends]);
+    useEffect(() => {
+        handleOffersSaved()
+        handleOffersForUser();
+    }, []);
 
+    const onClick = () => {
+        getInformation(token);
+        setUpdate(true);
+    }
+
+    const annuler = () => {
+        setUpdate(false)
+    }
+
+    useEffect(() => {
+        handleFriends();
+        handleCountFollow();
+    }, []);
+    
   return (
     <div className="flex flex-col gap-6 w-full overflow-x-hidden overflow-y-scroll  scrollbar-none h-[86vh] rounded-xl">
       <div className="flex flex-col gap-6">
@@ -75,9 +90,12 @@ export default function Profile() {
               rightContent={<p className="text-black-80 dark:text-white-100">4</p>}
             />
             <div className="flex flex-col gap-4 rounded-lg">
-              {[1, 2, 3].map((item) => (
-                <OfferCard key={item} saved />
-              ))}
+                {
+                    savedOffers.length > 0 ? (
+                            savedOffers.map((savedOffer) => (<OfferCard key={savedOffer.saveid} sug={savedOffer} saved />))
+                        ) :
+                        <div className='text-subtitle-2 text-black-40 text-center'>No offers</div>
+                }
             </div>
           </div>
           <div className="flex flex-col gap-6">
@@ -93,9 +111,12 @@ export default function Profile() {
               }
             />
             <div className="flex flex-col gap-4 rounded-lg">
-              {[1, 2, 3].map((item) => (
-                <OfferCard key={item}  forCurrentUser/>
-              ))}
+                {
+                    myOffers.length > 0 ? (
+                            myOffers.map((offer) => (<OfferCard key={offer.offerid} sug={offer} mine />))
+                        ) :
+                        <div className='text-subtitle-2 text-black-40 text-center'>No offers</div>
+                }
             </div>
           </div>
         </>
@@ -103,3 +124,4 @@ export default function Profile() {
     </div>
   );
 }
+

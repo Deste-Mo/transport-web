@@ -1,50 +1,58 @@
-import { useNavigate } from "react-router-dom";
+/* eslint-disable react/prop-types */
+import { useNavigate } from 'react-router-dom'
 import ProfileImage from "../../../assets/images/OIP.jpg";
 import OfferImage from "../../../assets/images/voiture.jpg";
-import React, { useEffect, useRef, useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "../../ui/Button.jsx";
 import { Icon } from "../../../styles/components.js";
-
 import OfferDetailBadge from "./OfferDetailBadge.jsx";
+import { useApp } from '../../../context/AppPorvider.jsx';
+import { SERVERLINK } from '../../../constants/index.js';
 import OfferCardLoading from "../../loader/OfferCardLoading.jsx";
-import { useAnimation } from "framer-motion";
-import { TOAST_TYPE } from "../../../constants/index.js";
 
-const OfferCard = ({
-  className,
-  saved = false,
-  forCurrentUser = false,
-  detailedProfile = true,
-}) => {
-  const [detailed, setDetailed] = useState(true);
-  const [loading, setLoading] = useState(true);
-  const [popupVisible, setPopupVisible] = useState(false);
+const OfferCard = ({ className, saved = false, sug, mine = false, detailedProfile = true, forCurrentUser = false }) => {
 
-  const toggleOfferCardPopup = () => {
+    const [detailed, setDetailed] = useState(true);
+    const [loading, setLoading] = useState(true);
+    const [popupVisible, setPopupVisible] = useState(false);
+    const { saveOffer, handleOffersSaved, retireOffer, timeSince } = useApp();
+    const navigate = useNavigate();
+    const image = SERVERLINK + "/" + sug?.profileimage;
+
+    const offerImage = SERVERLINK + "/" + sug?.imgurl;
+
+    const handleClick = () => {
+        localStorage.setItem('userToChat', JSON.stringify({ id: sug?.userid, fullName: sug?.firstname + " " + sug?.lastname, accounttype: sug?.accounttype, pic: image }))
+        navigate('/message')
+    }
+
+    const handleSaveOffer = async () => {
+        await saveOffer(await sug?.offerid);
+        await handleOffersSaved();
+    }
+
+    const handleRetireSaveOffer = async () => {
+        await retireOffer(sug?.offerid);
+        await handleOffersSaved();
+    }
+    
+    const toggleOfferCardPopup = () => {
     setPopupVisible((prev) => !prev);
   };
-
+    
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
   }, []);
-
-  const navigate = useNavigate();
 
   return loading ? (
     <OfferCardLoading detailedProfile={detailedProfile} />
   ) : (
     <div className="flex flex-col items-start justify-start w-full gap-2 ">
       <div className="flex items-center gap-x-6 gap-y-2 flex-wrap">
-        <OfferDetailBadge text="Transport de marchandise" icon="bi bi-box" />
-        <OfferDetailBadge
-          text="Fianarantsoa vers Tananarive"
-          icon="bi bi-map"
-        />
-        <OfferDetailBadge
-          text=" Prévue le 04 août 2024"
-          icon="bi bi-calendar2-event"
-        />
-        <OfferDetailBadge text="5 Tonnes" icon="bi bi-truck" />
+          <OfferDetailBadge text={sug?.title} icon="bi bi-box" />
+          <OfferDetailBadge text={sug?.depart + " vers " + sug?.dest} icon="bi bi-map" />
+          <OfferDetailBadge text={"Prévue le " + new Date(sug?.scheduleddate).toLocaleDateString()} icon="bi bi-calendar2-event" />
+          <OfferDetailBadge text={sug?.capacity} icon="bi bi-truck" />
       </div>
       <div
         className={`relative flex flex-col gap-3 w-full items-center ${className} bg-white-100  dark:bg-black-100 dark:text-white-100 dark:font-sm dark:bg-white-10 dark:border-none rounded-xl p-4 border border-black-0`}
@@ -58,14 +66,14 @@ const OfferCard = ({
           <div className="flex items-center gap-2">
             <img
               className="size-[40px] object-cover rounded-full"
-              src={ProfileImage}
+              src={image}
             />
             <div className="flex flex-col items-start">
-              <p className="text-small-1 font-md">RAHARISOA Haingonirina </p>
-              <span className=" dark:font-sm text-small-2">Entreprise</span>
+              <p className="text-small-1 font-md">{sug?.firstname + (!sug?.lastname ? '' : sug?.lastname)}</p>
+              <span className=" dark:font-sm text-small-2">{sug?.accounttype}</span>
               <div className="flex items-center gap-2  dark:text-white-100 text-black-80 ">
                 <i className="bi bi-clock"></i>
-                <span className="text-small-2  ">Il y a 30 minutes</span>
+                <span className="text-small-2  ">{timeSince(sug?.publicationdate, 4)}</span>
               </div>
             </div>
           </div>
@@ -83,11 +91,7 @@ const OfferCard = ({
         <div className="w-full flex flex-col gap-4 items-start justify-cente  rounded-2xl  ">
           {detailed && (
             <p className="text-small-1 text-black-100 dark:text-white-100 dark:font-sm ">
-              Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet Lorem ipsum
-              dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit
-              amet, Lorem ipsum dolor{" "}
-              <span className="text-primary-80"> #sit amet </span>
-              Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet
+                {sug?.description}
             </p>
           )}
           <button
@@ -102,7 +106,7 @@ const OfferCard = ({
         </div>
         {detailedProfile && (
           <img
-            src={OfferImage}
+            src={offerImage}
             className="w-full h-[256px] object-cover rounded-xl"
           />
         )}
@@ -120,6 +124,7 @@ const OfferCard = ({
             </Button>
             {saved ? (
               <Button
+                  onClick={handleRetireSaveOffer}
                 size="sm"
                 variant="danger"
                 icon="bi bi-bookmark-dash"
@@ -133,6 +138,7 @@ const OfferCard = ({
                 variant="secondary"
                 icon="bi bi-bookmark"
                 rounded="full"
+                onClick={handleSaveOffer}
               >
                 Sauvegarder
               </Button>
@@ -143,7 +149,6 @@ const OfferCard = ({
     </div>
   );
 };
-
 export default OfferCard;
 
 const OfferCardPopup = ({ setPopupVisible }) => {

@@ -10,6 +10,7 @@ const FileInput = ({
   onError = () => {},
   className = "",
   block = false,
+  inputClassName=""
 }) => {
   const fileRef = useRef(null);
   const [error, setError] = useState(true);
@@ -51,7 +52,7 @@ const FileInput = ({
   }, [error]);
 
   const fileInputClassName = `flex items-center justify-between ${
-    block ? "w-full" : `${globalInputVariants.width}`
+    block ? "w-full" : `null`
   } ${className}`;
 
   return (
@@ -59,10 +60,10 @@ const FileInput = ({
       <Icon
         icon="bi-folder"
         size="lg"
-        className="rounded-md"
+        className="rounded-md m-0"
         onClick={() => handleClick(fileRef)}
       />
-      <div className="">
+      <div className={inputClassName}>
         <input
           ref={fileRef}
           type="file"
@@ -82,7 +83,7 @@ const FileInput = ({
             "Ajouter un photo"}
         </label>
       </div>
-      <Icon size="md" variant="danger" icon="bi-trash" onClick={removeFiles} />
+      <Icon className={inputClassName} size="md" variant="danger" icon="bi-trash" onClick={removeFiles} />
     </div>
   );
 };
@@ -94,6 +95,7 @@ FileInput.propTypes = {
   onError: PropTypes.func,
   className: PropTypes.string,
   block: PropTypes.bool,
+  inputClassName: PropTypes.string
 };
 
 export default FileInput;

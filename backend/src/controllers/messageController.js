@@ -1,24 +1,31 @@
-import { conversationExist, createConversation, createNewMessage, getAll, getAllConversation, getAllMessages, messageAllSeen, unreadConversation } from "../models/messages.js";
-import { getReceiverSocketId } from "../socket/socket.js";
+import { conversationExist, createConversation, createNewMessage, deleteMessages, getAll, getAllConversation, getAllMessages, messageAllSeen, unreadConversation } from "../models/messages.js";
+import { getReceiverSocketId, io } from "../socket/socket.js";
 
 
 export const sendMessage = async (req, res)  => {
     try {
 
-        const { message } = await req.body;
+        const { message, refMessage } = await req.body;
+
+        var fileContent = null;
+        
+        if (req.file) {
+            fileContent = req.file.filename;
+        }
+
         const senderId = await req.user.userid;
-        const { receiverId } = req.params;
+        const { receiverId } = await req.params;
 
         const conversation = 
-                !await conversationExist(senderId, receiverId) 
+                !await conversationExist(senderId, receiverId)
                     ? 
-                await createConversation(senderId, receiverId) 
+                await createConversation(senderId, receiverId)
                     : 
                 await conversationExist(senderId, receiverId);
 
         if(!conversation) return res.status(400).json({error: "Erreur lors de la generation du conversation"});
 
-        const createMessage = await createNewMessage(message, conversation.idconversation, receiverId);
+        const createMessage = await createNewMessage(message, refMessage, fileContent, conversation.idconversation, receiverId, senderId);
 
         if(!createMessage) return res.status(400).json({error: "Erreur lors de l'envoie du message"});
 
@@ -28,7 +35,6 @@ export const sendMessage = async (req, res)  => {
 
         
         if(receiverSocketId){
-            // 
             io.to(receiverSocketId).emit("newMessage", createMessage)
         }
 
@@ -61,6 +67,7 @@ export const getMessages = async (req, res) => {
     try {
 
         const senderId = await req.user.userid;
+
         const { userIdToChat } = await req.params; 
 
         const allMessage = await getAllMessages(senderId, userIdToChat);
@@ -91,6 +98,25 @@ export const getAllUsers = async (req, res) => {
 
 }
 
+export const deleteMessageId = async (req, res) => {
+
+    const { messageId, conversationId } = req.params;
+
+    const myId = req.user.userid;
+
+    try {
+        const allMess = await deleteMessages(messageId, conversationId, myId);
+
+        if (!allMess[0]) return res.status(200).json({allMess: {}, success: "Aucun Message"});
+
+        return res.status(200).json({allMess: allMess})
+        
+    } catch (error) {
+        return res.status(500).json({allMess:{}, error: error.message });
+    }
+
+}
+
 export const isViewed = async (req, res) => {
     try {
         
@@ -117,9 +143,6 @@ export const countUnread = async (req, res) => {
 
         const unread = await unreadConversation(senderId);
 
-        // return res.json(unread.length)
-
-        // console.log(unread)
 
         return res.status(200).json({unread: unread.length});
 

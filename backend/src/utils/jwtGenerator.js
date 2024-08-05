@@ -28,11 +28,6 @@ export const generateRefreshToken = async (user) => {
     const refreshToken = jwt.sign(payload, JWT_SECRET_REFRESH , {expiresIn: '7d'});
 
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-
-/*    const {rows} = await pool.query(
-      'INSERT INTO refresh_tokens (token,userid, expires_at) VALUES ($1, $2, $3)',
-      [refreshToken,user.userid, expiresAt]
-    );*/
     
     return refreshToken;
 };

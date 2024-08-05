@@ -52,7 +52,7 @@ const RegisterSecurity = () => {
                 email,
                 bio,
                 profileimage: profileImage,
-                accountid: accountId === ACCOUNT_TYPES.camion ? 3 : accountId === ACCOUNT_TYPES.society ? 1 : 2,
+                accountid: accountId === ACCOUNT_TYPES.camion ? 2 : accountId === ACCOUNT_TYPES.society ? 1 : 3,
                 password,
                 confirmPassword,
             };

@@ -1,9 +1,8 @@
 import { Outlet, useLocation } from "react-router-dom";
-import { ProfileLeft } from "../components/pages/profile/ProfileLeft.jsx";
+import { ProfileLeft } from "../components/pages/ProfileLeft.jsx";
 import { SubHeader } from "../components/pages/SubHeader.jsx";
 import RecentlyFriends from "../components/pages/RecentlyFriends.jsx";
 import SavePublication from "../components/pages/SavePublication.jsx";
-import { Notification } from "../components/pages/Notification.jsx";
 import { useAuth } from "../context/AuthProvider.jsx";
 import { SERVERLINK } from "../constants/index.js";
 import { useApp } from "../context/AppPorvider.jsx";
@@ -13,13 +12,19 @@ import { Button, Icon } from "../styles/components.js";
 import OfferCard from "../components/pages/Offer/OfferCard.jsx";
 
 const NavPageLayout = () => {
-  const { personalInformation } = useAuth();
-  const user = personalInformation;
+    const { personalInformation } = useAuth();
+    const user = personalInformation;
 
-  const pathname = useLocation().pathname;
+    const pathname = useLocation().pathname;
 
-  const { handleFriends, handleOfferSuggestion, suggestions } = useApp();
+    const { handleFriends, handleOfferSuggestion, suggestions, handleOffersSaved, handleOffersForUser, savedOffers } = useApp();
 
+    useEffect(() => {
+        handleOfferSuggestion();
+        handleOffersSaved();
+        handleOffersForUser();
+    }, [])
+    
   return (
     <section className="flex items-start  w-full justify-between nav-page-container gap-10 h-[86vh] relative">
       {/*Left subNav*/}
@@ -154,5 +159,3 @@ const DynamicLeftContent = ({ currentLocation }) => {
       );
   }
 };
-
-const DynamicRightContent = () => {};

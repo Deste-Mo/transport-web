@@ -1,13 +1,23 @@
+
 import {useAuth} from "../context/AuthProvider.jsx";
 import {SubHeader} from "../components/pages/SubHeader.jsx";
 import OfferCard from "../components/pages/Offer/OfferCard.jsx";
-import {Icon} from "../styles/components.js";
 import {appVariants} from "../animations/variants.js";
 import {motion} from "framer-motion";
 import ExpandableSearchBar from "../components/ui/ExpandableSearchBar.jsx";
+import {useApp} from "../context/AppPorvider.jsx";
+import {useEffect} from "react";
 
 const Offers = ({userId = null}) => {
-    const {personalInformation, logout, setRegistrationStep} = useAuth();
+    const { personalInformation } = useAuth();
+
+    const { handleOfferSuggestion, suggestions, handleOffersSaved, savedOffers } = useApp();
+
+    useEffect(() => {
+        handleOfferSuggestion();
+        handleOffersSaved();
+    }, [])
+
     const user = personalInformation;
 
     return (
@@ -16,7 +26,10 @@ const Offers = ({userId = null}) => {
             <SubHeader name="Offres" icon="bi bi-briefcase-fill" sticky  rightContent={<ExpandableSearchBar/>}/>
             <div className="flex flex-col items-center justify-center gap-6 w-full">
                 {
-                    [1,2,3,4,5,6].map((item) => (<OfferCard key={item} />))
+                    suggestions.length > 0 ? (
+                            suggestions.map((suggestion) => (<OfferCard key={suggestion.offerid} sug={suggestion} saved={ savedOffers.length > 0 ? savedOffers.find(offer => offer.offerid === suggestion.offerid) : false } />))
+                        ) :
+                        <div>No offers</div>
                 }
             </div>
         </motion.section>

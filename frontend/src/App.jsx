@@ -27,7 +27,6 @@ import MessageList from "./pages/conversations/MessageList.jsx";
 import ProfileLayout from "./layouts/ProfileLayout.jsx";
 import GlobalLayout from "./layouts/GlobalLayout.jsx";
 import ProfileDetails from "./pages/profile/ProfileDetails.jsx";
-import OfferCard from "./components/pages/Offer/OfferCard.jsx";
 
 
 // TODO :

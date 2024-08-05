@@ -34,7 +34,7 @@ const SocketContextProvider = ({ children }) => {
 
             // socketRef.current = socket;
 
-            socket.on("getActiveUsers", (users) => {
+            socket.on("getOnlineUsers", (users) => {
                 setActiveUsers(users);
             });
 

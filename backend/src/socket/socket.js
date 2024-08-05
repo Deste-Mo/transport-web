@@ -8,7 +8,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: process.env.FRONTEND_HOST,
+        origin: 'http://localhost:5173',
         methods: ["GET", "POST"]
     }
 })
@@ -30,7 +30,7 @@ io.on("connection", (socket) => {
 
 
     //io.emit() utiliser pour envoyer des evenement a tout les utilisateur connecter
-    io.emit("getActiveUsers", Object.keys(userSocketMap));
+    io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
 
     // socket.on() utiliser pour ecouter des evenement a la fois utilisable cote server et client 
@@ -38,7 +38,7 @@ io.on("connection", (socket) => {
         console.log("user disconnected", socket.id);
         delete userSocketMap[userId];
 
-        io.emit("getActiveUsers", Object.keys(userSocketMap));
+        io.emit("getOnlineUsers", Object.keys(userSocketMap));
     });
 
 });

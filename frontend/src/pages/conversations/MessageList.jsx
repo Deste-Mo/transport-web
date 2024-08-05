@@ -1,5 +1,5 @@
-import {Button, TextInput} from "../../styles/components";
-import React, {useState, useEffect} from "react";
+import {Button} from "../../styles/components";
+import  {useEffect} from "react";
 import {useAuth} from "../../context/AuthProvider";
 import {useApp} from "../../context/AppPorvider";
 import {useSocketContext} from "../../context/SocketContext";
@@ -14,7 +14,7 @@ import {appVariants} from "../../animations/variants.js";
 
 const MessageList = () => {
 
-    const {token, loading} = useAuth();
+    const {token} = useAuth();
 
     const {conversations, handleShowConversation, friends, handleFriends} = useApp();
 
@@ -50,9 +50,7 @@ const MessageList = () => {
                     </div>
                 }
             </div>
-
             <SearchBar variant={"fill"} block size={"lg"} placeholder={"Rechercher un ami"}/>
-
             <div className="w-full  h-[70%] bg-white-100 dark:bg-black-10 dark:border-none  flex flex-col gap-4 overflow-hidden p-4  rounded-xl border border-black-0">
                 {conversations.length > 0 ?
                     conversations.map(conversation => (
@@ -68,27 +66,26 @@ const MessageList = () => {
         </motion.section>
     )
 }
+export default MessageList;
 
 const DiscussionCard = ({profileImage, messageSeen, fullName, accountType, lastMessage, lastMessageTime}) => {
-   
+
     return (
-        <div className={"flex items-center justify-between cursor-pointer w-full hover:bg-primary-20 p-6 rounded-xl"}>
-            <div className="flex items-center gap-2">
-                <img className="size-[40px] object-cover rounded-full" src={ProfileImage}/>
-                <div className="flex flex-col gap-1 items-start">
-                    <p className="text-black-100 text-small-1">RAHARISOA Haingonirina (Client)</p>
-                    <p className={"text-black-100 font-bold text-small-1"}>
-                        Lorem ipsum dolor sit amet
-                    </p>
-                </div>
-            </div>
-            <div className="flex items-center gap-1">
-                <div className="size-[10px] rounded-full bg-primary-100"
-                ></div>
-                <p className={"text-small-2 text-black-80 font-light"}>Il y a 10 min</p>
-            </div>
+    <div className={"flex items-center justify-between cursor-pointer w-full hover:bg-primary-20 p-6 rounded-xl"}>
+    <div className="flex items-center gap-2">
+        <img className="size-[40px] object-cover rounded-full" src={ProfileImage}/>
+        <div className="flex flex-col gap-1 items-start">
+            <p className="text-black-100 text-small-1">RAHARISOA Haingonirina (Client)</p>
+            <p className={"text-black-100 font-bold text-small-1"}>
+                Lorem ipsum dolor sit amet
+            </p>
         </div>
+    </div>
+    <div className="flex items-center gap-1">
+        <div className="size-[10px] rounded-full bg-primary-100"
+        ></div>
+        <p className={"text-small-2 text-black-80 font-light"}>Il y a 10 min</p>
+    </div>
+</div>
 )
 }
-
-export default MessageList;

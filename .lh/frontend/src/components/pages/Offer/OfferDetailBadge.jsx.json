@@ -1,0 +1,30 @@
+{
+    "sourceFile": "frontend/src/components/pages/Offer/OfferDetailBadge.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1722244008831,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1722244020629,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,12 @@\n+\r\n+\r\n+const OfferDetailBadge = ({icon, text}) => {\r\n+    return (\r\n+        <p className=\" text-small-2 rounded-full px-4 py-2 bg-primary-20 flex gap-2 cursor-pointer border border-primary-20 hover:bg-primary-80 group\">\r\n+            <i className={`${icon} text-primary-100 group-hover:text-black-100`}></i>\r\n+            <p>{text}</p>\r\n+        </p>\r\n+    )\r\n+}\r\n+\r\n+export default  OfferDetailBadge;\r\n"
+                },
+                {
+                    "date": 1722244025999,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,16 +9,4 @@\n     )\r\n }\r\n \r\n export default  OfferDetailBadge;\r\n-\r\n-\r\n-const OfferDetailBadge = ({icon, text}) => {\r\n-    return (\r\n-        <p className=\" text-small-2 rounded-full px-4 py-2 bg-primary-20 flex gap-2 cursor-pointer border border-primary-20 hover:bg-primary-80 group\">\r\n-            <i className={`${icon} text-primary-100 group-hover:text-black-100`}></i>\r\n-            <span>{text}</p>\r\n-        </p>\r\n-    )\r\n-}\r\n-\r\n-export default  OfferDetailBadge;\r\n"
+                },
+                {
+                    "date": 1722244031897,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n \r\n \r\n const OfferDetailBadge = ({icon, text}) => {\r\n     return (\r\n-        <p className=\" text-small-2 rounded-full px-4 py-2 bg-primary-20 flex gap-2 cursor-pointer border border-primary-20 hover:bg-primary-80 group\">\r\n+        <div className=\" text-small-2 rounded-full px-4 py-2 bg-primary-20 flex gap-2 cursor-pointer border border-primary-20 hover:bg-primary-80 group\">\r\n             <i className={`${icon} text-primary-100 group-hover:text-black-100`}></i>\r\n             <p>{text}</p>\r\n         </p>\r\n     )\r\n"
+                }
+            ],
+            "date": 1722244008831,
+            "name": "Commit-0",
+            "content": "\r\n\r\nconst OfferDetailBadge = ({icon, text}) => {\r\n    return (\r\n        <p className=\" text-small-2 rounded-full px-4 py-2 bg-primary-20 flex gap-2 cursor-pointer border border-primary-20 hover:bg-primary-80 group\">\r\n            <i className={`${icon} text-primary-100 group-hover:text-black-100`}></i>\r\n            <span>{text}</p>\r\n        </p>\r\n    )\r\n}\r\n\r\nexport default  OfferDetailBadge;\r\n"
+        }
+    ]
+}

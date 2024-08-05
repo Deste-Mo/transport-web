@@ -1,0 +1,22 @@
+{
+    "sourceFile": "frontend/src/context/SocketContext.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1722239693617,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1722239698907,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,62 @@\n+import { createContext, useState, useEffect, useContext } from \"react\";\r\n+import { useAuth } from \"./AuthProvider\";\r\n+import io from \"socket.io-client\";\r\n+import { SERVERLINK } from \"../constants\";\r\n+\r\n+export const useSocketContext = () => {\r\n+    const context = useContext(SocketContext);\r\n+    return context;\r\n+};\r\n+\r\n+export const SocketContext = createContext();\r\n+\r\n+// const socketURL = import.meta.env.MODE === \"developement\" ? SERVERLINK : \"/\";\r\n+\r\n+\r\n+const SocketContextProvider = ({ children }) => {\r\n+\r\n+    const [ActiveUsers, setActiveUsers] = useState([]);\r\n+\r\n+    const [socket, setSocket] = useState(null);\r\n+\r\n+    const { personalInformation, loading } = useAuth();\r\n+\r\n+    useEffect(() => {\r\n+        if (personalInformation && !loading) {\r\n+\r\n+            const socket = io(SERVERLINK, {\r\n+                query: {\r\n+                    userId: personalInformation.id\r\n+                }\r\n+            });\r\n+            \r\n+            setSocket(socket);\r\n+\r\n+            // socketRef.current = socket;\r\n+\r\n+            socket.on(\"getOnlineUsers\", (users) => {\r\n+                setActiveUsers(users);\r\n+            });\r\n+\r\n+            return () => socket.close();\r\n+        } else{\r\n+            if (socket) {\r\n+                socket.close();\r\n+                setSocket(null);\r\n+            }\r\n+        }\r\n+    }, [personalInformation, loading]);\r\n+\r\n+    return (\r\n+        <SocketContext.Provider value={\r\n+            {\r\n+                socket,\r\n+                ActiveUsers\r\n+            }\r\n+        }>\r\n+            {children}\r\n+        </SocketContext.Provider>\r\n+    )\r\n+};\r\n+\r\n+export default SocketContextProvider;\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1722239693617,
+            "name": "Commit-0",
+            "content": "import { createContext, useState, useEffect, useContext } from \"react\";\r\nimport { useAuth } from \"./AuthProvider\";\r\nimport io from \"socket.io-client\";\r\nimport { SERVERLINK } from \"../constants\";\r\n\r\nexport const useSocketContext = () => {\r\n    const context = useContext(SocketContext);\r\n    return context;\r\n};\r\n\r\nexport const SocketContext = createContext();\r\n\r\n// const socketURL = import.meta.env.MODE === \"developement\" ? SERVERLINK : \"/\";\r\n\r\n\r\nconst SocketContextProvider = ({ children }) => {\r\n\r\n    const [ActiveUsers, setActiveUsers] = useState([]);\r\n\r\n    const [socket, setSocket] = useState(null);\r\n\r\n    const { personalInformation, loading } = useAuth();\r\n\r\n    useEffect(() => {\r\n        if (personalInformation && !loading) {\r\n\r\n            const socket = io(SERVERLINK, {\r\n                query: {\r\n                    userId: personalInformation.id\r\n                }\r\n            });\r\n            \r\n            setSocket(socket);\r\n\r\n            // socketRef.current = socket;\r\n\r\n            socket.on(\"getOnlineUsers\", (users) => {\r\n                setActiveUsers(users);\r\n            });\r\n\r\n            return () => socket.close();\r\n        } else{\r\n            if (socket) {\r\n                socket.close();\r\n                setSocket(null);\r\n            }\r\n        }\r\n    }, [personalInformation, loading]);\r\n\r\n    return (\r\n        <SocketContext.Provider value={\r\n            {\r\n                socket,\r\n                ActiveUsers\r\n            }\r\n        }>\r\n            {children}\r\n        </SocketContext.Provider>\r\n    )\r\n};\r\n\r\nexport default SocketContextProvider;"
+        }
+    ]
+}

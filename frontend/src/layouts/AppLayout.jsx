@@ -1,16 +1,27 @@
 import {useAuth} from "../context/AuthProvider.jsx";
 import {Navigate, Outlet} from "react-router-dom";
+import {useEffect} from "react";
 import {Header} from "../components/pages/Header.jsx";
 import {SERVERLINK} from "../constants/index.js";
-import {motion} from "framer-motion";
-import {appVariants} from "../animations/variants.js";
-import { usePreference } from "../context/UserPreferenceProvider.jsx";
+import { useApp } from "../context/AppPorvider.jsx";
 
+
+import { usePreference } from "../context/UserPreferenceProvider.jsx";
 const AppLayout = () => {
     const {token, loading, personalInformation} = useAuth();
     const {darkMode} = usePreference();
-    const user = personalInformation;
     
+    const user = personalInformation;
+    const { handleCountUnread, countUnread, handleNotificationShow, handleOffersForUser, handleFriends} = useApp();
+
+    const { socket } = countUnread;
+
+    useEffect(() => {
+        socket?.on("newMessage", () => {
+            handleCountUnread();
+        });
+        return () => socket?.off("newMessage")
+    }, [socket, countUnread, handleCountUnread]);
     
     return <div className={`bg-gray-100 dark:bg-black-100 overflow-hidden h-screen ${darkMode && 'dark'}`}>
         {

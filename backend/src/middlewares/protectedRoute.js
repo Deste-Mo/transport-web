@@ -14,7 +14,7 @@ const protectedRoute = async (req, res, next) => {
 
     try {
 
-        const jwtToken = req.header("token");
+        const jwtToken = await req.header("token");
 
         const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -43,7 +43,7 @@ const protectedRoute = async (req, res, next) => {
         next();
 
     } catch (error) {
-        console.log(error)
+        console.error(error)
         return res.status(500).json({ error: "Server error: " + error });
     }
 
