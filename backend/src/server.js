@@ -16,7 +16,7 @@ import notifsRoute from './routes/notifsRoutes.js';
 
 import { app, io, server } from './socket/socket.js';
 
-const allowedOrigins = 'http://localhost:5173';
+const allowedOrigins = process.env["FRONTEND_HOST "];
 const corsOptions = {
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {
