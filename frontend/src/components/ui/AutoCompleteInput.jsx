@@ -87,7 +87,7 @@ const AutoCompleteInput = ({
         required
       />
       {error && value && (
-        <small className="text-small text-danger ">{errorMsg}</small>
+        <small className="text-small text-danger">{errorMsg}</small>
       )}
       {filteredOptions?.length > 0 && isFocused && (
         <ul

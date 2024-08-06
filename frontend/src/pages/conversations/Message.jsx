@@ -1,105 +1,296 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import { useNavigate } from "react-router-dom";
-import { TextArea, TextInput } from "../../styles/components";
+import { Button, FileInput, TextArea, TextInput } from "../../styles/components";
+import { useAuth } from "../../context/AuthProvider";
+import { useApp } from "../../context/AppPorvider";
+import { useEffect, useRef, useState } from "react";
+import { useSocketContext } from "../../context/SocketContext";
+import { SERVERLINK } from "../../constants";
+import Icon from "../../components/ui/Icon.jsx";
+import { useForm } from "../../context/FormProvider.jsx";
+import {appVariants} from "../../animations/variants.js";
+import {motion} from "framer-motion";
 
 const Messages = () => {
 
     const navigate = useNavigate();
 
+    const { token } = useAuth();
+
+    const { messages, userToChat, handleCountUnread, handleShown } = useApp()
+
+    const [messInput, setMessInput] = useState("");
+
+    const endOfMessagesRef = useRef(null);
+
+    const { ActiveUsers } = useSocketContext();
+
+    const [answerMess, setAnswer] = useState(null);
+
+    const { handleInputChange, checkFieldError, handleError } = useForm()
+
+    const [formData, setFormData] = useState({
+        fileContent: null,
+        message: "",
+        refMessage: "",
+    })
+
+    const [errorData, setErrorData] = useState({
+        fileContent: false,
+        message: false,
+        refMessage: false,
+    })
+
+    const [file, setFile] = useState({
+        name: '',
+        path: ''
+    });
+
+    const isOnline = ActiveUsers.includes(JSON.parse(localStorage.getItem('userToChat')).id);
+
+
     const handleClick = () => {
-        navigate('/conversations');
+        localStorage.removeItem('userToChat');
+        navigate('/discussion');
     }
 
+    const handleTextInputChange = (e) => {
+        setMessInput(e.target.value)
+    }
+
+    const { socket } = useSocketContext();
+
+
+    useEffect(() => {
+
+        handleShown(endOfMessagesRef);
+
+        socket?.on("newMessage", async () => {
+            // setMessages([...messages, await newMessage]);
+            handleShown(endOfMessagesRef);
+            handleCountUnread();
+        });
+
+        return () => socket?.off("newMessage");
+
+    }, [socket]);
+
+
+
+    const handleSendMessage = async (e) => {
+        e.preventDefault();
+
+        const data = new FormData()
+
+        for (const key in formData) {
+            data.append(key, formData[key])
+        }
+
+        const userToChat = await JSON.parse(localStorage.getItem('userToChat')).id;
+
+        const response = await fetch(SERVERLINK + '/api/messages/send/' + userToChat, {
+            method: "POST",
+            headers: {
+                "token": token
+            },
+            body: data
+        });
+
+        const answer = await response.json();
+
+        handleShown(endOfMessagesRef);
+
+        setFormData({
+            fileContent: null,
+            message: "",
+            refMessage: "",
+        })
+
+        setFile({
+            name: '',
+            path: ''
+        })
+
+    }
+    
     return (
-        <section className="w-[100vw] h-[100vh] flex items-center justify-center scroll-smooth">
-            <div className="bg-black-10 w-[50vw] p-5 h-[90vh] flex flex-wrap justify-center overflow-auto relative rounded-2xl">
-                <div className="w-[600px] bg-white-100 h-max p-3 mt-2 rounded-lg opacity-80 sticky top-0">
-                    <i className="bi bi-chat mr-2"></i><span className="text-small-1 mr-2 cursor-pointer" onClick={e => handleClick(e)}>Conversations</span><span className="text-small-1 mr-2">&gt;</span><span className="text-small-1 mr-2 text-primary-80">Listes Message</span>
-                </div>
-
-                <div className="w-[600px] h-fit bg-white-100 flex justify-start p-2 rounded-2xl mt-5">
-                    <div className="flex items-center">
-                        <button className="mr-3 text-lead px-3 cursor-pointer" onClick={e => handleClick(e)}>&lt;</button>
-                        <img src="" alt="" className="bg-black-20 w-[40px] h-[40px] rounded-full" />
-                        <div className="ml-3">
-                            <span className="text-small-2 text-center text-black-80">Emmanuel</span>
-                            <span className="block text-small-3 bg-primary-80 w-fit rounded-xl text-center text-black-60 px-3 mb-2">Client</span>
+        <motion.section
+            className="flex flex-col items-center justify-center w-full gap-4  rounded-xl bg-white-100 dark:bg-black-10  h-[85vh] relative overflow-hidden" variants={appVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <div
+                className="flex items-center justify-between w-full py-4 px-6 border-0 border-b border-b-black-20  bg-white-10 top-0 z-40">
+                <div className="flex items-center justify-between ">
+                    <Icon variant="ghost" icon="bi bi-chevron-left " onClick={handleClick} />
+                    <div className="flex items-center gap-2 cursor-pointer">
+                        <div className="relative">
+                            <img src={userToChat.pic} className={"size-[54px] rounded-full bg-black-20"} />
+                            {isOnline ? <span className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-success-100 absolute top-0 right-0 block" ></span> : null}
                         </div>
+                        <p className={"text-black-100 dark:text-white-100 text-lead"}>{userToChat.fullName}<span
+                            className="text-small-1 text-black-80 dark:text-white-80">({userToChat.accounttype})</span>
+                        </p>
                     </div>
                 </div>
-
-                <div className="w-[600px] h-[500px] overflow-auto bg-black-10 relative mt-3 rounded-lg ">
-                    <div className="flex flex-col mt-3 p-3">
-                        <div className="mine">
-                            <span className="text-small-3 text-black-40">09 : 20</span>
-                            <p className="text-small-2 font-sans bg-white-100 w-max py-2 px-5 rounded-lg">Bonjour</p>
-                        </div>
-
-                        <div className="else">
-                            <span className="text-small-3 text-black-40">09 : 20</span>
-                            <p className="text-small-2 font-sans bg-white-100 w-max py-2 px-5 rounded-lg">Bonjour</p>
-                        </div>
-
-                        <div className="else">
-                            <span className="text-small-3 text-black-40">09 : 20</span>
-                            <p className="text-small-2 font-sans bg-white-100 w-max py-2 px-5 rounded-lg">Bonjour</p>
-                        </div>
-                        <div className="else">
-                            <span className="text-small-3 text-black-40">09 : 20</span>
-                            <p className="text-small-2 font-sans bg-white-100 w-max py-2 px-5 rounded-lg">Bonjour</p>
-                        </div>
-
-                        <div className="mine">
-                            <span className="text-small-3 text-black-40">09 : 20</span>
-                            <p className="text-small-2 font-sans bg-white-100 w-max py-2 px-5 rounded-lg">Bonjour</p>
-                        </div>                    <div className="mine">
-                            <span className="text-small-3 text-black-40">09 : 20</span>
-                            <p className="text-small-2 font-sans bg-white-100 w-max py-2 px-5 rounded-lg">Bonjour</p>
-                        </div>
-                        <div className="else">
-                            <span className="text-small-3 text-black-40">09 : 20</span>
-                            <p className="text-small-2 font-sans bg-white-100 w-max py-2 px-5 rounded-lg">Bonjour</p>
-                        </div>
-                        <div className="else">
-                            <span className="text-small-3 text-black-40">09 : 20</span>
-                            <p className="text-small-2 font-sans bg-white-100 w-max py-2 px-5 rounded-lg">Bonjour</p>
-                        </div>
-
-                        <div className="mine">
-                            <span className="text-small-3 text-black-40">09 : 20</span>
-                            <p className="text-small-2 font-sans bg-white-100 w-max py-2 px-5 rounded-lg">Bonjour</p>
-                        </div>                    <div className="mine">
-                            <span className="text-small-3 text-black-40">09 : 20</span>
-                            <p className="text-small-2 font-sans bg-white-100 w-max py-2 px-5 rounded-lg">Bonjour</p>
-                        </div>
-                        <div className="else">
-                            <span className="text-small-3 text-black-40">09 : 20</span>
-                            <p className="text-small-2 font-sans bg-white-100 w-max py-2 px-5 rounded-lg">Bonjour</p>
-                        </div>
-                        <div className="else">
-                            <span className="text-small-3 text-black-40">09 : 20</span>
-                            <p className="text-small-2 font-sans bg-white-100 w-max py-2 px-5 rounded-lg">Bonjour</p>
-                        </div>
-
-                        <div className="mine">
-                            <span className="text-small-3 text-black-40">09 : 20</span>
-                            <p className="text-small-2 font-sans bg-white-100 w-max py-2 px-5 rounded-lg">Bonjour</p>
-                        </div>                    <div className="mine">
-                            <span className="text-small-3 text-black-40">09 : 20</span>
-                            <p className="text-small-2 font-sans bg-white-100 w-max py-2 px-5 rounded-lg">Bonjour</p>
-                        </div>
-
-                        <form className=" mt-3 w-[97%] flex items-center sticky bottom-0 self-center justify-end">
-                            <button className="absolute top-[20%] right-3 text-black-80 p-2 text-center">
-                                <i className="bi bi-send"></i>
-                            </button>
-                            <TextArea className="h-[70px] mt-3 bg-white-100 rounded-sm" block placeholder="Messages"></TextArea>
-                        </form>
-                    </div>
-                </div>
+                <Button variant="secondary">Profile</Button>
             </div>
-        </section>
+            <div
+                className="flex flex-col gap-4 items-start justify-start h-screen px-6 py-[24px] w-full scrollbar-none overflow-y-scroll ">
+                {
+                    messages.length > 0 ? messages.map(message =>
+                    (<>
+                        {
+                            !(message.receiverid === userToChat.id) ? (
+                                <div className="w-full flex justify-start">
+                                    <Message
+                                        conversationId={message.idconversation}
+                                        messageId={message.messageid}
+                                        handleShown={handleShown}
+                                        fileContent={message.filecontent}
+                                        formData={formData}
+                                        setAnswer={setFormData}
+                                        refmessage={message.refmessage}
+                                        message={message.content}
+                                        sentDate={message.sentdate} />
+                                </div>
+                            ) : (
+                                <div className="w-full flex justify-end">
+                                    <Message
+                                        conversationId={message.idconversation}
+                                        messageId={message.messageid}
+                                        handleShown={handleShown}
+                                        fileContent={message.filecontent}
+                                        refmessage={message.refmessage}
+                                        message={message.content}
+                                        sentDate={message.sentdate} sentByCurrentUser />
+                                </div>
+                            )
+                        }
+                    </>
+                    )) : (
+                        <p className="text-black-40 w-full h-screen text-center flex items-center justify-center text-subtitle-3">
+                            Envoyer un message!
+                        </p>
+                    )
+
+                }
+                <div ref={endOfMessagesRef} />
+            </div>
+            <div className="border-0 bg-white-10 px-6 py-4 w-full border-t border-t-black-20  bottom-0 z-40">
+                {
+                    formData.refMessage ?
+                        <p className="max-w-[400px] break-words text-small-1 flex items-center justify-start rounded-xl text-black-60 p-1">
+                            <Icon variant="ghost" icon="bi bi-arrow-90deg-down" className="-rotate-90" size="sm" />
+                            {formData.refMessage}
+                        </p>
+                        :
+                        null
+                }
+                {formData.fileContent ?
+                    <Icon size="md" variant="ghost" icon="bi bi-image" />
+                    :
+                    null
+                }
+                <form className="flex items-center justify-between gap-4" onSubmit={handleSendMessage}>
+                    <FileInput inputClassName=" hidden " className="w-min"
+                        name="fileContent"
+                        setFile={setFile}
+                        onChange={(e) => handleInputChange(setFormData, e)}
+                        onError={handleError(setErrorData)}
+                        value={formData.fileContent}
+                    />
+                    <Icon size="md" variant="ghost" icon="bi bi-emoji-smile" />
+                    <TextInput rounded="full" block
+                        className="flex-1 outline-none bg-gray-100  text-base text-black-80 px-6 py-3"
+                        placeholder="Ecrire un message ...."
+                        name="message"
+                        onError={handleError(setErrorData)}
+                        onChange={(e) => handleInputChange(setFormData, e)}
+                        value={formData.message}
+                    />
+                    <Icon onClick={handleSendMessage} icon="bi bi-arrow-up" size="sm" />
+                </form>
+            </div>
+        </motion.section>
     )
 }
 
 
+const Message = ({ conversationId, messageId, message, sentDate, sentByCurrentUser = false, setAnswer, formData, refmessage, fileContent, handleShown }) => {
+
+    const { timeSince } = useApp();
+
+    const { token } = useAuth();
+
+    const answerMessage = () => {
+        setAnswer({ ...formData, ['refMessage']: message });
+    }
+    const handleDelete = async () => {
+        const response = await fetch(SERVERLINK + '/api/messages/delete/' + messageId + "/" + conversationId, {
+            method: "POST",
+            headers: {
+                "token": token
+            }
+        });
+
+        const answer = await response.json();
+
+        handleShown();
+    }
+
+    const fileTypes = ["jpg", "png", "jpeg", "gif"]
+
+    return <div className="space-y-1 mt-3 max-w-[420px] text-wrap break-words">
+        <p className="text-small-2 text-black-80 dark:text-white-80 dark:font-sm text-right pr-2">{timeSince(sentDate, 3)}</p>
+        {
+            fileContent
+                ?
+                <div>
+                    {
+                        refmessage ?
+                        <p className="text-small-1 flex items-center justify-start rounded-xl text-black-60 dark:text-white-60 max-w-[300px] p-1"><Icon variant="ghost" icon="bi bi-arrow-90deg-down" className="-rotate-90" size="sm" />{refmessage}</p>
+                            :
+                            null
+                    }
+                    <a href={SERVERLINK + "/" + fileContent}>
+                        {
+                            fileTypes.includes(fileContent.split(".")[1].toLowerCase()) ?
+                                <img src={SERVERLINK + "/" + fileContent} alt={fileContent} className="max-w-[200px] rounded-lg" />
+                                :
+                                <div>
+                                    <Icon variant="ghost" icon="bi bi-file-earmark" size="lg" />
+                                    <span className="text-black-40 dark:text-white-60">{fileContent}</span>
+                                </div>
+                        }
+                    </a>
+                </div>
+                : null
+        }
+        {
+            !message && fileContent ?
+                null
+                :
+                <div>
+                    {
+                        refmessage ?
+                            <p className="text-small-1 flex items-center justify-start rounded-xl text-black-60 max-w-[300px] p-1"><Icon variant="ghost" icon="bi bi-arrow-90deg-down" className="-rotate-90" size="sm" />{refmessage}</p>
+                            :
+                            null
+                    }
+                    <div className={`p-4  rounded-2xl space-y-3 w-full ${sentByCurrentUser ? 'bg-primary-20' : 'bg-black-10'}`}>
+                        <p className="text-small-1 text-black-100 dark:text-white-100 ">{message}</p>
+                    </div>
+                </div>
+        }
+
+        <div className={`flex items-center  w-full gap-2 ${sentByCurrentUser ? 'justify-end' : 'justify-start'}`}>
+            <Icon onClick={handleDelete} variant="ghost" icon="bi bi-trash" size="sm" />
+            {
+                !sentByCurrentUser &&
+                <Icon onClick={answerMessage} variant="ghost" icon="bi bi-arrow-90deg-down" className="-rotate-90" size="sm" />
+            }
+        </div>
+    </div>
+}
+
 export default Messages;
+

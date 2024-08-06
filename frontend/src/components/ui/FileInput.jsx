@@ -10,6 +10,7 @@ const FileInput = ({
   onError = () => {},
   className = "",
   block = false,
+  inputClassName=""
 }) => {
   const fileRef = useRef(null);
   const [error, setError] = useState(true);
@@ -51,7 +52,7 @@ const FileInput = ({
   }, [error]);
 
   const fileInputClassName = `flex items-center justify-between ${
-    block ? "w-full" : `${globalInputVariants.width}`
+    block ? "w-full" : `null`
   } ${className}`;
 
   return (
@@ -59,14 +60,14 @@ const FileInput = ({
       <Icon
         icon="bi-folder"
         size="lg"
-        className="rounded-md"
+        className="rounded-md m-0"
         onClick={() => handleClick(fileRef)}
       />
-      <div className="">
+      <div className={inputClassName}>
         <input
           ref={fileRef}
           type="file"
-          className="text-black  dark:text-white  w-[0.1px] -z-10 h-[0.1px] hidden input-file"
+          className="-z-10 hidden text-black w-[0.1px] h-[0.1px] input-file dark:text-white"
           accept=".png,.jpeg, .jpg"
           onChange={(e) => {
             handleChangeFile(e);
@@ -75,14 +76,14 @@ const FileInput = ({
           }}
           name={name}
         />
-        <label htmlFor="" className=" text-black-40 dark:text-white-40">
+        <label htmlFor="" className="text-black-40 dark:text-white-40">
           {fileRef.current?.value
             ?.split("\\")
             [fileRef.current?.value?.split("\\").length - 1].substr(-20) ||
             "Ajouter un photo"}
         </label>
       </div>
-      <Icon size="md" variant="danger" icon="bi-trash" onClick={removeFiles} />
+      <Icon className={inputClassName} size="md" variant="danger" icon="bi-trash" onClick={removeFiles} />
     </div>
   );
 };
@@ -94,6 +95,7 @@ FileInput.propTypes = {
   onError: PropTypes.func,
   className: PropTypes.string,
   block: PropTypes.bool,
+  inputClassName: PropTypes.string
 };
 
 export default FileInput;

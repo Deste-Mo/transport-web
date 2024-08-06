@@ -20,14 +20,15 @@ const Icon = ({
 }) => {
   return (
     <button
+    type="button"
       disabled={disabled}
       className={` ${globalIconVariants.constant}  ${
         disabled ? globalIconVariants.variant.disabled : globalIconVariants.variant[variant]
-      } ${iconSizeVariant[size]} ${transition} ${className}
+      } ${globalIconVariants.size[size]} ${transition} ${className}
        `}
       onClick={onClick}
     >
-      <i className={`${icon} ${size === "md" ? "" : "text-icon"}`}></i>
+      <i className={`${icon} ${globalIconVariants.iconSize[size]}`}></i>
     </button>
   );
 };

@@ -13,7 +13,7 @@ const Switchbox = ({
   name,
 }) => {
   return (
-    <label className="inline-flex items-center cursor-pointer">
+    <label className="inline-flex cursor-pointer items-center">
       <input
         disabled={disabled}
         name={name}
@@ -30,7 +30,7 @@ const Switchbox = ({
         ${className}`}
       ></div>
       {label && (
-        <span className="ms-3 text-base text-white select-none">{label}</span>
+        <span className="select-none text-base text-white ms-3">{label}</span>
       )}
     </label>
   );

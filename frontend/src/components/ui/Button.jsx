@@ -17,6 +17,7 @@ const Button = ({
   disabled = false,
   block = false,
   loading = false,
+  type = ""
 }) => {
   const buttonClass = `${globalButtonVariants.constants} ${globalButtonVariants.radious[rounded]} ${
     block ? "w-full" : "w-fit"
@@ -24,16 +25,16 @@ const Button = ({
     disabled ? globalButtonVariants.variant.disabled : globalButtonVariants.variant[variant]
   } ${transition} ${globalButtonVariants.size[size]} ${className} ${
     icon ? (inverseIcon ? "flex-row-reverse" : "flex-row") : ""
-  } overflow-hidden select-none flex items-center justify-center text-base font-RobotoMd`;
+  } overflow-hidden select-none flex items-center justify-center  font-RobotoMd`;
 
   return (
-    <button disabled={disabled} onClick={onClick} className={buttonClass}>
+    <button disabled={disabled} type={type} onClick={onClick} className={buttonClass}>
       {loading ? (
-        <i className="bi-hourglass-top animate-spin"></i>
+        <i className="animate-spin bi-hourglass-top"></i>
       ) : icon ? (
         <>
-          <i className={`${icon} ${size === "md" ? "" : "text-icon"}`}></i>
-          <p>{children}</p>
+          <i className={`${icon} ${globalButtonVariants.iconSize[size]}`}></i>
+          <p className={globalButtonVariants.textSize[size]}>{children}</p>
         </>
       ) : (
         children
@@ -44,7 +45,7 @@ const Button = ({
 
 Button.propTypes = {
   children: PropTypes.string.isRequired,
-  size: PropTypes.number,
+  size: PropTypes.string,
   className: PropTypes.string,
   variant: PropTypes.string,
   icon: PropTypes.string,
@@ -55,6 +56,7 @@ Button.propTypes = {
   block: PropTypes.bool,
   loading: PropTypes.bool,
   disabled: PropTypes.bool,
+  type: PropTypes.string
 };
 
 export default Button;

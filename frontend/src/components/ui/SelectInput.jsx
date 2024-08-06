@@ -21,6 +21,7 @@ const SelectInput = ({
   block = false,
   onChange = () => {},
   onError = () => {},
+  value = "",
 }) => {
   const error = options.length <= 0 || loading;
   const [selectedItem, setSelectedItem] = useState(
@@ -60,7 +61,7 @@ const SelectInput = ({
   }, [loading]);
   return (
     <div ref={selectRef} className={`flex flex-col gap-3 w-full `}>
-      <p className="text-base text-black">{title}</p>
+      <p className="text-base text-black-100 dark:text-white-100">{title}</p>
       <div
         className={`flex items-start justify-start flex-col gap-2 w-full   relative `}
       >
@@ -96,7 +97,7 @@ const SelectInput = ({
           )}
         </div>
         <ul
-          className={`absolute z-40 bg-gray-100 ${block ? "w-full" : globalInputVariants.width} ${
+          className={`absolute z-40 bg-gray-100 dark:backdrop-blur-sm shadow-md ${block ? "w-full" : globalInputVariants.width} ${
             globalSelectvariants.variant[variant]
           } ${size === "md" ? "top-[54px]" : "top-[64px]"} ${
             opened
@@ -106,8 +107,8 @@ const SelectInput = ({
             ${globalInputVariants.rounded[rounded]}`}
         >
           {loading ? (
-            <li className="origin-center flex justify-center">
-              <i className="bi-hourglass-top "></i>
+            <li className="flex origin-center justify-center">
+              <i className="bi-hourglass-top"></i>
             </li>
           ) : (
             options?.map((item) => (
@@ -149,6 +150,7 @@ SelectInput.propTypes = {
   block: PropTypes.bool,
   onChange: PropTypes.func,
   onError: PropTypes.func,
+  value: PropTypes.string,
 };
 
 export default SelectInput;

@@ -1,114 +1,126 @@
-import { useNavigate } from "react-router-dom";
-import { Button, Icon, TextArea, TextInput } from "../../../../styles/components";
-import { useAuth } from "../../../../context/AuthProvider";
-import { useForm } from "../../../../context/FormProvider";
-import { useEffect, useState } from "react";
+import { Button, TextInput } from "../../../../styles/components";
 
 const RegisterCli = () => {
-  const { inputs, setInputs, setErrorData, errorData } = useAuth();
-  const { handleInputChange, handleError } = useForm();
-  const [fieldError, setFieldError] = useState(false);
-  const navigate = useNavigate();
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    navigate("/registerPass");
-  };
-
-  useEffect(() => {
-    // Check if all of the current fielfs are valid
-    const { firstname, cin, lastname, email, phone, adress, bio } = errorData;
-    setFieldError(
-      firstname || cin || email || phone || adress || bio || lastname
-    );
-  }, [inputs, errorData]);
-
   return (
-    <section className="w-fullscreen bg-gray-80 auth-section space-y-[128px] absolute top-[128px] left-1/2 -translate-x-1/2">
-      <div className="flex flex-col items-center justify-center gap-4">
-        <div className="w-full flex items-center justify-center">
-          <Icon icon="bi bi-arrow-left" onClick={() => navigate("/register")} />
-        </div>
-        <div className="h1 text-subtitle-1 w-full text-center">
-          Entrer vos <span className="text-primary-100">identifications</span>
+    <section className="w-fullscreen">
+      <div className="flex mt-5 ml-3">
+        <span className="w-[5px] h-[100px] bg-maintr-100 mr-2"></span>
+        <div>
+          <p className="text-subtitle-2 boxShadow text-gray-100">
+            Creez votre compte
+          </p>
+          <br />
+          <p className="text-subtitle-1">
+            Media<span className="text-maintr-100">Trans</span>
+          </p>
         </div>
       </div>
-      <form
-        className="flex flex-col  border border-black-20 bg-white-100 items-start justify-center gap-[32px] w-fit p-4 rounded-xl"
-        onSubmit={handleSubmit}
-      >
-        <div className="flex flex-col items-start w-full justify-center gap-6">
-          <h3 className="text-subtitle-3 text-black-100">Identification</h3>
-          <div className="flex flex-row items-start justify-center gap-6">
-            <div className="flex flex-col items-center justify-center gap-6">
-              <TextInput
-                name="userCin"
-                title="CIN"
-                placeholder="Entrer votre CIN"
-                onError={handleError(setErrorData)}
-                onChange={(e) => handleInputChange(setInputs, e)}
-                value={inputs.userCin}
-              />
-              <TextInput
-                name="firstname"
-                title="Nom"
-                placeholder="Entrer votre nom"
-                onError={handleError(setErrorData)}
-                onChange={(e) => handleInputChange(setInputs, e)}
-                value={inputs.firstname}
-              />
-              <TextInput
-                name="lastname"
-                title="Prénom"
-                placeholder="Entrer votre prénom"
-                onError={handleError(setErrorData)}
-                onChange={(e) => handleInputChange(setInputs, e)}
-                value={inputs.lastname}
-              />
-              <TextInput
-                name="email"
-                title="Email"
-                type="email"
-                placeholder="Entrer votre email"
-                onError={handleError(setErrorData)}
-                onChange={(e) => handleInputChange(setInputs, e)}
-                value={inputs.email}
-              />
-              <TextInput
-                name="phone"
-                title="Telephone"
-                type="texte"
-                placeholder="Entrer votre numéro de téléphone"
-                onError={handleError(setErrorData)}
-                onChange={(e) => handleInputChange(setInputs, e)}
-                value={inputs.phone}
-              />
+      <form className="mt-[10px] flex justify-center items-center">
+        <div className="h-[400px] flex">
+          <div className="flex justify-arround items-center">
+            <div className="mr-[200px] text-subtitle-2">
+              <a className="bi bi-arrow-left py-2 px-4 bg-primary-60 rounded-[50%]"></a>
             </div>
-            <div className="flex flex-col items-center justify-center gap-6">
-              <TextInput
-                name="adress"
-                title="Adresse"
-                type="texte"
-                placeholder="Entrer votre adresse"
-                onError={handleError(setErrorData)}
-                onChange={(e) => handleInputChange(setInputs, e)}
-                value={inputs.adress}
-              />
-
-              <TextArea
-                name="bio"
-                title="Description"
-                placeholder="Entrer une description"
-                onError={handleError(setErrorData)}
-                onChange={(e) => handleInputChange(setInputs, e)}
-                value={inputs.bio}
-              />
+            <div>
+              <h2 className="text-subtitle-3">Identification</h2>
+              <div className="mb-5 mt-3">
+                <label htmlFor="cin" className="text-small-1 text-gray-100">
+                  CIN
+                </label>
+                <TextInput
+                  className="w-[275px]"
+                  type="text"
+                  placeholder=""
+                  name="cin"
+                  id="cin"
+                />
+              </div>
+              <div className="mb-5">
+                <label
+                  htmlFor="firstname"
+                  className="text-small-1 text-gray-100"
+                >
+                  Nom
+                </label>
+                <TextInput
+                  className="w-[275px]"
+                  type="text"
+                  placeholder=""
+                  name="firstname"
+                  id="firstname"
+                />
+              </div>
+              <div className="mb-5">
+                <label
+                  htmlFor="lastname"
+                  className="text-small-1 text-gray-100"
+                >
+                  Prenom
+                </label>
+                <TextInput
+                  className="w-[275px]"
+                  type="text"
+                  placeholder=""
+                  name="lastname"
+                  id="lastname"
+                />
+              </div>
+              <div className="mb-5">
+                <label htmlFor="email" className="text-small-1 text-gray-100">
+                  Email
+                </label>
+                <TextInput
+                  className="w-[275px]"
+                  type="text"
+                  placeholder=""
+                  name="email"
+                  id="email"
+                />
+              </div>
+              <div className="mb-5">
+                <label htmlFor="phone" className="text-small-1 text-gray-100">
+                  Telephone
+                </label>
+                <TextInput
+                  className="w-[275px]"
+                  type="text"
+                  placeholder=""
+                  name="phone"
+                  id="phone"
+                />
+              </div>
+            </div>
+            <div>
+              <div className="mb-5">
+                <label htmlFor="adress" className="text-small-1 text-gray-100">
+                  Address
+                </label>
+                <TextInput
+                  className="w-[275px]"
+                  type="text"
+                  placeholder=""
+                  name="adress"
+                  id="adress"
+                />
+              </div>
+              <div className="mb-5">
+                <label
+                  htmlFor="bio"
+                  className="text-small-1 text-gray-100 block"
+                >
+                  Description
+                </label>
+                <textarea
+                  className="w-[275px] bg-black-10 border-none outline-none p-2 rounded-[10px] text-gray-100"
+                  placeholder=""
+                  name="bio"
+                  id="bio"
+                />
+              </div>
+              <Button className="w-[275px] mt-5">Suivant</Button>
             </div>
           </div>
         </div>
-        <Button disabled={fieldError} block>
-          Suivant
-        </Button>
       </form>
     </section>
   );

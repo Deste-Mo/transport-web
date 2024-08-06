@@ -1,56 +1,108 @@
-import { useState, useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+// Main import
+import {Routes, Route} from "react-router-dom";
 
-import { SERVERLINK } from "./constants";
 
+// Components
+import Home from './pages/Home';
+import Labo from './pages/labo/Labo';
+import AppLayout from "./layouts/AppLayout.jsx";
 import AuthLayout, {
-  Login,
-  Register,
-  RegisterCli,
-  RegisterEntr,
-  RegisterPass,
-} from "./pages/auth/AuthLayout";
+    Login,
+    RegisterAccountType,
+    RegisterIdentification,
+    RegisterSecurity
+} from "./layouts/AuthLayout.jsx";
+import NotFound from "./pages/auth/NotFound.jsx";
+import Forbidden from "./pages/auth/Forbidden.jsx";
+import Unauthorized from "./pages/auth/Unauthorized.jsx";
+import ProfileEdit from "./pages/profile/ProfileEdit.jsx";
+import Notifications from "./pages/Notifications.jsx";
+import Friends from "./pages/Friend.jsx";
+import Offers from "./pages/Offers.jsx";
+import NavPageLayout from "./layouts/NavPageLayout.jsx";
 
-import Home from "./pages/Home";
-import Labo from "./pages/labo/Labo.jsx";
-import Option_li from "./pages/Parametre/Option_li.jsx";
-import Notif from "./pages/notif/Notif.jsx";
-import FriendOption from "./pages/Parametre/Social/friend/FriendOption.jsx";
-import Invitation from "./pages/Parametre/Social/friend/Invitation.jsx";
-import Suggestion from "./pages/Parametre/Social/friend/Suggestion.jsx";
-import All_friend from "./pages/Parametre/Social/friend/All_friend.jsx";
+import Security from './pages/profile/Security';
+import Messages from "./pages/conversations/Message.jsx";
+import MessageList from "./pages/conversations/MessageList.jsx";
+import ProfileLayout from "./layouts/ProfileLayout.jsx";
+import GlobalLayout from "./layouts/GlobalLayout.jsx";
+import ProfileDetails from "./pages/profile/ProfileDetails.jsx";
+
+
+// TODO :
+/*
+  - Animation Skeleton
+  - Theme changer
+  - Settings
+*/
+
 
 export default function App() {
-  return (
-    <div className="App">
-      <Routes>
-        
-        {/* Auth */}
-        <Route element={<AuthLayout />}>
-          <Route path="/login" element={<Login/>}></Route>
-          <Route path="/register" element={<Register/>}></Route>
-          <Route path="/registerEntr" element={<RegisterEntr/>}></Route>
-          <Route path="/registerCam" element={<RegisterCli/>}></Route>
-          <Route path="/registerCli" element={<RegisterCli/>}></Route>
-          <Route path="/registerPass" element={<RegisterPass/>}></Route>
-        </Route>
 
-        {/* Notification */}
-        <Route path='/notification' element={<Notif /> }></Route>
-        <Route path='/options' element={<Option_li /> }></Route>
+    return (
+      <div className="App">
+        <Routes>
+          <Route element={<GlobalLayout />}>
+            {/* Auth */}
+            <Route element={<AuthLayout />}>
+              <Route path="/login" element={<Login />}></Route>
 
-        {/* Option amis */}
-        <Route path="/friends" element={<FriendOption/>}></Route>
-        <Route path="/invitation" element={<Invitation/>}></Route>
-        <Route path="/suggestion" element={<Suggestion/>}></Route>
-        <Route path="/all-friends" element={<All_friend/>}></Route>
-        
+              <Route
+                path="/registerAccountType"
+                element={<RegisterAccountType />}
+              ></Route>
+              <Route
+                path="/registerIdentification"
+                element={<RegisterIdentification />}
+              ></Route>
+              <Route
+                path="/registerSecurity"
+                element={<RegisterSecurity />}
+              ></Route>
+            </Route>
 
-        <Route path="/" element={<Home/>}></Route>
+            {/* App */}
+            <Route element={<AppLayout />}>
+              {/*Profile*/}
+              <Route element={<ProfileLayout />}>
 
-        {/* Labo routes */}
-        <Route path="/labo" element={<Labo />}></Route>
-      </Routes>
-    </div>
-  );
+                <Route path="profile/:id" element={<ProfileDetails />} />
+                <Route path="profile/:id/edit/" element={<ProfileEdit />} />
+              </Route>
+
+              <Route element={<NavPageLayout />}>
+                {/*Home*/}
+                <Route path="/" element={<Home />}></Route>
+
+                {/* Offers*/}
+                <Route path="/offer" element={<Offers />} />
+
+                {/* Friends*/}
+                <Route path="/friend" element={<Friends />} />
+
+                {/* Notifications*/}
+                <Route path="/notification" element={<Notifications />} />
+
+                {/*Messages*/}
+                <Route path="/discussion" element={<MessageList />} />
+                <Route path="/message" element={<Messages />} />
+              </Route>
+            </Route>
+
+            {/* Pages Error */}
+            <Route path="*" element={<NotFound />} />
+            <Route path="/forbidden" element={<Forbidden />} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
+
+            {/*Not implemented routes and components*/}
+            <Route path="/securite" element={<Security />} />
+
+
+
+            {/* Labo (Only for testing components)*/}
+            <Route path="/labo" element={<Labo />}></Route>
+          </Route>
+        </Routes>
+      </div>
+    );
 }

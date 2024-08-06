@@ -23,12 +23,13 @@ export default {
       },
       dark: "#000",
       black: {
-        100: "#2E2B2B",
-        80: "#2E2B2Bcc", // 80% opacity
-        60: "#2E2B2B99", // 60% opacity
-        40: "#2E2B2B66", // 40% opacity
-        20: "#2E2B2B33", // 20% opacity
+        100: "#181818",
+        80: "#181818cc", // 80% opacity
+        60: "#18181899", // 60% opacity
+        40: "#18181866", // 40% opacity
+        20: "#18181833", // 20% opacity
         10: "#8888881a", // 10% opacity
+        0: "rgba(138,137,137,0.2)", // for border
       },
       white: {
         100: "#ffffff",
@@ -39,7 +40,7 @@ export default {
         10: "#ffffff1a", // 10% opacity
       },
       gray: {
-        100: "#F2F2F2",
+        100: "#f0f2f5",
       },
       success: {
         100: "#48DA5F",
@@ -65,6 +66,7 @@ export default {
       sans: "RobotoMd",
       bold: "RobotoBold",
       md: "RobotoMd",
+      sm : "RobotoSm"
     },
     fontSize: {
       "title-1": "64px",
@@ -78,8 +80,18 @@ export default {
       "small-1": "14px",
       "small-2": "12px",
       "small-3" : "10px",
-      icon: "24px",
+      icon: "20px",
     },
   },
-  plugins: [],
+
+  variants: {
+    extend: {
+      scrollbar: ['rounded', 'hover'],
+    },
+  },
+
+  plugins: [
+    require('tailwind-scrollbar'),
+    require('@tailwindcss/typography'),
+  ],
 }

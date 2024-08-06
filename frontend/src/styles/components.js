@@ -13,12 +13,14 @@ import Toast from "../components/ui/Toast";
 import CheckBox from "../components/ui/Checkbox";
 import Switchbox from "../components/ui/Switchbox";
 import TextArea from "../components/ui/TextArea";
+import DateInput from "../components/ui/DateInput";
 
 export {
   AutoCompleteInput,
   TextArea,
   Badge,
   Button,
+  DateInput,
   Empty,
   FileInput,
   Icon,

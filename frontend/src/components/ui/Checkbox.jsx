@@ -13,7 +13,7 @@ const Checkbox = ({
   onChange = () => {},
   onError = () => {},
 }) => (
-  <div className="w-full flex gap-2">
+  <div className="flex w-full gap-2">
     <input
       disabled={disabled}
       onChange={(e) => {
@@ -37,7 +37,7 @@ const Checkbox = ({
     >
       <polyline points="20 6 9 17 4 12"></polyline>
     </svg>
-    <label className="text-white select-none cursor-pointer" htmlFor={id}>
+    <label className="cursor-pointer select-none text-white" htmlFor={id}>
       {label}
     </label>
   </div>
