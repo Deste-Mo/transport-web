@@ -1,4 +1,5 @@
-export const SERVERLINK = 'http://192.168.0.104:3000';
+// export const SERVERLINK = 'http://192.168.43.47:3000';
+export const SERVERLINK = 'http://localhost:3000';
 
 
 // REGEXP

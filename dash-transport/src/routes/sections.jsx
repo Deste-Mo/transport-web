@@ -8,6 +8,11 @@ export const SignalementPage = lazy(() => import('src/pages/signalement'));
 export const UserPage = lazy(() => import('src/pages/utilisateur'));
 export const LoginPage = lazy(() => import('src/pages/login'));
 export const NotifsPage = lazy(() => import('src/pages/notifs'));
+
+
+
+
+
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
 // ----------------------------------------------------------------------
@@ -25,7 +30,7 @@ export default function Router() {
       children: [
         { element: <IndexPage />, index: true },
         { path: 'user', element: <UserPage /> },
-        { path: 'notifs', element: <NotifsPage /> },
+        { path: 'notifications', element: <NotifsPage /> },
         { path: 'signalement', element: <SignalementPage /> },
       ],
     },
