@@ -8,7 +8,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: process.env.JWT_SECRET_REFRESH,
+        origin: process.env.FRONTEND_HOST || 'http://localhost:5173',
         methods: ["GET", "POST"]
     }
 })
