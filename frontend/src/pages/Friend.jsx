@@ -4,20 +4,17 @@ import RecentlyFriends from "../components/pages/RecentlyFriends.jsx";
 import {useApp} from "../context/AppPorvider.jsx";
 import {useEffect} from "react";
 import {SERVERLINK} from "../constants/index.js";
-import {Icon} from "../styles/components.js";
 import {appVariants} from "../animations/variants.js";
 import {motion} from "framer-motion";
 import ExpandableSearchBar from "../components/ui/ExpandableSearchBar.jsx";
+import {useUser} from "../context/UserProvider.jsx";
 
 const Friends = () => {
-    const {personalInformation, logout, setRegistrationStep} = useAuth();
-    const user = personalInformation;
-
-    const {users, handleUsersToShow, friends, handleFriends} = useApp();
+    const {friends, getFriends, getUsers} = useUser();
 
     useEffect(() => {
-        handleUsersToShow();
-        handleFriends();
+        getUsers();
+        getFriends();
     }, [])
 
     return (
@@ -25,7 +22,7 @@ const Friends = () => {
             <SubHeader name="Amis" icon="bi bi-person-fill"
                        rightContent={<ExpandableSearchBar/>}/>
             <div className="flex flex-col items-center justify-center gap-6 p-4 w-full bg-white-100 dark:bg-black-100 rounded-xl">
-                {friends.length > 0 ?
+                {friends?.length > 0 ?
                     friends.map(friend => (
                         <RecentlyFriends className="w-full" key={friend.userid} spec={friend.userid}
                                          account={friend.accounttype} name={friend.firstname + " " + friend.lastname}

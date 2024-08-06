@@ -4,12 +4,17 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {useApp} from "../../context/AppPorvider.jsx";
 import ProfilePopup from "./profile/ProfilePopup.jsx";
 import {useAnimation} from "../../context/AnimationProvider.jsx";
+import {useNotification} from "../../context/NotficationProvider.jsx";
+import {useUser} from "../../context/UserProvider.jsx";
 
 export function Header({profileImage}) {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const {countUnread, handleCountUnread, handleFriends, handleCountNotifUnread, countNotifUnread} = useApp()
+    const {countUnread, getUnreadMessageCount} = useApp();
+    const {unreadNotificationsCount, getUnreadNotifications} = useNotification();
+    const {getFriends} = useUser();
+    
     const NAV_LINKS = [
         {
             name: "Accueil",
@@ -39,20 +44,20 @@ export function Header({profileImage}) {
             name: "Notifications",
             icon: "bi bi-bell",
             path: "/notification",
-            number : countNotifUnread,
+            number : unreadNotificationsCount,
         },
     ]
     
     useEffect(() => {
-        handleCountUnread();
-    }, [countUnread, handleCountUnread])
+        getUnreadMessageCount();
+    }, [countUnread, getUnreadMessageCount])
 
     useEffect(() => {
-        handleCountNotifUnread();
-    }, [countNotifUnread, handleCountNotifUnread]);
+        getUnreadNotifications();
+    }, [unreadNotificationsCount, getUnreadNotifications]);
 
     useEffect(() => {
-        handleFriends();
+        getFriends();
     }, []);
 
     return (

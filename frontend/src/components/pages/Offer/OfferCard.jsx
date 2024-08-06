@@ -12,7 +12,8 @@ import OfferCardLoading from "../../loader/OfferCardLoading.jsx";
 import {useAnimation} from "framer-motion";
 
 const OfferCard = ({ className, saved = false, sug,  detailedProfile = true, forCurrentUser = false }) => {
-
+    
+    const [isSaved, setIsSaved] = useState(saved);
     const [detailed, setDetailed] = useState(true);
     const [loading, setLoading] = useState(true);
     const [popupVisible, setPopupVisible] = useState(false);
@@ -30,11 +31,14 @@ const OfferCard = ({ className, saved = false, sug,  detailedProfile = true, for
     const handleSaveOffer = async () => {
         await saveOffer(await sug?.offerid);
         await handleOffersSaved();
+        setIsSaved(true);
     }
 
-    const handleRetireSaveOffer = async () => {
+    const handleRevokeSavedOffer = async () => {
         await retireOffer(sug?.offerid);
         await handleOffersSaved();
+        setIsSaved(false);
+        
     }
     
     const toggleOfferCardPopup = () => {
@@ -123,15 +127,15 @@ const OfferCard = ({ className, saved = false, sug,  detailedProfile = true, for
             >
               Contacter
             </Button>
-            {saved ? (
+            {saved || isSaved ? (
               <Button
-                  onClick={handleRetireSaveOffer}
+                  onClick={handleRevokeSavedOffer}
                 size="sm"
                 variant="danger"
                 icon="bi bi-bookmark-dash"
                 rounded="full"
               >
-                Retirer
+                Retirer de la sauvegarde
               </Button>
             ) : (
               <Button

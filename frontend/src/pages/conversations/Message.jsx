@@ -17,17 +17,16 @@ const Messages = () => {
     const navigate = useNavigate();
 
     const { token } = useAuth();
-
-    const { messages, userToChat, handleCountUnread, handleShown } = useApp()
+    const { socket } = useSocketContext();
+    
+    const { messages, userToChat, getUnreadMessageCount, getUserMessages } = useApp()
 
     const [messInput, setMessInput] = useState("");
 
     const endOfMessagesRef = useRef(null);
 
     const { ActiveUsers } = useSocketContext();
-
-    const [answerMess, setAnswer] = useState(null);
-
+    
     const { handleInputChange, checkFieldError, handleError } = useForm()
 
     const [formData, setFormData] = useState({
@@ -54,22 +53,17 @@ const Messages = () => {
         localStorage.removeItem('userToChat');
         navigate('/discussion');
     }
+    
 
-    const handleTextInputChange = (e) => {
-        setMessInput(e.target.value)
-    }
-
-    const { socket } = useSocketContext();
 
 
     useEffect(() => {
-
-        handleShown(endOfMessagesRef);
+        getUserMessages(endOfMessagesRef);
 
         socket?.on("newMessage", async () => {
             // setMessages([...messages, await newMessage]);
-            handleShown(endOfMessagesRef);
-            handleCountUnread();
+            getUserMessages(endOfMessagesRef);
+            getUnreadMessageCount();
         });
 
         return () => socket?.off("newMessage");
@@ -99,7 +93,7 @@ const Messages = () => {
 
         const answer = await response.json();
 
-        handleShown(endOfMessagesRef);
+        getUserMessages(endOfMessagesRef);
 
         setFormData({
             fileContent: null,
@@ -136,15 +130,15 @@ const Messages = () => {
             <div
                 className="flex flex-col gap-4 items-start justify-start h-screen px-6 py-[24px] w-full scrollbar-none overflow-y-scroll ">
                 {
-                    messages.length > 0 ? messages.map(message =>
+                    messages?.length > 0 ? messages.map(message =>
                     (<>
                         {
-                            !(message.receiverid === userToChat.id) ? (
-                                <div className="w-full flex justify-start">
+                            (message.receiverid !== userToChat.id) ? (
+                                <div key={message.messageid}  className="w-full flex justify-start">
                                     <Message
                                         conversationId={message.idconversation}
                                         messageId={message.messageid}
-                                        handleShown={handleShown}
+                                        handleShown={getUserMessages}
                                         fileContent={message.filecontent}
                                         formData={formData}
                                         setAnswer={setFormData}
@@ -157,7 +151,7 @@ const Messages = () => {
                                     <Message
                                         conversationId={message.idconversation}
                                         messageId={message.messageid}
-                                        handleShown={handleShown}
+                                        handleShown={getUserMessages}
                                         fileContent={message.filecontent}
                                         refmessage={message.refmessage}
                                         message={message.content}

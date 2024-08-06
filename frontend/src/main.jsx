@@ -15,6 +15,7 @@ import DiscussionProvider from "./context/DiscussionProvider.jsx";
 import OfferProvider from "./context/OfferProvider.jsx";
 import NotficationProvider from "./context/NotficationProvider.jsx";
 import ProfileProvider from "./context/ProfileProvider.jsx";
+import UserProvider from "./context/UserProvider.jsx";
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -28,15 +29,17 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                                 <HomeProvider>
                                     <DiscussionProvider>
                                         <OfferProvider>
-                                            <NotficationProvider>
-                                                <ProfileProvider>
-                                                    <FormProvider>
-                                                        <App/>
-                                                    </FormProvider>
-                                                </ProfileProvider>
-                                            </NotficationProvider>
+                                            <UserProvider>
+                                                <NotficationProvider>
+                                                    <ProfileProvider>
+                                                        <FormProvider>
+                                                            <App/>
+                                                        </FormProvider>
+                                                    </ProfileProvider>
+                                                </NotficationProvider>
+                                            </UserProvider>
+                                                
                                         </OfferProvider>
-
                                     </DiscussionProvider>
                                 </HomeProvider>
                             </SocketContextProvider>

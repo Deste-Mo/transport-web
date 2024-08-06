@@ -1,43 +1,33 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useAuth } from '../../context/AuthProvider';
 import { Button, Icon } from '../../styles/components';
 import { SubHeader } from './../../components/pages/SubHeader';
 import RecentlyFriends from './../../components/pages/RecentlyFriends';
 import { SERVERLINK } from '../../constants';
-import { useApp } from '../../context/AppPorvider';
 import OfferCard from "../../components/pages/Offer/OfferCard.jsx";
 import {useNavigate, useParams} from "react-router-dom";
 import ProfileCard from "../../components/pages/profile/ProfileCard.jsx";
+import {useUser} from "../../context/UserProvider.jsx";
+import {useOffer} from "../../context/OfferProvider.jsx";
 
 
 export default function Profile() {
-    const { personalInformation, getInformation, token } = useAuth();
-    const user = personalInformation;
-    const navigate = useNavigate();
-
-    const { friends, handleFriends, countFollow, handleCountFollow, allOffers, handleOffersSaved, savedOffers, handleOffersForUser, myOffers, savedPubNumber } = useApp();
-
-    const [update, setUpdate] = useState(false);
     const {id} = useParams();
+    const navigate = useNavigate();
+    
+    const { personalInformation } = useAuth();
+    const {friends,getFriends, followersCount, getFollowersCount} = useUser();
+    const {getSavedOffers, savedOffers, currentUserOffers} = useOffer();
+    
+    const user = personalInformation;
+    
 
     useEffect(() => {
-        handleOffersSaved()
-        handleOffersForUser();
+        getFriends();
+        getSavedOffers();
+        getFollowersCount();
     }, []);
-
-    const onClick = () => {
-        getInformation(token);
-        setUpdate(true);
-    }
-
-    const annuler = () => {
-        setUpdate(false)
-    }
-
-    useEffect(() => {
-        handleFriends();
-        handleCountFollow();
-    }, []);
+    
     
   return (
     <div className="flex flex-col gap-6 w-full overflow-x-hidden overflow-y-scroll  scrollbar-none h-[86vh] rounded-xl">
@@ -46,7 +36,7 @@ export default function Profile() {
         <ProfileCard
           id={user.id}
           account={user?.accounttype}
-          countFollow={countFollow}
+          countFollow={followersCount}
           name={user?.fullName}
           date={user?.date}
           email={user?.email}
@@ -56,7 +46,7 @@ export default function Profile() {
         />
       </div>
       <div className="flex flex-col gap-6">
-        <SubHeader icon="bi bi-person-fill" name="Amis" profile />
+          <SubHeader icon="bi bi-person-fill" name="Amis" rightContent={<p className="text-black-100 dark:text-white-100">{followersCount}</p>} />
         <div className="bg-white-100 dark:bg-black-100 flex flex-col gap-4 rounded-lg p-2">
           {friends.length > 0 ? (
             friends
@@ -69,7 +59,7 @@ export default function Profile() {
                   name={friend.firstname + " " + friend.lastname}
                   image={SERVERLINK + "/" + friend.profileimage}
                   message
-                  retire
+                  showRemoveFriendButton
                 />
               ))
           ) : (
@@ -87,7 +77,7 @@ export default function Profile() {
             <SubHeader
               name="Offres Sauvegardés"
               icon="bi bi-bookmarks-fill"
-              rightContent={<p className="text-black-80 dark:text-white-100">4</p>}
+              rightContent={<p className="text-black-80 dark:text-white-100">{savedOffers?.length}</p>}
             />
             <div className="flex flex-col gap-4 rounded-lg">
                 {
@@ -114,8 +104,8 @@ export default function Profile() {
             />
             <div className="flex flex-col gap-4 rounded-lg">
                 {
-                    myOffers.length > 0 ? (
-                            myOffers.map((offer) => (<OfferCard forCurrentUser key={offer.offerid} sug={offer} mine />))
+                    currentUserOffers.length > 0 ? (
+                            currentUserOffers.map((currentUserOffer) => (<OfferCard forCurrentUser key={currentUserOffer.offerid} sug={currentUserOffer} mine />))
                         ) :
                         <div className='text-subtitle-2 text-black-40 text-center'>No offers</div>
                 }

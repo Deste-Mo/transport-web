@@ -17,19 +17,12 @@ const sizeVariants = {
 export function SubHeader({
   name,
   icon,
-  disableButton = false,
   sticky = false,
   size = "md",
-  profile = false,
   rightContent,
   className,
 }) {
-  const { countFollow, handleCountFollow } = useApp();
-
-  useEffect(() => {
-    handleCountFollow();
-  }, [countFollow, handleCountFollow]);
-
+  
   return (
     <div
       className={`flex select-none w-full justify-between items-center z-30  rounded-xl shadow-sm border border-black-0 bg-white-100 sticky top-0 dark:bg-white-10 dark:border-none dark:backdrop-blur-sm  ${
@@ -40,7 +33,6 @@ export function SubHeader({
         <i className={icon + " text-icon"}></i>
         <span>{name}</span>
       </div>
-      {profile ? <span className="text-black-80 dark:text-white-80">{countFollow}</span> : null}
       {rightContent}
     </div>
   );

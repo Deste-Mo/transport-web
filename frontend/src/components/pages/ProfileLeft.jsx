@@ -3,6 +3,7 @@ import {Button} from "../../styles/components.js";
 import ProfileLeftLoading from "../loader/ProfileLeftLoading.jsx";
 import {useEffect, useState} from "react";
 import {useApp} from "../../context/AppPorvider.jsx";
+import {useUser} from "../../context/UserProvider.jsx";
 
 
 export const ProfileLeft = ({
@@ -14,7 +15,7 @@ export const ProfileLeft = ({
                             }) => {
     const navigate = useNavigate();
 
-    const { countFollow, handleCountFollow } = useApp();
+    const {followersCount, getFollowersCount} = useUser();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -22,8 +23,8 @@ export const ProfileLeft = ({
     }, [])
 
     useEffect(() => {
-        handleCountFollow();
-    }, [countFollow, handleCountFollow]);
+        getFollowersCount();
+    }, [followersCount, getFollowersCount]);
 
     return (
         loading ? <ProfileLeftLoading/> :
@@ -54,7 +55,7 @@ export const ProfileLeft = ({
                     </div>
                     <div className="flex items-center  justify-between gap-2">
                         <span>Amis</span>
-                        <span>{countFollow}</span>
+                        <span>{followersCount}</span>
                     </div>
                 </div>
 

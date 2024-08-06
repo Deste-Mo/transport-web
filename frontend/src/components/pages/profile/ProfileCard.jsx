@@ -3,6 +3,7 @@ import { useApp } from "../../../context/AppPorvider";
 import { useEffect, useState } from "react";
 import Button from "../../ui/Button";
 import ProfileCardLoading from "../../loader/ProfileCardLoading";
+import {useUser} from "../../../context/UserProvider.jsx";
 
 const ProfileCard = ({
   id,
@@ -19,7 +20,7 @@ const ProfileCard = ({
 }) => {
   const navigate = useNavigate();
 
-  const { countFollow, handleCountFollow } = useApp();
+  const {followersCount, getFollowersCount} = useUser();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,8 +28,8 @@ const ProfileCard = ({
   }, [])
 
   useEffect(() => {
-    handleCountFollow();
-  }, [countFollow, handleCountFollow]);
+    getFollowersCount();
+  }, [followersCount, getFollowersCount]);
 
 
   return (

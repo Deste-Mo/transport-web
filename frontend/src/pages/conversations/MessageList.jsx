@@ -10,13 +10,15 @@ import ProfileImage from "../../assets/images/OIP.jpg";
 import Conv from "../../components/pages/conversations/Conversation.jsx";
 import {motion} from "framer-motion";
 import {appVariants} from "../../animations/variants.js";
+import {useUser} from "../../context/UserProvider.jsx";
 
 
 const MessageList = () => {
 
     const {token} = useAuth();
 
-    const {conversations, handleShowConversation, friends, handleFriends} = useApp();
+    const {conversations, handleShowConversation} = useApp();
+    const {friends, getFriends} = useUser();
 
     const {socket} = useSocketContext();
 
@@ -24,7 +26,7 @@ const MessageList = () => {
 
     useEffect(() => {
 
-        handleFriends();
+        getFriends();
         handleShowConversation();
 
         socket?.on("newMessage", (newMessage) => {

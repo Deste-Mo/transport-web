@@ -8,23 +8,14 @@ import { useEffect } from 'react'
 import { useApp } from '../context/AppPorvider.jsx'
 import { useSocketContext } from '../context/SocketContext.jsx'
 import { SERVERLINK } from '../constants/index.js'
+import {useNotification} from "../context/NotficationProvider.jsx";
 
 const Notifications = () => {
-  const { personalInformation, token } = useAuth()
-  const user = personalInformation
-
-  const {
-    notifications,
-    handleNotificationShow,
-    handleCountNotifUnread,
-  } = useApp()
-
-  const { socket } = useSocketContext()
-
-  useEffect(() => {
-    handleNotificationShow()
-  }, [])
-
+  const { token } = useAuth();
+  const { socket } = useSocketContext();
+  
+  const {notifications, getNotifications, getUnreadNotifications} = useNotification();
+  
   const handleSetReadAll = async () => {
     const response = await fetch(SERVERLINK + '/api/notifs/viewnotifs', {
       method: 'POST',
@@ -35,16 +26,20 @@ const Notifications = () => {
     })
 
     const verification = await response.json()
-
-    handleNotificationShow()
-    handleCountNotifUnread()
+    
+    getNotifications();
+    getUnreadNotifications();
   }
+  
+  useEffect(() => {
+    getNotifications();
+  }, [])
 
   useEffect(() => {
-    handleNotificationShow()
+    getNotifications();
     socket?.on('newNotif', () => {
-      handleNotificationShow()
-      handleCountNotifUnread()
+      getNotifications();
+      getUnreadNotifications();
     })
     return () => socket?.off('newNotif')
   }, [socket])
