@@ -30,7 +30,7 @@ const AppProvider = ({ children }) => {
     const [messages, setMessages] = useState([]);
 
     const [suggestions, setSuggestions] = useState([]);
-
+    
     const [homeOffers, setHomeOffers] = useState([]);
 
     const [myOffers, setMyOffers] = useState([]);
@@ -59,8 +59,7 @@ const AppProvider = ({ children }) => {
 
         setConversations(await allConversations.conversations);
     }
-
-
+    
     const handleNotificationShow = async () => {
 
         const notificationsRes = await fetch(SERVERLINK + '/api/notifs/getnotifs', {
@@ -73,7 +72,7 @@ const AppProvider = ({ children }) => {
 
         const allNotifs = await notificationsRes.json();
 
-        setNotifications(await allNotifs.notifications);
+        setNotifications(allNotifs.notifications);
     }
 
     const handleUsersToShow = async () => {
@@ -121,7 +120,6 @@ const AppProvider = ({ children }) => {
 
     }
     
-
     const handleFriends = async () => {
         setLoading(true);
         const conversationsRes = await fetch(SERVERLINK + '/api/profile/friends', {
@@ -291,9 +289,6 @@ const AppProvider = ({ children }) => {
         });
 
         const notifRes = await response.json();
-
-        // console.log(await offerRes)
-
         setCountNotifUnread(await notifRes.count);
     }
     

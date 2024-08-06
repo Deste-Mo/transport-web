@@ -2,27 +2,32 @@ export const NAV_LINKS = [
     {
         name: "Accueil",
         icon: "bi bi-grid",
-        path: "/"
+        path: "/",
+        number : 0,
     },
     {
         name: "Discussion",
         icon: "bi bi-chat",
-        path: "/discussion"
+        path: "/discussion",
+        number : 0,
     },
     {
         name: "Offres",
         icon: "bi bi-briefcase",
-        path: "/offer"
+        path: "/offer",
+        number : 0,
     },
     {
         name: "Amis",
         icon: "bi bi-person",
-        path: "/friend"
+        path: "/friend",
+        number : 0,
     },
     {
         name: "Notifications",
         icon: "bi bi-bell",
-        path: "/notification"
+        path: "/notification",
+        number : 0,
     },
 ]
 
