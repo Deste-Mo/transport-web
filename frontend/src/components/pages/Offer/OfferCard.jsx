@@ -2,15 +2,16 @@
 import { useNavigate } from 'react-router-dom'
 import ProfileImage from "../../../assets/images/OIP.jpg";
 import OfferImage from "../../../assets/images/voiture.jpg";
-import { useState, useEffect } from "react";
+import {useState, useEffect, useRef} from "react";
 import Button from "../../ui/Button.jsx";
 import { Icon } from "../../../styles/components.js";
 import OfferDetailBadge from "./OfferDetailBadge.jsx";
 import { useApp } from '../../../context/AppPorvider.jsx';
-import { SERVERLINK } from '../../../constants/index.js';
+import {SERVERLINK, TOAST_TYPE} from '../../../constants/index.js';
 import OfferCardLoading from "../../loader/OfferCardLoading.jsx";
+import {useAnimation} from "framer-motion";
 
-const OfferCard = ({ className, saved = false, sug, mine = false, detailedProfile = true, forCurrentUser = false }) => {
+const OfferCard = ({ className, saved = false, sug,  detailedProfile = true, forCurrentUser = false }) => {
 
     const [detailed, setDetailed] = useState(true);
     const [loading, setLoading] = useState(true);

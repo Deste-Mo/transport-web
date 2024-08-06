@@ -48,19 +48,19 @@ const Conv = ({ id, userToChat }) => {
     }, [])
 
     return (
-        <div className={`flex select-none items-center justify-between cursor-pointer w-full hover:bg-primary-20 p-6 rounded-xl ${isViewed ? 'bg-white-100' : 'bg-primary-20'}`} onClick={handleClick}>
+        <div className={`flex select-none items-center justify-between cursor-pointer w-full hover:bg-primary-20  p-6 rounded-xl ${isViewed ? 'bg-white-100 dark:bg-white-10 ' : 'bg-primary-20'}`} onClick={handleClick}>
             <div className="flex items-center gap-2">
                 <div className="relative">
                     <img className="size-[40px] object-cover rounded-full" src={image || '../../assets/images/OIP.jpg'} />
-                    {isOnline ? <span className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-success-100 absolute top-0 right-0 block" ></span> : null}
+                    {isOnline ? <span className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-primary-100 absolute top-0 right-0 block" ></span> : null}
                 </div>
                 <div className="flex flex-col gap-1 items-start">
-                    <p className="text-black-150 text-small-1">{userToChat.firstname + " " + userToChat.lastname}  ({userToChat.accounttype})</p>
-                    <p className={`${isViewed ? 'text-black-80' : 'text-black-100 font-bold'} text-small-1 flex items-center gap-1`}>
+                    <p className="text-black-100 dark:text-white-100 text-small-1">{userToChat.firstname + " " + userToChat.lastname}  <span className="font-sm">({userToChat.accounttype})</span></p>
+                    <p className={`${isViewed ? 'text-black-80 dark:text-white-80 dark:font-sm' : 'text-black-100 dark:text-white-100 font-bold'}  text-small-1 flex items-center gap-1`}>
                         <span>
                             {personalInformation.id === userToChat.lastsender ? "Vous : " : "Nouveau : "}
                         </span>
-                        <span className="max-w-[150px] overflow-hidden">
+                        <span className="overflow-hidden">
                             {" " + userToChat.lastmessage}
                         </span>
                         <span>...</span>
@@ -68,9 +68,12 @@ const Conv = ({ id, userToChat }) => {
                 </div>
             </div>
             <div className="flex items-center gap-1">
-                <div className={`size-[10px] rounded-full ${isViewed ? "bg-black-60" : "bg-primary-100"}`}
-                ></div>
-                <p className={"text-small-2 text-black-80 font-light"}>{timeSince(userToChat.lastdate, 3)}</p>
+                {
+                    !isViewed && <div
+                        className={`size-[10px] rounded-full bg-primary-100 `}
+                    />
+                }
+                <p className={"text-small-2 text-black-80 dark:text-white-100 dark:font-sm font-light"}>{timeSince(userToChat.lastdate, 3)}</p>
             </div>
         </div>
     )

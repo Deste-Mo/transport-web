@@ -31,7 +31,7 @@ const AppProvider = ({ children }) => {
 
     const [suggestions, setSuggestions] = useState([]);
 
-    const [homeoffers, setHomeoffers] = useState([]);
+    const [homeOffers, setHomeOffers] = useState([]);
 
     const [myOffers, setMyOffers] = useState([]);
 
@@ -42,6 +42,8 @@ const AppProvider = ({ children }) => {
     const [ pubNumber, setPubNumber ] = useState(0);
 
     const [ savedPubNumber, setSavedPubNumber ] = useState(0);
+    
+    const [loading, setLoading] = useState(false);
 
     const handleShowConversation = async () => {
 
@@ -118,8 +120,10 @@ const AppProvider = ({ children }) => {
         scrollToBottom();
 
     }
+    
 
     const handleFriends = async () => {
+        setLoading(true);
         const conversationsRes = await fetch(SERVERLINK + '/api/profile/friends', {
             method: "GET",
             headers: {
@@ -131,6 +135,7 @@ const AppProvider = ({ children }) => {
         const allFriends = await conversationsRes.json();
 
         setFriends(await allFriends.friends);
+        setTimeout(() => setLoading(false), 200);
     }
 
     const handleCountUnread = async () => {
@@ -190,7 +195,7 @@ const AppProvider = ({ children }) => {
 
         const homeoffersRes = await homeRes.json();
 
-        setHomeoffers(await homeoffersRes.offers);
+        setHomeOffers(await homeoffersRes.offers);
     }
 
     const handleOffersForUser = async () => {
@@ -319,8 +324,8 @@ const AppProvider = ({ children }) => {
         setNotifications,
         handleNotificationShow,
         handleShown,
-        homeoffers,
-        setHomeoffers,
+        homeOffers,
+        setHomeOffers,
         handleHomeOffers,
         timeSince,
         handleOffersForUser,
@@ -336,6 +341,8 @@ const AppProvider = ({ children }) => {
         countNotifUnread,
         pubNumber,
         savedPubNumber,
+        setLoading,
+        loading,
     }}>
         {children}
     </AppContext.Provider>

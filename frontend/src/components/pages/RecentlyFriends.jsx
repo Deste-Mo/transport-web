@@ -22,11 +22,10 @@ const RecentlyFriends = ({
 }) => {
   const { token } = useAuth();
 
-  const { handleFriends, handleUsersToShow } = useApp();
+  const { handleFriends, handleUsersToShow, loading } = useApp();
 
   const { ActiveUsers } = useSocketContext();
-
-  const [loading, setLoading] = useState(true);
+  
 
   const navigate = useNavigate();
 
@@ -77,10 +76,7 @@ const RecentlyFriends = ({
     );
     navigate("/message");
   };
-
-  useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
-  }, []);
+  
 
   return loading ? (
     <FriendCardLoading />
@@ -94,7 +90,7 @@ const RecentlyFriends = ({
           <span className="group-hover:underline cursor-pointer">
             {name}{" "}
             {isOnline && (
-              <span className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-success-100 inline-block"></span>
+              <span className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-primary-100 inline-block"></span>
             )}
           </span>
           <span className="text-black-80 dark:text-white-80 text-small-1 ">

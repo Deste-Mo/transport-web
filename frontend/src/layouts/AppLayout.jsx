@@ -23,7 +23,7 @@ const AppLayout = () => {
         return () => socket?.off("newMessage")
     }, [socket, countUnread, handleCountUnread]);
     
-    return <div className={`bg-gray-100 dark:bg-black-100 overflow-hidden h-screen ${darkMode && 'dark'}`}>
+    return <div className={`bg-gray-100 dark:bg-black-100 overflow-hidden h-screen`}>
         {
             loading ? <p className="text-black-100 text-title-3">Loading ...</p> : token ?
             <section className="relative">

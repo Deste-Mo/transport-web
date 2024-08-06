@@ -40,7 +40,7 @@ const MessageList = () => {
         <motion.section className="flex flex-col items-center justify-start w-full gap-6 relative  min-h-screen" variants={appVariants} initial="hidden" whileInView="visible" viewport={{once : true}}>
             <SubHeader name={"Messages"} icon={"bi bi-chat"}/>
             <div
-                className="w-full h-fit bg-white-100 dark:bg-black-100 dark:border-none flex justify-start overflow-auto p-4 border border-black-0 rounded-2xl scrollbar-none ">
+                className="w-full h-fit bg-white-100 dark:bg-black-100 dark:border-none flex justify-start overflow-x-scroll p-4 border border-black-0 rounded-2xl scrollbar-none ">
                 {friends.length > 0 ?
                     friends.map(friend => (
                         <ActiveUser key={friend.userid} friend={friend}/>
@@ -67,25 +67,3 @@ const MessageList = () => {
     )
 }
 export default MessageList;
-
-const DiscussionCard = ({profileImage, messageSeen, fullName, accountType, lastMessage, lastMessageTime}) => {
-
-    return (
-    <div className={"flex items-center justify-between cursor-pointer w-full hover:bg-primary-20 p-6 rounded-xl"}>
-    <div className="flex items-center gap-2">
-        <img className="size-[40px] object-cover rounded-full" src={ProfileImage}/>
-        <div className="flex flex-col gap-1 items-start">
-            <p className="text-black-100 text-small-1">RAHARISOA Haingonirina (Client)</p>
-            <p className={"text-black-100 font-bold text-small-1"}>
-                Lorem ipsum dolor sit amet
-            </p>
-        </div>
-    </div>
-    <div className="flex items-center gap-1">
-        <div className="size-[10px] rounded-full bg-primary-100"
-        ></div>
-        <p className={"text-small-2 text-black-80 font-light"}>Il y a 10 min</p>
-    </div>
-</div>
-)
-}

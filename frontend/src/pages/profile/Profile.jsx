@@ -92,19 +92,21 @@ export default function Profile() {
             <div className="flex flex-col gap-4 rounded-lg">
                 {
                     savedOffers.length > 0 ? (
-                            savedOffers.map((savedOffer) => (<OfferCard key={savedOffer.saveid} sug={savedOffer} saved />))
+                            savedOffers.map((savedOffer) => (<OfferCard key={savedOffer.saveid} sug={savedOffer} saved/>))
                         ) :
-                        <div className='text-subtitle-2 text-black-40 text-center'>No offers</div>
+                        <p className="w-full px-4 py-10 text-center text-black-80 bg-white-100 border border-black-0 rounded-xl dark:border-none dark:bg-black-10 dark:text-white-60">
+                            Pas de sauvegarde pour l'instant
+                        </p>
                 }
             </div>
           </div>
-          <div className="flex flex-col gap-6">
-            <SubHeader
-              name="Vos Offres"
-              icon="bi bi-briefcase-fill"
-              rightContent={
-                <Icon
-                  onClick={() => navigate(`/profile/${id}`)}
+            <div className="flex flex-col gap-6">
+                <SubHeader
+                    name="Vos Offres"
+                    icon="bi bi-briefcase-fill"
+                    rightContent={
+                        <Icon
+                            onClick={() => navigate(`/profile/${id}`)}
                   size="sm"
                   icon="bi bi-plus-lg"
                 />
@@ -113,7 +115,7 @@ export default function Profile() {
             <div className="flex flex-col gap-4 rounded-lg">
                 {
                     myOffers.length > 0 ? (
-                            myOffers.map((offer) => (<OfferCard key={offer.offerid} sug={offer} mine />))
+                            myOffers.map((offer) => (<OfferCard forCurrentUser key={offer.offerid} sug={offer} mine />))
                         ) :
                         <div className='text-subtitle-2 text-black-40 text-center'>No offers</div>
                 }

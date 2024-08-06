@@ -99,16 +99,16 @@ const RegisterSecurity = () => {
                         }}
                     />
                 </div>
-                <div className="w-full text-center h1 text-subtitle-1">
+                <div className="w-full text-center h1 text-subtitle-1 text-black-100 dark:text-white-100">
                     Créer un <span className="text-primary-100">mot de passe</span>
                 </div>
             </div>
             <form
-                className="flex w-fit flex-col items-start justify-center rounded-xl border p-4 border-black-0 bg-white-100 gap-[32px]"
+                className="flex w-fit flex-col items-start justify-center rounded-xl border p-4 border-black-0 bg-white-100 dark:text-white-100 gap-[32px]"
                 onSubmit={handleSubmit}
             >
                 <div className="flex w-full flex-col items-start justify-center gap-6">
-                    <h3 className="text-subtitle-3 text-black-100">Sécurité</h3>
+                    <h3 className="text-subtitle-3 text-black-100 dark:text-white-100">Sécurité</h3>
                     <div className="flex flex-col items-start justify-center gap-6">
                         <TextInput
                             name="password"

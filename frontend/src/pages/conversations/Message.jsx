@@ -7,10 +7,10 @@ import { useApp } from "../../context/AppPorvider";
 import { useEffect, useRef, useState } from "react";
 import { useSocketContext } from "../../context/SocketContext";
 import { SERVERLINK } from "../../constants";
-import Mess from "../../components/pages/conversations/Message.jsx";
 import Icon from "../../components/ui/Icon.jsx";
-import { Input } from "postcss";
 import { useForm } from "../../context/FormProvider.jsx";
+import {appVariants} from "../../animations/variants.js";
+import {motion} from "framer-motion";
 
 const Messages = () => {
 
@@ -113,13 +113,12 @@ const Messages = () => {
         })
 
     }
-
-
+    
     return (
-        <section
-            className="flex flex-col items-center justify-center w-full gap-4  rounded-xl bg-white-100 h-[85vh] relative overflow-hidden">
+        <motion.section
+            className="flex flex-col items-center justify-center w-full gap-4  rounded-xl bg-white-100 dark:bg-black-10  h-[85vh] relative overflow-hidden" variants={appVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <div
-                className="flex items-center justify-between w-full py-4 px-6 border-0 border-b border-b-black-20  bg-white-100 top-0 z-40">
+                className="flex items-center justify-between w-full py-4 px-6 border-0 border-b border-b-black-20  bg-white-10 top-0 z-40">
                 <div className="flex items-center justify-between ">
                     <Icon variant="ghost" icon="bi bi-chevron-left " onClick={handleClick} />
                     <div className="flex items-center gap-2 cursor-pointer">
@@ -127,8 +126,8 @@ const Messages = () => {
                             <img src={userToChat.pic} className={"size-[54px] rounded-full bg-black-20"} />
                             {isOnline ? <span className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-success-100 absolute top-0 right-0 block" ></span> : null}
                         </div>
-                        <p className={"text-black-100 text-lead"}>{userToChat.fullName}<span
-                            className="text-small-1 text-black-80">({userToChat.accounttype})</span>
+                        <p className={"text-black-100 dark:text-white-100 text-lead"}>{userToChat.fullName}<span
+                            className="text-small-1 text-black-80 dark:text-white-80">({userToChat.accounttype})</span>
                         </p>
                     </div>
                 </div>
@@ -176,7 +175,7 @@ const Messages = () => {
                 }
                 <div ref={endOfMessagesRef} />
             </div>
-            <div className="border-0 bg-white-100 px-6 py-4 w-full border-t border-t-black-20  bottom-0 z-40">
+            <div className="border-0 bg-white-10 px-6 py-4 w-full border-t border-t-black-20  bottom-0 z-40">
                 {
                     formData.refMessage ?
                         <p className="max-w-[400px] break-words text-small-1 flex items-center justify-start rounded-xl text-black-60 p-1">
@@ -211,7 +210,7 @@ const Messages = () => {
                     <Icon onClick={handleSendMessage} icon="bi bi-arrow-up" size="sm" />
                 </form>
             </div>
-        </section>
+        </motion.section>
     )
 }
 
@@ -241,14 +240,14 @@ const Message = ({ conversationId, messageId, message, sentDate, sentByCurrentUs
     const fileTypes = ["jpg", "png", "jpeg", "gif"]
 
     return <div className="space-y-1 mt-3 max-w-[420px] text-wrap break-words">
-        <p className="text-small-2 text-black-80 text-right pr-2">{timeSince(sentDate, 3)}</p>
+        <p className="text-small-2 text-black-80 dark:text-white-80 dark:font-sm text-right pr-2">{timeSince(sentDate, 3)}</p>
         {
             fileContent
                 ?
                 <div>
                     {
                         refmessage ?
-                        <p className="text-small-1 flex items-center justify-start rounded-xl text-black-60 max-w-[300px] p-1"><Icon variant="ghost" icon="bi bi-arrow-90deg-down" className="-rotate-90" size="sm" />{refmessage}</p>
+                        <p className="text-small-1 flex items-center justify-start rounded-xl text-black-60 dark:text-white-60 max-w-[300px] p-1"><Icon variant="ghost" icon="bi bi-arrow-90deg-down" className="-rotate-90" size="sm" />{refmessage}</p>
                             :
                             null
                     }
@@ -259,7 +258,7 @@ const Message = ({ conversationId, messageId, message, sentDate, sentByCurrentUs
                                 :
                                 <div>
                                     <Icon variant="ghost" icon="bi bi-file-earmark" size="lg" />
-                                    <span className="text-black-40">{fileContent}</span>
+                                    <span className="text-black-40 dark:text-white-60">{fileContent}</span>
                                 </div>
                         }
                     </a>
@@ -278,7 +277,7 @@ const Message = ({ conversationId, messageId, message, sentDate, sentByCurrentUs
                             null
                     }
                     <div className={`p-4  rounded-2xl space-y-3 w-full ${sentByCurrentUser ? 'bg-primary-20' : 'bg-black-10'}`}>
-                        <p className="text-small-1 text-black-100">{message}</p>
+                        <p className="text-small-1 text-black-100 dark:text-white-100 ">{message}</p>
                     </div>
                 </div>
         }

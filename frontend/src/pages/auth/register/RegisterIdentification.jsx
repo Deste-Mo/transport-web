@@ -79,16 +79,16 @@ const RegisterIdentification = () => {
                         }}
                     />
                 </div>
-                <div className="w-full text-center h1 text-subtitle-1">
+                <div className="w-full text-center h1 text-subtitle-1 text-black-100 dark:text-white-100">
                     Entrer vos <span className="text-primary-100">identifications</span>
                 </div>
             </div>
             <form
-                className="flex w-fit flex-col items-start justify-center rounded-xl border p-6 border-black-0 bg-white-100 gap-[32px]"
+                className="flex w-fit flex-col items-start justify-center rounded-xl border p-6 border-black-0 bg-white-100 dark:border-none dark:bg-white-10 gap-[32px]"
                 onSubmit={handleSubmit}
             >
                 <div className="flex w-full flex-col items-start justify-center gap-6">
-                    <h3 className="text-subtitle-3 text-black-100">Identification</h3>
+                    <h3 className="text-subtitle-3 text-black-100 dark:text-white-100">Identification</h3>
                     <div className="flex flex-row items-start justify-center gap-6">
                         <div className="flex flex-col items-center justify-center gap-6">
                             {isAccountTypeForCompany ? (

@@ -31,18 +31,18 @@ const RegisterAccountType = () => {
   };
 
   return (
-    <section className="absolute left-1/2 -translate-x-1/2 w-fullscreen bg-gray-80 auth-section space-y-[128px] top-[128px]">
-      <div className="w-full text-center h1 text-subtitle-1">
+    <section className="absolute left-1/2 -translate-x-1/2 w-fullscreen  auth-section space-y-[128px] top-[128px]">
+      <div className="w-full text-center text-black-100 dark:text-white-100 h1 text-subtitle-1">
         Selectionner votre{" "}
         <span className="text-primary-100">type de compte</span>
       </div>
       <div className="flex flex-col items-center justify-center">
         <form
-          className="flex w-fit flex-col items-start justify-center rounded-xl border p-4 border-black-0 bg-white-100 gap-[32px]"
+          className="flex w-fit flex-col items-start justify-center rounded-xl border p-4 border-black-0 bg-white-100 dark:bg-white-10 dark:border-none gap-[32px]"
           onSubmit={handleSubmit}
         >
           <div className="flex w-full flex-col items-start justify-center gap-6">
-            <h3 className="text-subtitle-3 text-black-100">Type de compte</h3>
+            <h3 className="text-subtitle-3 text-black-100 dark:text-white-100">Type de compte</h3>
             <div className="flex flex-col items-center justify-center">
               <SelectInput
                 title="Compte pour"
@@ -59,7 +59,7 @@ const RegisterAccountType = () => {
           <Button disabled={errorData.accountid} block>
             Suivant
           </Button>
-          <p className="text-small-1 text-black-80">
+          <p className="text-small-1 text-black-80 dark:text-white-80">
             Deja membre ?{" "}
             <Link to="/login" className="underline text-primary-100">
               Se connecter

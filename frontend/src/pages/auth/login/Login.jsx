@@ -3,9 +3,9 @@ import {
     TextInput
 } from "../../../styles/components";
 
-import {Link, useNavigate} from "react-router-dom";
-import {EMAIL_REGEX, PASSWORD_REGEX, SERVERLINK, TOAST_TYPE} from "../../../constants";
-import {useState, useEffect} from "react";
+import {Link} from "react-router-dom";
+import {EMAIL_REGEX, PASSWORD_REGEX, TOAST_TYPE} from "../../../constants";
+import {useState} from "react";
 import {useAuth} from "../../../context/AuthProvider.jsx";
 import {useForm} from "../../../context/FormProvider.jsx";
 import api from "../../../utils/api.js";
@@ -39,15 +39,15 @@ const Login = () => {
 
     return (
         <section
-            className="w-fullscreen bg-gray-80 auth-section space-y-[128px] absolute top-[128px] left-1/2 -translate-x-1/2 ">
-            <div className="h1 text-subtitle-1 w-full text-center">
+            className="w-fullscreen  auth-section space-y-[128px] absolute top-[128px] left-1/2 -translate-x-1/2 ">
+            <div className="h1 text-subtitle-1 w-full text-center text-black-100 dark:text-white-100">
                 Connecter vous dans votre compte
                 <span className="text-primary-100"> Media Trans</span>
             </div>
             {/* Main Form */}
             <div className="flex flex-col items-center justify-center">
                 <form
-                    className="flex flex-col  items-start justify-center gap-[32px] w-fit p-6 border bg-white-100 border-black-0 rounded-xl"
+                    className="flex flex-col  items-start justify-center gap-[32px] w-fit p-6 border bg-white-100 dark:bg-white-10 dark:border-none border-black-0 rounded-xl"
                     onSubmit={handleLogin}
                 >
                     <div className="flex flex-col items-center w-full justify-center gap-6">
@@ -83,7 +83,7 @@ const Login = () => {
                         connecter</Button>     
 {/*                    <Button loading={loading} disabled={errorData.email || errorData.password} block>Se
                         connecter</Button>*/}
-                    <p className="text-small-1 text-black-80">
+                    <p className="text-small-1 text-black-80 dark:text-white-80">
                         Pas encore de compte ?{" "}
                         <Link to="/registerAccountType" className="text-primary-100 underline">
                             Créer un compte
