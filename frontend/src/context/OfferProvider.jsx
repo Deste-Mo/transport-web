@@ -40,11 +40,9 @@ const OfferProvider = ({children}) => {
         const response = await axios.get(`${SERVERLINK}/api/offres/suggestionoffers`, {
             headers: {token: token}
         })
-
         setSuggestedOffers(await response?.data?.suggestions);
     }
-
-
+    
     return (
         <OfferContext.Provider value={{
             offers,
