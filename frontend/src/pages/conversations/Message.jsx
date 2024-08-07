@@ -171,18 +171,14 @@ const Messages = () => {
             </div>
             <div className="border-0 bg-white-10 px-6 py-4 w-full border-t border-t-black-20  bottom-0 z-40">
                 {
-                    formData.refMessage ?
-                        <p className="max-w-[400px] break-words text-small-1 flex items-center justify-start rounded-xl text-black-60 p-1">
+                    formData.refMessage &&
+                        <p className="max-w-[400px] break-words text-small-1 flex items-center justify-start rounded-xl text-black-60 dark:text-white-60 p-1">
                             <Icon variant="ghost" icon="bi bi-arrow-90deg-down" className="-rotate-90" size="sm" />
                             {formData.refMessage}
                         </p>
-                        :
-                        null
                 }
-                {formData.fileContent ?
+                {formData.fileContent &&
                     <Icon size="md" variant="ghost" icon="bi bi-image" />
-                    :
-                    null
                 }
                 <form className="flex items-center justify-between gap-4" onSubmit={handleSendMessage}>
                     <FileInput inputClassName=" hidden " className="w-min"
@@ -191,6 +187,7 @@ const Messages = () => {
                         onChange={(e) => handleInputChange(setFormData, e)}
                         onError={handleError(setErrorData)}
                         value={formData.fileContent}
+                               iconVariant="ghost"
                     />
                     <Icon size="md" variant="ghost" icon="bi bi-emoji-smile" />
                     <TextInput rounded="full" block
@@ -212,23 +209,25 @@ const Messages = () => {
 const Message = ({ conversationId, messageId, message, sentDate, sentByCurrentUser = false, setAnswer, formData, refmessage, fileContent, handleShown }) => {
 
     const { timeSince } = useApp();
-
     const { token } = useAuth();
+    const {setConfirmMessagePopup} = useApp();
 
     const answerMessage = () => {
         setAnswer({ ...formData, ['refMessage']: message });
     }
     const handleDelete = async () => {
-        const response = await fetch(SERVERLINK + '/api/messages/delete/' + messageId + "/" + conversationId, {
-            method: "POST",
-            headers: {
-                "token": token
-            }
-        });
-
-        const answer = await response.json();
-
-        handleShown();
+        if (setConfirmMessagePopup("Voulez-vous vraiment supprimer ce message ?")) {
+            const response = await fetch(SERVERLINK + '/api/messages/delete/' + messageId + "/" + conversationId, {
+                method: "POST",
+                headers: {
+                    "token": token
+                }
+            });
+            
+            const answer = await response.json();
+            handleShown();
+        }
+        
     }
 
     const fileTypes = ["jpg", "png", "jpeg", "gif"]
@@ -266,7 +265,7 @@ const Message = ({ conversationId, messageId, message, sentDate, sentByCurrentUs
                 <div>
                     {
                         refmessage ?
-                            <p className="text-small-1 flex items-center justify-start rounded-xl text-black-60 max-w-[300px] p-1"><Icon variant="ghost" icon="bi bi-arrow-90deg-down" className="-rotate-90" size="sm" />{refmessage}</p>
+                            <p className="text-small-1 flex items-center justify-start rounded-xl text-black-60 dark:text-white-60 max-w-[300px] p-1"><Icon variant="ghost" icon="bi bi-arrow-90deg-down" className="-rotate-90" size="sm" />{refmessage}</p>
                             :
                             null
                     }

@@ -28,6 +28,21 @@ export const appVariants = {
     }
 }
 
+export const confirmPopupVariants = {
+    visible : {
+        opacity : 1,
+        scale : 1,
+    },
+    hidden : {
+        opacity: 0,
+        scale : 0.8,
+    },
+    exit : {
+      opacity : 0,
+      scale : 0.8,  
+    }
+}
+
 export const profilePopupVariants = {
     visible : {
         opacity : 1,

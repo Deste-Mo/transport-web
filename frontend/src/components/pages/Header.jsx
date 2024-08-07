@@ -8,8 +8,7 @@ import {useNotification} from "../../context/NotficationProvider.jsx";
 import {useUser} from "../../context/UserProvider.jsx";
 
 export function Header({profileImage}) {
-    const navigate = useNavigate();
-    const location = useLocation();
+
 
     const {countUnread, getUnreadMessageCount} = useApp();
     const {unreadNotificationsCount, getUnreadNotifications} = useNotification();
@@ -61,16 +60,31 @@ export function Header({profileImage}) {
     }, []);
 
     return (
+        <>
+            <DesktopHeader NAV_LINKS={NAV_LINKS} profileImage={profileImage} className="max-md:hidden"/>
+            <MobileHeader NAV_LINKS={NAV_LINKS} profileImage={profileImage} className="md:hidden"/>
+        </>
+    );
+}
+
+const MobileHeader = ({className, NAV_LINKS, profileImage}) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    return (
         <header
-            className={`flex justify-between items-center bg-white-100 dark:bg-white-10 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md py-4 px-8 fixed left-0 top-0 right-0 z-50`}
+            className={`flex justify-between max-md:justify-center  items-center   z-40 ${className}`}
         >
-            <div className="flex items-center gap-14 logo">
-                <h1 className="text-subtitle-2">
-                    Media <span className="text-primary-100">Trans</span>
-                </h1>
+            <div className="flex  items-center w-full justify-between max-md:items-center gap-20 max-lg:gap-10 py-4 px-8 fixed left-0 top-0 bg-white-100 dark:bg-white-10 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md z-50">
+                <div className="flex items-center gap-14 logo ">
+                    <h1 className="text-subtitle-2 max-lg:text-subtitle-3">
+                        Media <span className="text-primary-100">Trans</span>
+                    </h1>
+                </div>
+                <Profile profileImage={profileImage}/>
             </div>
+            
             <div className="">
-                <ul className="flex  items-end gap-20">
+                <ul className="flex  items-center w-full justify-between max-md:items-center  py-4 px-8 fixed left-0 bottom-0 bg-white-100 dark:bg-white-10 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md z-50">
                     {NAV_LINKS.map((navlink) => (
                         <NavLink
                             key={navlink.name}
@@ -81,7 +95,37 @@ export function Header({profileImage}) {
                             onClick={() => navigate(navlink.path)}
                         />
                     ))}
-                    
+                </ul>
+            </div>
+        </header>
+    )
+}
+
+const DesktopHeader = ({className, NAV_LINKS, profileImage}) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    return (
+        <header
+            className={`flex justify-between items-center bg-white-100 dark:bg-white-10 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md py-4 px-8 fixed left-0 top-0 right-0 z-40 ${className}`}
+        >
+            <div className="flex items-center gap-14 logo">
+                <h1 className="text-subtitle-2 max-lg:text-subtitle-3">
+                    Media <span className="text-primary-100">Trans</span>
+                </h1>
+            </div>
+            <div className="">
+                <ul className="flex  items-end gap-20 max-lg:gap-10">
+                    {NAV_LINKS.map((navlink) => (
+                        <NavLink
+                            key={navlink.name}
+                            {...navlink}
+                            active={
+                                navlink.path.toLowerCase() === location.pathname.toLowerCase()
+                            }
+                            onClick={() => navigate(navlink.path)}
+                        />
+                    ))}
+
                 </ul>
             </div>
             <Profile profileImage={profileImage}/>
@@ -89,11 +133,11 @@ export function Header({profileImage}) {
     );
 }
 
-const Profile = ({profileImage}) => {
+const Profile = ({profileImage, className}) => {
     const {togglePopup, setTogglePopup} = useAnimation();
-    const selectRef = useRef();
+    const selectRef = useRef(null);
 
-    useEffect(() => {
+    /*useEffect(() => {
         const handleClickOutside = (e) => {
             if (selectRef.current && !selectRef.current.contains(e.target)) {
                 setTogglePopup(false);
@@ -103,14 +147,14 @@ const Profile = ({profileImage}) => {
 
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
-
+*/
     return (
-        <div ref={selectRef} className="flex items-center gap-10 relative ">
+        <div ref={selectRef} className={`flex items-center justify-center gap-10 relative  ${className}`}>
             <div
-                className="flex w-14 h-14 cursor-pointer items-center justify-center rounded-full shadow-xl bg-black-40"
+                className="flex size-14 max-md:size-10 cursor-pointer items-center justify-center rounded-full shadow-xl bg-black-40"
                 onClick={() => setTogglePopup((prev) => !prev)}
             >
-                <img src={profileImage} alt="" className="h-14 w-14 rounded-full "/>
+                <img src={profileImage} alt="" className="size-full rounded-full "/>
             </div>
             {togglePopup && <ProfilePopup className="fixed top-[86px] right-10"/>}
         </div>
@@ -133,7 +177,7 @@ const NavLink = ({icon, name, active = false, onClick, number = 0}) => {
             >
       {
           number > 0 && <div
-              className="absolute bottom-10 -right-2 bg-danger-100 text-white-100 size-[24px] flex items-center justify-center px-2 py-2 rounded-full">1</div>
+              className="absolute max-md:text-small-3 max-md:font-sm bottom-10 -right-2 bg-danger-100 text-white-100 size-[24px] flex items-center justify-center px-2 py-2 rounded-full">1</div>
       }
                 {name}
       </span>

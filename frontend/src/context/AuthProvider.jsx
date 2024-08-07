@@ -14,10 +14,10 @@ const AuthProvider = ({children}) => {
         REGISRATION_STEPS.accoutType
     ); // In witch registration route is the user
     const [loading, setLoading] = useState(true);
+    const [loadingInformation, setLoadingInformation] = useState(false);
     const [token, setToken] = useState(null);
     const [isAuth, setIsAuth] = useState(false);
-
-
+    
     const navigate = useNavigate();
 
     // Register handler
@@ -35,7 +35,6 @@ const AuthProvider = ({children}) => {
         password: "",
         confirmPassword: "",
     });
-
     const [errorData, setErrorData] = useState({
         firstname: true,
         lastname: true,
@@ -55,9 +54,8 @@ const AuthProvider = ({children}) => {
         setToken(accessToken);
         setIsAuth(token !== null);
     }
-
     const getInformation = async (accessToken) => {
-        // console.log(`Access token : ${accessToken}`)
+        setLoadingInformation(true);
         api.get(`${SERVERLINK}/api/auth/me`, {
             headers: {
                 token: accessToken,
@@ -70,10 +68,8 @@ const AuthProvider = ({children}) => {
                 console.log(`Erreur : ${e.response.data.error}`);
                 // setToken(null);
             })
-
+        setLoadingInformation(false);
     };
-
-
     const logout = () => {
         axios.post(`${SERVERLINK}/api/auth/logout`)
             .then(res => {
@@ -85,7 +81,6 @@ const AuthProvider = ({children}) => {
                 console.log(e.response.data.error);
             })
     }
-
     const login = async (accessToken) => {
         updateAuthorization(accessToken);
         await getInformation(accessToken);
@@ -117,6 +112,7 @@ const AuthProvider = ({children}) => {
     return (
         <AuthContext.Provider
             value={{
+                loadingInformation,
                 personalInformation,
                 setPersonalInformation,
                 getInformation,

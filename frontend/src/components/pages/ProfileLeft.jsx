@@ -16,18 +16,12 @@ export const ProfileLeft = ({
     const navigate = useNavigate();
 
     const {followersCount, getFollowersCount} = useUser();
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        setTimeout(() => setLoading(false) , 1000)
-    }, [])
 
     useEffect(() => {
         getFollowersCount();
     }, [followersCount, getFollowersCount]);
 
     return (
-        loading ? <ProfileLeftLoading/> :
             <div className="flex flex-col gap-6 rounded-xl shadow-sm border border-black-0 p-4 bg-white-100 dark:bg-black-100 dark:border-none w-full">
 
                 <div className="flex flex-col items-center justify-center gap-4">

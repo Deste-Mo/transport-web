@@ -3,11 +3,13 @@ import { createContext, useContext, useState } from "react";
 import { useAuth } from "./AuthProvider";
 import { SERVERLINK } from "../constants";
 import axios from "axios";
+import {useAnimation} from "./AnimationProvider.jsx";
 const AppContext = createContext({});
 
 const AppProvider = ({ children }) => {
 
     const { token } = useAuth()
+    const {setShowConfirmPopup} = useAnimation();
 
     const [userToChat, setUserToChat] = useState({
         id: null,
@@ -18,6 +20,20 @@ const AppProvider = ({ children }) => {
     const [conversations, setConversations] = useState([]);
     const [countUnread, setCountUnread] = useState(0)
     const [messages, setMessages] = useState([]);
+    
+    // Confirm message popup
+    const [confirmPopup, setConfirmPopup] = useState({
+        message :  "Some message ?",
+        confirmed : false,
+    });
+    const setConfirmMessagePopup = (message) => {
+        setConfirmPopup({
+            message,
+            confirmed : false,
+        })
+        setShowConfirmPopup(true);
+        return confirmPopup.confirmed;
+    }
     
     const handleShowConversation = async () => {
 
@@ -111,6 +127,11 @@ const AppProvider = ({ children }) => {
         handleShowConversation,
         countUnread,
         setCountUnread,
+        
+        // Confirm Popup
+        confirmPopup,
+        setConfirmPopup,
+        setConfirmMessagePopup
 
 
     }}>

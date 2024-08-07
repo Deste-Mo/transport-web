@@ -10,7 +10,9 @@ const FileInput = ({
   onError = () => {},
   className = "",
   block = false,
-  inputClassName=""
+  inputClassName="",
+    iconVariant,
+    icon = "bi bi-folder",
 }) => {
   const fileRef = useRef(null);
   const [error, setError] = useState(true);
@@ -58,8 +60,9 @@ const FileInput = ({
   return (
     <div className={fileInputClassName}>
       <Icon
-        icon="bi-folder"
+        icon={icon}
         size="lg"
+        variant={iconVariant}
         className="rounded-md m-0"
         onClick={() => handleClick(fileRef)}
       />

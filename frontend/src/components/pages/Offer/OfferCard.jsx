@@ -49,9 +49,7 @@ const OfferCard = ({ className, saved = false, sug,  detailedProfile = true, for
     setTimeout(() => setLoading(false), 1000);
   }, []);
 
-  return loading ? (
-    <OfferCardLoading detailedProfile={detailedProfile} />
-  ) : (
+  return (
     <div className="flex flex-col items-start justify-start w-full gap-2 ">
       <div className="flex items-center gap-x-6 gap-y-2 flex-wrap">
           <OfferDetailBadge text={sug?.title} icon="bi bi-box" />
@@ -116,7 +114,7 @@ const OfferCard = ({ className, saved = false, sug,  detailedProfile = true, for
           />
         )}
         {!forCurrentUser && (
-          <div className="flex items-center w-full gap-6 jusify-start">
+          <div className="flex items-center w-full gap-6 jusify-start flex-wrap">
             {/*<Icon variant="secondary" icon="bi bi-chat" size="sm"/>*/}
             <Button
               onClick={() => navigate(`discussion`)}

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import {lazy, Suspense, useEffect} from 'react';
 import { useAuth } from '../../context/AuthProvider';
 import { Button, Icon } from '../../styles/components';
 import { SubHeader } from './../../components/pages/SubHeader';
@@ -6,17 +6,18 @@ import RecentlyFriends from './../../components/pages/RecentlyFriends';
 import { SERVERLINK } from '../../constants';
 import OfferCard from "../../components/pages/Offer/OfferCard.jsx";
 import {useNavigate, useParams} from "react-router-dom";
-import ProfileCard from "../../components/pages/profile/ProfileCard.jsx";
 import {useUser} from "../../context/UserProvider.jsx";
 import {useOffer} from "../../context/OfferProvider.jsx";
-
+import ProfileCardLoading from "../../components/loader/ProfileCardLoading.jsx";
+import FriendCardLoading from "../../components/loader/FriendCardLoading.jsx";
+const ProfileCard = lazy(() => import("../../components/pages/profile/ProfileCard.jsx"));
 
 export default function Profile() {
     const {id} = useParams();
     const navigate = useNavigate();
     
-    const { personalInformation } = useAuth();
-    const {friends,getFriends, followersCount, getFollowersCount} = useUser();
+    const { personalInformation, loadingInformation } = useAuth();
+    const {friends,getFriends, followersCount, getFollowersCount, loadingFriend} = useUser();
     const {getSavedOffers, savedOffers, currentUserOffers} = useOffer();
     
     const user = personalInformation;
@@ -33,35 +34,38 @@ export default function Profile() {
     <div className="flex flex-col gap-6 w-full overflow-x-hidden overflow-y-scroll  scrollbar-none h-[86vh] rounded-xl">
       <div className="flex flex-col gap-6">
         <SubHeader icon="bi bi-person-fill" name="Profile" />
-        <ProfileCard
-          id={user.id}
-          account={user?.accounttype}
-          countFollow={followersCount}
-          name={user?.fullName}
-          date={user?.date}
-          email={user?.email}
-          image={SERVERLINK + "/" + user?.profile}
-          phone={user?.phone}
-          forCurrentUser={user.id === id}
-        />
+          {
+              loadingInformation ? <ProfileCardLoading/> : <ProfileCard
+                  id={user.id}
+                  account={user?.accounttype}
+                  countFollow={followersCount}
+                  name={user?.fullName}
+                  date={user?.date}
+                  email={user?.email}
+                  image={SERVERLINK + "/" + user?.profile}
+                  phone={user?.phone}
+                  forCurrentUser={user.id === id}
+              />
+          }
       </div>
       <div className="flex flex-col gap-6">
           <SubHeader icon="bi bi-person-fill" name="Amis" rightContent={<p className="text-black-100 dark:text-white-100">{followersCount}</p>} />
         <div className="bg-white-100 dark:bg-black-100 flex flex-col gap-4 rounded-lg p-2">
-          {friends.length > 0 ? (
-            friends
-              .slice(0, 4)
-              .map((friend) => (
-                <RecentlyFriends
-                  className="w-full"
-                  key={friend.userid}
-                  spec={friend.userid}
-                  name={friend.firstname + " " + friend.lastname}
-                  image={SERVERLINK + "/" + friend.profileimage}
-                  message
-                  showRemoveFriendButton
-                />
-              ))
+          {friends.length > 0 ? 
+              loadingFriend ? <FriendCardLoading/> : (
+                  friends
+                      .slice(0, 4)
+                      .map((friend) => (
+                          <RecentlyFriends
+                              className="w-full"
+                              key={friend.userid}
+                              spec={friend.userid}
+                              name={friend.firstname + " " + friend.lastname}
+                              image={SERVERLINK + "/" + friend.profileimage}
+                              message
+                              showRemoveFriendButton
+                          />
+                      ))
           ) : (
             <div>Pas d'amis</div>
           )}

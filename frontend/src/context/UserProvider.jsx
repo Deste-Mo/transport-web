@@ -9,15 +9,18 @@ const UserProvider = ({children}) => {
     const {token} = useAuth();
     
     const [friends, setFriends] = useState([]);
+    const [loadingFriend, setLoadingFriend] = useState(true);
     const [users, setUsers] = useState([]);
     const [followersCount, setFollowersCount] = useState(0);
     
+    
     const getFriends = async () => {
+        setLoadingFriend(true);
         const response = await axios.get(`${SERVERLINK}/api/profile/friends`, {
             headers: {token}
         })
-        
         setFriends(await response?.data?.friends);
+        setLoadingFriend(false);
     }
     const getUsers = async () => {
         const reponse = await axios.get(`${SERVERLINK}/api/messages/users`, {headers: {token}})
@@ -34,7 +37,7 @@ const UserProvider = ({children}) => {
     }
     
   return (
-      <FriendContext.Provider value={{friends, followersCount,users,handleUsersToShow, getFriends, getUsers, getFollowersCount}}>
+      <FriendContext.Provider value={{friends, followersCount,users,loadingFriend,handleUsersToShow, getFriends, getUsers, getFollowersCount}}>
         {children}
       </FriendContext.Provider>
   )
