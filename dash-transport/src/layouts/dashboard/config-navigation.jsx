@@ -14,12 +14,6 @@ const navConfig = [
 
 
   { title: 'Abonnements', path: '/subscriptions', icon: icon('ic_subscription') },
-  { title: 'Offres', path: '/offers', icon: icon('ic_offer') },
-  { title: 'Messages', path: '/messages', icon: icon('../ic_notification_chat') },
-  { title: 'Abonnés', path: '/follows', icon: icon('ic_follow') },
-  { title: 'Évaluations', path: '/ratings', icon: icon('ic_rating') },
-  { title: 'Offres enregistrées', path: '/saved-offers', icon: icon('ic_save_offer') },
-  { title: 'Véhicules', path: '/vehicles', icon: icon('ic_vehicle') },
 ];
 
 export default navConfig;

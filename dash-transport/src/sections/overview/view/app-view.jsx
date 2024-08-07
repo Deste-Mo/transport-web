@@ -13,8 +13,6 @@ import AppCurrentVisits from '../app-current-visits';
 import AppWebsiteVisits from '../app-website-visits';
 import AppTrafficBySite from '../app-traffic-by-site';
 import AppCurrentSubject from '../app-current-subject';
-import AppConversionRates from '../app-conversion-rates';
-
 // ----------------------------------------------------------------------
 
 export default function AppView() {
