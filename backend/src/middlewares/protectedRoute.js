@@ -32,7 +32,7 @@ const protectedRoute = async (req, res, next) => {
             return res.status(500).json({ error: "Token invalid" });
         }
 
-        const user = await getInformation([payload.id]);
+        const user = await getInformation(payload.id);
 
         if (!user) {
             return res.status(500).json({ error: "Utilisateur non trouver" });

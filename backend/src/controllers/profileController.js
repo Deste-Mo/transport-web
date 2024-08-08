@@ -45,17 +45,29 @@ export const allFriend = async (req, res) => {
 
         const userId = await req.user.userid;
 
+        const profileId = await req.params.userId;
+
         const request = await getAllFriend(userId);
 
-        if(!request[0]) return res.status(200).json({friends: {}});
+        let profileFriends = [];
 
-        const friends = request;
+        if(profileId){
+            profileFriends = await getAllFriend(profileId);
+        }
 
-        return res.status(200).json({friends});
+
+        let friends = {};
+        let profile = {};
+
+        friends = !request[0] ? {} : request;
+
+        profile = !profileFriends[0] ? {} : profileFriends;
+
+        return res.status(200).json({friends, profile});
 
     } catch (error) {
         console.error("Erreur au niveau de l'envoie de requete pour suivre la personne: " + error.message);
-        return res.status(500).json({error})
+        return res.status(500).json({error: error.message})
     }
 
 }

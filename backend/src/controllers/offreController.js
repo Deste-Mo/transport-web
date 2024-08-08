@@ -13,7 +13,8 @@ import {
     getOfferByOfferId,
     allSavedOffers,
     setSavedOffer,
-    retireSavedOffer
+    retireSavedOffer,
+    getOfferById
 } from '../models/offreModel.js';
 
 // handle the offer publication and register the offer for a user in the profile page
@@ -149,7 +150,7 @@ export const saveOffer = async (req, res) => {
     try {
         const result = await setSavedOffer(userId, offerId);
 
-        if (!result) return res.json({ error })
+        if (!result) return res.json({ error: "Erreur lors de l'ajout" });
 
         return res.status(200).json({ success: "Saved successfully" });
     } catch (error) {
@@ -180,7 +181,7 @@ export const retireOffer = async (req, res) => {
 
 export const allOffersForUser = async (req, res) => {
 
-    const userId = req.user.userid;
+    const userId = !req.params.userId ? req.user.userid : req.params.userId;
     
     try {
 
@@ -191,6 +192,29 @@ export const allOffersForUser = async (req, res) => {
         if(!allOffers[0]) return res.status(200).json({all: {}})
 
         return res.status(200).json({ all: allOffers });
+
+    } catch (error) {
+        // console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+
+}
+
+export const OfferForUser = async (req, res) => {
+
+    const userId = req.user.userid;
+
+    const { offerId } = req.params;
+    
+    try {
+
+        const offer = await getOfferById(offerId);
+
+        // console.log("offerBack: " + offer)
+
+        if(!offer) return res.status(200).json({offer: {}})
+
+        return res.status(200).json({ offer: offer });
 
     } catch (error) {
         // console.error(error);
@@ -224,48 +248,60 @@ export const deleteOfferForUser = async (req, res) => {
 export const updateOfferForUser = async (req, res) => {
     try {
 
-        const offerId = req.body.offerid;  
-        const userId = req.user.userid;        
+        const { offerId } = req.params;
         
-        // use a key table for obtaining the data in the request
-        const keys = ['title', 'capacity', 'depart', 'destination', 'scheduledDate', 'description','imgUrl','offerId'];
-        
-         const formData = keys.map(key => {             
-            if(key ==='imgUrl') {return req.file ? req.file.filename : null}
-            if(key ==='offerId') return offerId
-            return req.body[key]
-        });  
-              
-        // res.json({objet:formData});        
+        const {
+            title,
+            description,
+            depart,
+            destination,
+            capacity,
+            scheduledDate
+        } = req.body;
+
+        // return res.json(req.file)
+
+        // return res.json({body: req.body });
+
+        var data = [];
+
+        if (req.file) {
+            const file = req.file.filename;
+
+            data = [
+                title,
+                capacity,
+                depart,
+                destination,
+                scheduledDate,
+                description,
+                file,
+                offerId
+            ]
+            
+        } else {
+            data = [
+                title,
+                capacity,
+                depart,
+                destination,
+                scheduledDate,
+                description,
+                offerId
+            ]
+        }
         
         // create a new offer
-        const result = await updateOffer(formData);
+        const result = await updateOffer(data);
         
-        if (result && result.length>0) {            
-
-            // send a notification to the follower if it has plublished
-            const update = result[0]             
-            
-            const content = ` ${req.user.lastname} ${req.user.firstname != null? req.user.firstname:""} a modifié sa publication d'offre de ${update.title}`;
-    
-            const datanotif = [                
-                content,
-                update.offerid,
-                userId
-            ];
-    
-            const notif = createNotification(datanotif, userId);
-            res.json({notif});
-            console.log("notification envoyé au followers");
+        if (result) {
+            return res.status(200).json({ offer: result });
         } else {
-            res.status(404).json({ message: "Erreur, publication non trouvée" })
+            return res.status(400).json({ error: "Erreur lors de la modification de l'image de profile" });
         }
 
     } catch (error) {
-
-        console.error(error);
         res.status(500).json({ error: error.message });
-
     }
 
 };

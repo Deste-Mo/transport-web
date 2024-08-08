@@ -2,15 +2,15 @@ import pool from '../db/connexion.js';
 
 // create a new offer publication, this function takes a table for this parameter and returns the inserted values
 
- export const createOffer = async (data) => {
+export const createOffer = async (data) => {
 
     var query = ""
-    
-    data.length > 7 
-    ? 
-    query = "INSERT INTO Offer( title, capacity, depart, dest, scheduledDate, description, imgUrl, userId) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) returning *" 
-    : 
-    query = "INSERT INTO Offer( title, capacity, depart, dest, scheduledDate, description, userId) VALUES ($1,$2,$3,$4,$5,$6,$7) returning *";
+
+    data.length > 7
+        ?
+        query = "INSERT INTO Offer( title, capacity, depart, dest, scheduledDate, description, imgUrl, userId) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) returning *"
+        :
+        query = "INSERT INTO Offer( title, capacity, depart, dest, scheduledDate, description, userId) VALUES ($1,$2,$3,$4,$5,$6,$7) returning *";
 
     const result = await pool.query(query,data);
 
@@ -28,6 +28,15 @@ export const getAllOfferById = async (userId) =>{
     return result.rows;
 }
 
+export const getOfferById = async (offerId) =>{
+
+    const query = 'SELECT u.userId, u.firstName, u.lastName, u.phone, u.profileImage, o.offerId, o.title, o.capacity, o.depart, o.dest, o.scheduledDate, o.description, o.imgUrl, o.publicationDate, o.dispo FROM users u INNER JOIN Offer o ON u.userId = o.userId WHERE o.offerId = $1';
+
+    const result = await pool.query(query, [offerId]);
+
+    return result.rows[0];
+}
+
 // delete a offer publication for a user (used for the unset function )
 
 export const deleteOfferById = async (offerId) =>{
@@ -39,9 +48,17 @@ export const deleteOfferById = async (offerId) =>{
 // update the offer
 
 export const updateOffer = async (data) => {
-    const result = await pool.query('UPDATE Offer SET title = $1, capacity =$2, depart=$3, dest=$4, scheduledDate=$5, description=$6, imgUrl=$7, dispo=TRUE WHERE offerId=$8', data);
 
-    return result.rowCount;
+    const query =
+        data.length > 7
+            ?
+            'UPDATE Offer SET title = $1, capacity =$2, depart=$3, dest=$4, scheduledDate=$5, description=$6, imgUrl=$7 WHERE offerId=$8 RETURNING *'
+            :
+            'UPDATE Offer SET title = $1, capacity =$2, depart=$3, dest=$4, scheduledDate=$5, description=$6 WHERE offerId=$7 RETURNING *';
+
+    const result = await pool.query(query, data);
+
+    return result.rows[0];
 }
 
 //Make the offer unavailable (use this for cancelling the offer publication or if a contract is established )
@@ -86,80 +103,81 @@ export const expiredOffer = async(userId) => {
 export const getHomepageOffers = async (userId) => {
 
     // const todaydate = new Date();    
-  
+
     const query = `
-            WITH CurrentUser AS (
-                SELECT a.accountType 
-                FROM Account a 
-                JOIN Users u ON u.accountId = a.accountId 
-                WHERE u.userId = $1
-            ), 
-            OppositeOffers AS (
-                SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType 
-                FROM Offer o 
-                JOIN Users u ON o.userId = u.userId 
-                JOIN Account a ON a.accountId = u.accountId 
-                WHERE o.dispo = TRUE 
-                AND u.userId <> $1
-                AND o.scheduledDate >= current_date 
-                AND (
-                    (a.accountType IN ('Camionneur') AND (SELECT accountType FROM CurrentUser) IN ('Client', 'Entreprise'))
-                    OR
-                    (a.accountType IN ('Client', 'Entreprise') AND (SELECT accountType FROM CurrentUser) IN ('Camionneur'))
-                )
-                ORDER BY RANDOM() 
-                LIMIT 50
-            ), 
+        WITH CurrentUser AS (
+            SELECT a.accountType
+            FROM Account a
+                     INNER JOIN Users u ON u.accountId = a.accountId
+            WHERE u.userId = $1
+        ),
+             OppositeOffers AS (
+                 SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType, EXISTS ( SELECT 1 FROM Follow f WHERE f.followerId = $1 AND f.followeeId = u.userId) AS isfollowed
+                 FROM Offer o
+                          INNER JOIN Users u ON o.userId = u.userId
+                          INNER JOIN Account a ON a.accountId = u.accountId
+
+                 WHERE o.dispo = TRUE
+                   AND u.userId <> $1
+
+                   AND (
+                     (a.accountType IN ('Camionneur') AND (SELECT accountType FROM CurrentUser) IN ('Client', 'Entreprise'))
+                         OR
+                     (a.accountType IN ('Client', 'Entreprise') AND (SELECT accountType FROM CurrentUser) IN ('Camionneur'))
+                     )
+                 ORDER BY RANDOM()
+            LIMIT 50
+            ),
             SameTypeFollowedOffers AS (
-                SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType 
-                FROM Offer o 
-                JOIN Users u ON o.userId = u.userId 
-                JOIN Follow f ON u.userId = f.followeeId 
-                JOIN Account a ON u.accountId = a.accountId 
-                WHERE o.dispo = TRUE
-                AND u.userId <> $1 
-                AND o.scheduledDate >= current_date 
-                AND f.followerId = $1 
-                AND a.accountType = (SELECT accountType FROM CurrentUser) 
-                ORDER BY RANDOM() 
-                LIMIT 15
-            ), 
+        SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType,EXISTS ( SELECT 1 FROM Follow f WHERE f.followerId = $1 AND f.followeeId = u.userId) AS isfollowed
+        FROM Offer o
+            INNER JOIN Users u ON o.userId = u.userId
+            INNER JOIN Follow f ON u.userId = f.followeeId
+            INNER JOIN Account a ON u.accountId = a.accountId
+        WHERE o.dispo = TRUE
+          AND u.userId <> $1
+
+          AND f.followerId = $1
+          AND a.accountType = (SELECT accountType FROM CurrentUser)
+        ORDER BY RANDOM()
+            LIMIT 15
+            ),
             OppositeFollowedOffers AS (
-                SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType 
-                FROM Offer o 
-                JOIN Users u ON o.userId = u.userId 
-                JOIN Follow f ON u.userId = f.followeeId 
-                JOIN Account a ON u.accountId = a.accountId 
-                WHERE o.dispo = TRUE 
-                AND u.userId <> $1
-                AND o.scheduledDate >= current_date 
-                AND f.followerId = $1  
-                AND (
-                    (a.accountType IN ('Camionneur') AND (SELECT accountType FROM CurrentUser) IN ('Client', 'Entreprise'))
-                    OR
-                    (a.accountType IN ('Client', 'Entreprise') AND (SELECT accountType FROM CurrentUser) IN ('Camionneur'))
-                )
-                ORDER BY RANDOM() 
-                LIMIT 35
-            ) 
-            SELECT * FROM (SELECT * FROM OppositeOffers 
-            UNION  
-            SELECT * FROM SameTypeFollowedOffers 
-            UNION 
-            SELECT * FROM OppositeFollowedOffers) AS CombinedOffers
-            ORDER BY RANDOM();
-        `;
-  
-          const result = await pool.query(query, [userId]);
-  
-  
-      return result.rows;
-  }
+        SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType,EXISTS ( SELECT 1 FROM Follow f WHERE f.followerId = $1 AND f.followeeId = u.userId) AS isfollowed
+        FROM Offer o
+            INNER JOIN Users u ON o.userId = u.userId
+            INNER JOIN Follow f ON u.userId = f.followeeId
+            INNER JOIN Account a ON u.accountId = a.accountId
+        WHERE o.dispo = TRUE
+          AND u.userId <> $1
+
+          AND f.followerId = $1
+          AND (
+            (a.accountType IN ('Camionneur') AND (SELECT accountType FROM CurrentUser) IN ('Client', 'Entreprise'))
+           OR
+            (a.accountType IN ('Client', 'Entreprise') AND (SELECT accountType FROM CurrentUser) IN ('Camionneur'))
+            )
+        ORDER BY RANDOM()
+            LIMIT 35
+            )
+        SELECT * FROM (SELECT * FROM OppositeOffers
+                       UNION
+                       SELECT * FROM SameTypeFollowedOffers
+                       UNION
+                       SELECT * FROM OppositeFollowedOffers) AS CombinedOffers
+        ORDER BY RANDOM();
+    `;
+
+    const result = await pool.query(query, [userId]);
+
+
+    return result.rows;
+}
 
 // get the latest offers published
 
 export const latestOffers = async (userId) => {
-    const query = "SELECT o.*, u.lastname, u.firstname, u.profileimage, u.phone, a.accountType FROM Offer o INNER JOIN users u ON o.userId = u.userId  INNER JOIN Account a ON u.accountId = a.accountId WHERE o.dispo = TRUE AND u.userId <> $1 ORDER BY o.offerid DESC"
+    const query = "SELECT o.*, u.lastname, u.firstname, u.profileimage, u.phone, a.accountType FROM Offer o INNER JOIN users u ON o.userId = u.userId  INNER JOIN Account a ON u.accountId = a.accountId WHERE o.dispo = TRUE AND u.userId <> $1 ORDER BY o.publicationDate DESC"
 
     const result = await pool.query(query, [userId]);
 
@@ -167,8 +185,8 @@ export const latestOffers = async (userId) => {
 }
 
 export const allSavedOffers = async (userId) => {
-    
-    const query = "SELECT o.*, u.lastname, u.firstname, u.profileimage, u.phone, a.accountType, s.saveid, s.savedate FROM saveoffer s INNER JOIN users u ON s.userId = u.userId  INNER JOIN Account a ON u.accountId = a.accountId INNER JOIN offer o on s.offerid = o.offerid WHERE o.dispo = TRUE AND u.userId = $1 ORDER BY o.offerid DESC"
+
+    const query = "SELECT o.*, u.lastname, u.firstname, u.profileimage, u.phone, a.accountType, s.saveid, s.savedate FROM saveoffer s INNER JOIN offer o on s.offerid = o.offerid INNER JOIN users u ON u.userId = o.userId  INNER JOIN Account a ON u.accountId = a.accountId  WHERE o.dispo = TRUE AND s.userid = $1 ORDER BY o.offerid DESC"
 
     const result = await pool.query(query, [userId]);
 
@@ -178,7 +196,7 @@ export const allSavedOffers = async (userId) => {
 export const setSavedOffer = async (userId, offerId) => {
 
     const verif = " SELECT * FROM Saveoffer WHERE offerid = $1 AND userid= $2";
-   
+
     const result_0 = await pool.query(verif, [offerId, userId]);
 
     if(result_0.rowCount > 0){

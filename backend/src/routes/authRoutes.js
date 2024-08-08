@@ -7,7 +7,8 @@ import upload from '../middlewares/uploadMiddle.js';
 const router = express.Router();
 
 
-router.get('/me', protectedRoute, getMe);
+router.get('/me/:profileId', protectedRoute, getMe);
+router.get('/me/', protectedRoute, getMe);
 
 router.post('/signup',signup);
 

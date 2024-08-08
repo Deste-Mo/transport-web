@@ -1,7 +1,6 @@
 import {Button} from "../../styles/components.js";
 import {useAuth} from "../../context/AuthProvider.jsx";
 import {useNavigate} from "react-router-dom";
-import {useApp} from "../../context/AppPorvider.jsx";
 import {useAnimation} from "../../context/AnimationProvider.jsx";
 
 const ProfilePopup = ({className}) => {

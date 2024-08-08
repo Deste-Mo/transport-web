@@ -21,7 +21,8 @@ import {  newPublication,
     savedOffers,
     saveOffer,
     retireOffer,
-    deleteAllSaveForUser,} from '../controllers/offreController.js';
+    deleteAllSaveForUser,
+    OfferForUser,} from '../controllers/offreController.js';
 
 
 const router = express.Router();
@@ -37,7 +38,9 @@ router.post('/saveoffer/:offerId', protectedRoute, saveOffer);
 router.post('/retireoffer/:offerId', protectedRoute, retireOffer);
 router.post('/deleteallsave', protectedRoute, deleteAllSaveForUser);
 
-router.get('/allofferforuser', protectedRoute,allOffersForUser);
+router.get('/allofferforuser/', protectedRoute,allOffersForUser);
+router.get('/allofferforuser/:userId', protectedRoute,allOffersForUser);
+router.get('/offreToUp/:offerId', protectedRoute, OfferForUser);
 router.get('/allavailableoffer', protectedRoute, availableOfferForUser);
 router.get('/unavailableofferforuser', protectedRoute, unavailableOfferForUser);
 router.get('/ongoingofferforuser', protectedRoute,ongoingOffersForUser);

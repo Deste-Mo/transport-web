@@ -4,15 +4,15 @@ import bcrypt from "bcryptjs";
 export const createUser = async (user, accountId) => {
     let query = "";
     accountId === 1 ? query = "INSERT INTO users (firstname,companynumber,phone,address,email,bio,profileimage,accountid,password) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *" : query = 'INSERT INTO users (firstname,lastname,usercin,phone,address,email,bio,profileimage,accountid,password) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *'
-  
+
     const { rows } = await pool.query(query, user);
-  
+
     return rows[0];
 };
 
 export const updateUser = async (data)=>{
 
-    
+
     let query = "";
 
     !data[0] ? query = "UPDATE users SET firstname = $1, companynumber = $2, phone = $3,address= $4, email = $5, bio= $6, lastname=$7, usercin=$8 WHERE userid = $9 RETURNING *" : query = "UPDATE users SET firstname = $2, companynumber = $3, phone = $4,address= $5, email = $6, bio= $7, lastname=$8, usercin=$9, profileimage = $1 WHERE userid = $10 RETURNING *";
@@ -32,8 +32,7 @@ export const getUser = async (email, cin, nif, phone) => {
 
 export const getInformation = async (userId) => {
     const query = "SELECT users.* , account.accounttype FROM USERS INNER JOIN ACCOUNT ON users.accountid = account.accountid  WHERE users.userid = $1 LIMIT 1";
-    const { rows } = await pool.query(query, userId);
-
+    const { rows } = await pool.query(query,[userId]);
     return rows[0];
 }
 

@@ -60,9 +60,6 @@ export const sendNotifsNewPub = async (req, res) => {
 
         if (notification && sendNotif) {
             // io.TO() est utiliser pour envoyer un evenement a un utilisateur specifique
-
-            console.log(followerId);
-
             followerId.forEach(userId => {
                 const receiverSocketId = getReceiverSocketId(userId.followerid);
 

@@ -1,7 +1,7 @@
 import bcryptjs from 'bcryptjs';
 import pool from "../db/connexion.js";
 import {generateAccessToken, generateRefreshToken, hashPassword} from '../utils/jwtGenerator.js';
-import {createUser, getUser} from '../models/users.js';
+import {createUser, getInformation, getUser} from '../models/users.js';
 import * as uuid from "uuid";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -164,9 +164,9 @@ export const login = async (req, res) => {
             httpOnly: true,
             // secure: true,
             sameSite: 'Lax',
-            maxAge:  7 * 24 * 60 * 60 * 1000 // 7 jours
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 jours
         });
-        
+
         // return res.json({ accessToken, refToken });
         return res.json({accessToken});
     } catch (error) {
@@ -192,34 +192,53 @@ export const getMe = async (req, res) => {
     try {
 
         const user = req.user;
+        let profile = req.user;
 
-        if (!user) {
+        const {profileId} = await req.params
+
+        if (profileId) {
+            profile = await getInformation(await profileId);
+        }
+
+        if (!user && !profile) {
             return res.status(500).json({error: "L'utilisateur existe pas"});
         }
 
-        let fullname = "";
-
-        if (!user.lastname) {
-            fullname = user.firstname;
-        } else {
-            fullname = user.firstname + " " + user.lastname;
-        }
-
-        return res.status(200).json({
-            id: user.userid,
-            fullName: fullname,
-            firstname: user.firstname,
-            lastname: user.lastname,
-            accounttype: user.accounttype,
-            usercin: user.usercin,
-            companynumber: user.companynumber,
-            address: user.address,
-            bio: user.bio,
-            profile: user.profileimage,
-            email: user.email,
-            phone: user.phone,
-            date: new Date(user.registerdate).toLocaleDateString(),
-        });
+        return res.status(200).json(
+            {
+                personalInfo: {
+                    id: user.userid,
+                    fullName: user.firstname + (!user.lastname ? '' : (" " + user.lastname)),
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                    accounttype: user.accounttype,
+                    accountId: user.accountid,
+                    usercin: user.usercin,
+                    companynumber: user.companynumber,
+                    address: user.address,
+                    bio: user.bio,
+                    profile: user.profileimage,
+                    email: user.email,
+                    phone: user.phone,
+                    date: new Date(user.registerdate).toLocaleDateString(),
+                },
+                profileInfo: {
+                    id: profile.userid,
+                    fullName: profile.firstname + (!profile.lastname ? '' : (" " + profile.lastname)),
+                    firstname: profile.firstname,
+                    lastname: profile.lastname,
+                    accounttype: profile.accounttype,
+                    accountId: profile.accountid,
+                    usercin: profile.usercin,
+                    companynumber: profile.companynumber,
+                    address: profile.address,
+                    bio: profile.bio,
+                    profile: profile.profileimage,
+                    email: profile.email,
+                    phone: profile.phone,
+                    date: new Date(profile.registerdate).toLocaleDateString(),
+                }
+            });
 
     } catch (error) {
         return res.status(401).json({error: "Token error: " + error});
@@ -246,21 +265,20 @@ export const refreshAccessToken = async (req, res) => {
     const [refreshToken, users] = req.cookies.refreshToken || [null, null];
 
     if (!refreshToken || !users) {
-        return res.status(401).json({ error: "Aucun refresh token trouvé" });
+        return res.status(401).json({error: "Aucun refresh token trouvé"});
     }
-    
-    
+
 
     jwt.verify(refreshToken, process.env.JWT_SECRET_REFRESH, (err, decoded) => {
         if (err) {
             if (err.name === 'TokenExpiredError') {
-                return res.status(401).json({ error: "Refresh token expiré" });
+                return res.status(401).json({error: "Refresh token expiré"});
             }
-            return res.status(400).json({ error: "Refresh token invalid" });
+            return res.status(400).json({error: "Refresh token invalid"});
         }
 
         // Generate new access token
         const accessToken = generateAccessToken(users);
-        return res.status(200).json({ accessToken });
+        return res.status(200).json({accessToken});
     });
 };
