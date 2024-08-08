@@ -1,12 +1,15 @@
-import {useAuth} from "../context/AuthProvider.jsx";
-import {Navigate, Outlet} from "react-router-dom";
-import {useEffect} from "react";
-import {Header} from "../components/pages/Header.jsx";
-import {SERVERLINK} from "../constants/index.js";
-import {useApp} from "../context/AppPorvider.jsx";
+import { useAuth } from "../context/AuthProvider.jsx";
+import { Navigate, Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { Header } from "../components/pages/Header.jsx";
+import { SERVERLINK } from "../constants/index.js";
+import { useApp } from "../context/AppPorvider.jsx";
 
 
-import {usePreference} from "../context/UserPreferenceProvider.jsx";
+import { usePreference } from "../context/UserPreferenceProvider.jsx";
+import { useUser } from "../context/UserProvider.jsx";
+import { useNotification } from "../context/NotficationProvider.jsx";
+import { useOffer } from "../context/OfferProvider.jsx";
 
 const AppLayout = () => {
     const {token, loading, personalInformation} = useAuth();
@@ -14,13 +17,29 @@ const AppLayout = () => {
     const user = personalInformation;
     const {getUnreadMessageCount, countUnread} = useApp();
 
-    const {socket} = countUnread;
+    const { getFriends, getUsers } = useUser();
+
+    const { getNotifications } = useNotification();
+
+    const { getCurrentUserOffers } = useOffer();
+
+    const { socket } = countUnread;
 
     useEffect(() => {
+
+        // handleFriends()
+
+        socket?.on("newNotif", () => {
+            getNotifications();
+            getFriends();
+            getCurrentUserOffers();
+        });
+
         socket?.on("newMessage", () => {
             getUnreadMessageCount();
+            getUsers();
         });
-        return () => socket?.off("newMessage")
+        return () => { socket?.off("newMessage"); socket?.off("newNotif") }
     }, [socket, countUnread, getUnreadMessageCount]);
 
     return (

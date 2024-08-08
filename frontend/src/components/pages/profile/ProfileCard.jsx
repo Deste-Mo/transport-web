@@ -1,9 +1,10 @@
-import {useNavigate} from "react-router-dom";
-import {useApp} from "../../../context/AppPorvider";
-import {useEffect, useState} from "react";
+import { useNavigate } from "react-router-dom";
+import { useApp } from "../../../context/AppPorvider";
+import { useEffect, useState } from "react";
 import Button from "../../ui/Button";
 import ProfileCardLoading from "../../loader/ProfileCardLoading";
 import {useUser} from "../../../context/UserProvider.jsx";
+import { useAuth } from "../../../context/AuthProvider.jsx";
 
 const ProfileCard = ({
                          id,
@@ -15,21 +16,19 @@ const ProfileCard = ({
                          phone,
                          date,
                          onClick,
-                         forCurrentUser = false,
-                         isFriend = true,
+                        forCurrentUser = false
                      }) => {
     const navigate = useNavigate();
 
-    const {followersCount, getFollowersCount} = useUser();
+  const { followUser, unFollowUsers, friends } = useUser();
+  const { personalInformation } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [isFriend, setIsFriend] = useState(false);
 
     useEffect(() => {
         setTimeout(() => setLoading(false), 1000);
-    }, [])
-
-    useEffect(() => {
-        getFollowersCount();
-    }, [followersCount, getFollowersCount]);
-
+    setIsFriend(friends.length > 0 ? friends.find(friend => friend.userid === id) : false);
+  }, [friends, id])
 
     return (
         <div
@@ -82,24 +81,23 @@ const ProfileCard = ({
                         Modifier les informations
                     </Button>
                 ) :
-                isFriend ? (<Button
+    isFriend ? (
+    <Button
                             block
                             variant="danger"
                             size="md"
                             icon="bi bi-dash"
-                            onClick={() => {
-                            }}
+    onClick={() => unFollowUsers(id)}
                         >
                             Retirer
                         </Button>
                     )
-                    : (
+  :  (
                         <Button
                             block
                             size="md"
                             icon="bi bi-plus-lg"
-                            onClick={() => {
-                            }}
+        onClick={() => followUser(id, personalInformation)}
                         >
                             Suivre
                         </Button>)

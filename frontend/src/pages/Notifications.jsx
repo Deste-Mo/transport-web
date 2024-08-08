@@ -11,7 +11,10 @@ import { SERVERLINK } from '../constants/index.js'
 import {useNotification} from "../context/NotficationProvider.jsx";
 
 const Notifications = () => {
-  const { token } = useAuth();
+  const { personalInformation, token } = useAuth();
+  const user = personalInformation;
+
+
   const { socket } = useSocketContext();
   
   const {notifications, getNotifications, getUnreadNotifications} = useNotification();
@@ -75,7 +78,7 @@ const Notifications = () => {
               key={notif.notifid}
               propos={notif.content}
               spec={notif.sendnotifid}
-              vue={notif.viewed}
+              viewed={notif.viewed}
               date={notif.notifdate}
               icon
             />

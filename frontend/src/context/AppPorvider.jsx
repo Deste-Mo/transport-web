@@ -79,6 +79,7 @@ const AppProvider = ({ children }) => {
         scrollToBottom();
 
     }
+
     const getUnreadMessageCount = async () => {
 
         const conversationsRes = await fetch(SERVERLINK + '/api/messages/count', {
@@ -93,6 +94,7 @@ const AppProvider = ({ children }) => {
 
         setCountUnread(await count.unread);
     }
+
     const timeSince = (date, max) => {
         const now = new Date();
         const secondsPast = Math.floor((now - new Date(date)) / 1000);
@@ -113,8 +115,10 @@ const AppProvider = ({ children }) => {
 
         return new Date(date).toLocaleDateString();
     };
+
     
     return <AppContext.Provider value={{
+        // CONVERSATION
         getUserMessages,
         userToChat,
         setUserToChat,

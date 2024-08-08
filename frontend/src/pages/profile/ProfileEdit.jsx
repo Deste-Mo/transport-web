@@ -120,7 +120,19 @@ const ProfileEdit = ({ onClick }) => {
             block
             value={formData.firstname}
           />
-          {personalInformation?.accounttype === 1 ? (
+          {personalInformation?.accountId !== 1 && (
+            <TextInput
+              title="Prenom"
+              name="lastname"
+              size="md"
+              className="w-full"
+              onError={handleError(setErrorData)}
+              onChange={(e) => handleInputChange(setFormData, e)}
+              block
+              value={formData.lastname}
+            />
+          )}
+          {personalInformation?.accountId === 1 ? (
             <TextInput
               title="NIF"
               name="companynumber"
@@ -143,18 +155,7 @@ const ProfileEdit = ({ onClick }) => {
               value={formData.usercin}
             />
           )}
-          {personalInformation?.accounttype != 1 && (
-            <TextInput
-              title="Prenom"
-              name="lastname"
-              size="md"
-              className="w-full"
-              onError={handleError(setErrorData)}
-              onChange={(e) => handleInputChange(setFormData, e)}
-              block
-              value={formData.lastname}
-            />
-          )}
+
           <TextInput
             title="Contact"
             name="phone"

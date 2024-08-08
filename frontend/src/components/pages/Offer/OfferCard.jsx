@@ -1,23 +1,32 @@
 /* eslint-disable react/prop-types */
 import { useNavigate } from 'react-router-dom'
 import ProfileImage from "../../../assets/images/OIP.jpg";
-import OfferImage from "../../../assets/images/voiture.jpg";
-import {useState, useEffect, useRef} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "../../ui/Button.jsx";
 import { Icon } from "../../../styles/components.js";
 import OfferDetailBadge from "./OfferDetailBadge.jsx";
 import { useApp } from '../../../context/AppPorvider.jsx';
-import {SERVERLINK, TOAST_TYPE} from '../../../constants/index.js';
+import { SERVERLINK } from '../../../constants/index.js';
+import { useAnimation } from 'framer-motion';
 import OfferCardLoading from "../../loader/OfferCardLoading.jsx";
-import {useAnimation} from "framer-motion";
+import { TOAST_TYPE } from "../../../constants/index.js";
+import { useAuth } from '../../../context/AuthProvider.jsx';
+import { useOffer } from '../../../context/OfferProvider.jsx';
 
-const OfferCard = ({ className, saved = false, sug,  detailedProfile = true, forCurrentUser = false }) => {
-    
-    const [isSaved, setIsSaved] = useState(saved);
+const OfferCard = ({
+  className,
+  saved = false,
+  sug,
+  forCurrentUser = false,
+  detailedProfile = true,
+}) => {
     const [detailed, setDetailed] = useState(true);
     const [loading, setLoading] = useState(true);
     const [popupVisible, setPopupVisible] = useState(false);
-    const { saveOffer, handleOffersSaved, retireOffer, timeSince } = useApp();
+  const { timeSince } = useApp();
+
+  const { saveOffer, retireOffer, getSavedOffers } = useOffer()
+
     const navigate = useNavigate();
     const image = SERVERLINK + "/" + sug?.profileimage;
 
@@ -30,15 +39,12 @@ const OfferCard = ({ className, saved = false, sug,  detailedProfile = true, for
 
     const handleSaveOffer = async () => {
         await saveOffer(await sug?.offerid);
-        await handleOffersSaved();
-        setIsSaved(true);
+    await getSavedOffers();
     }
 
     const handleRevokeSavedOffer = async () => {
         await retireOffer(sug?.offerid);
-        await handleOffersSaved();
-        setIsSaved(false);
-        
+    await getSavedOffers();
     }
     
     const toggleOfferCardPopup = () => {
@@ -62,7 +68,7 @@ const OfferCard = ({ className, saved = false, sug,  detailedProfile = true, for
       >
         {popupVisible && (
           <div className="absolute top-10 right-10">
-            <OfferCardPopup setPopupVisible={setPopupVisible} />
+            <OfferCardPopup setPopupVisible={setPopupVisible} offer={sug} />
           </div>
         )}
         <div className="w-full flex items-center justify-between rounded-2xl">
@@ -94,7 +100,11 @@ const OfferCard = ({ className, saved = false, sug,  detailedProfile = true, for
         <div className="w-full flex flex-col gap-4 items-start justify-cente  rounded-2xl  ">
           {detailed && (
             <p className="text-small-1 text-black-100 dark:text-white-100 dark:font-sm ">
-                {sug?.description}
+              Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet Lorem ipsum
+              dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit
+              amet, Lorem ipsum dolor{" "}
+              <span className="text-primary-80"> #sit amet </span>
+              Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet
             </p>
           )}
           <button
@@ -117,7 +127,7 @@ const OfferCard = ({ className, saved = false, sug,  detailedProfile = true, for
           <div className="flex items-center w-full gap-6 jusify-start flex-wrap">
             {/*<Icon variant="secondary" icon="bi bi-chat" size="sm"/>*/}
             <Button
-              onClick={() => navigate(`discussion`)}
+              onClick={handleClick}
               size="sm"
               variant="secondary"
               icon="bi bi-chat"
@@ -125,7 +135,7 @@ const OfferCard = ({ className, saved = false, sug,  detailedProfile = true, for
             >
               Contacter
             </Button>
-            {saved || isSaved ? (
+            {saved ? (
               <Button
                   onClick={handleRevokeSavedOffer}
                 size="sm"
@@ -154,13 +164,32 @@ const OfferCard = ({ className, saved = false, sug,  detailedProfile = true, for
 };
 export default OfferCard;
 
-const OfferCardPopup = ({ setPopupVisible }) => {
+const OfferCardPopup = ({ setPopupVisible, offer }) => {
   const { setMessagePopup } = useAnimation();
+
+  const { handleOfferToUpdate, handleOffersForUser, setUpdateOffer } = useApp();
+
+  const { token } = useAuth();
 
   const selectRef = useRef(null);
 
-  const handleDeletePost = () => {
+  const handleDeletePost = async () => {
     // TODO :
+    const response = await fetch(SERVERLINK + "/api/offres//deleteofferforuser/" + offer.offerid, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "token": token
+      }
+    })
+
+    const verification = await response.json();
+
+    handleOffersForUser();
+
+    localStorage.removeItem("offer");
+    setUpdateOffer();
+
     // - Deleting the post
     setPopupVisible(false);
     setMessagePopup("Offre supprimé avec success", TOAST_TYPE.success);
@@ -168,6 +197,8 @@ const OfferCardPopup = ({ setPopupVisible }) => {
 
   const handleEditPost = () => {
     // TODO :
+    handleOfferToUpdate(offer.offerid);
+    localStorage.setItem('offer', JSON.stringify(offer))
     // - Editing the post
     setPopupVisible(false);
   };

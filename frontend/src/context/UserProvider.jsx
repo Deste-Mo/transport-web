@@ -11,33 +11,75 @@ const UserProvider = ({children}) => {
     const [friends, setFriends] = useState([]);
     const [loadingFriend, setLoadingFriend] = useState(true);
     const [users, setUsers] = useState([]);
+    const [profileFriends, setProfileFriends] = useState([]);
     const [followersCount, setFollowersCount] = useState(0);
+    const [friendFollowerCount, setFriendFollowerCount] = useState(0);
     
-    
-    const getFriends = async () => {
-        setLoadingFriend(true);
-        const response = await axios.get(`${SERVERLINK}/api/profile/friends`, {
-            headers: {token}
+    const getFriends = async (userId) => {
+        const response = await axios.get(`${SERVERLINK}/api/profile/friends/${!userId ? '' : userId}`, {
+            headers: { token }
         })
+
         setFriends(await response?.data?.friends);
-        setLoadingFriend(false);
+        setFollowersCount(await response?.data.friends.length);
+        setFriendFollowerCount(await response?.data.profile.length);
+        setProfileFriends(await response?.data.profile);
     }
     const getUsers = async () => {
-        const reponse = await axios.get(`${SERVERLINK}/api/messages/users`, {headers: {token}})
-        
-        setUsers(await reponse?.data?.allUsers);
+        const response = await axios.get(`${SERVERLINK}/api/messages/users`, { headers: { token } })
+        setUsers(await response?.data?.allUsers);
     }
-    const getFollowersCount = async () => {
-        const response = await axios.get(`${SERVERLINK}/api/profile/countfollow`, {headers : {token}});
-        setFollowersCount(await response?.data?.count);
-    }
-    
-    const handleUsersToShow = async () => {
-        // TODO: Forget the usage
-    }
+    const unFollowUsers = async (id) => {
+        const response = await fetch(SERVERLINK + "/api/profile/unfollow/" + id, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                token: token,
+            },
+        });
+
+        getFriends(id);
+        getUsers();
+    };
+
+    const followUser = async (id, me) => {
+
+        const content = me.fullName + " Vous suit desormais.";
+
+        const response = await fetch(SERVERLINK + "/api/profile/follow/" + id, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            token: token,
+          },
+        });
+
+        const sendNotifs = await fetch(SERVERLINK + '/api/notifs/sendnotifs/' + id, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "token": token
+            },
+            body: JSON.stringify({ content })
+        });
+        getFriends(id);
+        getUsers();
+    };
     
   return (
-      <FriendContext.Provider value={{friends, followersCount,users,loadingFriend,handleUsersToShow, getFriends, getUsers, getFollowersCount}}>
+        <FriendContext.Provider value={
+            {
+                friends,
+                followersCount,
+                users,
+                getFriends,
+                getUsers,
+                unFollowUsers,
+                followUser,
+                friendFollowerCount,
+                profileFriends,
+                setFriends,
+            }}>
         {children}
       </FriendContext.Provider>
   )

@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import {Button} from "../../styles/components.js";
+import { Button } from "../../styles/components.js";
 import ProfileLeftLoading from "../loader/ProfileLeftLoading.jsx";
-import {useEffect, useState} from "react";
-import {useApp} from "../../context/AppPorvider.jsx";
-import {useUser} from "../../context/UserProvider.jsx";
+import { useEffect, useState } from "react";
+import { useApp } from "../../context/AppPorvider.jsx";
+import { useUser } from "../../context/UserProvider.jsx";
 
 
 export const ProfileLeft = ({
@@ -15,11 +15,11 @@ export const ProfileLeft = ({
                             }) => {
     const navigate = useNavigate();
 
-    const {followersCount, getFollowersCount} = useUser();
+    const {followersCount, getFriends} = useUser();
 
     useEffect(() => {
-        getFollowersCount();
-    }, [followersCount, getFollowersCount]);
+        getFriends();
+    }, [followersCount, getFriends]);
 
     return (
             <div className="flex flex-col gap-6 rounded-xl shadow-sm border border-black-0 p-4 bg-white-100 dark:bg-black-100 dark:border-none w-full">

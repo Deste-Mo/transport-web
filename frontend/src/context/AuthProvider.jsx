@@ -9,6 +9,7 @@ export const AuthContext = createContext({});
 
 const AuthProvider = ({children}) => {
     const [personalInformation, setPersonalInformation] = useState([]);
+    const [profileInfo, setProfileInfo] = useState([]);
     const [registerMode, setRegisterMode] = useState(ACCOUNT_TYPES.camion);
     const [registrationStep, setRegistrationStep] = useState(
         REGISRATION_STEPS.accoutType
@@ -54,22 +55,25 @@ const AuthProvider = ({children}) => {
         setToken(accessToken);
         setIsAuth(token !== null);
     }
-    const getInformation = async (accessToken) => {
-        setLoadingInformation(true);
-        api.get(`${SERVERLINK}/api/auth/me`, {
+
+    const getInformation = async (accessToken, userId) => {
+        api.get(`${SERVERLINK}/api/auth/me/${!userId ? '' : userId}`, {
             headers: {
                 token: accessToken,
             }
         })
             .then(res => {
-                setPersonalInformation(res.data);
+                setPersonalInformation(res.data.personalInfo);
+                setProfileInfo(res.data.profileInfo)
             })
             .catch(e => {
                 console.log(`Erreur : ${e.response.data.error}`);
                 // setToken(null);
             })
-        setLoadingInformation(false);
+
     };
+
+
     const logout = () => {
         axios.post(`${SERVERLINK}/api/auth/logout`)
             .then(res => {
@@ -81,6 +85,7 @@ const AuthProvider = ({children}) => {
                 console.log(e.response.data.error);
             })
     }
+
     const login = async (accessToken) => {
         updateAuthorization(accessToken);
         await getInformation(accessToken);
@@ -132,6 +137,8 @@ const AuthProvider = ({children}) => {
                 setToken,
                 isAuth,
                 updateAuthorization,
+                setProfileInfo,
+                profileInfo
             }}
         >
             {children}

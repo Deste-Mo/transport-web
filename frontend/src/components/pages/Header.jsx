@@ -25,7 +25,7 @@ export function Header({profileImage}) {
             name: "Discussion",
             icon: "bi bi-chat",
             path: "/discussion",
-            number : 0,
+            number : countUnread,
         },
         {
             name: "Offres",

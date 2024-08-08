@@ -7,7 +7,9 @@ import { useApp } from "../../context/AppPorvider";
 import { useEffect, useRef, useState } from "react";
 import { useSocketContext } from "../../context/SocketContext";
 import { SERVERLINK } from "../../constants";
+import Mess from "../../components/pages/conversations/Message.jsx";
 import Icon from "../../components/ui/Icon.jsx";
+import { Input } from "postcss";
 import { useForm } from "../../context/FormProvider.jsx";
 import {appVariants} from "../../animations/variants.js";
 import {motion} from "framer-motion";
@@ -17,7 +19,6 @@ const Messages = () => {
     const navigate = useNavigate();
 
     const { token } = useAuth();
-    const { socket } = useSocketContext();
     
     const { messages, userToChat, getUnreadMessageCount, getUserMessages } = useApp()
 
@@ -26,6 +27,8 @@ const Messages = () => {
     const endOfMessagesRef = useRef(null);
 
     const { ActiveUsers } = useSocketContext();
+
+    const [answerMess, setAnswer] = useState(null);
     
     const { handleInputChange, checkFieldError, handleError } = useForm()
 
@@ -55,20 +58,12 @@ const Messages = () => {
     }
     
 
+    const { socket } = useSocketContext();
 
 
     useEffect(() => {
         getUserMessages(endOfMessagesRef);
-
-        socket?.on("newMessage", async () => {
-            // setMessages([...messages, await newMessage]);
-            getUserMessages(endOfMessagesRef);
-            getUnreadMessageCount();
-        });
-
-        return () => socket?.off("newMessage");
-
-    }, [socket]);
+    }, []);
 
 
 
@@ -210,13 +205,12 @@ const Message = ({ conversationId, messageId, message, sentDate, sentByCurrentUs
 
     const { timeSince } = useApp();
     const { token } = useAuth();
-    const {setConfirmMessagePopup} = useApp();
+    const {setConfirmMessagePopup, getUserMessages} = useApp();
 
     const answerMessage = () => {
         setAnswer({ ...formData, ['refMessage']: message });
     }
     const handleDelete = async () => {
-        if (setConfirmMessagePopup("Voulez-vous vraiment supprimer ce message ?")) {
             const response = await fetch(SERVERLINK + '/api/messages/delete/' + messageId + "/" + conversationId, {
                 method: "POST",
                 headers: {
@@ -225,9 +219,8 @@ const Message = ({ conversationId, messageId, message, sentDate, sentByCurrentUs
             });
             
             const answer = await response.json();
-            handleShown();
-        }
         
+        getUserMessages();
     }
 
     const fileTypes = ["jpg", "png", "jpeg", "gif"]

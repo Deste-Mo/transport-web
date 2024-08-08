@@ -3,21 +3,17 @@ import Icon from "./Icon"
 import SearchBar from "./SearchBar"
 
 
-const ExpandableSearchBar = () => {
+const ExpandableSearchBar = ({
+  value="",
+  setValue=()=>{},
+}) => {
   const [expand, setExpand] = useState(false);
 
-  const handleSearch = () => {
-    setExpand(false);
-    // TODO :
-    /*
-
-    */
-  }
   return (
     <div>
         {
             expand ? (
-                <SearchBar onClick={() => handleSearch()} size="sm" variant="fill" radious="full" className="w-[24px]"/>
+                <SearchBar setValue={setValue} value={value} size="sm" variant="fill" radious="full" className="w-[24px]"/>
             ) : (
                 <Icon onClick={() => setExpand(true)} size="sm" variant="secondary" icon="bi bi-search"/>
             )

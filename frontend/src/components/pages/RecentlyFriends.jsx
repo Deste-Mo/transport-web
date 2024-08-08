@@ -1,13 +1,13 @@
 import {useNavigate} from "react-router-dom";
 import Button from "../ui/Button";
-import {SubHeader} from "./SubHeader";
-import {useAuth} from "../../context/AuthProvider";
-import {SERVERLINK} from "../../constants";
-import {useApp} from "../../context/AppPorvider";
-import {useSocketContext} from "../../context/SocketContext";
-import {useEffect, useState} from "react";
+import { SubHeader } from "./SubHeader";
+import { useAuth } from "../../context/AuthProvider";
+import { SERVERLINK } from "../../constants";
+import { useApp } from "../../context/AppPorvider";
+import { useSocketContext } from "../../context/SocketContext";
+import { useEffect, useState } from "react";
 import FriendCardLoading from "../loader/FriendCardLoading";
-import {useUser} from "../../context/UserProvider.jsx";
+import { useUser } from "../../context/UserProvider.jsx";
 //import PropTypes from "prop-types";
 
 const RecentlyFriends = ({
@@ -21,14 +21,18 @@ const RecentlyFriends = ({
                              showProfileButton = true,
                              className,
                          }) => {
-    const {token} = useAuth();
+    const { token, personalInformation } = useAuth();
 
-    const {loading} = useApp();
+    const { loading } = useApp();
     const {
-        getFriends, handleUsersToShow // TODO : Forget the usage (empty function)
-    } = useUser();
+        getFriends,
+        getUsers,
+        followUser,
+        unFollowUsers,// TODO : Forget the usage (empty function)
+    }
+        = useUser();
 
-    const {ActiveUsers} = useSocketContext();
+    const { ActiveUsers } = useSocketContext();
 
     const navigate = useNavigate();
 
@@ -64,9 +68,15 @@ const RecentlyFriends = ({
     };
 
     const handleClick = () => {
-        localStorage.setItem("userToChat", JSON.stringify({
-            id: id, fullName: name, accounttype: account, pic: image,
-        }));
+        localStorage.setItem(
+            "userToChat",
+            JSON.stringify({
+                id: id,
+                fullName: name,
+                accounttype: account,
+                pic: image,
+            })
+        );
         navigate("/message");
     };
 
@@ -89,30 +99,39 @@ const RecentlyFriends = ({
                 </div>
             </div>
             <div className="flex items-center gap-8">
-                {showProfileButton && (<Button variant="secondary" onClick={() => navigate(`/profile/1`)}>
+                {showProfileButton && (
+          <Button variant="secondary" onClick={() => navigate(`/profile/${id}`)}>
                     Profile
-                </Button>)}
+                    </Button>
+                )}
 
-                {showMessageButton && (<i
+                {showMessageButton && (
+                    <i
                     onClick={handleClick}
                     className="bi bi-chat text-icon cursor-pointer"
-                ></i>)}
-                {showAddFriendButton && (<Button
+                    ></i>
+                )}
+                {showAddFriendButton && (
+                    <Button
                     variant={"ghost"}
                     className="text-primary-100"
-                    onClick={handleFollow}
+            onClick={() => followUser(id, personalInformation)}
                 >
                     Suivre
-                </Button>)}
-                {showRemoveFriendButton && (<Button
+                    </Button>
+                )}
+                {showRemoveFriendButton && (
+                    <Button
                     variant="ghost"
-                    onClick={handleUnfollow}
+            onClick={() => unFollowUsers(id)}
                     className="text-danger-100"
                 >
                     Retirer
-                </Button>)}
+                    </Button>
+                )}
             </div>
-        </div>);
+        </div>
+    );
 };
 
 export default RecentlyFriends;

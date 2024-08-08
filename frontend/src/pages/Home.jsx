@@ -1,15 +1,16 @@
-import {SubHeader} from "../components/pages/SubHeader.jsx";
-import {motion} from "framer-motion";
-import {appVariants} from "../animations/variants.js";
+import { SubHeader } from "../components/pages/SubHeader.jsx";
+import { motion } from "framer-motion";
+import { appVariants } from "../animations/variants.js";
 import ExpandableSearchBar from "../components/ui/ExpandableSearchBar.jsx";
-import {lazy, Suspense, useEffect} from "react";
-import {useOffer} from "../context/OfferProvider.jsx";
-import OfferCardLoading from "../components/loader/OfferCardLoading.jsx";
+import { lazy, useEffect } from "react";
+import { useOffer } from "../context/OfferProvider.jsx";
+import { useAuth } from "../context/AuthProvider.jsx";
 const OfferCard = lazy(() => import("../components/pages/Offer/OfferCard.jsx"))
 
 const Home = () => {
-    const {getOffers, offers, savedOffers, getSavedOffers} = useOffer();
-
+    const { getOffers, offers, savedOffers, getSavedOffers } = useOffer();
+    const { personalInformation } = useAuth();
+    const user = personalInformation;
     useEffect(() => {
         getOffers();
         getSavedOffers();

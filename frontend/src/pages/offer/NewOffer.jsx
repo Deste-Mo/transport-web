@@ -10,12 +10,18 @@ import {
 } from '../../styles/components'
 import { SERVERLINK } from '../../constants'
 import { useAuth } from '../../context/AuthProvider'
-import {SubHeader} from "../../components/pages/SubHeader.jsx";
-import {motion} from "framer-motion";
+import { SubHeader } from "../../components/pages/SubHeader.jsx";
+import { motion } from "framer-motion";
 import { appVariants } from '../../animations/variants.js'
+import { useApp } from '../../context/AppPorvider.jsx'
+import { useOffer } from '../../context/OfferProvider.jsx'
+
 
 const NewOffer = () => {
     const { handleInputChange, checkFieldError, handleError } = useForm()
+
+  const { getCurrentUserOffers, updateOffer, setUpdateOffer } = useOffer();
+
     const [formData, setFormData] = useState({
         imgUrl: '',
         title: '',
@@ -23,17 +29,54 @@ const NewOffer = () => {
         depart: '',
         destination: '',
         capacity: '',
-        scheduledDate: '',
-    });
+    scheduledDate: ''
+  });
 
-    const { token } = useAuth();
+  useEffect(() => {
+    updateOffer && setFormData({
+      imgUrl: updateOffer.imgurl,
+      title: updateOffer.title,
+      description: updateOffer.description,
+      depart: updateOffer.depart,
+      destination: updateOffer.dest,
+      capacity: updateOffer.capacity,
+      scheduledDate: '',
+    })
+  }, [updateOffer]);
+
+  const { token, personalInformation } = useAuth();
+
 
     const [file, setFile] = useState({
         name: '',
         path: '',
-    })
+  });
 
-    const titreData = ['Transport de marchandise','Marchandise à transporter']
+  useEffect(() => {
+    const getOfferToUpdate = async () => {
+      localStorage.getItem("offer") && setUpdateOffer(await JSON.parse(localStorage.getItem("offer")))
+    }
+    getOfferToUpdate();
+  }, []);
+
+  const reset = () => {
+    localStorage.removeItem("offer");
+    setFormData({
+      imgUrl: '',
+      title: '',
+      description: '',
+      depart: '',
+      destination: '',
+      capacity: '',
+      scheduledDate: ''
+    });
+    setFile({
+      name: '',
+      path: '',
+    })
+  }
+
+  const titreData = ['Transport de marchandise', 'Marchandise à transporter']
 
     const [errorData, setErrorData] = useState({
         imgUrl: false,
@@ -56,13 +99,9 @@ const NewOffer = () => {
 
             const data = new FormData();
 
-            data.append('imgUrl',imgUrl);
-            data.append('title',title);
-            data.append('description', description);
-            data.append('depart',depart);
-            data.append('destination',destination);
-            data.append('capacity',capacity);
-            data.append('scheduledDate',scheduledDate);
+      for (const key in formData) {
+        data.append(key, formData[key])
+      }
 
             const response = await fetch(SERVERLINK + "/api/offres/newpublication", {
                 method: 'POST',
@@ -70,7 +109,18 @@ const NewOffer = () => {
                     'token': token
                 },
                 body: data
-            })
+      });
+
+      const content = ` ${personalInformation.fullName} vient de publier une Offre`;
+
+      const sendNotifs = await fetch(SERVERLINK + "/api/notifs/sendnotifs", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'token': token
+        },
+        body: JSON.stringify({ content })
+      });
 
             setFormData({
                 imgUrl: '',
@@ -86,6 +136,58 @@ const NewOffer = () => {
                 name: '',
                 path: '',
             });
+
+      getCurrentUserOffers();
+
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+
+  const handleUpdateOffer = async (e) => {
+    e.preventDefault();
+
+    try {
+
+      const data = new FormData();
+
+      for (const key in formData) {
+        data.append(key, formData[key])
+      }
+
+      const response = await fetch(SERVERLINK + "/api/offres/updateofferforuser/" + updateOffer.offerid, {
+        method: 'POST',
+        headers: {
+          'token': token
+        },
+        body: data
+      });
+
+      const res = await response.json();
+
+      const content = ` ${personalInformation.fullName} a modifié sa publication d'offre`;
+
+
+      const sendNotifs = await fetch(SERVERLINK + "/api/notifs/sendnotifs", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'token': token
+        },
+        body: JSON.stringify({ content })
+      });
+
+      setUpdateOffer(await res.offer);
+      localStorage.setItem("offer", JSON.stringify(await res.offer));
+
+      setFile({
+        name: '',
+        path: '',
+      });
+
+
+      getCurrentUserOffers();
 
         } catch (error) {
             console.error(error)
@@ -137,6 +239,7 @@ const NewOffer = () => {
                   onError={handleError(setErrorData)}
                   onchange={(e) => handleInputChange(setFormData, e)}
                   block
+            value={titreData[0]}
                 />
                 <TextArea
                   className="w-full"
@@ -182,11 +285,23 @@ const NewOffer = () => {
                   onChange={(e) => handleInputChange(setFormData, e)}
                   value={formData.capacity}
                 />
-                <input type="date" name="scheduledDate" id="scheduledDate" onChange={handleDateInput} value={formData.scheduledDate} className='h-[1px] w-[50%] py-[30px] pl-4 outline-none bg-black-10 text-black-60 my-5 rounded-xl'/>
+          <input
+            type="date"
+            name="scheduledDate"
+            id="scheduledDate"
+            onChange={handleDateInput}
+            value={formData.scheduledDate} className='h-[1px] w-[50%] py-[30px] pl-4 outline-none bg-black-10 text-black-60 dark:text-white-60 my-5 rounded-xl'
+          />
               </div>
               <div className='flex flex-col gap-4 w-full'>
-                <Button block  children='Publier' />
-                <Button block variant="secondary" children='Annuler' />
+        {
+            localStorage.getItem("offer")
+              ?
+              <Button type='button' onClick={handleUpdateOffer} block children='Modifier' />
+              :
+              <Button type='submit' block children='Publier' />
+          }
+          <Button type='button' onClick={reset} block variant="secondary" children='Annuler' />
               </div>
           </form>
         </motion.section>

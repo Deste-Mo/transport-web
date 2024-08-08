@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../ui/Button";
 
-const SavePublication = ({ icon = false, capacity, title, depart, destination, scheduleddate, disable = false }) => {
+const SavePublication = ({ icon = false, capacity, userId, title, depart, destination, scheduleddate, disable = false }) => {
 
     const navigate = useNavigate()
 

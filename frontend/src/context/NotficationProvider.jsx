@@ -12,12 +12,13 @@ const NotificationProvider = ({children}) => {
     const [unreadNotificationsCount, setUnreadNotfificationsCount] = useState(0);
     
     const getNotifications = async () => {
-        const response = await axios.get(`${SERVERLINK}/api/notifs/getnotifs`, {headers : {token}});
-        setNotifications(response?.data?.notifications);
+    const response = await axios.get(`${SERVERLINK}/api/notifs/getnotifs`, { headers: { token } });
+    setNotifications(await response?.data?.notifications);
     }
+
     const getUnreadNotifications = async () => {
-        const response = await axios.get(`${SERVERLINK}/api/notifs/unreadnotif`, {headers : {token}});
-        setUnreadNotfificationsCount(response?.data?.notifRes?.count)
+    const response = await axios.get(`${SERVERLINK}/api/notifs/unreadnotif`, { headers: { token } });
+    setUnreadNotfificationsCount(response?.data?.count)
     }
     
   return (
