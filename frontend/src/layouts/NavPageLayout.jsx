@@ -37,12 +37,12 @@ const NavPageLayout = () => {
     return (
         <section className="flex items-start  w-full justify-between nav-page-container gap-10 h-[86vh] max-md:h-screen scrollbar-none relative">
             {/*Left subNav*/}
-            <div className="max-lg:hidden">
+            <div className="max-lg:hidden basis-[26%] ">
                 <div className="fixed bottom-10 right-[20%]">
                     <Icon icon="bi bi-briefcase"/>
                 </div>
                 <div
-                    className="flex flex-col items-start justify-start gap-10 overflow-x-hidden basis-[26%] overflow-y-scroll max-h-full scrollbar-none relative">
+                    className="flex flex-col items-start justify-start gap-10 overflow-x-hidden overflow-y-scroll max-h-full scrollbar-none relative">
                     {
                         loadingInformation ? <ProfileLeftLoading/> : <ProfileLeft
                             id={user.id}

@@ -17,7 +17,7 @@ const Home = () => {
     }, [])
     
     return (
-        <motion.section className="flex flex-col items-center justify-center w-full gap-6" variants={appVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+        <motion.section className="flex flex-col items-center justify-center gap-6 w-full " variants={appVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <SubHeader name="Actualites" icon="bi bi-grid-fill" rightContent={<ExpandableSearchBar />} />
             <div className="flex flex-col items-center justify-center gap-[64px] w-full ">
                 {
