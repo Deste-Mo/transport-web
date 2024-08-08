@@ -67,7 +67,7 @@ export default function AppView() {
 
         <Grid xs={12} md={6} lg={4}>
           <AppCurrentVisits
-            title="Current Visits"
+            title="Visits courants"
             chart={{
               series: [
                 { label: 'Antsiranana', value: 4344 },
@@ -83,7 +83,7 @@ export default function AppView() {
 
         <Grid xs={12} md={6} lg={4}>
           <AppCurrentSubject
-            title="Current Subject"
+            title="Sujets courants"
             chart={{
               categories: ['English', 'History', 'Physics', 'Geography', 'Chinese', 'Math'],
               series: [
@@ -97,7 +97,7 @@ export default function AppView() {
 
         <Grid xs={12} md={6} lg={8}>
           <AppNewsUpdate
-            title="News Update"
+            title="Nouveau mise à jours"
             list={[...Array(5)].map((_, index) => ({
               id: faker.string.uuid(),
               title: faker.person.jobTitle(),

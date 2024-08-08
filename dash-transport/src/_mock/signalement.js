@@ -3,6 +3,8 @@ import { faker } from '@faker-js/faker';
 // ----------------------------------------------------------------------
 
 const POST_TITLES = [
+  // Listes des gens signalé
+
   'Whiteboard Templates By Industry Leaders',
   'Tesla Cybertruck-inspired camper trailer for Tesla fans who can’t just wait for the truck!',
   'Designify Agency Landing Page Design',
