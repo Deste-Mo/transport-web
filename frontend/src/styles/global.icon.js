@@ -18,4 +18,6 @@ const globalIconVariants = {
     raidous : {...radiousVariant}
 };
 
+
+
 export default globalIconVariants;

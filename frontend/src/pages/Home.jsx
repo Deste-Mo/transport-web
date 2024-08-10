@@ -2,9 +2,10 @@ import { SubHeader } from "../components/pages/SubHeader.jsx";
 import { motion } from "framer-motion";
 import { appVariants } from "../animations/variants.js";
 import ExpandableSearchBar from "../components/ui/ExpandableSearchBar.jsx";
-import { lazy, useEffect } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { useOffer } from "../context/OfferProvider.jsx";
 import { useAuth } from "../context/AuthProvider.jsx";
+import OfferCardLoading from "../components/loader/OfferCardLoading.jsx";
 const OfferCard = lazy(() => import("../components/pages/Offer/OfferCard.jsx"))
 
 const Home = () => {
@@ -18,7 +19,7 @@ const Home = () => {
     
     return (
         <motion.section className="flex flex-col items-center justify-center gap-6 w-full " variants={appVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <SubHeader name="Actualites" icon="bi bi-grid-fill" rightContent={<ExpandableSearchBar />} />
+            <SubHeader name="Actualites" icon="bi bi-grid-fill" rightContent={<ExpandableSearchBar variant="fill" size="sm" radious="full" placeholder="Rechercher un offre"/>} />
             <div className="flex flex-col items-center justify-center gap-[64px] w-full ">
                 {
                     offers?.length > 0 ? (

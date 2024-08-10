@@ -26,7 +26,7 @@ export function SubHeader({
   
   return (
     <div
-      className={`flex select-none w-full justify-between items-center z-30  rounded-xl shadow-sm border border-black-0 bg-white-100 sticky top-0 dark:bg-white-10 dark:border-none dark:backdrop-blur-sm  ${
+      className={`flex select-none w-full justify-between items-center z-30  rounded-xl shadow-sm border border-black-0 bg-white-100 sticky top-0 dark:bg-white-0 dark:border-none dark:backdrop-blur-sm  ${
         sticky && "sticky"
       } ${sizeVariants.padding[size]}`}
     >
@@ -45,7 +45,6 @@ SubHeader.propTypes = {
   disableButton: PropTypes.bool,
   sticky: PropTypes.bool,
   profile: PropTypes.bool,
-  rightContent: PropTypes.object,
   className: PropTypes.string,
   size: PropTypes.string,
 };

@@ -38,6 +38,7 @@ export default {
         40: "#ffffff66", // 40% opacity
         20: "#ffffff33", // 20% opacity
         10: "#ffffff1a", // 10% opacity
+        0 : "#303030",
       },
       gray: {
         100: "#f0f2f5",

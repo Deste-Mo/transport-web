@@ -20,7 +20,7 @@ const UserProvider = ({children}) => {
             headers: { token }
         })
 
-        setFriends(await response?.data?.friends);
+        setFriends(response?.data?.friends);
         setFollowersCount(await response?.data.friends.length);
         setFriendFollowerCount(await response?.data.profile.length);
         setProfileFriends(await response?.data.profile);

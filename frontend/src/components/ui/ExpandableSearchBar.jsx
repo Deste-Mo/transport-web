@@ -1,25 +1,79 @@
 import { useState } from "react";
-import Icon from "./Icon"
-import SearchBar from "./SearchBar"
-
+import Icon from "./Icon";
+import PropTypes from "prop-types";
+import { globalInputVariants } from "../../styles/globals.input";
+import globalIconVariants from "../../styles/global.icon";
 
 const ExpandableSearchBar = ({
-  value="",
-  setValue=()=>{},
+  className = "",
+  placeholder = "Search something ...",
+  size = "sm",
+  radious = "full",
+  value = "",
+  onClick = () => {},
+  setValue = () => {},
+  onFilterClick = () => {},
+  variant = "fill",
+  block = false,
 }) => {
   const [expand, setExpand] = useState(false);
 
+  const searchBarClassName = `transition-all text-primary bg-black-10 flex  items-center  gap-4 ${
+    expand
+      ? block
+        ? "w-full"
+        : globalInputVariants.width
+      : "ustify-center rounded-full"
+  } ${
+    expand ? globalInputVariants.size[size] : globalIconVariants.size[size]
+  }  ${globalInputVariants.rounded[radious]} ${
+    globalInputVariants.variant[variant]
+  } ${className}`;
   return (
-    <div>
-        {
-            expand ? (
-                <SearchBar setValue={setValue} value={value} size="sm" variant="fill" radious="full" className="w-[24px]"/>
-            ) : (
-                <Icon onClick={() => setExpand(true)} size="sm" variant="secondary" icon="bi bi-search"/>
-            )
-        }
-    </div>
-  )
-}
+    <div className="flex gap-2">
+      <div className={searchBarClassName}>
+        <button
+          onClick={() => {
+            setExpand((prev) => !prev);
+            onClick(value);
+            setValue("");
+          }}
+          className="cursor-pointer bi bi-search"
+        ></button>
+        <input
+          type="text"
+          className={`flex-1 transition-color duration-700 delay-200  outline-0 border-0 bg-[rgba(0,0,0,0)] text-black-80 placeholder:text-black-80 dark:placeholder:text-white-60 dark:text-white-60 text-base outline-none ${
+            expand ? "opacity-1" : "opacity-0"
+          }`}
+          placeholder={placeholder}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              setValue("");
+            } else if (e.key === "Enter") {
+              setValue(e.target.value);
+            }
+          }}
+        />
 
-export default ExpandableSearchBar
+        {value && (
+          <button
+            onClick={() => setValue("")}
+            className="cursor-pointer bi bi-x-lg"
+          ></button>
+        )}
+      </div>
+      {expand && (
+        <Icon
+          onClick={onFilterClick}
+          icon="bi bi-filter-circle"
+          size="sm"
+          variant="secondary"
+        />
+      )}
+    </div>
+  );
+};
+
+export default ExpandableSearchBar;

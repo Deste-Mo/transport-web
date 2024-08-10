@@ -1,17 +1,17 @@
 /* eslint-disable react/prop-types */
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 import ProfileImage from "../../../assets/images/OIP.jpg";
 import React, { useEffect, useRef, useState } from "react";
 import Button from "../../ui/Button.jsx";
 import { Icon } from "../../../styles/components.js";
-import OfferDetailBadge from "./OfferDetailBadge.jsx";
-import { useApp } from '../../../context/AppPorvider.jsx';
-import { SERVERLINK } from '../../../constants/index.js';
-import { useAnimation } from 'framer-motion';
+import { useApp } from "../../../context/AppPorvider.jsx";
+import { SERVERLINK } from "../../../constants/index.js";
+import { useAnimation } from "framer-motion";
 import OfferCardLoading from "../../loader/OfferCardLoading.jsx";
 import { TOAST_TYPE } from "../../../constants/index.js";
-import { useAuth } from '../../../context/AuthProvider.jsx';
-import { useOffer } from '../../../context/OfferProvider.jsx';
+import { useAuth } from "../../../context/AuthProvider.jsx";
+import { useOffer } from "../../../context/OfferProvider.jsx";
+import Badge from "../../ui/Badge.jsx";
 
 const OfferCard = ({
   className,
@@ -20,37 +20,45 @@ const OfferCard = ({
   forCurrentUser = false,
   detailedProfile = true,
 }) => {
-    const [detailed, setDetailed] = useState(true);
-    const [loading, setLoading] = useState(true);
-    const [popupVisible, setPopupVisible] = useState(false);
+  const [detailed, setDetailed] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [popupVisible, setPopupVisible] = useState(false);
   const { timeSince } = useApp();
 
-  const { saveOffer, retireOffer, getSavedOffers } = useOffer()
+  const { saveOffer, retireOffer, getSavedOffers } = useOffer();
 
-    const navigate = useNavigate();
-    const image = SERVERLINK + "/" + sug?.profileimage;
+  const navigate = useNavigate();
+  const image = SERVERLINK + "/" + sug?.profileimage;
 
-    const offerImage = SERVERLINK + "/" + sug?.imgurl;
+  const offerImage = SERVERLINK + "/" + sug?.imgurl;
 
-    const handleClick = () => {
-        localStorage.setItem('userToChat', JSON.stringify({ id: sug?.userid, fullName: sug?.firstname + " " + sug?.lastname, accounttype: sug?.accounttype, pic: image }))
-        navigate('/message')
-    }
+  const handleClick = () => {
+    localStorage.setItem(
+      "userToChat",
+      JSON.stringify({
+        id: sug?.userid,
+        fullName: sug?.firstname + " " + sug?.lastname,
+        accounttype: sug?.accounttype,
+        pic: image,
+      })
+    );
+    navigate("/message");
+  };
 
-    const handleSaveOffer = async () => {
-        await saveOffer(await sug?.offerid);
+  const handleSaveOffer = async () => {
+    await saveOffer(await sug?.offerid);
     await getSavedOffers();
-    }
+  };
 
-    const handleRevokeSavedOffer = async () => {
-        await retireOffer(sug?.offerid);
+  const handleRevokeSavedOffer = async () => {
+    await retireOffer(sug?.offerid);
     await getSavedOffers();
-    }
-    
-    const toggleOfferCardPopup = () => {
+  };
+
+  const toggleOfferCardPopup = () => {
     setPopupVisible((prev) => !prev);
   };
-    
+
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
   }, []);
@@ -58,10 +66,15 @@ const OfferCard = ({
   return (
     <div className="flex flex-col items-start justify-start w-full gap-2 ">
       <div className="flex items-center gap-x-6 gap-y-2 flex-wrap">
-          <OfferDetailBadge text={sug?.title} icon="bi bi-box" />
-          <OfferDetailBadge text={sug?.depart + " vers " + sug?.dest} icon="bi bi-map" />
-          <OfferDetailBadge text={"Prévue le " + new Date(sug?.scheduleddate).toLocaleDateString()} icon="bi bi-calendar2-event" />
-          <OfferDetailBadge text={sug?.capacity} icon="bi bi-truck" />
+        <Badge text={sug?.title} icon="bi bi-box" />
+        <Badge text={sug?.depart + " vers " + sug?.dest} icon="bi bi-map" />
+        <Badge
+          text={
+            "Prévue le " + new Date(sug?.scheduleddate).toLocaleDateString()
+          }
+          icon="bi bi-calendar2-event"
+        />
+        <Badge text={sug?.capacity} icon="bi bi-truck" />
       </div>
       <div
         className={`relative flex flex-col gap-3 w-full items-center ${className} bg-white-100  dark:bg-black-100 dark:text-white-100 dark:font-sm dark:bg-white-10 dark:border-none rounded-xl p-4 border border-black-0`}
@@ -78,11 +91,17 @@ const OfferCard = ({
               src={image}
             />
             <div className="flex flex-col items-start">
-              <p className="text-small-1 font-md">{sug?.firstname + (!sug?.lastname ? '' : sug?.lastname)}</p>
-              <span className=" dark:font-sm text-small-2">{sug?.accounttype}</span>
+              <p className="text-small-1 font-md">
+                {sug?.firstname + (!sug?.lastname ? "" : sug?.lastname)}
+              </p>
+              <span className=" dark:font-sm text-small-2">
+                {sug?.accounttype}
+              </span>
               <div className="flex items-center gap-2  dark:text-white-100 text-black-80 ">
                 <i className="bi bi-clock"></i>
-                <span className="text-small-2  ">{timeSince(sug?.publicationdate, 4)}</span>
+                <span className="text-small-2  ">
+                  {timeSince(sug?.publicationdate, 4)}
+                </span>
               </div>
             </div>
           </div>
@@ -137,7 +156,7 @@ const OfferCard = ({
             </Button>
             {saved ? (
               <Button
-                  onClick={handleRevokeSavedOffer}
+                onClick={handleRevokeSavedOffer}
                 size="sm"
                 variant="danger"
                 icon="bi bi-bookmark-dash"
@@ -175,13 +194,16 @@ const OfferCardPopup = ({ setPopupVisible, offer }) => {
 
   const handleDeletePost = async () => {
     // TODO :
-    const response = await fetch(SERVERLINK + "/api/offres//deleteofferforuser/" + offer.offerid, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "token": token
+    const response = await fetch(
+      SERVERLINK + "/api/offres//deleteofferforuser/" + offer.offerid,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
       }
-    })
+    );
 
     const verification = await response.json();
 
@@ -198,7 +220,7 @@ const OfferCardPopup = ({ setPopupVisible, offer }) => {
   const handleEditPost = () => {
     // TODO :
     handleOfferToUpdate(offer.offerid);
-    localStorage.setItem('offer', JSON.stringify(offer))
+    localStorage.setItem("offer", JSON.stringify(offer));
     // - Editing the post
     setPopupVisible(false);
   };

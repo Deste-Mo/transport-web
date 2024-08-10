@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import OfferDetailBadgeLoading from "./OfferDetailBadgeLoading.jsx";
+import BadgeLoading from "./BadgeLoading.jsx";
 
 const OfferCardLoading = ({ className, detailedProfile = true }) => {
   const [detailed, setDetailed] = useState(true);
@@ -11,7 +11,7 @@ const OfferCardLoading = ({ className, detailedProfile = true }) => {
     <div className="flex flex-col items-start justify-start w-full gap-2">
       <div className="flex items-center px-4 gap-x-6 gap-y-2 flex-wrap">
         {[1, 2, 3, 4].map((item) => (
-          <OfferDetailBadgeLoading key={item} />
+          <BadgeLoading key={item} />
         ))}
       </div>
       <div

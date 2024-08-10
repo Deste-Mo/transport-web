@@ -74,7 +74,7 @@ const MobileHeader = ({className, NAV_LINKS, profileImage}) => {
         <header
             className={`flex justify-between max-md:justify-center  items-center   z-40 ${className}`}
         >
-            <div className="flex  items-center w-full justify-between max-md:items-center gap-20 max-lg:gap-10 py-4 px-8 fixed left-0 top-0 bg-white-100 dark:bg-white-10 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md z-50">
+            <div className="flex  items-center w-full justify-between max-md:items-center gap-20 max-lg:gap-10 py-4 px-8 fixed left-0 top-0 bg-white-100 dark:bg-white-0 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md z-50">
                 <div className="flex items-center gap-14 logo ">
                     <h1 className="text-subtitle-2 max-lg:text-subtitle-3">
                         Media <span className="text-primary-100">Trans</span>
@@ -135,21 +135,9 @@ const DesktopHeader = ({className, NAV_LINKS, profileImage}) => {
 
 const Profile = ({profileImage, className}) => {
     const {togglePopup, setTogglePopup} = useAnimation();
-    const selectRef = useRef(null);
 
-    /*useEffect(() => {
-        const handleClickOutside = (e) => {
-            if (selectRef.current && !selectRef.current.contains(e.target)) {
-                setTogglePopup(false);
-            }
-        };
-        document.addEventListener("mousedown", handleClickOutside);
-
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
-*/
     return (
-        <div ref={selectRef} className={`flex items-center justify-center gap-10 relative  ${className}`}>
+        <div  className={`flex items-center justify-center gap-10 relative  ${className}`}>
             <div
                 className="flex size-14 max-md:size-10 cursor-pointer items-center justify-center rounded-full shadow-xl bg-black-40"
                 onClick={() => setTogglePopup((prev) => !prev)}

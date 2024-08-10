@@ -47,8 +47,11 @@ export const getAll = async (reqSenderId) => {
     const query = "SELECT users.*, account.accounttype FROM users INNER JOIN account ON users.accountid = account.accountid WHERE users.userid != $1 AND users.userid NOT IN (SELECT followeeid FROM follow WHERE followerid = $1);";
 
     const { rows } = await pool.query(query, [reqSenderId]);
+    const datas = rows.map(row => ({
+        ...row, lastname : row.lastname || ""
+    }));
 
-    return rows;
+    return datas;
 }
 
 export const getAllMessages = async (reqSenderId, userIdToChat) => {

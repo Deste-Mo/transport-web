@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import AutoCompleteInput from "../components/ui/AutoCompleteInput";
-import Badge from "../components/ui/Badge";
 import Button from "../components/ui/Button";
 import Empty from "../components/ui/Empty";
 import FileInput from "../components/ui/FileInput";
@@ -18,7 +17,6 @@ import DateInput from "../components/ui/DateInput";
 export {
   AutoCompleteInput,
   TextArea,
-  Badge,
   Button,
   DateInput,
   Empty,

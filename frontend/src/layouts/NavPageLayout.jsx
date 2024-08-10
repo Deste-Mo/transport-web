@@ -119,6 +119,7 @@ const DynamicLeftContent = ({currentLocation}) => {
                                     image={SERVERLINK + "/" + friend.profileimage}
                                 />
                             ))
+                            
                         ) : (
                             <Button block icon="bi bi-plus-lg">Ajouter un ami</Button>
                         )}
@@ -132,15 +133,15 @@ const DynamicLeftContent = ({currentLocation}) => {
                     <SubHeader name="Suggestion d'amis" icon="bi bi-person"/>
                     <div
                         className="flex flex-col items-center justify-center gap-6 p-4 w-full bg-white-100 dark:bg-black-100 rounded-xl">
-                        {users.length > 0 ? (
-                            users.map((us) => (
+                        {users?.length > 0 ? (
+                            users.map((user) => (
                                 <RecentlyFriends
                                     className="w-full"
-                                    key={us.userid}
-                                    spec={us.userid}
-                                    account={us.accounttype}
-                                    name={us.firstname + " " + us.lastname}
-                                    image={SERVERLINK + "/" + us.profileimage}
+                                    key={user.userid}
+                                    spec={user.userid}
+                                    account={user.accounttype}
+                                    name={user.firstname + " " + user.lastname}
+                                    image={SERVERLINK + "/" + user.profileimage}
                                     showAddFriendButton
                                     showProfileButton={false}
                                 />
