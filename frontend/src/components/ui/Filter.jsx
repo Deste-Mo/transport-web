@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import Badge from "./Badge";
 import Icon from "./Icon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Filter = ({
   filters = [{}],
@@ -11,6 +11,7 @@ const Filter = ({
   filterResultsName = "filterResults",
 }) => {
   const [filterDatas, setFilterDatas] = useState(filters);
+  const [loading, setLoading] = useState(true);
 
   const updateFilter = (selectedFilterValue, selectedFilter) => {
     const newFilterDatas = filterDatas?.map((filterData) => {
@@ -21,10 +22,7 @@ const Filter = ({
         const newFilterValues = filterValues.map((filterValue) => {
           return {
             name: filterValue.name,
-            active:
-              filterValue.name === selectedFilterValue.name
-                ? !selectedFilterValue.active
-                : false,
+            active: filterValue.name === selectedFilterValue.name,
           };
         });
 
@@ -33,23 +31,51 @@ const Filter = ({
           title: filterData.title,
           values: newFilterValues,
         };
-      } else {
-        return filterData;
       }
+      return filterData;
     });
 
     const filterDatasSummary = newFilterDatas.map((filterData) => ({
-      ref: filterData.ref,
+      title: filterData.title,
       activeFilter: filterData?.values?.find((item) => item.active).name,
     }));
 
-    console.log(filterDatasSummary);
+    localStorage.setItem(filterResultsName, JSON.stringify(filterDatasSummary));
     setFilterDatas(newFilterDatas);
   };
 
+  useEffect(() => {
+    setLoading(true);
+    const savedFilters = filters?.map((filter) => {
+      const filterDatasSummary = JSON?.parse(
+        localStorage.getItem(filterResultsName)
+      );
+
+      if (!filterDatasSummary) return filter;
+
+      let newFilter = filter;
+
+      filterDatasSummary.forEach((filterDataSummary) => {
+        if (filter.title === filterDataSummary.title) {
+          newFilter = {
+            ...filter,
+            values: filter.values.map((filterValue) => ({
+              name: filterValue.name,
+              active: filterDataSummary.activeFilter === filterValue.name,
+            })),
+          };
+        }
+      });
+      return newFilter;
+    });
+
+    setFilterDatas(savedFilters);
+    setLoading(false);
+  }, []);
+
   return (
     <div
-      className={`bg-white-100 dark:bg-white-0 p-4 rounded-xl text-black-100 dark:text-white-100 flex flex-col gap-4 items-start justify-center ${className}`}
+      className={`bg-white-100 sahdow-sm border border-black-0 dark:bg-white-0 p-4 rounded-xl text-black-100 dark:text-white-100 flex flex-col gap-4 items-start justify-center ${className}`}
     >
       <div className="flex w-full justify-between items-center">
         <div className="flex items-center gap-2">
@@ -58,21 +84,28 @@ const Filter = ({
         </div>
         <Icon variant="ghost" icon="bi bi-x-lg" size="sm" onClick={onClose} />
       </div>
-      {filterDatas.map((filter) => (
-        <div key={filter.title} className="flex flex-col gap-3 items-start">
-          <p className="text-small-1">{filter?.title}</p>
-          <div className="flex gap-4 items-center justify-start flex-wrap">
-            {filter.values.map((item) => (
-              <Badge
-                onClick={() => updateFilter(item, filter)}
-                key={item.name}
-                active={item.active}
-                text={item.name}
-              />
-            ))}
+      {loading ? (
+        <p className="text-black-100 dark:text-white-100">Loading ....</p> // TODO : Filter loading
+      ) : (
+        filterDatas?.map((filter) => (
+          <div key={filter.title} className="flex flex-col gap-3 items-start ">
+            <p className="text-small-1">{filter?.title}</p>
+            <div className="flex gap-4 items-center justify-start flex-wrap">
+              {filter.values.map((item) => (
+                <Badge
+                  onClick={() => {
+                    updateFilter(item, filter);
+                    onFilter();
+                  }}
+                  key={item.name}
+                  active={item.active}
+                  text={item.name}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      )}
     </div>
   );
 };

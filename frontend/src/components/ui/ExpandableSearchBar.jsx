@@ -14,6 +14,7 @@ const ExpandableSearchBar = ({
   setValue = () => {},
   onFilterClick = () => {},
   variant = "fill",
+  filter = false,
   block = false,
 }) => {
   const [expand, setExpand] = useState(false);
@@ -64,7 +65,7 @@ const ExpandableSearchBar = ({
           ></button>
         )}
       </div>
-      {expand && (
+      {(expand && filter) && (
         <Icon
           onClick={onFilterClick}
           icon="bi bi-filter-circle"

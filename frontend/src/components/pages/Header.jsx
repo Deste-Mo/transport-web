@@ -84,7 +84,7 @@ const MobileHeader = ({className, NAV_LINKS, profileImage}) => {
             </div>
             
             <div className="">
-                <ul className="flex  items-center w-full justify-between max-md:items-center  py-4 px-8 fixed left-0 bottom-0 bg-white-100 dark:bg-white-10 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md z-50">
+                <ul className="flex  items-center w-full justify-between max-md:items-center  py-4 px-8 fixed left-0 bottom-0 bg-white-100 dark:bg-white-0 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md z-50">
                     {NAV_LINKS.map((navlink) => (
                         <NavLink
                             key={navlink.name}
@@ -106,7 +106,7 @@ const DesktopHeader = ({className, NAV_LINKS, profileImage}) => {
     const location = useLocation();
     return (
         <header
-            className={`flex justify-between items-center bg-white-100 dark:bg-white-10 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md py-4 px-8 fixed left-0 top-0 right-0 z-40 ${className}`}
+            className={`flex justify-between items-center bg-white-100 dark:bg-white-0 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md py-4 px-8 fixed left-0 top-0 right-0 z-40 ${className}`}
         >
             <div className="flex items-center gap-14 logo">
                 <h1 className="text-subtitle-2 max-lg:text-subtitle-3">

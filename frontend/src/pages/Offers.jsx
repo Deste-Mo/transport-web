@@ -10,6 +10,12 @@ import { useOffer } from "../context/OfferProvider.jsx";
 import { useParams } from "react-router-dom";
 import { Button } from "../styles/components.js";
 import OfferCardLoading from "../components/loader/OfferCardLoading.jsx";
+import SearchFilter from "../components/pages/SearchFilter.jsx";
+import {
+  OFFER_CARD_FILTERS,
+  OFFER_CARD_FILTERS_MODE,
+  OFFER_CARD_FILTERS_TITLES,
+} from "../constants/index.js";
 
 const Offers = () => {
   const { personalInformation } = useAuth();
@@ -29,7 +35,51 @@ const Offers = () => {
 
   const filterOffers = () => {
     setSearching(true);
-    const filter = suggestedOffers.filter(
+    const filterModes = JSON?.parse(localStorage.getItem("offerCardFilter"));
+    let filteredResult = suggestedOffers;
+
+    const filterByAccountType = (accountTypeFilter) => {
+      const accountTypeFilterMode = OFFER_CARD_FILTERS_MODE.accountType;
+      switch (accountTypeFilter.activeFilter) {
+        case accountTypeFilterMode.client: {
+          // TODO : filter by client
+          filteredResult = filteredResult.filter(
+            ({ accounttype }) =>
+              accounttype.toLowerCase() ===
+              accountTypeFilterMode.client.toLowerCase()
+          );
+          break;
+        }
+
+        case accountTypeFilterMode.entreprise: {
+          // TODO : filter by enterprise
+          filteredResult = filteredResult.filter(
+            ({ accounttype }) =>
+              accounttype.toLowerCase() ===
+              accountTypeFilterMode.entreprise.toLowerCase()
+          );
+          break;
+        }
+
+        default:
+          break;
+      }
+    };
+
+    const filterByPostDate = (postDateFilter) => {
+      switch (postDateFilter.activeFilter) {
+        
+      }
+    };
+
+    for (const filterMode of filterModes) {
+      if (filterMode.title === OFFER_CARD_FILTERS_TITLES.accountType)
+        filterByAccountType(filterMode);
+      if (filterMode.title === OFFER_CARD_FILTERS_TITLES.postDate)
+        filterByPostDate(filterMode);
+    }
+
+    filteredResult = filteredResult.filter(
       ({
         accounttype,
         capacity,
@@ -42,19 +92,19 @@ const Offers = () => {
       }) => {
         if (!search) return true;
 
-        const filterResult =
+        return (
           accounttype?.toLowerCase()?.includes(search?.toLowerCase()) ||
           capacity?.toLowerCase()?.includes(search?.toLowerCase()) ||
           firstname?.toLowerCase()?.includes(search?.toLowerCase()) ||
           lastname?.toLowerCase()?.includes(search?.toLowerCase()) ||
           publicationdate?.toLowerCase()?.includes(search?.toLowerCase()) ||
           title?.toLowerCase()?.includes(search?.toLowerCase()) ||
-          description?.toLowerCase()?.includes(search?.toLowerCase());
-
-        return filterResult;
+          description?.toLowerCase()?.includes(search?.toLowerCase())
+        );
       }
     );
-    setFilterefOffers(filter);
+
+    setFilterefOffers(filteredResult);
     setSearching(false);
   };
 
@@ -88,13 +138,16 @@ const Offers = () => {
         sticky
         rightContent={
           suggestedOffers?.length > 0 && (
-            <ExpandableSearchBar
+            <SearchFilter
+              filterResultsName="offerCardFilter"
+              filters={OFFER_CARD_FILTERS}
               variant="fill"
               size="sm"
               radious="full"
               value={search}
               placeholder="Rechercher une offre"
               setValue={setSearch}
+              onFilter={filterOffers}
             />
           )
         }
