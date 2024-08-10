@@ -6,18 +6,39 @@ import { motion } from "framer-motion";
 
 const filters = [
   {
-    name: "Tous",
-    active: true,
+    ref: "accounttype",
+    title: "Type de compte",
+    values: [
+      {
+        name: "Client",
+        active: true,
+      },
+      {
+        name: "Entreprise",
+        active: false,
+      },
+    ],
   },
   {
-    name: "Recent",
-    active: false,
-  },
-  {
-    name: "Sauvegardé",
-    active: false,
+    ref: "publicationdate",
+    title: "Date de publication",
+    values: [
+      {
+        name: "Aujourd'hui",
+        active: true,
+      },
+      {
+        name: "Récente",
+        active: false,
+      },
+      {
+        name: "Ancienne",
+        active: false,
+      },
+    ],
   },
 ];
+
 const Labo = () => {
   const [filterVisible, setFilterVisible] = useState(false);
   return (
@@ -26,12 +47,14 @@ const Labo = () => {
         onFilterClick={() => setFilterVisible((prev) => !prev)}
       />
       <motion.div
-        animate={filterVisible ? { opacity: 1, pointerEvents : "auto"} : { opacity: 0, pointerEvents: "none" } }
-        transition={
-            {
-                duration: 0.1,
-            }
+        animate={
+          filterVisible
+            ? { opacity: 1, pointerEvents: "auto" }
+            : { opacity: 0, pointerEvents: "none" }
         }
+        transition={{
+          duration: 0.1,
+        }}
         initial={false}
       >
         <Filter filters={filters} onClose={() => setFilterVisible(false)} />

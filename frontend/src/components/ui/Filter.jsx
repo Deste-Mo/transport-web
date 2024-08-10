@@ -1,13 +1,52 @@
 import PropTypes from "prop-types";
 import Badge from "./Badge";
 import Icon from "./Icon";
+import { useState } from "react";
 
 const Filter = ({
   filters = [{}],
   className = "",
   onClose = () => {},
   onFilter = () => {},
+  filterResultsName = "filterResults",
 }) => {
+  const [filterDatas, setFilterDatas] = useState(filters);
+
+  const updateFilter = (selectedFilterValue, selectedFilter) => {
+    const newFilterDatas = filterDatas?.map((filterData) => {
+      if (filterData.title === selectedFilter.title) {
+        // TODO : find and update active filter
+        const filterValues = filterData.values;
+
+        const newFilterValues = filterValues.map((filterValue) => {
+          return {
+            name: filterValue.name,
+            active:
+              filterValue.name === selectedFilterValue.name
+                ? !selectedFilterValue.active
+                : false,
+          };
+        });
+
+        return {
+          ref: filterData.ref,
+          title: filterData.title,
+          values: newFilterValues,
+        };
+      } else {
+        return filterData;
+      }
+    });
+
+    const filterDatasSummary = newFilterDatas.map((filterData) => ({
+      ref: filterData.ref,
+      activeFilter: filterData?.values?.find((item) => item.active).name,
+    }));
+
+    console.log(filterDatasSummary);
+    setFilterDatas(newFilterDatas);
+  };
+
   return (
     <div
       className={`bg-white-100 dark:bg-white-0 p-4 rounded-xl text-black-100 dark:text-white-100 flex flex-col gap-4 items-start justify-center ${className}`}
@@ -19,16 +58,21 @@ const Filter = ({
         </div>
         <Icon variant="ghost" icon="bi bi-x-lg" size="sm" onClick={onClose} />
       </div>
-      <div className="flex gap-4 items-center justify-start flex-wrap">
-        {filters.map((filter) => (
-          <Badge
-            key={filter.name}
-            text={filter.name}
-            active={filter.active}
-            onFilter={() => onFilter(filter.name)}
-          />
-        ))}
-      </div>
+      {filterDatas.map((filter) => (
+        <div key={filter.title} className="flex flex-col gap-3 items-start">
+          <p className="text-small-1">{filter?.title}</p>
+          <div className="flex gap-4 items-center justify-start flex-wrap">
+            {filter.values.map((item) => (
+              <Badge
+                onClick={() => updateFilter(item, filter)}
+                key={item.name}
+                active={item.active}
+                text={item.name}
+              />
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

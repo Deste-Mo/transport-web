@@ -5,88 +5,74 @@ import { appVariants } from "../animations/variants.js";
 import { motion } from "framer-motion";
 import ExpandableSearchBar from "../components/ui/ExpandableSearchBar.jsx";
 import { useApp } from "../context/AppPorvider.jsx";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useOffer } from "../context/OfferProvider.jsx";
 import { useParams } from "react-router-dom";
 import { Button } from "../styles/components.js";
+import OfferCardLoading from "../components/loader/OfferCardLoading.jsx";
 
 const Offers = () => {
   const { personalInformation } = useAuth();
-
-  const [filter, setFilter] = useState("all");
-  const [recent, setRecent] = useState(false);
-
-  const changeFilter = (value) => {
-    setFilter(value);
-    setRecent(false);
-  };
-
   const {
+    offerLoading,
     suggestedOffers,
     savedOffers,
     getSavedOffers,
     getSuggestedOffers,
     getCurrentUserOffers,
   } = useOffer();
-  const user = personalInformation;
-
   const { id } = useParams();
-
-  const [search, setSearch] = useState("");
-
   const now = new Date();
+  const [search, setSearch] = useState("");
+  const [filteredOffers, setFilterefOffers] = useState(suggestedOffers);
+  const [searching, setSearching] = useState(false);
 
   const filterOffers = () => {
-    return suggestedOffers.length > 0
-      ? suggestedOffers.filter((offer) => {
-        
-          if (filter === "all") {
-            return true;
-          } else if (filter === "week") {
-            const scheduledDate = new Date(offer.scheduleddate);
-            const oneWeekBefore = new Date(scheduledDate);
-            oneWeekBefore.setDate(scheduledDate.getDate() - 7);
+    setSearching(true);
+    const filter = suggestedOffers.filter(
+      ({
+        accounttype,
+        capacity,
+        firstname,
+        lastname,
+        publicationdate,
+        title,
+        description,
+        depart,
+      }) => {
+        if (!search) return true;
 
-            return oneWeekBefore <= now && now <= scheduledDate;
-          } else if (filter === "followed") {
-            return offer.isfollowed;
-          }
+        const filterResult =
+          accounttype?.toLowerCase()?.includes(search?.toLowerCase()) ||
+          capacity?.toLowerCase()?.includes(search?.toLowerCase()) ||
+          firstname?.toLowerCase()?.includes(search?.toLowerCase()) ||
+          lastname?.toLowerCase()?.includes(search?.toLowerCase()) ||
+          publicationdate?.toLowerCase()?.includes(search?.toLowerCase()) ||
+          title?.toLowerCase()?.includes(search?.toLowerCase()) ||
+          description?.toLowerCase()?.includes(search?.toLowerCase());
 
-          return false;
-        })
-      : false;
+        return filterResult;
+      }
+    );
+    setFilterefOffers(filter);
+    setSearching(false);
   };
 
-  const SearchOffres =
-    suggestedOffers.length > 0
-      ? suggestedOffers.filter((suggestion) => {
-          let fullName =
-            suggestion.firstname.toLowerCase() +
-            " " +
-            (suggestion.lastname ? suggestion.lastname.toLowerCase() : "");
-          if (
-            search &&
-            !suggestion.title.toLowerCase().includes(search.toLowerCase()) &&
-            !suggestion.depart.toLowerCase().includes(search.toLowerCase()) &&
-            !suggestion.dest.toLowerCase().includes(search.toLowerCase()) &&
-            !suggestion.capacity.toLowerCase().includes(search.toLowerCase()) &&
-            !fullName.toLowerCase().includes(search.toLowerCase()) &&
-            !suggestion.accounttype
-              .toLowerCase()
-              .includes(search.toLowerCase()) &&
-            !suggestion.description.toLowerCase().includes(search.toLowerCase())
-          ) {
-            return false;
-          }
-          return true;
-        })
-      : null;
+  useEffect(() => {
+    getSuggestedOffers();
+    filterOffers();
+  }, []);
 
   useEffect(() => {
     getSavedOffers();
     getSuggestedOffers();
+    filterOffers();
     if (id) getCurrentUserOffers(id);
   }, [id]);
+
+  useEffect(() => {
+    filterOffers();
+  }, [search]);
 
   return (
     <motion.section
@@ -107,45 +93,16 @@ const Offers = () => {
               size="sm"
               radious="full"
               value={search}
-              placeholder="Rechercher un offre"
+              placeholder="Rechercher une offre"
               setValue={setSearch}
             />
           )
         }
       />
-
-      {suggestedOffers.length > 0 && (
-        <div className=" flex w-full h-fit bg-white-100 dark:bg-black-10 justify-around overflow-auto p-2 rounded-2xl scrollbar-none sticky top-0">
-          <Button
-            className=" bg-primary-40 h-fit p-0 dark:text-white-100"
-            children="Tout"
-            rounded="full"
-            onClick={() => changeFilter("all")}
-          />
-          <Button
-            className=" bg-primary-40 h-fit p-0 dark:text-white-100"
-            children="Recent"
-            rounded="full"
-            onClick={() => setRecent(true)}
-          />
-          <Button
-            className=" bg-primary-40 h-fit p-0 dark:text-white-100"
-            children="Proche du départ"
-            rounded="full"
-            onClick={() => changeFilter("week")}
-          />
-          <Button
-            className=" bg-primary-40 h-fit p-0 dark:text-white-100"
-            children="Suivi"
-            rounded="full"
-            onClick={() => changeFilter("followed")}
-          />
-        </div>
-      )}
       <div className="flex flex-col items-center justify-center gap-6 w-full">
-        {search ? (
-          SearchOffres?.length > 0 ? (
-            SearchOffres.map((suggestion) => (
+        {filteredOffers?.length > 0 ? (
+          filteredOffers.map((suggestion) => (
+            <Suspense fallback={<OfferCardLoading />}>
               <OfferCard
                 key={suggestion.offerid}
                 sug={suggestion}
@@ -157,44 +114,10 @@ const Offers = () => {
                     : false
                 }
               />
-            ))
-          ) : (
-            <div className="dark:text-white-100">No offers</div>
-          )
-        ) : recent ? (
-          suggestedOffers?.length > 0 ? (
-            suggestedOffers?.map((suggestion) => (
-              <OfferCard
-                key={suggestion.offerid}
-                sug={suggestion}
-                saved={
-                  savedOffers.length > 0
-                    ? savedOffers.find(
-                        (offer) => offer.offerid === suggestion.offerid
-                      )
-                    : false
-                }
-              />
-            ))
-          ) : (
-            <div className="dark:text-white-100">No offers Recent </div>
-          )
-        ) : filterOffers().length > 0 ? (
-          filterOffers().map((suggestions) => (
-            <OfferCard
-              key={suggestions.offerid}
-              sug={suggestions}
-              saved={
-                savedOffers.length > 0
-                  ? savedOffers.find(
-                      (offer) => offer.offerid === suggestions.offerid
-                    )
-                  : false
-              }
-            />
+            </Suspense>
           ))
         ) : (
-          <div className="dark:text-white-100">No offer</div>
+          <div className="dark:text-white-100">Pas d'offres</div>
         )}
       </div>
     </motion.section>
