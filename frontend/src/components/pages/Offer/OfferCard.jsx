@@ -59,10 +59,6 @@ const OfferCard = ({
     setPopupVisible((prev) => !prev);
   };
 
-  useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
-  }, []);
-
   return (
     <div className="flex flex-col items-start justify-start w-full gap-2 ">
       <div className="flex items-center gap-x-6 gap-y-2 flex-wrap">

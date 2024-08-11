@@ -76,7 +76,7 @@ export const OFFER_CARD_FILTERS_MODE = {
   },
   postDate: {
     all: "Tous",
-    today: "Ajourd'hui",
+    today: "Aujourd'hui",
     recent: "Récente",
     old: "Ancienne",
   },

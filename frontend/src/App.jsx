@@ -27,6 +27,7 @@ import MessageList from "./pages/conversations/MessageList.jsx";
 import ProfileLayout from "./layouts/ProfileLayout.jsx";
 import GlobalLayout from "./layouts/GlobalLayout.jsx";
 import ProfileDetails from "./pages/profile/ProfileDetails.jsx";
+import NewOffer from "./pages/offer/NewOffer.jsx";
 
 
 // TODO :
@@ -65,8 +66,8 @@ export default function App() {
             <Route element={<AppLayout />}>
               {/*Profile*/}
               <Route element={<ProfileLayout />}>
-
                 <Route path="profile/:id" element={<ProfileDetails />} />
+                <Route path="profile/:id/newOffer" element={<NewOffer />} />
                 <Route path="profile/:id/edit/" element={<ProfileEdit />} />
               </Route>
 

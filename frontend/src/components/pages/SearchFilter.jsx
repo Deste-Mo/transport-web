@@ -44,7 +44,7 @@ const SearchFilter = ({
           duration: 0.1,
         }}
         initial={false}
-        className="fixed top-[64px] right-2"
+        className="fixed top-[64px] right-2 z-40"
       >
         <Filter
           filters={filters}

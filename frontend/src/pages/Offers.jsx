@@ -67,8 +67,33 @@ const Offers = () => {
     };
 
     const filterByPostDate = (postDateFilter) => {
+      const postDateFilterMode = OFFER_CARD_FILTERS_MODE.postDate;
+
       switch (postDateFilter.activeFilter) {
-        
+        case postDateFilterMode.today: {
+          filteredResult = filteredResult.filter(({ publicationdate }) => {
+            const postDate = new Date(publicationdate);
+            const today = new Date();
+
+            return (
+              postDate.getFullYear() === today.getFullYear() &&
+              postDate.getMonth() === today.getMonth() &&
+              postDate.getDate() === today.getDate()
+            );
+          });
+        }
+
+        case postDateFilterMode.recent: {
+          filteredResult.sort(({ publicationdate }) => {
+            return new Date().getTime() - new Date(publicationdate).getTime();
+          });
+        }
+
+        case postDateFilterMode.old: {
+          filteredResult.sort(({ publicationdate }) => {
+            return new Date(publicationdate).getTime() - new Date().getTime();
+          });
+        }
       }
     };
 
@@ -85,7 +110,6 @@ const Offers = () => {
         capacity,
         firstname,
         lastname,
-        publicationdate,
         title,
         description,
         depart,
@@ -97,7 +121,6 @@ const Offers = () => {
           capacity?.toLowerCase()?.includes(search?.toLowerCase()) ||
           firstname?.toLowerCase()?.includes(search?.toLowerCase()) ||
           lastname?.toLowerCase()?.includes(search?.toLowerCase()) ||
-          publicationdate?.toLowerCase()?.includes(search?.toLowerCase()) ||
           title?.toLowerCase()?.includes(search?.toLowerCase()) ||
           description?.toLowerCase()?.includes(search?.toLowerCase())
         );

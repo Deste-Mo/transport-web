@@ -14,10 +14,10 @@ const ProfileLayout = () => {
       whileInView="visible"
       viewport={{ once: true }}
     >
-      <div className="w-full basis-[46%] overflow-x-hidden scrollbar-none rounded-xl max-md:basis-full">
+      <div className="w-full basis-[46%] overflow-x-hidden scrollbar-none rounded-xl max-md:hidden">
         <Profile  />
       </div>
-      <div className="w-full overflow-x-hidden h-full basis-[50%] scrollbar-none max-md:hidden">
+      <div className="w-full overflow-x-hidden h-full basis-[50%] scrollbar-none  max-md:basis-full ">
         <Outlet />
       </div>
     </motion.section>

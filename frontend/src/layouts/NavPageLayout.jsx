@@ -58,7 +58,7 @@ const NavPageLayout = () => {
             </div>
 
             {/*Center */}
-            <div className="overflow-x-hidden overflow-y-scroll max-h-full basis-[44%] max-lg:basis-[60%] max-md:basis-full scrollbar-none rounded-xl">
+            <div className="overflow-x-hidden overflow-y-scroll h-full max-h-full basis-[44%] max-lg:basis-[60%] max-md:basis-full scrollbar-none rounded-xl">
                 <Outlet/>
             </div>
 
