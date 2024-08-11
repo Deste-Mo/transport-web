@@ -4,7 +4,7 @@ import ProfileImage from "../../../assets/images/OIP.jpg";
 import React, { useEffect, useRef, useState } from "react";
 import Button from "../../ui/Button.jsx";
 import { Icon } from "../../../styles/components.js";
-import { useApp } from "../../../context/AppPorvider.jsx";
+import { useApp } from "../../../context/AppProvider.jsx";
 import { SERVERLINK } from "../../../constants/index.js";
 import { useAnimation } from "framer-motion";
 import OfferCardLoading from "../../loader/OfferCardLoading.jsx";
@@ -13,6 +13,13 @@ import { useAuth } from "../../../context/AuthProvider.jsx";
 import { useOffer } from "../../../context/OfferProvider.jsx";
 import Badge from "../../ui/Badge.jsx";
 
+const offerDetails = `Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet Lorem ipsum
+              dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit
+              amet, Lorem ipsum dolor
+              Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet`;
+
+const MAX_OFFER_DESC = 130;
+
 const OfferCard = ({
   className,
   saved = false,
@@ -20,11 +27,11 @@ const OfferCard = ({
   forCurrentUser = false,
   detailedProfile = true,
 }) => {
-  const [detailed, setDetailed] = useState(true);
+  const [detailed, setDetailed] = useState(false);
   const [loading, setLoading] = useState(true);
   const [popupVisible, setPopupVisible] = useState(false);
   const { timeSince } = useApp();
-
+  
   const { saveOffer, retireOffer, getSavedOffers } = useOffer();
 
   const navigate = useNavigate();
@@ -83,11 +90,12 @@ const OfferCard = ({
         <div className="w-full flex items-center justify-between rounded-2xl">
           <div className="flex items-center gap-2">
             <img
-              className="size-[40px] object-cover rounded-full"
+                onClick={() => navigate(`/profile/${sug.userid}`)}
+              className="size-[40px] object-cover rounded-full cursor-pointer"
               src={image}
             />
             <div className="flex flex-col items-start">
-              <p className="text-small-1 font-md">
+              <p className="text-small-1 font-md cursor-pointer hover:underline" onClick={() => navigate(`/profile/${sug.userid}`)}>
                 {sug?.firstname + (!sug?.lastname ? "" : sug?.lastname)}
               </p>
               <span className=" dark:font-sm text-small-2">
@@ -113,36 +121,37 @@ const OfferCard = ({
           </div>
         </div>
         <div className="w-full flex flex-col gap-4 items-start justify-cente  rounded-2xl  ">
-          {detailed && (
             <p className="text-small-1 text-black-100 dark:text-white-100 dark:font-sm ">
-              Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet Lorem ipsum
-              dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit
-              amet, Lorem ipsum dolor{" "}
-              <span className="text-primary-80"> #sit amet </span>
-              Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet
+              {
+                offerDetails.length > MAX_OFFER_DESC ? (
+                    detailed ? offerDetails : (offerDetails.slice(0,MAX_OFFER_DESC) + " ...")
+                ) : offerDetails
+              }
             </p>
-          )}
-          <button
-            className="flex gap-1 items-center"
-            onClick={() => setDetailed((prev) => !prev)}
-          >
-            {/*<i className={`bi bi-chevron-${detailed ? 'up' : 'down'}`}></i>*/}
-            <p className="underline text-small-2 text-black-100 dark:text-white-80">
-              {detailed ? "Moin" : "Plus"} de details
-            </p>
-          </button>
+
+          {
+              offerDetails.length > MAX_OFFER_DESC && <button
+                  className="flex gap-1 items-center"
+                  onClick={() => setDetailed((prev) => !prev)}
+              >
+                {/*<i className={`bi bi-chevron-${detailed ? 'up' : 'down'}`}></i>*/}
+                <p className="underline text-small-2 text-black-100 dark:text-white-80">
+                  {detailed ? "Moin" : "Plus"} de details
+                </p>
+              </button>
+          }
         </div>
         {detailedProfile && (
-          <img
-            src={offerImage}
-            className="w-full h-[256px] object-cover rounded-xl"
-          />
+            <img
+                src={offerImage}
+                className="w-full h-[256px] object-cover rounded-xl"
+            />
         )}
         {!forCurrentUser && (
-          <div className="flex items-center w-full gap-6 jusify-start flex-wrap">
-            {/*<Icon variant="secondary" icon="bi bi-chat" size="sm"/>*/}
-            <Button
-              onClick={handleClick}
+            <div className="flex items-center w-full gap-6 jusify-start flex-wrap">
+              {/*<Icon variant="secondary" icon="bi bi-chat" size="sm"/>*/}
+              <Button
+                  onClick={handleClick}
               size="sm"
               variant="secondary"
               icon="bi bi-chat"

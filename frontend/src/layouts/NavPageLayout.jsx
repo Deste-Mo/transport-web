@@ -4,7 +4,7 @@ import {SubHeader} from "../components/pages/SubHeader.jsx";
 import RecentlyFriends from "../components/pages/RecentlyFriends.jsx";
 import {useAuth} from "../context/AuthProvider.jsx";
 import {SERVERLINK} from "../constants/index.js";
-import {useApp} from "../context/AppPorvider.jsx";
+import {useApp} from "../context/AppProvider.jsx";
 import {useEffect} from "react";
 import {NAVIGATIONS} from "../constants/home.js";
 import {Button, Icon} from "../styles/components.js";
@@ -35,14 +35,14 @@ const NavPageLayout = () => {
     }, [])
 
     return (
-        <section className="flex items-start  w-full justify-between nav-page-container gap-10 h-[86vh] max-md:h-screen scrollbar-none relative">
+        <section
+            className="flex items-start  w-full justify-between nav-page-container gap-10 h-[86vh] max-md:h-[80vh] scrollbar-none relative ">
+{/*            <div className="fixed bottom-10 right-[20%]">
+                <Icon icon="bi bi-briefcase"/>
+            </div>*/}
             {/*Left subNav*/}
-            <div className="max-lg:hidden basis-[26%] ">
-                <div className="fixed bottom-10 right-[20%]">
-                    <Icon icon="bi bi-briefcase"/>
-                </div>
                 <div
-                    className="flex flex-col items-start justify-start gap-10 overflow-x-hidden overflow-y-scroll max-h-full scrollbar-none relative">
+                    className="flex flex-col max-lg:hidden basis-[26%]  items-start justify-start gap-10 overflow-x-hidden overflow-y-scroll max-h-full scrollbar-none relative">
                     {
                         loadingInformation ? <ProfileLeftLoading/> : <ProfileLeft
                             id={user.id}
@@ -55,15 +55,16 @@ const NavPageLayout = () => {
                         <DynamicLeftContent currentLocation={pathname}/>
                     </div>
                 </div>
-            </div>
 
             {/*Center */}
-            <div className="overflow-x-hidden overflow-y-scroll h-full max-h-full basis-[44%] max-lg:basis-[60%] max-md:basis-full scrollbar-none rounded-xl">
+            <div
+                className="overflow-x-hidden overflow-y-scroll h-full max-h-full basis-[44%] max-lg:basis-[60%] max-md:basis-full scrollbar-none rounded-xl">
                 <Outlet/>
             </div>
 
             {/*Right subNav*/}
-            <div className=" max-h-full flex flex-col gap-10 overflow-x-hidden basis-[26%] max-lg:basis-[40%] max-md:hidden scrollbar-none">
+            <div
+                className="max-h-full flex flex-col gap-10 overflow-x-hidden basis-[26%] max-lg:basis-[40%] max-md:hidden scrollbar-none">
                 <div className="flex flex-col gap-4 w-full">
                     <SubHeader
                         name="Offres Sauvegardées"
@@ -75,7 +76,7 @@ const NavPageLayout = () => {
                             savedOffers.map((savedOffer) => (
                                 <OfferCard key={savedOffer.saveid} sug={savedOffer} saved detailedProfile={false}/>))
                         ) : (
-                            <p className="w-full px-4 py-10 text-center text-black-80 bg-white-100 border border-black-0 rounded-xl dark:border-none dark:bg-black-10 dark:text-white-60">
+                            <p className="nothing-box">
                                 Pas de sauvegarde pour l'instant
                             </p>
                         )}
@@ -115,6 +116,7 @@ const DynamicLeftContent = ({currentLocation}) => {
                                     className="w-full"
                                     key={friend.userid}
                                     spec={friend.userid}
+                                    account={friend.accounttype}
                                     name={friend.firstname + " " + friend.lastname}
                                     image={SERVERLINK + "/" + friend.profileimage}
                                 />
@@ -163,6 +165,7 @@ const DynamicLeftContent = ({currentLocation}) => {
                                 <RecentlyFriends
                                     className="w-full"
                                     key={friend.userid}
+                                    account={friend.accounttype}
                                     spec={friend.userid}
                                     name={friend.firstname + " " + friend.lastname}
                                     image={SERVERLINK + "/" + friend.profileimage}

@@ -3,10 +3,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import { Header } from "../components/pages/Header.jsx";
 import { SERVERLINK } from "../constants/index.js";
-import { useApp } from "../context/AppPorvider.jsx";
-
-
-import { usePreference } from "../context/UserPreferenceProvider.jsx";
+import { useApp } from "../context/AppProvider.jsx";
 import { useUser } from "../context/UserProvider.jsx";
 import { useNotification } from "../context/NotficationProvider.jsx";
 import { useOffer } from "../context/OfferProvider.jsx";

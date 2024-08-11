@@ -1,7 +1,7 @@
 import { Button, TextInput } from "../../styles/components";
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthProvider";
-import { useApp } from "../../context/AppPorvider";
+import { useApp } from "../../context/AppProvider";
 import { useSocketContext } from "../../context/SocketContext";
 import ActiveUser from "../../components/pages/conversations/ActiveUser.jsx";
 import { SubHeader } from "../../components/pages/SubHeader.jsx";
@@ -75,7 +75,7 @@ const MessageList = () => {
                             )
                             )
                             :
-                            <p className="text-black-80 dark:bg-white-100 text-center">
+                            <p className="nothing-box">
                                 Aucun resultat
                             </p>
                         :

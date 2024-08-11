@@ -1,7 +1,7 @@
 import { useAuth } from "../context/AuthProvider.jsx";
 import { SubHeader } from "../components/pages/SubHeader.jsx";
 import RecentlyFriends from "../components/pages/RecentlyFriends.jsx";
-import { useApp } from "../context/AppPorvider.jsx";
+import { useApp } from "../context/AppProvider.jsx";
 import { useEffect, useState } from "react";
 import { SERVERLINK } from "../constants/index.js";
 import { appVariants } from "../animations/variants.js";
@@ -33,7 +33,7 @@ const Friends = () => {
     return (
         <motion.section className="flex flex-col items-center justify-center gap-6 w-full " variants={appVariants} initial="hidden" whileInView="visible" viewport={{once : true}}>
             <SubHeader name="Amis" icon="bi bi-person-fill"
-                rightContent={<ExpandableSearchBar setValue={setSearch} value={search} />} />
+                rightContent={<ExpandableSearchBar block setValue={setSearch} value={search} />} />
             <div className="flex flex-col items-center justify-center gap-6 p-4 w-full bg-white-100 dark:bg-black-100 rounded-xl">
                 {
                     search ?

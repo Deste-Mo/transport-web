@@ -1,23 +1,25 @@
-import { useParams } from "react-router-dom";
-import { useAuth } from "../../context/AuthProvider";
+import {useParams} from "react-router-dom";
+import {useAuth} from "../../context/AuthProvider";
 import NewOffer from "../offer/NewOffer";
-import { useEffect } from "react";
+import {useEffect} from "react";
 import Offers from "../Offers";
+import Profile from "./Profile.jsx";
 
 const ProfileDetails = () => {
-  const { personalInformation } = useAuth();
-  const currentUser = personalInformation;
-  const { id } = useParams();
-
-  useEffect(() => {
-    console.log(currentUser);
-  }, []);
-
-  return (
-    <section className="w-full">
-      {currentUser.id === id ? <NewOffer /> : <Offers userId={id}/>}
-    </section>
-  );
+    const {personalInformation} = useAuth();
+    const currentUser = personalInformation;
+    const {id} = useParams();
+    
+    return (
+        <section className="w-full">
+            <div className="md:hidden">
+                <Profile/>
+            </div>
+            <div className="max-md:hidden">
+                {currentUser.id === id ? <NewOffer/> : <Offers userId={id}/>}
+            </div>
+        </section>
+    );
 };
 
 export default ProfileDetails;

@@ -23,6 +23,7 @@ const TextInput = ({
                        inputRef,
                        value,
                        required = true,
+                        titleIcon = "",
                    }) => {
     const error = !isValid || !pattern?.test(value);
     useEffect(() => {
@@ -31,7 +32,10 @@ const TextInput = ({
 
     return (
         <div className={`flex  flex-col gap-2 ${block ? 'w-full' : globalInputVariants.width}`}>
-            <p className="text-base font-thin text-black-100 dark:text-white-100">{title}</p>
+            <div className="flex items-center gap-2">
+                {titleIcon && <i className={`${titleIcon} text-primary-100`}></i>}
+                <p className="text-base font-thin text-black-100 dark:text-white-100">{title}</p>
+            </div>
             <input
                 ref={inputRef}
                 type={type}

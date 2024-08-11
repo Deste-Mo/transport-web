@@ -13,7 +13,7 @@ const globalButtonVariants = {
         success: "bg-success hover:bg-success-60 text-white  ",
         outline:
             " border-1 border text-black dark:text-white font-RobotoMd hover:bg-white hover:text-black",
-        ghost: "text-white hover:bg-white hover:text-black dark:text-white-100",
+        ghost: "text-white hover:bg-white  dark:text-white-100 hover:bg-black-20 dark:hover:bg-white-10",
         disabled: "bg-black-40 text-black-100 border-none cursor-not-allowed dark:text-white-40 dark:bg-white-40",
         "modern-1":
             "relative border border-2 border-[#000] text-black  shadow-dark-1 bg-white active:shadow-none   active:translate-y-[4px] active:translate-x-[4px]   font-RobotoMd ",

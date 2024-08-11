@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../../ui/Button";
 import { useEffect, useState } from "react";
-import { useApp } from "../../../context/AppPorvider";
+import { useApp } from "../../../context/AppProvider";
 import ProfileLeftLoading from "../../loader/ProfileLeftLoading";
 //import PropTypes from "prop-types";
 

@@ -5,7 +5,7 @@ import {TOAST_TYPE} from "../constants/index.js";
 import {motion} from "framer-motion";
 import {useAnimation} from "../context/AnimationProvider.jsx";
 import ConfirmPopup from "../components/ui/ConfirmPopup.jsx";
-import {useApp} from "../context/AppPorvider.jsx";
+import {useApp} from "../context/AppProvider.jsx";
 
 const GlobalLayout = () => {
     const {showMessagePopup, setShowMessagePopup, toast, showConfirmPopup, setShowConfirmPopup} = useAnimation();

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../../styles/components.js";
 import ProfileLeftLoading from "../loader/ProfileLeftLoading.jsx";
 import { useEffect, useState } from "react";
-import { useApp } from "../../context/AppPorvider.jsx";
+import { useApp } from "../../context/AppProvider.jsx";
 import { useUser } from "../../context/UserProvider.jsx";
 
 

@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router-dom";
-import { useApp } from "../../../context/AppPorvider";
-import { useEffect, useState } from "react";
+import {useNavigate} from "react-router-dom";
+import {useApp} from "../../../context/AppProvider";
+import {useEffect, useState} from "react";
 import Button from "../../ui/Button";
 import ProfileCardLoading from "../../loader/ProfileCardLoading";
 import {useUser} from "../../../context/UserProvider.jsx";
-import { useAuth } from "../../../context/AuthProvider.jsx";
+import {useAuth} from "../../../context/AuthProvider.jsx";
 
 const ProfileCard = ({
                          id,
@@ -16,24 +16,24 @@ const ProfileCard = ({
                          phone,
                          date,
                          onClick,
-                        forCurrentUser = false
+                         forCurrentUser = false
                      }) => {
     const navigate = useNavigate();
 
-  const { followUser, unFollowUsers, friends } = useUser();
-  const { personalInformation } = useAuth();
-  const [loading, setLoading] = useState(true);
-  const [isFriend, setIsFriend] = useState(false);
+    const {followUser, unFollowUsers, friends} = useUser();
+    const {personalInformation} = useAuth();
+    const [loading, setLoading] = useState(true);
+    const [isFriend, setIsFriend] = useState(false);
 
     useEffect(() => {
         setTimeout(() => setLoading(false), 1000);
-    setIsFriend(friends.length > 0 ? friends.find(friend => friend.userid === id) : false);
-  }, [friends, id])
+        setIsFriend(friends.length > 0 ? friends.find(friend => friend.userid === id) : false);
+    }, [friends, id])
 
     return (
         <div
             className="flex flex-col gap-6 rounded-xl shadow-sm border text-black-100 dark:text-white-100 border-black-0 p-4 bg-white-100 dark:bg-black-100 dark:border-none w-full">
-            <div className="flex justify-between items-start">
+            <div className="flex justify-center items-start">
                 <i className="disabled:bi-0-circle"></i>
                 <div className="flex flex-col items-center justify-center gap-4">
                     <img
@@ -44,11 +44,11 @@ const ProfileCard = ({
                     <div className="flex flex-col gap-1 items-center justify-center text-subtitle-2">
                         <span>{name}</span>
                         <span className="text-black-60 dark:text-white-100 dark:font-sm text-small-1 font-light">
-            {account}
-          </span>
+                            {account}
+                        </span>
                     </div>
                 </div>
-                <i className="bi bi-three-dots-vertical"></i>
+                {/*<i className="bi bi-three-dots-vertical"></i>*/}
             </div>
             <div
                 className={`flex w-full text-base text-black-100 
@@ -76,28 +76,28 @@ const ProfileCard = ({
                         block
                         size="md"
                         icon="bi bi-pencil"
-                        onClick={() => navigate(`profile/${id}/edit`)}
+                        onClick={() => navigate(`/profile/${id}/edit`)}
                     >
                         Modifier les informations
                     </Button>
                 ) :
-    isFriend ? (
-    <Button
+                isFriend ? (
+                        <Button
                             block
                             variant="danger"
                             size="md"
                             icon="bi bi-dash"
-    onClick={() => unFollowUsers(id)}
+                            onClick={() => unFollowUsers(id)}
                         >
                             Retirer
                         </Button>
                     )
-  :  (
+                    : (
                         <Button
                             block
                             size="md"
                             icon="bi bi-plus-lg"
-        onClick={() => followUser(id, personalInformation)}
+                            onClick={() => followUser(id, personalInformation)}
                         >
                             Suivre
                         </Button>)

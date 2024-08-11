@@ -28,6 +28,7 @@ import ProfileLayout from "./layouts/ProfileLayout.jsx";
 import GlobalLayout from "./layouts/GlobalLayout.jsx";
 import ProfileDetails from "./pages/profile/ProfileDetails.jsx";
 import NewOffer from "./pages/offer/NewOffer.jsx";
+import ProtectedProfileLayout from "./layouts/ProtectedProfileLayout.jsx";
 
 
 // TODO :
@@ -67,8 +68,13 @@ export default function App() {
               {/*Profile*/}
               <Route element={<ProfileLayout />}>
                 <Route path="profile/:id" element={<ProfileDetails />} />
-                <Route path="profile/:id/newOffer" element={<NewOffer />} />
-                <Route path="profile/:id/edit/" element={<ProfileEdit />} />
+                 
+                {/* Check the id */}
+                <Route element={<ProtectedProfileLayout/>}>
+                    <Route path="profile/:id/newOffer" element={<NewOffer />} />
+                    <Route path="profile/:id/edit/" element={<ProfileEdit />} />
+                </Route>
+                  
               </Route>
 
               <Route element={<NavPageLayout />}>
@@ -93,6 +99,7 @@ export default function App() {
             {/* Pages Error */}
             <Route path="*" element={<NotFound />} />
             <Route path="/forbidden" element={<Forbidden />} />
+            <Route path="/notFound" element={<NotFound />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
 
             {/*Not implemented routes and components*/}

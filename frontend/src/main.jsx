@@ -6,7 +6,7 @@ import "./styles/index.css";
 import {BrowserRouter as Router} from "react-router-dom";
 import FormProvider from "./context/FormProvider.jsx";
 import AuthProvider from "./context/AuthProvider.jsx";
-import AppProvider from "./context/AppPorvider.jsx";
+import AppProvider from "./context/AppProvider.jsx";
 import SocketContextProvider from "./context/SocketContext.jsx";
 import AnimationProvider from "./context/AnimationProvider.jsx";
 import UserPreferenceProvider from "./context/UserPreferenceProvider.jsx";

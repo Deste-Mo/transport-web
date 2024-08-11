@@ -27,7 +27,7 @@ const Home = () => {
                             {offers.map((offer) => (<OfferCard key={offer.offerid} sug={offer} saved={ savedOffers.length > 0 ? savedOffers.find(savedOffer => savedOffer.offerid === offer.offerid) : false }/>))}
                         </Suspense>
                     ) :
-                        <p className="w-full px-4 py-10 text-center text-black-80 bg-white-100 border border-black-0 rounded-xl dark:border-none dark:bg-black-10 dark:text-white-60">
+                        <p className="nothing-box">
                             Pas d'offres
                         </p>
                 }

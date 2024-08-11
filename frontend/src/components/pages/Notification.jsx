@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react"
 import {useNavigate} from "react-router-dom";
 import {Icon} from "../../styles/components.js";
-import { useApp } from "../../context/AppPorvider.jsx";
+import { useApp } from "../../context/AppProvider.jsx";
 import { useAuth } from "../../context/AuthProvider.jsx";
 import { SERVERLINK } from "../../constants/index.js";
 import { useNotification } from "../../context/NotficationProvider.jsx";

@@ -5,7 +5,7 @@ import { Button } from '../styles/components.js'
 import { appVariants } from '../animations/variants.js'
 import { motion } from 'framer-motion'
 import { useEffect } from 'react'
-import { useApp } from '../context/AppPorvider.jsx'
+import { useApp } from '../context/AppProvider.jsx'
 import { useSocketContext } from '../context/SocketContext.jsx'
 import { SERVERLINK } from '../constants/index.js'
 import {useNotification} from "../context/NotficationProvider.jsx";

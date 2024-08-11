@@ -20,6 +20,7 @@ const TextArea = ({
   inputRef,
   value,
   resize = true,
+    titleIcon = "",
 }) => {
   const error = !isValid || !pattern.test(value);
   useEffect(() => {
@@ -32,26 +33,29 @@ const TextArea = ({
         block ? "w-full" : globalInputVariants.width
       }`}
     >
-      <p className="text-black-100 dark:text-white-100">{title}</p>
+      <div className="flex items-center gap-2">
+        {titleIcon && <i className={`${titleIcon} text-primary-100`}></i>}
+        <p className="text-base font-thin text-black-100 dark:text-white-100">{title}</p>
+      </div>
       <textarea
-        ref={inputRef}
-        className={`h-[128px]  ${globalInputVariants.constant} ${
-          globalInputVariants.rounded[rounded]
-        } ${globalInputVariants.variant[variant]} ${
-          globalInputVariants.size[size]
-        }   ${globalInputVariants.size[size]}
+          ref={inputRef}
+          className={`h-[128px]  ${globalInputVariants.constant} ${
+              globalInputVariants.rounded[rounded]
+          } ${globalInputVariants.variant[variant]} ${
+              globalInputVariants.size[size]
+          }   ${globalInputVariants.size[size]}
         ${!resize && "resize-none"}  ${className}`}
-        placeholder={placeholder}
-        onChange={(e) => {
-          onChange(e);
-        }}
-        name={name}
-        value={value}
-        autoComplete="off"
-        required={true}
+          placeholder={placeholder}
+          onChange={(e) => {
+            onChange(e);
+          }}
+          name={name}
+          value={value}
+          autoComplete="off"
+          required={true}
       />
       {error && value && (
-        <small className="text-small text-danger">{errorMsg}</small>
+          <small className="text-small text-danger">{errorMsg}</small>
       )}
     </div>
   );

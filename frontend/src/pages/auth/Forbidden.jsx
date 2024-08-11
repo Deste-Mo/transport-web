@@ -4,7 +4,7 @@ const Forbidden = () => {
   const navigate = useNavigate();
   return (
     <section className="mt-20">
-      <p className="text-center text-black-100 dark:text-black-100 text-title-2">
+      <p className="text-center text-black-100 dark:text-white-100 text-title-2">
         {" "}
         403{" "}
       </p>
@@ -13,7 +13,7 @@ const Forbidden = () => {
       </p>
       <p
         onClick={() => navigate("/")}
-        className="cursor-pointer text-lead text-primary text-center"
+        className="cursor-pointer text-lead text-primary-100 text-center"
       >
         Return Back
       </p>

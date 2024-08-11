@@ -1,7 +1,7 @@
 import {Button} from "../../../styles/components.js";
 import {useAuth} from "../../../context/AuthProvider.jsx";
 import {useNavigate} from "react-router-dom";
-import {useApp} from "../../../context/AppPorvider.jsx";
+import {useApp} from "../../../context/AppProvider.jsx";
 import {useAnimation} from "../../../context/AnimationProvider.jsx";
 import {usePreference} from "../../../context/UserPreferenceProvider.jsx";
 import {useEffect, useRef} from "react";

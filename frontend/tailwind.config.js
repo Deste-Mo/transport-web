@@ -10,6 +10,7 @@ export default {
       boxShadow: {
         '3D': '0.5px 2px 0 1px rgba(153, 137, 194, 100)',
       },
+      
     },
     colors: {
       primary: {
@@ -88,6 +89,7 @@ export default {
   variants: {
     extend: {
       scrollbar: ['rounded', 'hover'],
+      
     },
   },
 

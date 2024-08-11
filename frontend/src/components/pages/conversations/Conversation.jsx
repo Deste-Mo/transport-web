@@ -5,7 +5,7 @@ import { useAuth } from "../../../context/AuthProvider.jsx";
 import { SERVERLINK } from "../../../constants/index.js";
 import { useSocketContext } from "../../../context/SocketContext.jsx";
 import ProfileImage from "../../../assets/images/OIP.jpg";
-import { useApp } from "../../../context/AppPorvider.jsx";
+import { useApp } from "../../../context/AppProvider.jsx";
 
 const Conv = ({ id, userToChat }) => {
     const navigate = useNavigate();

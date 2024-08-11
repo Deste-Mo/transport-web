@@ -75,7 +75,7 @@ const Filter = ({
 
   return (
     <div
-      className={`bg-white-100 sahdow-sm border border-black-0 dark:bg-white-0 p-4 rounded-xl text-black-100 dark:text-white-100 flex flex-col gap-4 items-start justify-center ${className}`}
+      className={`bg-white-100 sahdow-sm border border-black-0 dark:bg-white-0 p-4 rounded-xl text-black-100 dark:text-white-100 flex flex-col gap-4 items-start justify-center max-w-[420px] ${className}`}
     >
       <div className="flex w-full justify-between items-center">
         <div className="flex items-center gap-2">

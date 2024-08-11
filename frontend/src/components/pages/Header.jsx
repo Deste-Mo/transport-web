@@ -1,7 +1,7 @@
 //import PropTypes from "prop-types";
 import {useEffect, useRef, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
-import {useApp} from "../../context/AppPorvider.jsx";
+import {useApp} from "../../context/AppProvider.jsx";
 import ProfilePopup from "./profile/ProfilePopup.jsx";
 import {useAnimation} from "../../context/AnimationProvider.jsx";
 import {useNotification} from "../../context/NotficationProvider.jsx";
@@ -31,7 +31,7 @@ export function Header({profileImage}) {
             name: "Offres",
             icon: "bi bi-briefcase",
             path: "/offer",
-            number : 0,
+            number : 3,
         },
         {
             name: "Amis",
@@ -87,6 +87,7 @@ const MobileHeader = ({className, NAV_LINKS, profileImage}) => {
                 <ul className="flex  items-center w-full justify-between max-md:items-center  py-4 px-8 fixed left-0 bottom-0 bg-white-100 dark:bg-white-0 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md z-50">
                     {NAV_LINKS.map((navlink) => (
                         <NavLink
+                            forMobile
                             key={navlink.name}
                             {...navlink}
                             active={
@@ -149,7 +150,7 @@ const Profile = ({profileImage, className}) => {
     );
 };
 
-const NavLink = ({icon, name, active = false, onClick, number = 0}) => {
+const NavLink = ({icon, name, active = false, onClick, number = 0, forMobile = false}) => {
     return (
         <li
             onClick={onClick}
@@ -159,13 +160,13 @@ const NavLink = ({icon, name, active = false, onClick, number = 0}) => {
         >
             <i className={`${active ? icon + "-fill" : icon}  text-icon`}></i>
             <span
-                className={`text-small-1  group-hover:text-primary-100 relative ${
+                className={`${forMobile ? 'text-small-2' : 'text-small-1'} group-hover:text-primary-100 relative ${
                     active ? "text-primary-100" : "text-black-80 dark:text-white-100"
                 }`}
             >
       {
           number > 0 && <div
-              className="absolute max-md:text-small-3 max-md:font-sm bottom-10 -right-2 bg-danger-100 text-white-100 size-[24px] flex items-center justify-center px-2 py-2 rounded-full">1</div>
+              className="absolute max-md:text-small-3 max-md:font-sm bottom-10 -right-2 bg-danger-100 text-white-100 size-[24px] flex items-center justify-center px-2 py-2 rounded-full">{number}</div>
       }
                 {name}
       </span>

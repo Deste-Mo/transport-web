@@ -83,7 +83,7 @@ const FileInput = ({
           {fileRef.current?.value
             ?.split("\\")
             [fileRef.current?.value?.split("\\").length - 1].substr(-20) ||
-            "Ajouter un photo"}
+            "Ajoutez un photo"}
         </label>
       </div>
       <Icon className={inputClassName} size="md" variant="danger" icon="bi-trash" onClick={removeFiles} />

@@ -21,6 +21,7 @@ const SelectInput = ({
   block = false,
   onChange = () => {},
   onError = () => {},
+    titleIcon = "",
   value = "",
 }) => {
   const error = options.length <= 0 || loading;
@@ -60,78 +61,81 @@ const SelectInput = ({
     }
   }, [loading]);
   return (
-    <div ref={selectRef} className={`flex flex-col gap-3 w-full `}>
-      <p className="text-base text-black-100 dark:text-white-100">{title}</p>
-      <div
-        className={`flex items-start justify-start flex-col gap-2 w-full   relative `}
-      >
-        <div
-          role="button"
-          onClick={() => {
-            setOpened((prev) => !prev);
-          }}
-          className={`cursor-pointer ${globalInputVariants.constant} ${
-            globalInputVariants.size[size]
-          } ${defaultTransition} ${globalSelectvariants.variant[variant]} ${
-            globalInputVariants.rounded[rounded]
-          }  ${
-            block
-              ? "w-full"
-              : `items-start justify-start ${globalInputVariants.width} `
-          } ${className}`}
-        >
-          {inverseIcon && (
-            <i
-              className={`${defaultTransition} ${icon} ${
-                opened ? "rotate-90" : "rotate-  0"
-              }`}
-            ></i>
-          )}
-          <p>{selectedItem}</p>
-          {!inverseIcon && (
-            <i
-              className={`${defaultTransition} ${icon} ${
-                opened ? "rotate-90" : "rotate-0"
-              }`}
-            ></i>
-          )}
+      <div ref={selectRef} className={`flex flex-col gap-3 w-full `}>
+        <div className="flex items-center gap-2">
+          {titleIcon && <i className={`${titleIcon} text-primary-100`}></i>}
+          <p className="text-base font-thin text-black-100 dark:text-white-100">{title}</p>
         </div>
-        <ul
-          className={`absolute z-40 bg-gray-100  shadow-md ${block ? "w-full" : globalInputVariants.width} ${
-            globalSelectvariants.variant[variant]
-          } ${size === "md" ? "top-[54px]" : "top-[64px]"} ${
-            opened
-              ? "z-30 opacity-1 skew-x-0 "
-              : "-z-10 opacity-0 skew-x-[12deg] pointer-events-none"
-          }  ${defaultTransition}
-            ${globalInputVariants.rounded[rounded]}`}
+        <div
+            className={`flex items-start justify-start flex-col gap-2 w-full   relative `}
         >
-          {loading ? (
-            <li className="flex origin-center justify-center">
-              <i className="bi-hourglass-top"></i>
-            </li>
-          ) : (
-            options?.map((item) => (
-              <li
-                role="button"
-                onClick={() => {
-                  setSelectedItem(
-                    optionId === "option"
-                      ? item?.option
-                      : item?.[optionId] + " : " + item?.option
-                  );
-                  setOpened(false);
-                }}
-                key={item?.[optionId]}
-                className={`w-full cursor-pointer hover:bg-primary-40 hover:ps-6 px-4 py-2 rounded-md ${defaultTransition} transition-all`}
-              >
-                {item?.option?.slice(0, 30)}
-              </li>
-            ))
-          )}
-        </ul>
+          <div
+              role="button"
+              onClick={() => {
+                setOpened((prev) => !prev);
+              }}
+              className={`cursor-pointer ${globalInputVariants.constant} ${
+                  globalInputVariants.size[size]
+              } ${defaultTransition} ${globalSelectvariants.variant[variant]} ${
+                  globalInputVariants.rounded[rounded]
+              }  ${
+                  block
+                      ? "w-full"
+                      : `items-start justify-start ${globalInputVariants.width} `
+              } ${className}`}
+          >
+            {inverseIcon && (
+                <i
+                    className={`${defaultTransition} ${icon} ${
+                        opened ? "rotate-90" : "rotate-  0"
+                    }`}
+                ></i>
+            )}
+            <p>{selectedItem}</p>
+            {!inverseIcon && (
+                <i
+                    className={`${defaultTransition} ${icon} ${
+                        opened ? "rotate-90" : "rotate-0"
+                    }`}
+                ></i>
+            )}
+          </div>
+          <ul
+              className={`absolute z-40 bg-gray-100  shadow-md ${block ? "w-full" : globalInputVariants.width} ${
+                  globalSelectvariants.variant[variant]
+              } ${size === "md" ? "top-[54px]" : "top-[64px]"} ${
+                  opened
+                      ? "z-30 opacity-1 skew-x-0 "
+                      : "-z-10 opacity-0 skew-x-[12deg] pointer-events-none"
+              }  ${defaultTransition}
+            ${globalInputVariants.rounded[rounded]}`}
+          >
+            {loading ? (
+                <li className="flex origin-center justify-center">
+                  <i className="bi-hourglass-top"></i>
+                </li>
+            ) : (
+                options?.map((item) => (
+                    <li
+                        role="button"
+                        onClick={() => {
+                          setSelectedItem(
+                              optionId === "option"
+                                  ? item?.option
+                                  : item?.[optionId] + " : " + item?.option
+                          );
+                          setOpened(false);
+                        }}
+                        key={item?.[optionId]}
+                        className={`w-full cursor-pointer hover:bg-primary-40 hover:ps-6 px-4 py-2 rounded-md ${defaultTransition} transition-all`}
+                    >
+                      {item?.option?.slice(0, 30)}
+                    </li>
+                ))
+            )}
+          </ul>
+        </div>
       </div>
-    </div>
   );
 };
 
