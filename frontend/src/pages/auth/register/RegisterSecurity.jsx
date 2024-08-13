@@ -104,7 +104,7 @@ const RegisterSecurity = () => {
                 </div>
             </div>
             <form
-                className="flex w-fit flex-col items-start justify-center rounded-xl border p-4 border-black-0 bg-white-100 dark:text-white-100 gap-[32px]"
+                className="flex w-fit flex-col items-start justify-center rounded-xl border p-6 border-black-0 bg-white-100 dark:border-none dark:bg-white-10 gap-[32px]"
                 onSubmit={handleSubmit}
             >
                 <div className="flex w-full flex-col items-start justify-center gap-6">
