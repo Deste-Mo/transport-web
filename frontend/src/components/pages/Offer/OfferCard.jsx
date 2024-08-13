@@ -33,8 +33,8 @@ const OfferCard = ({
   const [popupVisible, setPopupVisible] = useState(false);
   const { timeSince } = useApp();
   const { goToUserProfile } = useUser();
-  
-  const { saveOffer, retireOffer, getSavedOffers } = useOffer();
+
+  const { saveOffer, retireOffer, getSavedOffers, offer } = useOffer();
 
   const navigate = useNavigate();
   const image = SERVERLINK + "/" + sug?.profileimage;
@@ -68,6 +68,53 @@ const OfferCard = ({
     setPopupVisible((prev) => !prev);
   };
 
+  const { setMessagePopup } = useAnimation();
+
+  const {
+    getOfferById,
+    getCurrentUserOffers,
+    setUpdateOffer,
+    setUnavalaibleOffer,
+    setAvalaibleOffer,
+    deleteOffer,
+  } = useOffer();
+
+  const { token } = useAuth();
+
+  const handleDeletePost = async () => {
+    // TODO :
+    deleteOffer(sug.offerid);
+    getCurrentUserOffers();
+    localStorage.removeItem("offer");
+    setUpdateOffer();
+
+    // - Deleting the post
+    // setPopupVisible(false);
+    // setMessagePopup("Offre supprimé avec success", TOAST_TYPE.success);
+  };
+
+  const handleEditPost = () => {
+    // TODO :
+    getOfferById(sug.offerid);
+    localStorage.setItem("offer", JSON.stringify(sug));
+    // - Editing the post
+    setPopupVisible(false);
+  };
+
+  const handleExpirePost = () => {
+    // TODO :
+    setUnavalaibleOffer(sug.offerid);
+    getCurrentUserOffers();
+    setPopupVisible(false);
+  };
+
+  const handleUnexpirePost = () => {
+    // TODO :
+    setAvalaibleOffer(sug.offerid);
+    getCurrentUserOffers();
+    setPopupVisible(false);
+  };
+
   return (
     <div className="flex flex-col items-start justify-start w-full gap-2 ">
       <div className="flex items-center gap-x-6 gap-y-2 flex-wrap">
@@ -86,18 +133,74 @@ const OfferCard = ({
       >
         {popupVisible && (
           <div className="absolute top-10 right-10">
-            <OfferCardPopup setPopupVisible={setPopupVisible} offer={sug} />
+            {forCurrentUser ? (
+              <OfferCardPopup
+                setPopupVisible={setPopupVisible}
+                content={
+                  <>
+                    <SettingItem
+                      onClick={() => handleDeletePost()}
+                      name="Supprimer"
+                      icon="bi bi-dash"
+                    />
+                    <SettingItem
+                      onClick={() => handleEditPost()}
+                      name="Modifier"
+                      icon="bi bi-pencil"
+                    />
+                    {sug?.dispo ? (
+                      <SettingItem
+                        onClick={() => handleExpirePost()}
+                        name="Rendre Indisponible"
+                        icon="bi bi-repeat"
+                      />
+                    ) : (
+                      <SettingItem
+                        onClick={() => handleUnexpirePost()}
+                        name="Rendre Disponible"
+                        icon="bi bi-circle"
+                      />
+                    )}
+                  </>
+                }
+              />
+            ) : (
+              <OfferCardPopup
+                setPopupVisible={setPopupVisible}
+                content={
+                  <>
+                    <SettingItem onClick={handleClick} name="Contacter" icon="bi bi-chat" />
+                    {saved ? (
+                      <SettingItem
+                        onClick={() => handleSaveOffer()}
+                        name="Sauvegarder"
+                        icon="bi bi-bookmark"
+                      />
+                    ) : (
+                      <SettingItem
+                        onClick={() => handleRevokeSavedOffer()}
+                        name="Retirer de la sauvegarde"
+                        icon="bi bi-bookmark-dash"
+                      />
+                    )}
+                  </>
+                }
+              />
+            )}
           </div>
         )}
         <div className="w-full flex items-center justify-between rounded-2xl">
           <div className="flex items-center gap-2">
             <img
-                onClick={() => navigate(`/profile/${sug.userid}`)}
+              onClick={() => navigate(`/profile/${sug.userid}`)}
               className="size-[40px] object-cover rounded-full cursor-pointer"
               src={image}
             />
             <div className="flex flex-col items-start">
-              <p className="text-small-1 font-md cursor-pointer hover:underline" onClick={() => navigate(`/profile/${sug.userid}`)}>
+              <p
+                className="text-small-1 font-md cursor-pointer hover:underline"
+                onClick={() => navigate(`/profile/${sug.userid}`)}
+              >
                 {sug?.firstname + (!sug?.lastname ? "" : sug?.lastname)}
               </p>
               <span className=" dark:font-sm text-small-2">
@@ -112,52 +215,50 @@ const OfferCard = ({
             </div>
           </div>
           <div className="flex flex-col gap-2 items-center">
-            
-              <Icon
-                onClick={() => toggleOfferCardPopup()}
-                size="sm"
-                variant="ghost"
-                icon="bi bi-three-dots-vertical"
-              />
-            
+            <Icon
+              onClick={() => toggleOfferCardPopup()}
+              size="sm"
+              variant="ghost"
+              icon="bi bi-three-dots-vertical"
+            />
           </div>
         </div>
         <div className="w-full flex flex-col gap-4 items-start justify-cente  rounded-2xl  ">
-            <p className="text-small-1 text-black-100 dark:text-white-100 dark:font-sm ">
-              {
-                offerDetails.length > MAX_OFFER_DESC ? (
-                    detailed ? offerDetails : (offerDetails.slice(0,MAX_OFFER_DESC) + " ...")
-                ) : offerDetails
-              }
-            </p>
+          <p className="text-small-1 text-black-100 dark:text-white-100 dark:font-sm ">
+            {offerDetails.length > MAX_OFFER_DESC
+              ? detailed
+                ? offerDetails
+                : offerDetails.slice(0, MAX_OFFER_DESC) + " ..."
+              : offerDetails}
+          </p>
 
-          {
-              offerDetails.length > MAX_OFFER_DESC && <button
-                  className="flex gap-1 items-center"
-                  onClick={() => setDetailed((prev) => !prev)}
-              >
-                {/*<i className={`bi bi-chevron-${detailed ? 'up' : 'down'}`}></i>*/}
-                <p className="underline text-small-2 text-black-100 dark:text-white-80">
-                  {detailed ? "Moin" : "Plus"} de details
-                </p>
-              </button>
-          }
+          {offerDetails.length > MAX_OFFER_DESC && (
+            <button
+              className="flex gap-1 items-center"
+              onClick={() => setDetailed((prev) => !prev)}
+            >
+              {/*<i className={`bi bi-chevron-${detailed ? 'up' : 'down'}`}></i>*/}
+              <p className="underline text-small-2 text-black-100 dark:text-white-80">
+                {detailed ? "Moin" : "Plus"} de details
+              </p>
+            </button>
+          )}
         </div>
         {detailedProfile && (
-            <img
-                src={offerImage}
-                className="w-full h-[256px] object-cover rounded-md"
-            />
+          <img
+            src={offerImage}
+            className="w-full h-[256px] object-cover rounded-md"
+          />
         )}
         {!forCurrentUser && (
-            <div className="flex items-center w-full gap-6 jusify-start flex-wrap">
-              {/*<Icon variant="secondary" icon="bi bi-chat" size="sm"/>*/}
-              <Button
-                  onClick={handleClick}
+          <div className="flex items-center w-full gap-6 jusify-start flex-wrap">
+            {/*<Icon variant="secondary" icon="bi bi-chat" size="sm"/>*/}
+            <Button
+              onClick={handleClick}
               size="sm"
               variant="secondary"
               icon="bi bi-chat"
-              block              
+              block
             >
               Contacter
             </Button>
@@ -190,56 +291,9 @@ const OfferCard = ({
 };
 export default OfferCard;
 
-const OfferCardPopup = ({ setPopupVisible, offer }) => {
-  const { setMessagePopup } = useAnimation();
-
-  const { getOfferById, getCurrentUserOffers, setUpdateOffer, setUnavalaibleOffer, setAvalaibleOffer, deleteOffer } = useOffer();
-
-  const { token } = useAuth();
-
+const OfferCardPopup = ({ setPopupVisible, content }) => {
   const selectRef = useRef(null);
 
-  const handleDeletePost = async () => {
-    // TODO :
-    deleteOffer(offer.offerid);
-    getCurrentUserOffers();
-    localStorage.removeItem("offer");
-    setUpdateOffer();
-
-    // - Deleting the post
-    // setPopupVisible(false);
-    // setMessagePopup("Offre supprimé avec success", TOAST_TYPE.success);
-  };
-
-  const handleEditPost = () => {
-    // TODO :
-    getOfferById(offer.offerid);
-    localStorage.setItem('offer', JSON.stringify(offer))
-    // - Editing the post
-    setPopupVisible(false);
-  };
-
-  const handleExpirePost = () => {
-    // TODO :
-    setUnavalaibleOffer(offer.offerid);
-    getCurrentUserOffers();
-    setPopupVisible(false);
-    // setMessagePopup(
-    //   "L'offre est maitenant rendu indisponible",
-    //   TOAST_TYPE.success
-    // );
-  };
-
-  const handleUnexpirePost = () => {
-    // TODO :
-    setAvalaibleOffer(offer.offerid);
-    getCurrentUserOffers();
-    setPopupVisible(false);
-    // setMessagePopup(
-    //   "L'offre est maitenant rendu indisponible",
-    //   TOAST_TYPE.success
-    // );
-  };
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (selectRef.current && !selectRef.current.contains(e.target)) {
@@ -252,35 +306,56 @@ const OfferCardPopup = ({ setPopupVisible, offer }) => {
   return (
     <div
       ref={selectRef}
-      className={`flex select-none flex-col items-center justify-center gap-4 w-[230px] p-2 rounded-xl bg-white-100 dark:bg-white-0 dark:backdrop-blur-sm shadow-sm border border-black-0`}
+      className={`flex select-none flex-col items-center justify-center gap-4 w-max p-2 rounded-xl bg-white-100 dark:bg-white-0 dark:backdrop-blur-sm shadow-sm border border-black-0`}
     >
-      <SettingItem
-        onClick={() => handleDeletePost()}
-        name="Supprimer"
-        icon="bi bi-dash"
-      />
-      <SettingItem
-        onClick={() => handleEditPost()}
-        name="Modifier"
-        icon="bi bi-pencil"
-      />
-      {
-        offer.dispo ?
-      <SettingItem
-        onClick={() => handleExpirePost()}
-        name="Rendre Indisponible"
-        icon="bi bi-repeat"
-      />
-          :
-          <SettingItem
-            onClick={() => handleUnexpirePost()}
-            name="Rendre Disponible"
-            icon="bi bi-circle"
-          />
-      }
+      {content}
     </div>
   );
 };
+// const OfferCardPopup = ({ setPopupVisible, offer }) => {
+//   const selectRef = useRef(null);
+
+//   useEffect(() => {
+//     const handleClickOutside = (e) => {
+//       if (selectRef.current && !selectRef.current.contains(e.target)) {
+//         setPopupVisible(false);
+//       }
+//     };
+//     document.addEventListener("mousedown", handleClickOutside);
+//     return () => document.removeEventListener("mousedown", handleClickOutside);
+//   }, []);
+//   return (
+//     <div
+//       ref={selectRef}
+//       className={`flex select-none flex-col items-center justify-center gap-4 w-[230px] p-2 rounded-xl bg-white-100 dark:bg-white-0 dark:backdrop-blur-sm shadow-sm border border-black-0`}
+//     >
+//       <SettingItem
+//         onClick={() => handleDeletePost()}
+//         name="Supprimer"
+//         icon="bi bi-dash"
+//       />
+//       <SettingItem
+//         onClick={() => handleEditPost()}
+//         name="Modifier"
+//         icon="bi bi-pencil"
+//       />
+//       {
+//         offer.dispo ?
+//       <SettingItem
+//         onClick={() => handleExpirePost()}
+//         name="Rendre Indisponible"
+//         icon="bi bi-repeat"
+//       />
+//           :
+//           <SettingItem
+//             onClick={() => handleUnexpirePost()}
+//             name="Rendre Disponible"
+//             icon="bi bi-circle"
+//           />
+//       }
+//     </div>
+//   );
+// };
 
 const SettingItem = ({ name, icon, onClick }) => {
   return (
