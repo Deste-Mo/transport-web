@@ -5,23 +5,13 @@ import Filter from "../../components/ui/Filter.jsx";
 import { motion } from "framer-motion";
 import SearchFilter from "../../components/pages/SearchFilter.jsx";
 import { OFFER_CARD_FILTERS } from "../../constants/index.js";
+import { FileInput } from "../../styles/components.js";
 
 const Labo = () => {
-  const actualDate = "2024-07-29T06:51:19.000Z";
-  const [result, setResult] = useState("");
-  const [load, setLoad] = useState(true);
-  useEffect(() => {
-    let d = new Date(actualDate);;
-    setResult(`${d.getDate()} ${d.getMonth()} ${d.getFullYear()}`);
-    setLoad(false);
-  }, []);
+
   return (
-    !load && (
-      <p className="text-white-100 p-4">
-        {actualDate} : {result}
-      </p>
+      <FileInput style="modern" className="w-[512px] p-10"/>
     )
-  );
 };
 
 export default Labo;
