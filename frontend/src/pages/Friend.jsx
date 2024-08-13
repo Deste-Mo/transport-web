@@ -16,7 +16,7 @@ const Friends = () => {
 
     const [search, setSearch] = useState('');
 
-    const SearchFriends = friends.length > 0 ? (friends.filter(friend => {
+    const SearchFriends = users.length > 0 ? (users.filter(friend => {
         let fullname = friend.firstname.toLowerCase() + " " + (friend.lastname ? friend.lastname.toLowerCase() : '');
         let accountType = friend.accounttype.toLowerCase();
         if (search && (!fullname.includes(search.toLowerCase()) && (!accountType.includes(search.toLowerCase())))) {
@@ -32,9 +32,9 @@ const Friends = () => {
 
     return (
         <motion.section className="flex flex-col items-center justify-center gap-6 w-full " variants={appVariants} initial="hidden" whileInView="visible" viewport={{once : true}}>
-            <SubHeader name="Amis" icon="bi bi-person-fill"
+            <SubHeader name="Suivis" icon="bi bi-broadcast"
                 rightContent={<ExpandableSearchBar block setValue={setSearch} value={search} />} />
-            <div className="flex flex-col items-center justify-center gap-6 p-4 w-full bg-white-100 dark:bg-black-100 rounded-xl">
+            <div className="flex flex-col items-center justify-center gap-6 p-2 w-full bg-white-100 dark:bg-white-0 rounded-xl">
                 {
                     search ?
                         SearchFriends?.length > 0 ?

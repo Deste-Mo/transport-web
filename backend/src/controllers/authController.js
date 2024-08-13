@@ -200,20 +200,17 @@ export const getMe = async (req, res) => {
             profile = await getInformation(await profileId);
         }
 
-        
-
         if (!user && !profile) {
             return res.status(500).json({error: "L'utilisateur existe pas"});
         }
-
 
         return res.status(200).json(
             {
                 personalInfo: {
                     id: user.userid,
-                    fullName: user.firstname + (!user.lastname ? '' : (" " + user.lastname)),
+                    fullName: user.firstname + ((!user.lastname || user.lastname === 'null' ) ? '' : (" " + user.lastname)),
                     firstname: user.firstname,
-                    lastname: user.lastname ? user.lastname : "",
+                    lastname: user.lastname,
                     accounttype: user.accounttype,
                     accountId: user.accountid,
                     usercin: user.usercin,
@@ -227,9 +224,9 @@ export const getMe = async (req, res) => {
                 },
                 profileInfo: {
                     id: profile.userid,
-                    fullName: profile.firstname + (!profile.lastname ? '' : (" " + profile.lastname)),
+                    fullName: profile.firstname + ((!profile.lastname || profile.lastname === 'null') ? '' : (" " + profile.lastname)),
                     firstname: profile.firstname,
-                    lastname: profile.lastname  ? profile.lastname : null,
+                    lastname: profile.lastname,
                     accounttype: profile.accounttype,
                     accountId: profile.accountid,
                     usercin: profile.usercin,

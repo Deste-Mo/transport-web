@@ -21,7 +21,7 @@ export const createConversation = async (senderId, receiverId) => {
 
 }
 
-export const createNewMessage = async (message, refMessage, fileContent , conversationId, receiverId, senderId) => {
+export const createNewMessage = async (message, lastMess, refMessage, fileContent , conversationId, receiverId, senderId) => {
 
     const query = "INSERT INTO message (content, idConversation, receiverId, refmessage, filecontent) VALUES ($1, $2, $3, $4, $5) RETURNING *";
 
@@ -30,7 +30,7 @@ export const createNewMessage = async (message, refMessage, fileContent , conver
     
     const { rows } = await pool.query(query, [message, conversationId, receiverId, refMessage, fileContent]);
     
-    const answer = await pool.query(update, [conversationId, message, senderId]);
+    const answer = await pool.query(update, [conversationId, lastMess, senderId]);
     
     return rows[0];
 }
@@ -47,11 +47,8 @@ export const getAll = async (reqSenderId) => {
     const query = "SELECT users.*, account.accounttype FROM users INNER JOIN account ON users.accountid = account.accountid WHERE users.userid != $1 AND users.userid NOT IN (SELECT followeeid FROM follow WHERE followerid = $1);";
 
     const { rows } = await pool.query(query, [reqSenderId]);
-    const datas = rows.map(row => ({
-        ...row, lastname : row.lastname || ""
-    }));
 
-    return datas;
+    return rows;
 }
 
 export const getAllMessages = async (reqSenderId, userIdToChat) => {

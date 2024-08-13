@@ -27,9 +27,10 @@ import MessageList from "./pages/conversations/MessageList.jsx";
 import ProfileLayout from "./layouts/ProfileLayout.jsx";
 import GlobalLayout from "./layouts/GlobalLayout.jsx";
 import ProfileDetails from "./pages/profile/ProfileDetails.jsx";
-import NewOffer from "./pages/offer/NewOffer.jsx";
+import ResetPassword from "./pages/auth/forgotPassword/ResetPassword.jsx";
+import ForgotPassword from "./pages/auth/forgotPassword/ForgotPassword.jsx";
 import ProtectedProfileLayout from "./layouts/ProtectedProfileLayout.jsx";
-
+import NewOffer from "./pages/offer/NewOffer.jsx";
 
 // TODO :
 /*
@@ -61,6 +62,10 @@ export default function App() {
                 path="/registerSecurity"
                 element={<RegisterSecurity />}
               ></Route>
+
+              <Route path="/forgot-password" element={<ForgotPassword/>} />
+
+              <Route path="/reset-password/:token" element={<ResetPassword/>} />
             </Route>
 
             {/* App */}

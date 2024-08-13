@@ -68,6 +68,12 @@ export const setunavailableOffer = async (offerId) =>{
     return result.rowCount;
 }
 
+export const setavailableOffer = async (offerId) =>{
+    const result = await pool.query('UPDATE Offer SET dispo = TRUE WHERE offerId = $1',[offerId]);
+
+    return result.rowCount;
+}
+
 //*****************************FILTER FUNCTIONS************************//
 
 export const allAvailableOffer = async(userId) => {

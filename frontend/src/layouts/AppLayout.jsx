@@ -7,20 +7,21 @@ import { useApp } from "../context/AppProvider.jsx";
 import { useUser } from "../context/UserProvider.jsx";
 import { useNotification } from "../context/NotficationProvider.jsx";
 import { useOffer } from "../context/OfferProvider.jsx";
+import { useSocketContext } from "../context/SocketContext.jsx";
 
 const AppLayout = () => {
     const {token, loading, personalInformation} = useAuth();
 
     const user = personalInformation;
-    const {getUnreadMessageCount, countUnread} = useApp();
+    const { getUnreadMessageCount, countUnread, getUserMessages } = useApp();
 
     const { getFriends, getUsers } = useUser();
 
-    const { getNotifications } = useNotification();
+    const { getNotifications, getUnreadNotifications, unreadNotificationsCount } = useNotification();
 
-    const { getCurrentUserOffers } = useOffer();
+    const { getCurrentUserOffers, getSuggestedOffers } = useOffer();
 
-    const { socket } = countUnread;
+    const { socket } = useSocketContext();
 
     useEffect(() => {
 
@@ -28,16 +29,18 @@ const AppLayout = () => {
 
         socket?.on("newNotif", () => {
             getNotifications();
+            getUnreadNotifications();
             getFriends();
             getCurrentUserOffers();
-        });2
+            getSuggestedOffers();
+        });
 
         socket?.on("newMessage", () => {
             getUnreadMessageCount();
             getUsers();
         });
-        return () => { socket?.off("newMessage"); socket?.off("newNotif") }
-    }, [socket, countUnread, getUnreadMessageCount]);
+        return () => socket?.off("newMessage");
+    }, [socket, countUnread, getUnreadMessageCount, unreadNotificationsCount]);
 
     return (
 

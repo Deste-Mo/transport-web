@@ -14,8 +14,10 @@ import {
     allSavedOffers,
     setSavedOffer,
     retireSavedOffer,
-    getOfferById
+    getOfferById,
+    setavailableOffer
 } from '../models/offreModel.js';
+import { io } from '../socket/socket.js';
 
 // handle the offer publication and register the offer for a user in the profile page
 
@@ -71,7 +73,7 @@ export const newPublication = async (req, res) => {
         const offer = await createOffer(data);
 
         if (offer) {
-            return res.status(200).json({ user: offer });
+            return res.status(200).json({ offer: offer });
         } else {
             return res.status(400).json({ error: "Erreur lors de la modification de l'image de profile" });
         }
@@ -116,7 +118,7 @@ export const suggestionOffers = async (req, res) => {
     try {
         const result = await latestOffers(userId);
 
-        if (!result) return result.json({ error: "No offer availaible" })
+        if (!result[0]) return result.json({ error: "No offer availaible", suggestions: {} })
 
         return res.status(200).json({ suggestions: result });
     } catch (error) {
@@ -316,6 +318,24 @@ export const setUnavailableOfferForUser = async (req, res) => {
 
         if (result) {
             res.status(200).json({ message: "Publication indisponible maintenant." });
+        } else {
+            res.status(404).json({ message: "Erreur, publication non trouvée" })
+        }
+
+    } catch (error) {
+        // console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+}
+
+export const setAvailableOfferForUser = async (req, res) => {
+    try {
+        const offerId = req.params.offerId;
+
+        const result = await setavailableOffer(offerId);
+
+        if (result) {
+            res.status(200).json({ message: "Publication disponible maintenant." });
         } else {
             res.status(404).json({ message: "Erreur, publication non trouvée" })
         }

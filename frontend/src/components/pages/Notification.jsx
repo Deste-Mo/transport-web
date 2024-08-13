@@ -5,13 +5,15 @@ import { useApp } from "../../context/AppProvider.jsx";
 import { useAuth } from "../../context/AuthProvider.jsx";
 import { SERVERLINK } from "../../constants/index.js";
 import { useNotification } from "../../context/NotficationProvider.jsx";
+import { useUser } from "../../context/UserProvider.jsx";
 
-export function Notification({propos, date, spec, icon = false, viewed = false}) {
+export function Notification({notification, spec, icon = false, viewed = false}) {
 
     const [vues, setVues] = useState(false);
     const notifid = spec;
     const { token } = useAuth();
     const { timeSince } = useApp();
+    const {goToUserProfile} = useUser();
 
     const { getNotifications, getUnreadNotifications } = useNotification()
     const navigate = useNavigate()
@@ -49,23 +51,24 @@ export function Notification({propos, date, spec, icon = false, viewed = false})
     }
 
     useEffect(() => {
-        setVues(viewed)
+        setVues(notification.viewed);
     }, [viewed]);
     
     const handleClick = () => {
+        notification.link && localStorage.setItem("offerNotifId", notification.link);
         !vues && handleViewed();
-        navigate(`/notification/${notifid}`);
+        goToUserProfile(notification.senderid);
     }
     
     return (
         <div 
-             className={`flex flex-col gap-6 rounded-xl p-4  group transition-color duration-300  border  ${viewed || vues ? "bg-white-100 border-black-0 dark:bg-white-10 dark:border-none" : "bg-primary-40 border-primary-40"}`}>
+             className={`flex flex-col gap-6 rounded-xl p-4  group transition-color duration-300  border  ${notification.viewed || vues ? "bg-white-100 border-black-0 dark:bg-white-10 dark:border-none" : "bg-primary-40 border-primary-40"}`}>
             <div className="flex items-center justify-between w-full">
                 <div className="flex items-start gap-2 flex-col" onClick={handleClick}>
-                    <p className="text-base text-black-100 dark:text-white-100 group-hover:underline cursor-pointer">{propos}</p>
+                    <p className="text-base text-black-100 dark:text-white-100 group-hover:underline cursor-pointer">{notification.content}</p>
                     <div className="flex  gap-1  justify-start items-center">
                         <div className={`size-2 rounded-full ${viewed || vues ? 'bg-black-60' : 'bg-primary-100'}`}></div>
-                        <p className="text-small-1 text-black-60 dark:text-white-100 dark:font-sm">{timeSince(date, 2)}</p>
+                        <p className="text-small-1 text-black-60 dark:text-white-100 dark:font-sm">{timeSince(notification.notifdate, 2)}</p>
                     </div>
 
                 </div>

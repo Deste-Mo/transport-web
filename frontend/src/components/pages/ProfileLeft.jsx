@@ -4,6 +4,7 @@ import ProfileLeftLoading from "../loader/ProfileLeftLoading.jsx";
 import { useEffect, useState } from "react";
 import { useApp } from "../../context/AppProvider.jsx";
 import { useUser } from "../../context/UserProvider.jsx";
+import { useOffer } from "../../context/OfferProvider.jsx";
 
 
 export const ProfileLeft = ({
@@ -15,14 +16,22 @@ export const ProfileLeft = ({
                             }) => {
     const navigate = useNavigate();
 
-    const {followersCount, getFriends} = useUser();
+    const { followersCount, getFriends, friends } = useUser();
+    const {
+        getCurrentUserOffers,
+        pubNumber
+    } = useOffer();
 
     useEffect(() => {
         getFriends();
-    }, [followersCount, getFriends]);
+    }, []);
+
+    useEffect(() => {
+        getCurrentUserOffers();
+    }, [])
 
     return (
-            <div className="flex flex-col gap-6 rounded-xl shadow-sm border border-black-0 p-4 bg-white-100 dark:bg-black-100 dark:border-none w-full">
+            <div className="flex flex-col gap-6 rounded-xl shadow-sm border border-black-0 p-4 bg-white-100 dark:bg-black-0 dark:border-none w-full">
 
                 <div className="flex flex-col items-center justify-center gap-4">
                     <img
@@ -45,7 +54,7 @@ export const ProfileLeft = ({
                 >
                     <div className="flex items-center justify-between  gap-2">
                         <span>Publication</span>
-                        <span>5</span>
+                    <span>{pubNumber}</span>
                     </div>
                     <div className="flex items-center  justify-between gap-2">
                         <span>Amis</span>

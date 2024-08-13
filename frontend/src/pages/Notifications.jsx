@@ -76,7 +76,8 @@ const Notifications = () => {
           notifications.map((notif) => (
             <Notification
               key={notif.notifid}
-              propos={notif.content}
+              notification={notif}
+              viewed={notif.viewed}
               spec={notif.sendnotifid}
               viewed={notif.viewed}
               date={notif.notifdate}

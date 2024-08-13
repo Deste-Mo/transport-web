@@ -23,11 +23,13 @@ const NewOffer = () => {
     const {handleInputChange, checkFieldError, handleError} = useForm();
     const {setShowBackIcon} = useAnimation();
 
-    const {getCurrentUserOffers, updateOffer, setUpdateOffer} = useOffer();
+  const { getCurrentUserOffers, updateOffer, setUpdateOffer } = useOffer();
+
+  const titreData = ['Transport de marchandise', 'Marchandise à transporter'];
 
     const [formData, setFormData] = useState({
         imgUrl: '',
-        title: '',
+    title: "Transport de marchandise",
         description: '',
         depart: '',
         destination: '',
@@ -35,11 +37,38 @@ const NewOffer = () => {
         scheduledDate: ''
     });
 
+  useEffect(() => {
+    updateOffer && setFormData({
+      imgUrl: updateOffer.imgurl,
+      title: !updateOffer.title || updateOffer.title === 'undefined' || updateOffer.title === undefined ? "Transport de marchandise" : updateOffer.title,
+      description: updateOffer.description,
+      depart: updateOffer.depart,
+      destination: updateOffer.dest,
+      capacity: updateOffer.capacity,
+      scheduledDate: '',
+    })
+  }, [updateOffer]);
+
+  const { token, personalInformation } = useAuth();
+
+
+  const [file, setFile] = useState({
+    name: '',
+    path: '',
+  });
+
+  useEffect(() => {
+    const getOfferById = async () => {
+      localStorage.getItem("offer") && setUpdateOffer(await JSON.parse(localStorage.getItem("offer")))
+    }
+    getOfferById();
+  }, []);
+
     const reset = () => {
         localStorage.removeItem("offer");
         setFormData({
             imgUrl: '',
-            title: '',
+      title: 'Transport de marchandise',
             description: '',
             depart: '',
             destination: '',
@@ -52,8 +81,6 @@ const NewOffer = () => {
         })
     }
 
-    const titreData = ['Transport de marchandise', 'Marchandise à transporter']
-
     const [errorData, setErrorData] = useState({
         imgUrl: false,
         title: false,
@@ -65,9 +92,6 @@ const NewOffer = () => {
     })
 
     const handleCreateOffer = async (e) => {
-
-        const {imgUrl, title, description, depart, destination, capacity, scheduledDate} = formData;
-
 
         e.preventDefault();
 
@@ -88,6 +112,9 @@ const NewOffer = () => {
             });
 
             const content = ` ${personalInformation.fullName} vient de publier une Offre`;
+      const offer = await response.json();
+
+      const offerId = await offer.offerid;
 
             const sendNotifs = await fetch(SERVERLINK + "/api/notifs/sendnotifs", {
                 method: 'POST',
@@ -95,12 +122,12 @@ const NewOffer = () => {
                     'Content-Type': 'application/json',
                     'token': token
                 },
-                body: JSON.stringify({content})
+        body: JSON.stringify({ content, offerId })
             });
 
             setFormData({
                 imgUrl: '',
-                title: '',
+        title: 'Transport de marchandise',
                 description: '',
                 depart: '',
                 destination: '',
@@ -143,6 +170,7 @@ const NewOffer = () => {
             const res = await response.json();
 
             const content = ` ${personalInformation.fullName} a modifié sa publication d'offre`;
+      const offerId = updateOffer.offerid;
 
 
             const sendNotifs = await fetch(SERVERLINK + "/api/notifs/sendnotifs", {
@@ -151,7 +179,7 @@ const NewOffer = () => {
                     'Content-Type': 'application/json',
                     'token': token
                 },
-                body: JSON.stringify({content})
+        body: JSON.stringify({ content, offerId })
             });
 
             setUpdateOffer(await res.offer);
@@ -171,42 +199,12 @@ const NewOffer = () => {
     }
 
     const handleDateInput = (e) => {
-        setFormData({...formData, [e.target.name]: e.target.value});
+    setFormData({ ...formData, [e.target.name]: e.target.value });
     }
-
-
 
     useEffect(() => {
         checkFieldError(errorData)
     }, [errorData])
-
-    useEffect(() => {
-        updateOffer && setFormData({
-            imgUrl: updateOffer.imgurl,
-            title: updateOffer.title,
-            description: updateOffer.description,
-            depart: updateOffer.depart,
-            destination: updateOffer.dest,
-            capacity: updateOffer.capacity,
-            scheduledDate: '',
-        })
-    }, [updateOffer]);
-
-    const {token, personalInformation} = useAuth();
-
-
-    const [file, setFile] = useState({
-        name: '',
-        path: '',
-    });
-
-    useEffect(() => {
-        setShowBackIcon(true);
-        const getOfferToUpdate = async () => {
-            localStorage.getItem("offer") && setUpdateOffer(await JSON.parse(localStorage.getItem("offer")))
-        }
-        getOfferToUpdate();
-    }, []);
 
     return (
         <motion.section
@@ -219,10 +217,8 @@ const NewOffer = () => {
                 <div className="flex flex-col gap-6">
                     <div className=" flex flex-col gap-4">
 
-                        <div
-                            className="w-full  h-60 bg-black-10 rounded-xl flex flex-col justify-center items-center overflow-hidden">
-                            <img className={'w-full h-full object-cover rounded-xl '} src={file?.path || ''}
-                                 alt="Choisez une image"/>
+          <div className="w-full  h-60 bg-black-10 rounded-xl flex flex-col justify-center items-center overflow-hidden">
+            <img className='w-full h-full object-cover rounded-xl' src={file.path ? file.path : SERVERLINK + "/defaultCar.jpg"} alt="Choisez une image" />
                         </div>
                         <FileInput className='w-full'
                                    name='imgUrl'
@@ -235,6 +231,20 @@ const NewOffer = () => {
 
                     {/* Informations sections */}
                     <div className="flex flex-col gap-4">
+          <SelectInput
+            className="w-full"
+            title="Objet"
+            name="title"
+            variant="fill"
+            options={titreData.map((titre) => ({
+              option: titre,
+            }))}
+            icon="bi bi-caret-down-fill"
+            onError={handleError(setErrorData)}
+            onChange={(e) => handleInputChange(setFormData, e)}
+            value={formData.title}
+            block
+          />
                         <TextArea
                             titleIcon="bi bi-pencil"
                             className="w-full"

@@ -38,8 +38,9 @@ const OfferProvider = ({ children }) => {
     );
     setPubNumber(await response?.data?.all.length);
     setCurrentUserOffers(await response?.data?.all);
-    setSuggestedOffers(await response?.data.all);
-  };
+        setPubNumber(await response?.data?.all.length)
+    }
+
 
   const getSavedOffers = async () => {
     const response = await axios.get(`${SERVERLINK}/api/offres/savedoffers`, {
@@ -59,12 +60,50 @@ const OfferProvider = ({ children }) => {
       }
     );
     setSuggestedOffers(await response?.data?.suggestions);
-  };
+    }
+
+    const setUnavalaibleOffer = async (offerId) => {
+
+        const response = await fetch(SERVERLINK + '/api/offres/setunavailableoffer/' + await offerId, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "token": token
+            }
+        });
+
+        await response.json();
+    }
+
+    const setAvalaibleOffer = async (offerId) => {
+
+        const response = await fetch(SERVERLINK + '/api/offres/setavailableoffer/' + await offerId, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "token": token
+            }
+        });
+
+        await response.json();
+    }
+
+    const deleteOffer = async (offerId) => {
+
+        const response = await fetch(SERVERLINK + '/api/offres/deleteofferforuser/' + await offerId, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "token": token
+            }
+        });
+
+        await response.json();
+    }
 
   const saveOffer = async (offerId) => {
-    const response = await fetch(
-      SERVERLINK + "/api/offres/saveoffer/" + (await offerId),
-      {
+
+        const response = await fetch(SERVERLINK + '/api/offres/saveoffer/' + await offerId, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -91,19 +130,15 @@ const OfferProvider = ({ children }) => {
     await response.json();
   };
 
-  const getOfferToUpdate = async (offerId) => {
+    const getOfferById = async (offerId) => {
     // console.log("My token: " + token)
 
-    const response = await axios.get(
-      SERVERLINK + "/api/offres/offreToUp/" + offerId,
-      {
-        headers: { token: token },
-      }
-    );
-    const offerRes = await response?.data;
-    // console.log(await offerRes)
-    setUpdateOffer(await offerRes.offer);
-  };
+        const response = await axios.get(SERVERLINK + '/api/offres/offreToUp/' + offerId, {
+            headers: { token: token }
+        });
+        setUpdateOffer(await response?.data?.offer);
+        localStorage.removeItem("offerNotifId");
+    }
 
   return (
     <OfferContext.Provider
@@ -117,7 +152,7 @@ const OfferProvider = ({ children }) => {
         getSavedOffers,
         getSuggestedOffers,
         getCurrentUserOffers,
-        getOfferToUpdate,
+            getOfferById,
         saveOffer,
         retireOffer,
         updateOffer,
@@ -125,8 +160,10 @@ const OfferProvider = ({ children }) => {
         pubNumber,
         savedPubNumber,
         setSavedPubNumber,
-      }}
-    >
+            setUnavalaibleOffer,
+            setAvalaibleOffer,
+            deleteOffer
+        }}>
       {children}
     </OfferContext.Provider>
   );

@@ -1,5 +1,6 @@
 import express from 'express';
 import { getMe, login, refreshAccessToken, signup, setImageProfile, logout } from '../controllers/authController.js';
+import { forgotPassword, resetPassword } from '../controllers/passwordController.js';
 import protectedRoute from '../middlewares/protectedRoute.js';
 import upload from '../middlewares/uploadMiddle.js';
 
@@ -15,6 +16,10 @@ router.post('/signup',signup);
 router.post('/login',login);
 
 router.post('/logout', logout);
+
+router.post('/forgot-password', forgotPassword);
+
+router.post('/reset-password', resetPassword);
 
 // router.post('/token', refreshAccessToken)
 

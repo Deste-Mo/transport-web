@@ -12,6 +12,7 @@ import { TOAST_TYPE } from "../../../constants/index.js";
 import { useAuth } from "../../../context/AuthProvider.jsx";
 import { useOffer } from "../../../context/OfferProvider.jsx";
 import Badge from "../../ui/Badge.jsx";
+import { useUser } from "../../../context/UserProvider.jsx";
 
 const offerDetails = `Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet Lorem ipsum
               dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit
@@ -31,6 +32,7 @@ const OfferCard = ({
   const [loading, setLoading] = useState(true);
   const [popupVisible, setPopupVisible] = useState(false);
   const { timeSince } = useApp();
+  const { goToUserProfile } = useUser();
   
   const { saveOffer, retireOffer, getSavedOffers } = useOffer();
 
@@ -80,7 +82,7 @@ const OfferCard = ({
         <Badge text={sug?.capacity} icon="bi bi-truck" />
       </div>
       <div
-        className={`relative flex flex-col gap-3 w-full items-center ${className} bg-white-100  dark:bg-black-100 dark:text-white-100 dark:font-sm dark:bg-white-10 dark:border-none rounded-xl p-4 border border-black-0`}
+        className={`relative flex flex-col gap-3 w-full items-center ${className} bg-white-100  dark:bg-black-100 dark:text-white-100 dark:font-sm dark:bg-white-10 dark:border-none rounded-xl p-4 max-md:p-2 border border-black-0`}
       >
         {popupVisible && (
           <div className="absolute top-10 right-10">
@@ -110,14 +112,14 @@ const OfferCard = ({
             </div>
           </div>
           <div className="flex flex-col gap-2 items-center">
-            {forCurrentUser && (
+            
               <Icon
                 onClick={() => toggleOfferCardPopup()}
                 size="sm"
                 variant="ghost"
                 icon="bi bi-three-dots-vertical"
               />
-            )}{" "}
+            
           </div>
         </div>
         <div className="w-full flex flex-col gap-4 items-start justify-cente  rounded-2xl  ">
@@ -144,7 +146,7 @@ const OfferCard = ({
         {detailedProfile && (
             <img
                 src={offerImage}
-                className="w-full h-[256px] object-cover rounded-xl"
+                className="w-full h-[256px] object-cover rounded-md"
             />
         )}
         {!forCurrentUser && (
@@ -155,11 +157,11 @@ const OfferCard = ({
               size="sm"
               variant="secondary"
               icon="bi bi-chat"
-              rounded="full"
+              block              
             >
               Contacter
             </Button>
-            {saved ? (
+            {/* {saved ? (
               <Button
                 onClick={handleRevokeSavedOffer}
                 size="sm"
@@ -179,7 +181,7 @@ const OfferCard = ({
               >
                 Sauvegarder
               </Button>
-            )}
+            )} */}
           </div>
         )}
       </div>
@@ -191,7 +193,7 @@ export default OfferCard;
 const OfferCardPopup = ({ setPopupVisible, offer }) => {
   const { setMessagePopup } = useAnimation();
 
-  const { handleOfferToUpdate, handleOffersForUser, setUpdateOffer } = useApp();
+  const { getOfferById, getCurrentUserOffers, setUpdateOffer, setUnavalaibleOffer, setAvalaibleOffer, deleteOffer } = useOffer();
 
   const { token } = useAuth();
 
@@ -199,45 +201,44 @@ const OfferCardPopup = ({ setPopupVisible, offer }) => {
 
   const handleDeletePost = async () => {
     // TODO :
-    const response = await fetch(
-      SERVERLINK + "/api/offres//deleteofferforuser/" + offer.offerid,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-      }
-    );
-
-    const verification = await response.json();
-
-    handleOffersForUser();
-
+    deleteOffer(offer.offerid);
+    getCurrentUserOffers();
     localStorage.removeItem("offer");
     setUpdateOffer();
 
     // - Deleting the post
-    setPopupVisible(false);
-    setMessagePopup("Offre supprimé avec success", TOAST_TYPE.success);
+    // setPopupVisible(false);
+    // setMessagePopup("Offre supprimé avec success", TOAST_TYPE.success);
   };
 
   const handleEditPost = () => {
     // TODO :
-    handleOfferToUpdate(offer.offerid);
-    localStorage.setItem("offer", JSON.stringify(offer));
+    getOfferById(offer.offerid);
+    localStorage.setItem('offer', JSON.stringify(offer))
     // - Editing the post
     setPopupVisible(false);
   };
 
   const handleExpirePost = () => {
     // TODO :
-
+    setUnavalaibleOffer(offer.offerid);
+    getCurrentUserOffers();
     setPopupVisible(false);
-    setMessagePopup(
-      "L'offre est maitenant rendu indisponible",
-      TOAST_TYPE.success
-    );
+    // setMessagePopup(
+    //   "L'offre est maitenant rendu indisponible",
+    //   TOAST_TYPE.success
+    // );
+  };
+
+  const handleUnexpirePost = () => {
+    // TODO :
+    setAvalaibleOffer(offer.offerid);
+    getCurrentUserOffers();
+    setPopupVisible(false);
+    // setMessagePopup(
+    //   "L'offre est maitenant rendu indisponible",
+    //   TOAST_TYPE.success
+    // );
   };
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -246,13 +247,12 @@ const OfferCardPopup = ({ setPopupVisible, offer }) => {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
   return (
     <div
       ref={selectRef}
-      className={`flex select-none flex-col items-center justify-center gap-4 w-[230px] p-2 rounded-xl bg-white-100 dark:bg-white-10 dark:backdrop-blur-sm shadow-sm border border-black-0`}
+      className={`flex select-none flex-col items-center justify-center gap-4 w-[230px] p-2 rounded-xl bg-white-100 dark:bg-white-0 dark:backdrop-blur-sm shadow-sm border border-black-0`}
     >
       <SettingItem
         onClick={() => handleDeletePost()}
@@ -264,11 +264,20 @@ const OfferCardPopup = ({ setPopupVisible, offer }) => {
         name="Modifier"
         icon="bi bi-pencil"
       />
+      {
+        offer.dispo ?
       <SettingItem
         onClick={() => handleExpirePost()}
         name="Rendre Indisponible"
-        icon="bi bi-arrows"
+        icon="bi bi-repeat"
       />
+          :
+          <SettingItem
+            onClick={() => handleUnexpirePost()}
+            name="Rendre Disponible"
+            icon="bi bi-circle"
+          />
+      }
     </div>
   );
 };

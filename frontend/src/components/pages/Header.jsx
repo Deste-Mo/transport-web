@@ -10,38 +10,44 @@ import Icon from "../ui/Icon.jsx";
 
 export function Header({ profileImage }) {
   const { countUnread, getUnreadMessageCount } = useApp();
-  const { unreadNotificationsCount, getUnreadNotifications } =
-    useNotification();
+    const { unreadNotificationsCount, getUnreadNotifications } = useNotification();
   const { getFriends } = useUser();
 
   const NAV_LINKS = [
     {
       name: "Accueil",
       icon: "bi bi-grid",
+      activeIcon : "bi bi-grid-fill",
       path: "/",
       number: 0,
     },
     {
       name: "Discussion",
       icon: "bi bi-chat",
+      activeIcon : "bi bi-chat-fill",
+
       path: "/discussion",
       number: countUnread,
     },
     {
       name: "Offres",
-      icon: "bi bi-briefcase",
+      activeIcon : "bi bi-truck",
+
+      icon: "bi bi-truck",
       path: "/offer",
-      number: 3,
+            number: 0,
     },
     {
-      name: "Amis",
-      icon: "bi bi-person",
+      name: "Suivis",
+      icon: "bi bi-broadcast",
+      activeIcon: "bi bi-broadcast",
       path: "/friend",
       number: 0,
     },
     {
       name: "Notifications",
       icon: "bi bi-bell",
+      activeIcon: "bi bi-bell-fill",
       path: "/notification",
       number: unreadNotificationsCount,
     },
@@ -49,11 +55,11 @@ export function Header({ profileImage }) {
 
   useEffect(() => {
     getUnreadMessageCount();
-  }, [countUnread, getUnreadMessageCount]);
+    }, [countUnread])
 
   useEffect(() => {
     getUnreadNotifications();
-  }, [unreadNotificationsCount, getUnreadNotifications]);
+    }, [unreadNotificationsCount]);
 
   useEffect(() => {
     getFriends();
@@ -81,7 +87,7 @@ const MobileHeader = ({ className, NAV_LINKS, profileImage }) => {
   const { showBackIcon } = useAnimation();
   return (
     <header
-      className={`flex justify-between max-md:justify-center  items-center   z-40 ${className}`}
+      className={`flex justify-between max-md:justify-center  items-center bi  z-40 ${className}`}
     >
       <div className="flex  items-center w-full justify-between max-md:items-center gap-20 max-lg:gap-10 py-4 px-8 fixed left-0 top-0 bg-white-100 dark:bg-white-0 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md z-50">
         <div className="flex items-center gap-14 logo ">
@@ -92,6 +98,7 @@ const MobileHeader = ({ className, NAV_LINKS, profileImage }) => {
               variant="secondary"
               onClick={() => navigate(-1)}
             />
+
           )}
           <h1 className="text-subtitle-2 max-lg:text-subtitle-3">
             Media <span className="text-primary-100">Trans</span>
@@ -111,6 +118,7 @@ const MobileHeader = ({ className, NAV_LINKS, profileImage }) => {
                 navlink.path.toLowerCase() === location.pathname.toLowerCase()
               }
               onClick={() => navigate(navlink.path)}
+                            number={navlink.number}
             />
           ))}
         </ul>
@@ -137,6 +145,7 @@ const DesktopHeader = ({ className, NAV_LINKS, profileImage }) => {
             <NavLink
               key={navlink.name}
               {...navlink}
+              number={navlink.number}
               active={
                 navlink.path.toLowerCase() === location.pathname.toLowerCase()
               }
@@ -175,6 +184,7 @@ const NavLink = ({
   onClick,
   number = 0,
   forMobile = false,
+  activeIcon = "",
 }) => {
   return (
     <li
@@ -183,7 +193,7 @@ const NavLink = ({
         active ? "text-primary-100" : "text-black-100 dark:text-white-100"
       } `}
     >
-      <i className={`${active ? icon + "-fill" : icon}  text-icon`}></i>
+      <i className={`${active ? activeIcon : icon}  text-icon`}></i>
       <span
         className={`${
           forMobile ? "text-small-2" : "text-small-1"

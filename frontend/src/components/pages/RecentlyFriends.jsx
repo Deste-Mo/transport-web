@@ -20,54 +20,28 @@ const RecentlyFriends = ({
                              showAddFriendButton = false,
                              showProfileButton = true,
                              className,
-                                
+    isFriend,
                          }) => {
-    const {token, personalInformation} = useAuth();
-    const MAX_NAME_LEN = 25;
+    const { token, personalInformation, profileInfo } = useAuth();
+
 
     const {loading} = useApp();
     const {
         getFriends,
         getUsers,
         followUser,
+        goToUserProfile,
         unFollowUsers,// TODO : Forget the usage (empty function)
     }
         = useUser();
 
-    const {ActiveUsers} = useSocketContext();
+    const { ActiveUsers } = useSocketContext();
 
     const navigate = useNavigate();
 
     const id = spec;
 
     const isOnline = ActiveUsers.includes(id);
-
-    const handleFollow = async () => {
-        const response = await fetch(SERVERLINK + "/api/profile/follow/" + id, {
-            method: "POST", headers: {
-                "Content-Type": "application/json", token: token,
-            },
-        });
-
-        const answer = await response.json();
-        getFriends();
-        handleUsersToShow();
-        console.log(answer);
-    };
-
-    const handleUnfollow = async () => {
-        const response = await fetch(SERVERLINK + "/api/profile/unfollow/" + id, {
-            method: "POST", headers: {
-                "Content-Type": "application/json", token: token,
-            },
-        });
-
-        const answer = await response.json();
-
-        getFriends();
-        handleUsersToShow();
-        console.log(answer);
-    };
 
     const handleClick = () => {
         localStorage.setItem(
@@ -87,13 +61,13 @@ const RecentlyFriends = ({
 
     return (
         <div
-            className={`flex items-center flex-wrap justify-between gap-3 bg-white-100 p-4 hover:bg-primary-20 group rounded-xl dark:bg-black-100 text-black-100 dark:text-white-100 ${className}`}
+            className={`flex items-center flex-wrap justify-between gap-3 bg-white-100 p-4 hover:bg-primary-20 group rounded-xl dark:bg-white-0 text-black-100 dark:text-white-100 ${className}`}
         >
             <div className="flex items-center relative gap-2">
-                <img src={image} alt="" className="h-12 w-12 rounded-full cursor-pointer " onClick={navigateToProfile}/>
-                <div className="flex flex-col text-small-1">
-                    <span className="group-hover:underline cursor-pointer " onClick={navigateToProfile}>
-                        {name.slice(0,MAX_NAME_LEN)}{name.length > MAX_NAME_LEN && "..."}
+                <img src={image} alt="" className="size-10 rounded-full cursor-pointer" onClick={() => goToUserProfile(id)}/>
+                <div className="flex flex-col">
+                    <span className="group-hover:underline cursor-pointer text-small-1" onClick={() => goToUserProfile(id)}>
+                        {name}{" "}
                         {isOnline && (
                             <span className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-primary-100 inline-block"></span>)}
                     </span>
@@ -102,21 +76,19 @@ const RecentlyFriends = ({
                     </span>
                 </div>
             </div>
-            <div className="flex items-center gap-8">
+            <div className="flex items-center justify-center max-sm:w-full gap-8">
                 
-
                 {showMessageButton && (
                     <i
                         onClick={handleClick}
                         className="bi bi-chat text-icon cursor-pointer"
                     ></i>
                 )}
-                {showAddFriendButton && (
+                {(showAddFriendButton && personalInformation.id !== spec) && (
                     <Button
                         variant={"ghost"}
                         className="text-primary-100"
-                        size="sm"
-                        onClick={() => followUser(id, personalInformation)}
+                        onClick={() => followUser(profileInfo.id, id, personalInformation)}
                     >
                         Suivre
                     </Button>
@@ -124,7 +96,7 @@ const RecentlyFriends = ({
                 {showRemoveFriendButton && (
                     <Button
                         variant="ghost"
-                        onClick={() => unFollowUsers(id)}
+                        onClick={() => unFollowUsers(profileInfo.id, id)}
                         className="text-danger-100"
                         size="sm"
                     >

@@ -2,11 +2,14 @@ import {createContext, useContext, useState} from "react";
 import {SERVERLINK} from "../constants/index.js";
 import {useAuth} from "./AuthProvider.jsx";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const FriendContext = createContext({});
 
 const UserProvider = ({children}) => {
     const {token} = useAuth();
+
+    const navigate = useNavigate();
     
     const [friends, setFriends] = useState([]);
     const [loadingFriend, setLoadingFriend] = useState(true);
@@ -20,7 +23,7 @@ const UserProvider = ({children}) => {
             headers: { token }
         })
 
-        setFriends(response?.data?.friends);
+        setFriends(await response?.data?.friends);
         setFollowersCount(await response?.data.friends.length);
         setFriendFollowerCount(await response?.data.profile.length);
         setProfileFriends(await response?.data.profile);
@@ -29,7 +32,7 @@ const UserProvider = ({children}) => {
         const response = await axios.get(`${SERVERLINK}/api/messages/users`, { headers: { token } })
         setUsers(await response?.data?.allUsers);
     }
-    const unFollowUsers = async (id) => {
+    const unFollowUsers = async (profileInfoId, id) => {
         const response = await fetch(SERVERLINK + "/api/profile/unfollow/" + id, {
             method: "POST",
             headers: {
@@ -37,12 +40,15 @@ const UserProvider = ({children}) => {
                 token: token,
             },
         });
-
-        getFriends(id);
+        getFriends(profileInfoId);
         getUsers();
     };
 
-    const followUser = async (id, me) => {
+    const goToUserProfile = (id) => {
+        navigate(`/profile/${id}`);
+    }
+
+    const followUser = async (profileInfoId, id, me) => {
 
         const content = me.fullName + " Vous suit desormais.";
 
@@ -62,7 +68,8 @@ const UserProvider = ({children}) => {
             },
             body: JSON.stringify({ content })
         });
-        getFriends(id);
+
+        getFriends(profileInfoId);
         getUsers();
     };
     
@@ -79,6 +86,7 @@ const UserProvider = ({children}) => {
                 friendFollowerCount,
                 profileFriends,
                 setFriends,
+                goToUserProfile
             }}>
         {children}
       </FriendContext.Provider>

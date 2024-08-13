@@ -32,7 +32,7 @@ const globalButtonVariants = {
     textSize: {
         md: "text-base",
         lg: "text-base",
-        sm: "text-small-2",
+        sm: "text-small-2 max-md:text-small-3",
     },
     iconSize: {
         md: "",

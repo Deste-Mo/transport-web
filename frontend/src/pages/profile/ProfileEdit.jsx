@@ -23,7 +23,7 @@ const ProfileEdit = ({onClick}) => {
     const [formData, setFormData] = useState({
         profileimage: null,
         firstname: personalInformation?.firstname,
-        lastname: personalInformation?.lastname,
+    lastname: !personalInformation?.lastname ? '' : personalInformation?.lastname,
         usercin: personalInformation?.usercin,
         companynumber: personalInformation?.companynumber,
         phone: personalInformation?.phone,

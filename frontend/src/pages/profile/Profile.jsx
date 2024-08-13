@@ -14,14 +14,14 @@ import Offers from "../Offers.jsx";
 
 export default function Profile() {
 
-    const {id} = useParams();
+  const { id } = useParams();
 
     const navigate = useNavigate();
 
-    const {personalInformation, getInformation, token, profileInfo} = useAuth();
+  const { personalInformation, getInformation, token, profileInfo } = useAuth();
 
-    const {getFriends, followersCount, friendFollowerCount, profileFriends} = useUser();
-    const {getSavedOffers, savedOffers, currentUserOffers, getCurrentUserOffers} = useOffer();
+  const { getFriends, followersCount, friendFollowerCount, profileFriends, friends } = useUser();
+  const { getSavedOffers, savedOffers, currentUserOffers, getCurrentUserOffers } = useOffer();
 
     const user = personalInformation;
 
@@ -54,10 +54,9 @@ export default function Profile() {
                     forCurrentUser={profileInfo.id === personalInformation.id}
                 />
             </div>
-            <div className="flex flex-col gap-6 max-w-[">
-                <SubHeader icon="bi bi-person-fill" name="Amis"
-                           rightContent={<p className="text-black-100 dark:text-white-100">{followersCount}</p>}/>
-                <div className="bg-white-100 dark:bg-black-100 flex flex-col gap-4 rounded-lg p-2">
+      <div className="flex flex-col gap-6">
+        <SubHeader icon="bi bi-broadcast" name={`Suivi(e)${(friendFollowerCount > 1) ? 's' : ''}`} rightContent={<p className="text-black-100 dark:text-white-100">{friendFollowerCount}</p>} />
+                <div className="bg-white-100 dark:bg-white-0 flex flex-col gap-4 rounded-xl p-2">
                     {profileFriends.length > 0 ? (
                         profileFriends
                             .slice(0, 4)
@@ -69,7 +68,8 @@ export default function Profile() {
                                     name={friend.firstname + (!friend.lastname ? '' : (" " + friend.lastname))}
                                     image={SERVERLINK + "/" + friend.profileimage}
                                     message
-                                    showRemoveFriendButton
+                  showRemoveFriendButton={friends.length > 0 ? friends.find(fr => fr.userid === friend.userid) : false}
+                  showAddFriendButton={friends.length > 0 ? !friends.find(fr => fr.userid === friend.userid) : false}
                                 />
                             ))
                     ) : (

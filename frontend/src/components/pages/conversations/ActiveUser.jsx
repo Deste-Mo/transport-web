@@ -11,7 +11,7 @@ const ActiveUser = ({ friend }) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        localStorage.setItem('userToChat', JSON.stringify({ id: friend.userid, fullName: friend.firstname + " " + friend.lastname, accounttype: friend.accounttype, pic: SERVERLINK + "/" + friend.profileimage }))
+        localStorage.setItem('userToChat', JSON.stringify({ id: friend.userid, fullName: friend.firstname + (!friend.lastname ? '' : (" " + friend.lastname)), accounttype: friend.accounttype, pic: SERVERLINK + "/" + friend.profileimage }))
         navigate('/message')
     }
 

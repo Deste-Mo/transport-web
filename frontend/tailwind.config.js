@@ -81,7 +81,7 @@ export default {
       base: "16px",
       "small-1": "14px",
       "small-2": "12px",
-      "small-3" : "10px",
+      "small-3" : "11px",
       icon: "20px",
     },
   },

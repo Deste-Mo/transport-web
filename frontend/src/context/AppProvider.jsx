@@ -51,6 +51,7 @@ const AppProvider = ({ children }) => {
     }
     const getUserMessages = async (endOfMessagesRef) => {
 
+
         const scrollToBottom = () => {
             endOfMessagesRef.current?.scrollIntoView();
         };

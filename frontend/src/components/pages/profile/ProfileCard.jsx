@@ -20,8 +20,8 @@ const ProfileCard = ({
                      }) => {
     const navigate = useNavigate();
 
-    const {followUser, unFollowUsers, friends} = useUser();
-    const {personalInformation} = useAuth();
+    const { followUser, unFollowUsers, friends } = useUser();
+    const { personalInformation, profileInfo } = useAuth();
     const [loading, setLoading] = useState(true);
     const [isFriend, setIsFriend] = useState(false);
 
@@ -87,7 +87,7 @@ const ProfileCard = ({
                             variant="danger"
                             size="md"
                             icon="bi bi-dash"
-                            onClick={() => unFollowUsers(id)}
+                        onClick={() => unFollowUsers(profileInfo.id, id)}
                         >
                             Retirer
                         </Button>
@@ -97,7 +97,7 @@ const ProfileCard = ({
                             block
                             size="md"
                             icon="bi bi-plus-lg"
-                            onClick={() => followUser(id, personalInformation)}
+                            onClick={() => followUser(profileInfo.id, id, personalInformation)}
                         >
                             Suivre
                         </Button>)

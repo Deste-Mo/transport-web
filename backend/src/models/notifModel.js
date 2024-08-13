@@ -2,7 +2,7 @@ import pool from '../db/connexion.js';
 
 export const allNotifs = async (userId) => {
 
-    const query = "SELECT *, S.sendnotifid FROM notifications N INNER JOIN sendnotification S ON N.notifid = S.notifid WHERE S.userid = $1 ORDER BY N.notifid DESC";
+    const query = "SELECT N.*,S.sendnotifid, S.viewed FROM notifications N INNER JOIN sendnotification S ON N.notifid = S.notifid WHERE S.userid = $1 ORDER BY N.notifid DESC";
 
     const { rows } = await pool.query(query, [userId]);
 
@@ -11,15 +11,15 @@ export const allNotifs = async (userId) => {
     return rows;
 }
 
-export const createNotifs = async (senderId, content) => {
+export const createNotifs = async (senderId, content, offerId) => {
 
-    const query = "INSERT INTO notifications(senderId, content) VALUES ($1, $2) RETURNING *";
+    const query = "INSERT INTO notifications(senderId, content, link) VALUES ($1, $2, $3) RETURNING *";
 
     const sendNotif = "INSERT INTO sendnotification (userid, notifid) SELECT followerid,$2 FROM follow WHERE followeeid = $1 RETURNING *";
 
     const follower = "SELECT followerid FROM follow WHERE followeeid = $1";
 
-    const { rows } = await pool.query(query, [senderId, content]);
+    const { rows } = await pool.query(query, [senderId, content, offerId]);
 
     const notifid = rows[0].notifid;
 
@@ -60,7 +60,7 @@ export const deleteAllNotifications = async (userId) =>{
  // delete a notification
  
  export const deleteNotificationById = async (notifId) =>{
-    const query = "DELETE FROM sendnotification WHERE sendnotifid = $1";
+    const query = "DELETE FROM sendnotification WHERE sendnotifid = $1 RETURNING *";
  
     const result = await pool.query(query, [notifId]);
  

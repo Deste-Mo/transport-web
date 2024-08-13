@@ -11,6 +11,8 @@ import Icon from "../../components/ui/Icon.jsx";
 import {useForm} from "../../context/FormProvider.jsx";
 import {appVariants} from "../../animations/variants.js";
 import {motion} from "framer-motion";
+import { useUser } from "../../context/UserProvider.jsx";
+
 
 const Messages = () => {
 
@@ -18,17 +20,19 @@ const Messages = () => {
 
     const {token} = useAuth();
 
-    const {messages, userToChat, getUnreadMessageCount, getUserMessages} = useApp()
+    const { goToUserProfile } = useUser();
+
+    const { messages, userToChat, getUnreadMessageCount, getUserMessages } = useApp()
 
     const [messInput, setMessInput] = useState("");
 
     const endOfMessagesRef = useRef(null);
 
-    const {ActiveUsers} = useSocketContext();
+    const { ActiveUsers } = useSocketContext();
 
     const [answerMess, setAnswer] = useState(null);
 
-    const {handleInputChange, checkFieldError, handleError} = useForm()
+    const { handleInputChange, checkFieldError, handleError } = useForm()
 
     const [formData, setFormData] = useState({
         fileContent: null,
@@ -58,8 +62,14 @@ const Messages = () => {
     const navigateToProfile = () => navigate(`/profile/${userToChat.id}`)
 
     useEffect(() => {
-        getUserMessages(endOfMessagesRef);
-    }, []);
+        getUserMessages();
+        socket?.on("newMessage", () => {
+            getUserMessages();
+        });
+        return () => socket?.off("newMessage")
+    }, [socket]);
+
+
 
 
     const handleSendMessage = async (e) => {
@@ -105,12 +115,11 @@ const Messages = () => {
             <div
                 className="flex items-center justify-between w-full py-4 px-6 border-0 border-b border-b-black-20  bg-white-10 top-0 z-40">
                 <div className="flex items-center justify-between ">
-                    <Icon variant="ghost" icon="bi bi-chevron-left " onClick={handleClick}/>
-                    <div className="flex items-center gap-2 cursor-pointer group" onClick={navigateToProfile}>
-                        <div className="relative">
-                            <img src={userToChat.pic} className={"size-[54px] rounded-full bg-black-20"}/>
-                            {isOnline ? <span
-                                className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-primary-100 absolute top-0 right-0 block"></span> : null}
+                    <Icon variant="ghost" icon="bi bi-chevron-left " onClick={handleClick} />
+                    <div className="flex items-center gap-2 cursor-pointer">
+                        <div className="relative cursor-pointer" onClick={() => goToUserProfile(userToChat.id)}>
+                            <img src={userToChat.pic} className={"size-[54px] rounded-full bg-black-20"} />
+                            {isOnline ? <span className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-success-100 absolute top-0 right-0 block" ></span> : null}
                         </div>
                         <p className={"text-black-100 dark:text-white-100 text-lead"}>{userToChat.fullName}
                             <span
@@ -118,10 +127,19 @@ const Messages = () => {
                         </p>
                     </div>
                 </div>
-                {/*<Button variant="secondary" size="sm">Profile</Button>*/}
+                <Button variant="secondary" onClick={() => goToUserProfile(userToChat.id)}>Profile</Button>
             </div>
             <div
                 className="flex flex-col gap-4 items-start justify-start h-screen px-6 py-[24px] w-full scrollbar-none overflow-y-scroll ">
+                <div className="flex items-center flex-col self-center gap-3 cursor-pointer pb-3">
+                    <div className="relative cursor-pointer" onClick={() => goToUserProfile(userToChat.id)}>
+                        <img src={userToChat.pic} className={"size-[134px] rounded-full bg-black-20"} />
+                        {isOnline ? <span className="size-[20px] rounded-[50%] ml-2 bg-success-100 absolute top-0 right-0 block" ></span> : null}
+                    </div>
+                    <p className={"text-black-100 flex flex-col items-center justify-center dark:text-white-100 text-lead cursor-pointer hover:underline"} onClick={() => goToUserProfile(userToChat.id)}>{userToChat.fullName}<span
+                        className="text-small-1 text-black-80 dark:text-white-80 block">({userToChat.accountType})</span>
+                    </p>
+                </div>
                 {
                     messages?.length > 0 ? messages.map(message =>
                         (<>
@@ -137,7 +155,7 @@ const Messages = () => {
                                                 setAnswer={setFormData}
                                                 refmessage={message.refmessage}
                                                 message={message.content}
-                                                sentDate={message.sentdate}/>
+                                        sentDate={message.sentdate} />
                                         </div>
                                     ) : (
                                         <div className="w-full flex justify-end">
@@ -148,7 +166,7 @@ const Messages = () => {
                                                 fileContent={message.filecontent}
                                                 refmessage={message.refmessage}
                                                 message={message.content}
-                                                sentDate={message.sentdate} sentByCurrentUser/>
+                                        sentDate={message.sentdate} sentByCurrentUser />
                                         </div>
                                     )
                                 }
@@ -199,17 +217,14 @@ const Messages = () => {
 }
 
 
-const Message = ({
-                     conversationId, messageId, message,
-                     sentDate, sentByCurrentUser = false, setAnswer, formData, refmessage, fileContent, handleShown
-                 }) => {
+const Message = ({ conversationId, messageId, message, sentDate, sentByCurrentUser = false, setAnswer, formData, refmessage, fileContent, handleShown }) => {
 
-    const {timeSince} = useApp();
-    const {token} = useAuth();
-    const {setConfirmMessagePopup, getUserMessages} = useApp();
+    const { timeSince } = useApp();
+    const { token } = useAuth();
+    const { setConfirmMessagePopup, getUserMessages } = useApp();
 
     const answerMessage = () => {
-        setAnswer({...formData, ['refMessage']: message});
+        setAnswer({ ...formData, ['refMessage']: message });
     }
     const handleDelete = async () => {
         const response = await fetch(SERVERLINK + '/api/messages/delete/' + messageId + "/" + conversationId, {

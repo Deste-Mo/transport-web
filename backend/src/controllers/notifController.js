@@ -50,13 +50,14 @@ export const sendNotifs = async (req, res) => {
 export const sendNotifsNewPub = async (req, res) => {
 
     const sender = await req.user;
-    const { content } = await req.body;
+    const { content, offerId } = await req.body;
+    
 
     // return res.json(content);
 
     try {
 
-        const { notification, sendNotif, followerId } = await createNotifs(sender.userid, content);
+        const { notification, sendNotif, followerId } = await createNotifs(sender.userid, content, offerId);
 
         if (notification && sendNotif) {
             // io.TO() est utiliser pour envoyer un evenement a un utilisateur specifique

@@ -13,6 +13,8 @@ export const sendMessage = async (req, res)  => {
             fileContent = req.file.filename;
         }
 
+        const lastMess = (!message && fileContent) ? ("Fichier : " + fileContent) : message;
+
         const senderId = await req.user.userid;
         const { receiverId } = await req.params;
 
@@ -25,7 +27,7 @@ export const sendMessage = async (req, res)  => {
 
         if(!conversation) return res.status(400).json({error: "Erreur lors de la generation du conversation"});
 
-        const createMessage = await createNewMessage(message, refMessage, fileContent, conversation.idconversation, receiverId, senderId);
+        const createMessage = await createNewMessage(message, lastMess, refMessage, fileContent, conversation.idconversation, receiverId, senderId);
 
         if(!createMessage) return res.status(400).json({error: "Erreur lors de l'envoie du message"});
 

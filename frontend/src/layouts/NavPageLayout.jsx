@@ -112,7 +112,7 @@ const DynamicLeftContent = ({currentLocation}) => {
             return (
                 <>
                     <SubHeader name="Amis" icon="bi bi-person"/>
-                    <div className="flex flex-col gap-3 rounded-lg p-4 bg-white-100 dark:bg-black-100">
+                    <div className="flex flex-col gap-3 rounded-xl p-2 bg-white-100 dark:bg-white-0">
                         {friends.length > 0 ? (
                             friends.map((friend) => (
                                 <RecentlyFriends
@@ -137,7 +137,7 @@ const DynamicLeftContent = ({currentLocation}) => {
                 <>
                     <SubHeader name="Suggestion d'amis" icon="bi bi-person"/>
                     <div
-                        className="flex flex-col items-center justify-center gap-6 p-4 w-full bg-white-100 dark:bg-black-100 rounded-xl">
+                        className="flex flex-col items-center justify-center gap-6 p-2 w-full bg-white-100 dark:bg-white-0 rounded-xl">
                         {users?.length > 0 ? (
                             users.map((user) => (
                                 <RecentlyFriends
@@ -152,7 +152,7 @@ const DynamicLeftContent = ({currentLocation}) => {
                                 />
                             ))
                         ) : (
-                            <div>Pas d'amis</div>
+                            <div className="nothing-box">Pas d'amis</div>
                         )}
                     </div>
                 </>
@@ -162,7 +162,7 @@ const DynamicLeftContent = ({currentLocation}) => {
             return (
                 <>
                     <SubHeader name="Amis" icon="bi bi-person"/>
-                    <div className="flex flex-col gap-3 rounded-lg p-4 bg-white-100 dark:bg-black-100">
+                    <div className="flex flex-col gap-3 rounded-xl p-2 bg-white-100 dark:bg-white-0">
                         {friends.length > 0 ? (
                             friends.map((friend) => (
                                 <RecentlyFriends

@@ -8,19 +8,23 @@ import { SubHeader } from "../../components/pages/SubHeader.jsx";
 import SearchBar from "../../components/ui/SearchBar.jsx";
 import ProfileImage from "../../assets/images/OIP.jpg";
 import Conv from "../../components/pages/conversations/Conversation.jsx";
-import {motion} from "framer-motion";
-import {appVariants} from "../../animations/variants.js";
-import {useUser} from "../../context/UserProvider.jsx";
+import { motion } from "framer-motion";
+import { appVariants } from "../../animations/variants.js";
+import { useUser } from "../../context/UserProvider.jsx";
+import { Navigate, useNavigate } from "react-router-dom";
+import ExpandableSearchBar from "../../components/ui/ExpandableSearchBar.jsx";
 
 
 const MessageList = () => {
 
-    const {token} = useAuth();
+    const { token } = useAuth();
 
-    const {conversations, handleShowConversation} = useApp();
-    const {friends, getFriends} = useUser();
+    const navigate = useNavigate();
 
-    const {socket} = useSocketContext();
+    const { conversations, handleShowConversation } = useApp();
+    const { friends, getFriends } = useUser();
+
+    const { socket } = useSocketContext();
 
     const { messages, setMessages } = useApp();
 
@@ -51,7 +55,7 @@ const MessageList = () => {
 
     return (
         <motion.section className="flex flex-col items-center justify-start w-full gap-6 relative  min-h-screen" variants={appVariants} initial="hidden" whileInView="visible" viewport={{once : true}}>
-            <SubHeader name={"Messages"} icon={"bi bi-chat"}/>
+                <SubHeader name={"Messages"} icon={"bi bi-chat"} rightContent={<ExpandableSearchBar setValue={setSearch} placeholder={"Rechercher un ami"} value={search}/>}/>
             <div
                 className="w-full h-fit bg-white-100 dark:bg-black-100 dark:border-none flex justify-start overflow-x-scroll p-4 border border-black-0 rounded-2xl scrollbar-none ">
                 {friends.length > 0 ?
@@ -59,14 +63,14 @@ const MessageList = () => {
                         <ActiveUser key={friend.userid} friend={friend}/>
                     )) :
                     <div>
-                        <Button icon="bi bi-plus-lg">Ajouter un ami</Button>
+                        <Button icon="bi bi-plus-lg" onClick={() => navigate("/friend")}>Ajouter un ami</Button>
                     </div>
                 }
             </div>
 
-            <SearchBar variant={"fill"} block size={"lg"} value={search} setValue={setSearch} placeholder={"Rechercher un ami"} />
+            {/* <SearchBar variant={"fill"} block size={"lg"} value={search} setValue={setSearch} placeholder={"Rechercher un ami"} /> */}
 
-            <div className="w-full  h-[70%] bg-white-100 dark:bg-black-10 dark:border-none  flex flex-col gap-4 overflow-hidden p-4  rounded-xl border border-black-0">
+            <div className="w-full h-[60vh] scrollbar-none overflow-y-scroll bg-white-100 dark:bg-white-0 dark:border-none  flex flex-col gap-3 overflow-hidden p-2  rounded-xl border border-black-0">
                 {
                     search ?
                         SearchFriends?.length > 0 ?
@@ -85,8 +89,8 @@ const MessageList = () => {
                         )
                     )
                     :
-                    <p className="text-black-80 dark:text-white-60  text-center">
-                        Commencer une conversation !
+                            <p className="w-full px-4 py-10 text-center text-black-80 bg-white-100 border border-black-0 rounded-xl dark:border-none dark:bg-black-10 dark:text-white-60">
+                                Commencez une Conversation
                     </p>
                 }
             </div>

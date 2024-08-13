@@ -3,6 +3,8 @@ import Button from "../../ui/Button";
 import { useEffect, useState } from "react";
 import { useApp } from "../../../context/AppProvider";
 import ProfileLeftLoading from "../../loader/ProfileLeftLoading";
+import { useUser } from "../../../context/UserProvider";
+import { useOffer } from "../../../context/OfferProvider";
 //import PropTypes from "prop-types";
 
 export const ProfileLeft = ({
@@ -14,7 +16,8 @@ export const ProfileLeft = ({
 }) => {
   const navigate = useNavigate();
 
-  const { countFollow, handleCountFollow } = useApp();
+  const { countFollow } = useUser();
+  const { pubNumber, getCurrentUserOffers, currentUserOffers } = useOffer();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -50,7 +53,7 @@ export const ProfileLeft = ({
       >
         <div className="flex items-center justify-between  gap-2">
           <span>Publication</span>
-          <span>5</span>
+          <span>{currentUserOffers.length}</span>
         </div>
         <div className="flex items-center  justify-between gap-2">
           <span>Amis</span>
