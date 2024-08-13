@@ -8,7 +8,7 @@ export default function SignalementPage() {
   return (
     <>
       <Helmet>
-        <title> Signalement | Transport </title>
+        <title> Signalement || Transport </title>
       </Helmet>
 
       <SignalementView />

@@ -62,6 +62,8 @@ export default function Header({ onOpenNav }) {
         }),
       }}
     >
+
+      {/* App menu */}
       <Toolbar
         sx={{
           height: 1,
