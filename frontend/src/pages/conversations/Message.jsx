@@ -130,7 +130,7 @@ const Messages = () => {
                 <Button variant="secondary" onClick={() => goToUserProfile(userToChat.id)}>Profile</Button>
             </div>
             <div
-                className="flex flex-col gap-4 items-start justify-start h-screen px-6 py-[24px] w-full scrollbar-none overflow-y-scroll ">
+                className="flex flex-col gap-4 items-start justify-start h-screen px-6 py-[24px] w-full scrollbar-none overflow-y-scroll overflow-x-hidden">
                 <div className="flex items-center flex-col self-center gap-3 cursor-pointer pb-3">
                     <div className="relative cursor-pointer" onClick={() => goToUserProfile(userToChat.id)}>
                         <img src={userToChat.pic} className={"size-[134px] rounded-full bg-black-20"} />

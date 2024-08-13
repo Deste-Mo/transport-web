@@ -7,7 +7,7 @@ import { useUser } from "../../context/UserProvider.jsx";
 import { useOffer } from "../../context/OfferProvider.jsx";
 
 
-export const ProfileLeft = ({
+ const ProfileLeft = ({
                                 id,
                                 name,
                                 account,
@@ -69,3 +69,5 @@ export const ProfileLeft = ({
 
     );
 };
+
+export default ProfileLeft;

@@ -7,6 +7,7 @@
 // ! Global loading component
 // ! Using suspense for components that fetches datas
 // ! Setting pages
+// ! Fix offers page bug
 // ? Scroll to bottom for message
 // ? Enhance file input UI -> pending
 // ? Infinite scroll for offers

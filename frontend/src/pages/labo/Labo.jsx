@@ -6,11 +6,13 @@ import { motion } from "framer-motion";
 import SearchFilter from "../../components/pages/SearchFilter.jsx";
 import { OFFER_CARD_FILTERS } from "../../constants/index.js";
 import { FileInput } from "../../styles/components.js";
+import loaderSvg from "./loader.svg"
 
 const Labo = () => {
 
   return (
-      <FileInput style="modern" className="w-[512px] p-10"/>
+    <img src={loaderSvg} alt="" srcset="" />
+  
     )
 };
 

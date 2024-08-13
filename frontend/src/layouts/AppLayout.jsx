@@ -8,6 +8,8 @@ import { useUser } from "../context/UserProvider.jsx";
 import { useNotification } from "../context/NotficationProvider.jsx";
 import { useOffer } from "../context/OfferProvider.jsx";
 import { useSocketContext } from "../context/SocketContext.jsx";
+import { Loader } from "../styles/components.js";
+import DefaultLoader from "../components/loader/DefaultLoader.jsx";
 
 const AppLayout = () => {
     const {token, loading, personalInformation} = useAuth();
@@ -24,9 +26,6 @@ const AppLayout = () => {
     const { socket } = useSocketContext();
 
     useEffect(() => {
-
-        // handleFriends()
-
         socket?.on("newNotif", () => {
             getNotifications();
             getUnreadNotifications();
@@ -44,7 +43,7 @@ const AppLayout = () => {
 
     return (
 
-        loading ? <p className="text-primary-100 text-title-3">Loading ...</p> : token ?
+        loading ? <DefaultLoader/> : token ?
             <section className="relative scrollbar-none">
                 <Header profileImage={SERVERLINK + "/" + user.profile || "X.png"}/>
                 <div className="mt-[7em] max-md:mb-[7em] max-md:mt-[5em] scrollbar-none ">

@@ -177,14 +177,14 @@ const OfferCard = ({
                     {saved ? (
                       <SettingItem
                         onClick={handleRevokeSavedOffer}
-                        name="Sauvegarder"
-                        icon="bi bi-bookmark"
+                        name="Retirer de la sauvegarde"
+                        icon="bi bi-bookmark-dash"
                       />
                     ) : (
                       <SettingItem
                         onClick={handleSaveOffer}
-                        name="Retirer de la sauvegarde"
-                        icon="bi bi-bookmark-dash"
+                        name="Sauvegarder"
+                        icon="bi bi-bookmark"
                       />
                     )}
                   </>
@@ -295,50 +295,6 @@ const OfferCardPopup = ({ setPopupVisible, content }) => {
     </div>
   );
 };
-// const OfferCardPopup = ({ setPopupVisible, offer }) => {
-//   const selectRef = useRef(null);
-
-//   useEffect(() => {
-//     const handleClickOutside = (e) => {
-//       if (selectRef.current && !selectRef.current.contains(e.target)) {
-//         setPopupVisible(false);
-//       }
-//     };
-//     document.addEventListener("mousedown", handleClickOutside);
-//     return () => document.removeEventListener("mousedown", handleClickOutside);
-//   }, []);
-//   return (
-//     <div
-//       ref={selectRef}
-//       className={`flex select-none flex-col items-center justify-center gap-4 w-[230px] p-2 rounded-xl bg-white-100 dark:bg-white-0 dark:backdrop-blur-sm shadow-sm border border-black-0`}
-//     >
-//       <SettingItem
-//         onClick={() => handleDeletePost()}
-//         name="Supprimer"
-//         icon="bi bi-dash"
-//       />
-//       <SettingItem
-//         onClick={() => handleEditPost()}
-//         name="Modifier"
-//         icon="bi bi-pencil"
-//       />
-//       {
-//         offer.dispo ?
-//       <SettingItem
-//         onClick={() => handleExpirePost()}
-//         name="Rendre Indisponible"
-//         icon="bi bi-repeat"
-//       />
-//           :
-//           <SettingItem
-//             onClick={() => handleUnexpirePost()}
-//             name="Rendre Disponible"
-//             icon="bi bi-circle"
-//           />
-//       }
-//     </div>
-//   );
-// };
 
 const SettingItem = ({ name, icon, onClick }) => {
   return (
