@@ -13,6 +13,7 @@ import { useAuth } from "../../../context/AuthProvider.jsx";
 import { useOffer } from "../../../context/OfferProvider.jsx";
 import Badge from "../../ui/Badge.jsx";
 import { useUser } from "../../../context/UserProvider.jsx";
+import TemplatePopup, { OptionItem } from "../../ui/TemplatePopup.jsx";
 
 const offerDetails = `Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet Lorem ipsum
               dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit
@@ -134,57 +135,66 @@ const OfferCard = ({
         {popupVisible && (
           <div className="absolute top-10 right-10">
             {forCurrentUser ? (
-              <OfferCardPopup
+              <TemplatePopup
+                popupVisible={popupVisible}
                 setPopupVisible={setPopupVisible}
                 content={
                   <>
-                    <SettingItem
+                    <OptionItem
                       onClick={() => handleDeletePost()}
                       name="Supprimer"
                       icon="bi bi-dash"
+                      setPopupVisible={setPopupVisible}
                     />
-                    <SettingItem
+                    <OptionItem
                       onClick={() => handleEditPost()}
                       name="Modifier"
                       icon="bi bi-pencil"
+                      setPopupVisible={setPopupVisible}
                     />
                     {sug?.dispo ? (
-                      <SettingItem
+                      <OptionItem
                         onClick={() => handleExpirePost()}
                         name="Rendre Indisponible"
                         icon="bi bi-repeat"
+                        setPopupVisible={setPopupVisible}
                       />
                     ) : (
-                      <SettingItem
+                      <OptionItem
                         onClick={() => handleUnexpirePost()}
                         name="Rendre Disponible"
                         icon="bi bi-circle"
+                        setPopupVisible={setPopupVisible}
                       />
                     )}
                   </>
                 }
               />
             ) : (
-              <OfferCardPopup
+              <TemplatePopup
                 setPopupVisible={setPopupVisible}
+                popupVisible={popupVisible}
                 content={
                   <>
-                    <SettingItem
+                    <OptionItem
                       onClick={handleClick}
                       name="Contacter"
                       icon="bi bi-chat"
+                      setPopupVisible={setPopupVisible}
                     />
                     {saved ? (
-                      <SettingItem
+                      <OptionItem
                         onClick={handleRevokeSavedOffer}
                         name="Retirer de la sauvegarde"
                         icon="bi bi-bookmark-dash"
+                        setPopupVisible={setPopupVisible}
                       />
                     ) : (
-                      <SettingItem
+                      <OptionItem
                         onClick={handleSaveOffer}
                         name="Sauvegarder"
                         icon="bi bi-bookmark"
+                        setPopupVisible={setPopupVisible}
                       />
                     )}
                   </>
@@ -273,37 +283,3 @@ const OfferCard = ({
   );
 };
 export default OfferCard;
-
-const OfferCardPopup = ({ setPopupVisible, content }) => {
-  const selectRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (selectRef.current && !selectRef.current.contains(e.target)) {
-        setPopupVisible(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-  return (
-    <div
-      ref={selectRef}
-      className={`flex select-none flex-col items-center justify-center gap-4 w-max p-2 rounded-xl bg-white-100 dark:bg-white-0 dark:backdrop-blur-sm shadow-sm border border-black-0`}
-    >
-      {content}
-    </div>
-  );
-};
-
-const SettingItem = ({ name, icon, onClick }) => {
-  return (
-    <div
-      className="flex items-center justify-start w-full px-6 py-2 hover:bg-black-10 rounded-xl gap-2 cursor-pointer "
-      onClick={onClick}
-    >
-      <i className={`${icon}`}></i>
-      <p className="text-small-1 text-black-100 dark:text-white-100">{name}</p>
-    </div>
-  );
-};

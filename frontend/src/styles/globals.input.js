@@ -11,10 +11,10 @@ export const globalInputVariants = {
         fill : "text-black-60  border-black-10 bg-black-10  placeholder:text-black-60 outline-none focus:ring-primary-100 focus:ring-2 dark:bg-white-10 dark:placeholder:text-white-60  dark:text-white-60 dark:border-white-60 ",
         default : "outline",
     },
-    width : "w-[320px] md:w-[380px]",
+    width : "w-full md:w-[380px]",
     size : {
         sm : "px-6 py-2",
-        md: "px-6 py-3",
+        md: "px-6 py-3 max-md:px-3 max-md:py-2",
         lg: "px-8 py-4",
         default : "md",
     },

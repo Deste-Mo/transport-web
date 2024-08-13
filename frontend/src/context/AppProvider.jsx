@@ -53,15 +53,16 @@ const AppProvider = ({ children }) => {
 
 
         const scrollToBottom = () => {
-            endOfMessagesRef.current?.scrollIntoView();
+            // endOfMessagesRef.current?.scrollIntoView();
         };
 
         const user = await JSON.parse(localStorage.getItem('userToChat'));
 
+
         setUserToChat({
             id: user.id,
             fullName: user.fullName,
-            accountType: user.accountType,
+            accountType: user.accounttype,
             pic: user.pic
         })
 

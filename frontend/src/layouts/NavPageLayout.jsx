@@ -13,11 +13,13 @@ import { useOffer } from "../context/OfferProvider.jsx";
 import { useUser } from "../context/UserProvider.jsx";
 import ProfileLeftLoading from "../components/loader/ProfileLeftLoading.jsx";
 import { useAnimation } from "../context/AnimationProvider.jsx";
+import useWindowSize from "../hooks/useWindowSize.jsx";
 const ProfileLeft = lazy(() => import("../components/pages/ProfileLeft.jsx"));
 
 const NavPageLayout = () => {
   const { personalInformation, loadingInformation } = useAuth();
-  const { setShowBackIcon } = useAnimation();
+  const { setShowBackIcon, hideMobileNavigation, setHideMobileNavigation } = useAnimation();
+  const [width] = useWindowSize();
   const {
     savedOffers,
     getSavedOffers,
@@ -37,21 +39,15 @@ const NavPageLayout = () => {
     setShowBackIcon(false);
   }, []);
 
+  useEffect(() => {
+    setHideMobileNavigation(pathname.toLowerCase() === '/message');
+  }, [pathname])
+
   return (
-    <section className="flex items-start  w-full justify-between nav-page-container gap-10 h-[86vh] max-md:h-[80vh] scrollbar-none relative ">
+    <section className={`flex items-start  w-full justify-between nav-page-container gap-10 h-[86vh]  scrollbar-none relative ${hideMobileNavigation ? 'max-md:h-screen overflow-hidden' : 'max-md:h-[80vh]'} `}>
       <div className="flex flex-col max-lg:hidden basis-[26%]  items-start justify-start gap-10 overflow-x-hidden overflow-y-scroll max-h-full scrollbar-none relative">
-        {/* {loadingInformation ? (
-          <ProfileLeftLoading />
-        ) : (
+        <Suspense fallback={<ProfileLeftLoading />}>
           <ProfileLeft
-            id={user.id}
-            name={user?.fullName}
-            image={SERVERLINK + "/" + user?.profile}
-            account={user?.accounttype}
-          />
-        )} */}
-        <Suspense fallback={<ProfileLeftLoading/>}>
-        <ProfileLeft
             id={user.id}
             name={user?.fullName}
             image={SERVERLINK + "/" + user?.profile}
@@ -64,7 +60,7 @@ const NavPageLayout = () => {
       </div>
 
       {/*Center */}
-      <div className="overflow-x-hidden overflow-y-scroll h-full max-h-full basis-[44%] max-lg:basis-[60%] max-md:basis-full scrollbar-none rounded-xl">
+      <div className={`overflow-x-hidden  h-full max-h-full basis-[44%] max-lg:basis-[60%] max-md:basis-full scrollbar-none rounded-xl ${hideMobileNavigation ? 'overflow-y-hidden' : 'overflow-y-scroll'}`}>
         <Outlet />
       </div>
 

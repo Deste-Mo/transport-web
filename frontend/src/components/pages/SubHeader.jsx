@@ -26,7 +26,7 @@ export function SubHeader({
 }) {
   return (
     <div
-      className={`flex select-none gap-4 w-full justify-between items-center z-30  rounded-xl shadow-sm  border border-black-0 bg-white-100 sticky top-0 dark:bg-white-0  dark:backdrop-blur-sm   ${
+      className={`flex select-none gap-4 max-md:gap-2 w-full justify-between items-center z-30  rounded-xl shadow-sm  border border-black-0 bg-white-100 sticky top-0 dark:bg-white-0  dark:backdrop-blur-sm   ${
         sticky && "sticky"
       } ${sizeVariants.padding[size]}`}
     >
@@ -38,7 +38,7 @@ export function SubHeader({
           <span>{name}</span>
         </div>
       )}
-      <div className="">{rightContent}</div>
+      <div className="w-full flex justify-end">{rightContent}</div>
     </div>
   );
 }

@@ -10,32 +10,33 @@ import Icon from "../ui/Icon.jsx";
 
 export function Header({ profileImage }) {
   const { countUnread, getUnreadMessageCount } = useApp();
-    const { unreadNotificationsCount, getUnreadNotifications } = useNotification();
+  const { unreadNotificationsCount, getUnreadNotifications } =
+    useNotification();
   const { getFriends } = useUser();
 
   const NAV_LINKS = [
     {
       name: "Accueil",
       icon: "bi bi-grid",
-      activeIcon : "bi bi-grid-fill",
+      activeIcon: "bi bi-grid-fill",
       path: "/",
       number: 0,
     },
     {
       name: "Discussion",
       icon: "bi bi-chat",
-      activeIcon : "bi bi-chat-fill",
+      activeIcon: "bi bi-chat-fill",
 
       path: "/discussion",
       number: countUnread,
     },
     {
       name: "Offres",
-      activeIcon : "bi bi-truck",
+      activeIcon: "bi bi-truck",
 
       icon: "bi bi-truck",
       path: "/offer",
-            number: 0,
+      number: 0,
     },
     {
       name: "Suivis",
@@ -55,11 +56,11 @@ export function Header({ profileImage }) {
 
   useEffect(() => {
     getUnreadMessageCount();
-    }, [countUnread])
+  }, [countUnread]);
 
   useEffect(() => {
     getUnreadNotifications();
-    }, [unreadNotificationsCount]);
+  }, [unreadNotificationsCount]);
 
   useEffect(() => {
     getFriends();
@@ -85,6 +86,10 @@ const MobileHeader = ({ className, NAV_LINKS, profileImage }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { showBackIcon } = useAnimation();
+  const { hideMobileNavigation } = useAnimation();
+
+  if (hideMobileNavigation) return ;
+
   return (
     <header
       className={`flex justify-between max-md:justify-center  items-center bi  z-40 ${className}`}
@@ -98,7 +103,6 @@ const MobileHeader = ({ className, NAV_LINKS, profileImage }) => {
               variant="secondary"
               onClick={() => navigate(-1)}
             />
-
           )}
           <h1 className="text-subtitle-2 max-lg:text-subtitle-3">
             Media <span className="text-primary-100">Trans</span>
@@ -108,7 +112,7 @@ const MobileHeader = ({ className, NAV_LINKS, profileImage }) => {
       </div>
 
       <div className="">
-        <ul className="flex  items-center w-full justify-between max-md:items-center  py-4 px-8 fixed left-0 bottom-0 bg-white-100 dark:bg-white-0 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md z-50">
+        <ul className="flex  items-center w-full justify-between max-md:items-center  py-4 px-3 fixed left-0 bottom-0 bg-white-100 dark:bg-white-0 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md z-50">
           {NAV_LINKS.map((navlink) => (
             <NavLink
               forMobile
@@ -118,7 +122,7 @@ const MobileHeader = ({ className, NAV_LINKS, profileImage }) => {
                 navlink.path.toLowerCase() === location.pathname.toLowerCase()
               }
               onClick={() => navigate(navlink.path)}
-                            number={navlink.number}
+              number={navlink.number}
             />
           ))}
         </ul>

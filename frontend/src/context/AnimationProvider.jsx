@@ -8,6 +8,7 @@ const AnimationProvider = ({ children }) => {
   const [showMessagePopup, setShowMessagePopup] = useState(false);
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [showBackIcon, setShowBackIcon] = useState(false);
+  const [hideMobileNavigation, setHideMobileNavigation] = useState(false);
 
   const [toast, setToast] = useState({
     message: null,
@@ -28,6 +29,8 @@ const AnimationProvider = ({ children }) => {
     <AnimationContext.Provider
       value={{
         togglePopup,
+        hideMobileNavigation,
+        setHideMobileNavigation,
         setTogglePopup,
         showMessagePopup,
         setShowMessagePopup,

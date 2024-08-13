@@ -1,8 +1,6 @@
-
 import PropTypes from "prop-types";
 import { defaultTransition } from "../../styles/globals";
 import globalIconVariants from "../../styles/global.icon";
-
 
 const iconSizeVariant = {
   md: "size-10 p-2",
@@ -20,10 +18,12 @@ const Icon = ({
 }) => {
   return (
     <button
-    type="button"
+      type="button"
       disabled={disabled}
       className={` ${globalIconVariants.constant}  ${
-        disabled ? globalIconVariants.variant.disabled : globalIconVariants.variant[variant]
+        disabled
+          ? globalIconVariants.variant.disabled
+          : globalIconVariants.variant[variant]
       } ${globalIconVariants.size[size]} ${transition} ${className}
        `}
       onClick={onClick}
@@ -34,14 +34,13 @@ const Icon = ({
 };
 
 Icon.propTypes = {
-  icon : PropTypes.string,
-  size : PropTypes.string,
-  variant : PropTypes.string,
-  className : PropTypes.string,
-  transition : PropTypes.string,
-  onClick : PropTypes.func,
-  disabled : PropTypes.bool
-
-}
+  icon: PropTypes.string,
+  size: PropTypes.string,
+  variant: PropTypes.string,
+  className: PropTypes.string,
+  transition: PropTypes.string,
+  onClick: PropTypes.func,
+  disabled: PropTypes.bool,
+};
 
 export default Icon;

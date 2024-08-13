@@ -172,6 +172,7 @@ const Offers = () => {
               placeholder="Rechercher une offre"
               setValue={setSearch}
               onFilter={filterOffers}
+              
             />
           )
         }
