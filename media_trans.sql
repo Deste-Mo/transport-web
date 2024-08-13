@@ -1,7 +1,6 @@
-CREATE EXTENSION "uuid-ossp";
-
-
 CREATE SCHEMA IF NOT EXISTS "public";
+
+CREATE EXTENSION "uuid-ossp";
 
 CREATE SEQUENCE "public".account_accountid_seq AS integer START WITH 1 INCREMENT BY 1;
 
@@ -27,7 +26,7 @@ CREATE SEQUENCE "public".subscription_subid_seq AS integer START WITH 1 INCREMEN
 
 CREATE SEQUENCE "public".vehicle_vehicleid_seq AS integer START WITH 1 INCREMENT BY 1;
 
-CREATE TYPE "public".accounttype AS ENUM ('Entreprise','Client','Camionneur');
+CREATE TYPE accounttype AS ENUM ('Entreprise','Client','Camionneur');
 
 CREATE  TABLE "public".account ( 
 	accountid            serial  NOT NULL  ,
@@ -60,6 +59,8 @@ CREATE  TABLE "public".users (
 	subid                integer    ,
 	enrdate              date    ,
 	accessday            integer DEFAULT 2   ,
+	reset_token          varchar(255)    ,
+	reset_token_exipiry  timestamp    ,
 	CONSTRAINT users_pkey PRIMARY KEY ( userid ),
 	CONSTRAINT users_accountid_fkey FOREIGN KEY ( accountid ) REFERENCES "public".account( accountid )   ,
 	CONSTRAINT users_subid_fkey FOREIGN KEY ( subid ) REFERENCES "public".subscription( subid )   
@@ -95,8 +96,8 @@ CREATE  TABLE "public".follow (
 	followeeid           uuid  NOT NULL  ,
 	followdate           date DEFAULT CURRENT_DATE   ,
 	CONSTRAINT follow_pkey PRIMARY KEY ( followid ),
-	CONSTRAINT follow_followerid_fkey FOREIGN KEY ( followerid ) REFERENCES "public".users( userid )   ,
-	CONSTRAINT follow_followeeid_fkey FOREIGN KEY ( followeeid ) REFERENCES "public".users( userid )   
+	CONSTRAINT follow_followeeid_fkey FOREIGN KEY ( followeeid ) REFERENCES "public".users( userid ) ON DELETE CASCADE ON UPDATE CASCADE ,
+	CONSTRAINT follow_followerid_fkey FOREIGN KEY ( followerid ) REFERENCES "public".users( userid ) ON DELETE CASCADE ON UPDATE CASCADE 
  );
 
 CREATE  TABLE "public".message ( 
@@ -106,6 +107,8 @@ CREATE  TABLE "public".message (
 	content              text    ,
 	idconversation       bigint    ,
 	receiverid           uuid    ,
+	refmessage           text    ,
+	filecontent          text    ,
 	CONSTRAINT message_pkey PRIMARY KEY ( messageid ),
 	CONSTRAINT fk_message_conversation FOREIGN KEY ( idconversation ) REFERENCES "public".conversation( idconversation ) ON DELETE CASCADE ON UPDATE CASCADE ,
 	CONSTRAINT fk_message_users FOREIGN KEY ( receiverid ) REFERENCES "public".users( userid ) ON DELETE CASCADE ON UPDATE CASCADE 
@@ -134,7 +137,7 @@ CREATE  TABLE "public".offer (
 	dispo                boolean DEFAULT true   ,
 	publicationdate      timestamp DEFAULT CURRENT_TIMESTAMP   ,
 	CONSTRAINT offer_pkey PRIMARY KEY ( offerid ),
-	CONSTRAINT offer_userid_fkey FOREIGN KEY ( userid ) REFERENCES "public".users( userid )   
+	CONSTRAINT offer_userid_fkey FOREIGN KEY ( userid ) REFERENCES "public".users( userid ) ON DELETE CASCADE ON UPDATE CASCADE 
  );
 
 CREATE  TABLE "public".rating ( 
@@ -158,8 +161,8 @@ CREATE  TABLE "public".report (
 	message              text  NOT NULL  ,
 	reason               text  NOT NULL  ,
 	CONSTRAINT report_pkey PRIMARY KEY ( reportid ),
-	CONSTRAINT report_reporterid_fkey FOREIGN KEY ( reporterid ) REFERENCES "public".users( userid )   ,
-	CONSTRAINT report_reportedid_fkey FOREIGN KEY ( reportedid ) REFERENCES "public".users( userid )   
+	CONSTRAINT report_reportedid_fkey FOREIGN KEY ( reportedid ) REFERENCES "public".users( userid )   ,
+	CONSTRAINT report_reporterid_fkey FOREIGN KEY ( reporterid ) REFERENCES "public".users( userid ) ON DELETE CASCADE ON UPDATE CASCADE 
  );
 
 CREATE  TABLE "public".saveoffer ( 
@@ -186,100 +189,186 @@ CREATE OR REPLACE FUNCTION public.uuid_generate_v1()
  RETURNS uuid
  LANGUAGE c
  PARALLEL SAFE STRICT
-AS '$libdir/uuid-ossp', $function$uuid_generate_v1$function$;
+AS '$libdir/uuid-ossp', $function$uuid_generate_v1$function$
+;
 
 CREATE OR REPLACE FUNCTION public.uuid_generate_v1mc()
  RETURNS uuid
  LANGUAGE c
  PARALLEL SAFE STRICT
-AS '$libdir/uuid-ossp', $function$uuid_generate_v1mc$function$;
+AS '$libdir/uuid-ossp', $function$uuid_generate_v1mc$function$
+;
 
 CREATE OR REPLACE FUNCTION public.uuid_generate_v3(namespace uuid, name text)
  RETURNS uuid
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/uuid-ossp', $function$uuid_generate_v3$function$;
+AS '$libdir/uuid-ossp', $function$uuid_generate_v3$function$
+;
 
 CREATE OR REPLACE FUNCTION public.uuid_generate_v4()
  RETURNS uuid
  LANGUAGE c
  PARALLEL SAFE STRICT
-AS '$libdir/uuid-ossp', $function$uuid_generate_v4$function$;
+AS '$libdir/uuid-ossp', $function$uuid_generate_v4$function$
+;
 
 CREATE OR REPLACE FUNCTION public.uuid_generate_v5(namespace uuid, name text)
  RETURNS uuid
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/uuid-ossp', $function$uuid_generate_v5$function$;
+AS '$libdir/uuid-ossp', $function$uuid_generate_v5$function$
+;
 
 CREATE OR REPLACE FUNCTION public.uuid_nil()
  RETURNS uuid
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/uuid-ossp', $function$uuid_nil$function$;
+AS '$libdir/uuid-ossp', $function$uuid_nil$function$
+;
 
 CREATE OR REPLACE FUNCTION public.uuid_ns_dns()
  RETURNS uuid
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/uuid-ossp', $function$uuid_ns_dns$function$;
+AS '$libdir/uuid-ossp', $function$uuid_ns_dns$function$
+;
 
 CREATE OR REPLACE FUNCTION public.uuid_ns_oid()
  RETURNS uuid
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/uuid-ossp', $function$uuid_ns_oid$function$;
+AS '$libdir/uuid-ossp', $function$uuid_ns_oid$function$
+;
 
 CREATE OR REPLACE FUNCTION public.uuid_ns_url()
  RETURNS uuid
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/uuid-ossp', $function$uuid_ns_url$function$;
+AS '$libdir/uuid-ossp', $function$uuid_ns_url$function$
+;
 
 CREATE OR REPLACE FUNCTION public.uuid_ns_x500()
  RETURNS uuid
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/uuid-ossp', $function$uuid_ns_x500$function$;
+AS '$libdir/uuid-ossp', $function$uuid_ns_x500$function$
+;
 
 INSERT INTO "public".account( accountid, accounttype ) VALUES ( 1, 'Entreprise');
 INSERT INTO "public".account( accountid, accounttype ) VALUES ( 2, 'Camionneur');
 INSERT INTO "public".account( accountid, accounttype ) VALUES ( 3, 'Client');
-INSERT INTO "public".users( userid, firstname, lastname, usercin, companynumber, phone, address, email, bio, profileimage, "password", registerdate, accountid, subid, enrdate, accessday ) VALUES ( 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44', 'ADOLPHE', null, null, '342541432424', '0340854816', 'SOANIERANA FIANARANTSOA', 'allel@gmail.com', 'Nothing', 'profileImage-1720882570236.jpg', '$2a$10$9lA44xVm8SI.1TChgFuAWuytLNCkr1TYNFf2pAUr89u1I.yBePjHS', '2024-07-12', 1, null, null, 2);
-INSERT INTO "public".users( userid, firstname, lastname, usercin, companynumber, phone, address, email, bio, profileimage, "password", registerdate, accountid, subid, enrdate, accessday ) VALUES ( '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', 'Jean', 'Mark', '321231234456', null, '0324578376', 'SOANIERANA FIANARANTSOA', 'jean@gmail.com', 'Nothing', 'profileImage-1720882627143.jpg', '$2a$10$iW6No4OqIW4Smzi96MZyAOggf9nKlfQVzr.BV0LvxyZzPfLymtCfe', '2024-07-13', 2, null, null, 2);
-INSERT INTO "public".users( userid, firstname, lastname, usercin, companynumber, phone, address, email, bio, profileimage, "password", registerdate, accountid, subid, enrdate, accessday ) VALUES ( '325ab2a9-a6fd-4a5f-9408-9498bb012afe', 'PROTESTE', null, null, '55255252523', '0341243567', 'ANTSIRANANA', 'prot@gmail.com', 'Entreprise inconnue de tous', 'default.png', '$2a$10$eDayYx51CNE3zAkUzLNCVOEv4CFK5bJSoNwkBFE32RyFdv23KIJyi', '2024-07-14', 1, null, null, 2);
-INSERT INTO "public".users( userid, firstname, lastname, usercin, companynumber, phone, address, email, bio, profileimage, "password", registerdate, accountid, subid, enrdate, accessday ) VALUES ( '89ed4dfe-33af-438d-911f-285c85619c0a', 'RAHARISOA', 'Haingonirina', '111111111111', null, '0345393880', 'au ciel', 'haingonirina301@gmail.com', 'give me your heart guys', 'default.png', '$2a$10$R2wQQLN1ZdfpFXk.bqbDPeygAAhcHcJhOrVXj.NOZnR0vKzI5VXte', '2024-07-14', 3, null, null, 2);
-INSERT INTO "public".users( userid, firstname, lastname, usercin, companynumber, phone, address, email, bio, profileimage, "password", registerdate, accountid, subid, enrdate, accessday ) VALUES ( 'f38ac467-4030-466e-b7bf-45ed41ed7ef6', 'Razafitsotra', 'Toslin', '201011032461', null, '0380525383', 'AJhSJHAA', 'razafitosy@gmail.com', 'SASASASASdsd', 'default.png', '$2a$10$WgVxrRjMVKy9MELuGL4rCe9.DeAGGEFhxhWlCOe128ZXWTrOAiiUm', '2024-07-15', 3, null, null, 2);
-INSERT INTO "public".users( userid, firstname, lastname, usercin, companynumber, phone, address, email, bio, profileimage, "password", registerdate, accountid, subid, enrdate, accessday ) VALUES ( 'b6569ebc-bc8d-4afb-a0e2-f5a53ea6f04f', 'ADMIN', null, null, '5252525352', '0348967543', 'Admin adresse', 'admin@gmail.com', 'Je suis admin', 'default.png', '$2a$10$OCzYcbj/pLPKHegu5xOHiecuVEJ.DQdU1xDfLrBjv0rx4yt1hxdh.', '2024-07-15', 1, null, null, 2);
-INSERT INTO "public".users( userid, firstname, lastname, usercin, companynumber, phone, address, email, bio, profileimage, "password", registerdate, accountid, subid, enrdate, accessday ) VALUES ( 'fbfe3738-952d-4c2c-94e1-20e816c439de', 'vgjkgjhklb', 'iphuhpwn', '779651234567', null, '0347917218', 'sdsdvsdv', 'ue@gmail.com', 'vsdvsdvs', 'default.png', '$2a$10$TC6hk98Ijd1sfvKn4aF.k.kfMlcqaIZYd5ObPvGO5QXl1aBvWW91.', '2024-07-12', 3, null, null, 2);
-INSERT INTO "public".users( userid, firstname, lastname, usercin, companynumber, phone, address, email, bio, profileimage, "password", registerdate, accountid, subid, enrdate, accessday ) VALUES ( '933bad13-88f2-4dd9-a220-0f2bb1714af3', 'Alexis', 'Allel', '634451234565', null, '0324565423', 'Soanierana', 'alexis@gmail.com', 'None of your business', 'default.png', '$2a$10$8XU3fWCa8HjDDmU7LLYLy.MrrUwScZclxrcPEhqvcS8oiQ3vunZEO', '2024-07-14', 3, null, null, 2);
-INSERT INTO "public".users( userid, firstname, lastname, usercin, companynumber, phone, address, email, bio, profileimage, "password", registerdate, accountid, subid, enrdate, accessday ) VALUES ( '5c0b6122-726f-4ddb-9cef-ef2241507e53', 'TOLOJANAHARY', 'Modeste', '212011013026', null, '0332571312', 'Manakara', 'modestep20.aps1a@gmail.com', 'Boum boum', 'default.png', '$2a$10$V5decVpAs3D5lFC6Yztm8.VC/4gM9upm1fh9lenUknNCHjlcrj/t2', '2024-07-16', 2, null, null, 2);
-INSERT INTO "public".users( userid, firstname, lastname, usercin, companynumber, phone, address, email, bio, profileimage, "password", registerdate, accountid, subid, enrdate, accessday ) VALUES ( '19c31c51-8982-473b-a767-9535850a8934', 'Fandreseko', 'Ismael', '222222222222', null, '0346179950', 'Andrainjato Fianarantsoa', 'fandreseko@gmail.com', 'Bonjour', 'default.png', '$2a$10$oiFCqWfAv6Wkf67FhzfZZ.ZKy.XW2ofwCpG8BjlkAyAYWJqvVwD9e', '2024-07-16', 3, null, null, 2);
-INSERT INTO "public".users( userid, firstname, lastname, usercin, companynumber, phone, address, email, bio, profileimage, "password", registerdate, accountid, subid, enrdate, accessday ) VALUES ( 'dd592338-ca50-491e-afcf-44f563ae0d6e', 'Rael', 'Nathan', '123452123456', null, '0346712308', 'Nathan', 'ralaivoavy.natanael@gmail.com', 'admin\n', 'default.png', '$2a$10$SWue6oPs6Y7uxs4jvTvkSuzoABtZY/fakaH4CXMRK3.yUPwc4ax.S', '2024-07-16', 3, null, null, 2);
-INSERT INTO "public".users( userid, firstname, lastname, usercin, companynumber, phone, address, email, bio, profileimage, "password", registerdate, accountid, subid, enrdate, accessday ) VALUES ( '761cdd81-0e1d-4271-b1b5-734f1d972762', 'hery', null, null, '212121212121', '0348188887', 'Andrainjato Fianarantsoa', 'hery@gmail.com', 'Ismael', 'X.jpg', '$2a$10$QM0Jo3.kkhKy3LMepPOUy.34Fd9c0fHWvprDTsEadzxbURgp3.6Y2', '2024-07-17', 1, null, null, 2);
-INSERT INTO "public".conversation( idsender, idreceiver, idconversation, lastupdate, lastmessage, lastsender ) VALUES ( '933bad13-88f2-4dd9-a220-0f2bb1714af3', '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', 31, '2024-07-26 09:04:49 AM', 'gggg', null);
-INSERT INTO "public".conversation( idsender, idreceiver, idconversation, lastupdate, lastmessage, lastsender ) VALUES ( 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44', '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', 33, '2024-07-28 09:20:15 PM', 'ttt', 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44');
-INSERT INTO "public".follow( followid, followerid, followeeid, followdate ) VALUES ( 63, 'f38ac467-4030-466e-b7bf-45ed41ed7ef6', 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44', '2024-07-17');
-INSERT INTO "public".follow( followid, followerid, followeeid, followdate ) VALUES ( 67, 'f38ac467-4030-466e-b7bf-45ed41ed7ef6', '89ed4dfe-33af-438d-911f-285c85619c0a', '2024-07-17');
-INSERT INTO "public".follow( followid, followerid, followeeid, followdate ) VALUES ( 188, 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44', '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', '2024-07-28');
-INSERT INTO "public".follow( followid, followerid, followeeid, followdate ) VALUES ( 141, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', '933bad13-88f2-4dd9-a220-0f2bb1714af3', '2024-07-21');
-INSERT INTO "public".follow( followid, followerid, followeeid, followdate ) VALUES ( 56, 'dd592338-ca50-491e-afcf-44f563ae0d6e', 'f38ac467-4030-466e-b7bf-45ed41ed7ef6', '2024-07-17');
-INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 72, 'ADOLPHE Vous suit desormais.', '2024-07-26 10:39:01 AM', 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44', null);
-INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 73, 'Alexis Allel A recemment publié une offre !', '2024-07-26 10:39:44 AM', '933bad13-88f2-4dd9-a220-0f2bb1714af3', null);
-INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 74, 'RAHARISOA Haingonirina Vous suit desormais.', '2024-07-26 11:16:58 AM', '89ed4dfe-33af-438d-911f-285c85619c0a', null);
-INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 75, 'Alexis Allel Vous suit desormais.', '2024-07-26 11:17:57 AM', '933bad13-88f2-4dd9-a220-0f2bb1714af3', null);
-INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 76, 'ADOLPHE A recemment publié une offre !', '2024-07-26 11:19:12 AM', 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44', null);
-INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 77, 'Alexis Allel Vous suit desormais.', '2024-07-26 11:25:19 AM', '933bad13-88f2-4dd9-a220-0f2bb1714af3', null);
-INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 78, 'ADOLPHE Vous suit desormais.', '2024-07-28 09:19:09 PM', 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44', null);
-INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 79, 'RAHARISOA Haingonirina Vous suit desormais.', '2024-07-28 10:01:45 PM', '89ed4dfe-33af-438d-911f-285c85619c0a', null);
-INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 80, 'RAHARISOA Haingonirina Vous suit desormais.', '2024-07-28 10:05:39 PM', '89ed4dfe-33af-438d-911f-285c85619c0a', null);
-INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 81, 'RAHARISOA Haingonirina Vous suit desormais.', '2024-07-28 10:06:39 PM', '89ed4dfe-33af-438d-911f-285c85619c0a', null);
-INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 82, 'RAHARISOA Haingonirina Vous suit desormais.', '2024-07-28 10:09:11 PM', '89ed4dfe-33af-438d-911f-285c85619c0a', null);
-INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 83, 'RAHARISOA Haingonirina Vous suit desormais.', '2024-07-28 10:10:35 PM', '89ed4dfe-33af-438d-911f-285c85619c0a', null);
-INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 84, 'RAHARISOA Haingonirina Vous suit desormais.', '2024-07-28 10:25:38 PM', '89ed4dfe-33af-438d-911f-285c85619c0a', null);
-INSERT INTO "public".offer( offerid, userid, title, capacity, depart, dest, scheduleddate, description, imgurl, dispo, publicationdate ) VALUES ( 44, '933bad13-88f2-4dd9-a220-0f2bb1714af3', 'Marchandise à transporter', '1 tonne', 'TANA', 'ANTSIRABE', '2024-07-28', 'Des Armes de guerres', 'imgUrl-1721979584866.jpg', true, '2024-07-26 10:39:44 AM');
-INSERT INTO "public".offer( offerid, userid, title, capacity, depart, dest, scheduleddate, description, imgurl, dispo, publicationdate ) VALUES ( 45, 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44', 'Marchandise à transporter', '10 kg', 'TANA', 'FIANARA', '2024-07-28', 'PS 5', 'imgUrl-1721981951882.jpg', true, '2024-07-26 11:19:12 AM');
-INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 44, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', 73, false);
-INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 47, 'f38ac467-4030-466e-b7bf-45ed41ed7ef6', 76, false);
-INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 51, '08f42c03-88c7-4bcb-9b1b-fdf7b32a8939', 78, false);
-INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 57, 'f4c9d52f-79c1-4f24-ba2c-ace8d4090b44', 84, false);
+INSERT INTO "public".users( userid, firstname, lastname, usercin, companynumber, phone, address, email, bio, profileimage, "password", registerdate, accountid, subid, enrdate, accessday, reset_token, reset_token_exipiry ) VALUES ( '7a0a7942-7921-4399-ac4c-8d3377556b96', 'ADOLPHE', 'Alexis', '783921343234', null, '0340854816', 'SOANIERANA', 'alexis@gmail.com', 'Magic JOHNSON', 'default.png', '$2a$10$38iBXDktXIWVtMU6aGwCD.aDXfiITY678PtBhQz8pOb02HVFKJZFO', '2024-08-08', 3, null, null, 2, null, null);
+INSERT INTO "public".users( userid, firstname, lastname, usercin, companynumber, phone, address, email, bio, profileimage, "password", registerdate, accountid, subid, enrdate, accessday, reset_token, reset_token_exipiry ) VALUES ( '03a2bf26-9b69-494f-b238-44844dc9643d', 'Rrrrrrr', 'Rrrrrrr', '243421216526', null, '0345555555', 'Tetete', 'rr@gmail.com', 'Hdhdhdhd', 'default.png', '$2a$10$Owa4eiv4GTXeNb0lkV3eIO1CcgcQYhRgoEYYQMsIgF6lpI06ZckUS', '2024-08-08', 2, null, null, 2, null, null);
+INSERT INTO "public".users( userid, firstname, lastname, usercin, companynumber, phone, address, email, bio, profileimage, "password", registerdate, accountid, subid, enrdate, accessday, reset_token, reset_token_exipiry ) VALUES ( 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', 'Razafitsotra', 'Toslin', '201011032461', null, '0380525383', 'Ampitakely', 'razafitosy@gmail.com', 'No coding No life', 'default.png', '$2a$10$9ykKSXuIXyqFBTi04pz4POuhQsPkL31FaBW7E68tbuuNI2MzvDTJO', '2024-08-08', 3, null, null, 2, null, null);
+INSERT INTO "public".users( userid, firstname, lastname, usercin, companynumber, phone, address, email, bio, profileimage, "password", registerdate, accountid, subid, enrdate, accessday, reset_token, reset_token_exipiry ) VALUES ( 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', 'SCORE', '', 'null', '773432334', '0347828618', 'ANTSIRANANA Namakia', 'score@gmail.com', 'SUPERMARCHE RENOMMEE', 'profileimage-1723236027346.jpg', '$2a$10$0uNknh2mBFgEisM74RofVeG2mJAzC3.LTYIIXjD4FMUopEsIXik3K', '2024-08-09', 1, null, null, 2, null, null);
+INSERT INTO "public".conversation( idsender, idreceiver, idconversation, lastupdate, lastmessage, lastsender ) VALUES ( '03a2bf26-9b69-494f-b238-44844dc9643d', '7a0a7942-7921-4399-ac4c-8d3377556b96', 36, '2024-08-09 07:28:02 PM', 'Ah bon', '7a0a7942-7921-4399-ac4c-8d3377556b96');
+INSERT INTO "public".conversation( idsender, idreceiver, idconversation, lastupdate, lastmessage, lastsender ) VALUES ( 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', '7a0a7942-7921-4399-ac4c-8d3377556b96', 38, '2024-08-12 03:23:27 PM', 'Ok', '7a0a7942-7921-4399-ac4c-8d3377556b96');
+INSERT INTO "public".follow( followid, followerid, followeeid, followdate ) VALUES ( 315, 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', '2024-08-09');
+INSERT INTO "public".follow( followid, followerid, followeeid, followdate ) VALUES ( 316, 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', '7a0a7942-7921-4399-ac4c-8d3377556b96', '2024-08-10');
+INSERT INTO "public".follow( followid, followerid, followeeid, followdate ) VALUES ( 317, '7a0a7942-7921-4399-ac4c-8d3377556b96', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', '2024-08-12');
+INSERT INTO "public".follow( followid, followerid, followeeid, followdate ) VALUES ( 289, 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', '7a0a7942-7921-4399-ac4c-8d3377556b96', '2024-08-08');
+INSERT INTO "public".follow( followid, followerid, followeeid, followdate ) VALUES ( 305, '7a0a7942-7921-4399-ac4c-8d3377556b96', 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', '2024-08-09');
+INSERT INTO "public".follow( followid, followerid, followeeid, followdate ) VALUES ( 306, '7a0a7942-7921-4399-ac4c-8d3377556b96', '03a2bf26-9b69-494f-b238-44844dc9643d', '2024-08-09');
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 444, '2024-08-09 07:28:02 PM', 'F', 'Ah bon', 36, '03a2bf26-9b69-494f-b238-44844dc9643d', '', null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 441, '2024-08-08 09:46:44 PM', 'T', 'ssjsj', 36, '7a0a7942-7921-4399-ac4c-8d3377556b96', '', null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 446, '2024-08-09 10:44:50 PM', 'T', 'Ah bon', 38, 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', 'Interessant', null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 448, '2024-08-09 11:27:37 PM', 'T', '', 38, 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', 'Interessant', 'fileContent-1723235257160.jpg');
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 450, '2024-08-12 03:16:30 PM', 'T', 'Bonjour', 38, 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', '', null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 445, '2024-08-09 10:18:21 PM', 'T', 'Interessant', 38, '7a0a7942-7921-4399-ac4c-8d3377556b96', '', 'fileContent-1723231101553.png');
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 447, '2024-08-09 11:26:46 PM', 'T', '', 38, 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', '', 'fileContent-1723235206134.jpg');
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 449, '2024-08-10 12:07:11 AM', 'T', 'okay', 38, 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', '', null);
+INSERT INTO "public".message( messageid, sentdate, viewed, content, idconversation, receiverid, refmessage, filecontent ) VALUES ( 451, '2024-08-12 03:23:27 PM', 'T', 'Ok', 38, 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', 'Interessant', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 146, 'ADOLPHE Alexis Vous suit desormais.', '2024-08-08 07:56:04 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 148, 'ADOLPHE Alexis Vous suit desormais.', '2024-08-08 08:04:14 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 149, 'ADOLPHE Alexis Vous suit desormais.', '2024-08-08 08:04:23 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 150, 'ADOLPHE Alexis Vous suit desormais.', '2024-08-08 08:07:30 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 151, 'ADOLPHE Alexis Vous suit desormais.', '2024-08-08 08:07:44 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 152, 'ADOLPHE Alexis Vous suit desormais.', '2024-08-08 08:08:11 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 153, 'ADOLPHE Alexis Vous suit desormais.', '2024-08-08 08:08:23 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 154, 'ADOLPHE Alexis Vous suit desormais.', '2024-08-08 08:10:49 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 155, 'ADOLPHE Alexis Vous suit desormais.', '2024-08-08 08:11:05 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 156, 'ADOLPHE Alexis Vous suit desormais.', '2024-08-08 08:13:13 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 157, 'ADOLPHE Alexis Vous suit desormais.', '2024-08-08 08:14:08 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 160, ' ADOLPHE Alexis vient de publier une Offre', '2024-08-08 08:15:39 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 161, ' ADOLPHE Alexis a modifié sa publication d''offre', '2024-08-08 08:19:16 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 162, ' ADOLPHE Alexis a modifié sa publication d''offre', '2024-08-08 08:20:20 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 163, ' ADOLPHE Alexis a modifié sa publication d''offre', '2024-08-08 08:20:24 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 164, ' ADOLPHE Alexis a modifié sa publication d''offre', '2024-08-08 08:21:25 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 165, ' ADOLPHE Alexis a modifié sa publication d''offre', '2024-08-08 08:22:00 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 167, ' ADOLPHE Alexis a modifié sa publication d''offre', '2024-08-08 08:27:15 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 168, ' ADOLPHE Alexis a modifié sa publication d''offre', '2024-08-08 08:27:29 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 171, ' ADOLPHE Alexis a modifié sa publication d''offre', '2024-08-08 08:27:53 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 172, ' ADOLPHE Alexis a modifié sa publication d''offre', '2024-08-08 08:28:21 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 176, ' ADOLPHE Alexis vient de publier une Offre', '2024-08-08 08:30:39 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 202, 'Rrrrrrr Rrrrrrr Vous suit desormais.', '2024-08-08 09:22:39 PM', '03a2bf26-9b69-494f-b238-44844dc9643d', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 207, 'Rrrrrrr Rrrrrrr Vous suit desormais.', '2024-08-08 09:24:51 PM', '03a2bf26-9b69-494f-b238-44844dc9643d', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 208, 'Rrrrrrr Rrrrrrr Vous suit desormais.', '2024-08-08 09:25:26 PM', '03a2bf26-9b69-494f-b238-44844dc9643d', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 215, 'ADOLPHE Alexis Vous suit desormais.', '2024-08-08 10:10:30 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 216, 'Razafitsotra Toslin Vous suit desormais.', '2024-08-08 10:10:31 PM', 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 217, ' ADOLPHE Alexis a modifié sa publication d''offre', '2024-08-08 10:10:58 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 218, ' Razafitsotra Toslin vient de publier une Offre', '2024-08-08 10:11:42 PM', 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 219, 'ADOLPHE Alexis Vous suit desormais.', '2024-08-08 10:12:36 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 220, ' Razafitsotra Toslin a modifié sa publication d''offre', '2024-08-08 10:49:50 PM', 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', '75');
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 221, ' Razafitsotra Toslin vient de publier une Offre', '2024-08-08 10:51:43 PM', 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 222, 'ADOLPHE Alexis Vous suit desormais.', '2024-08-09 07:28:32 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 223, 'SCORE Vous suit desormais.', '2024-08-09 08:48:32 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 224, ' ADOLPHE Alexis a modifié sa publication d''offre', '2024-08-09 08:49:39 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', '62');
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 225, ' ADOLPHE Alexis a modifié sa publication d''offre', '2024-08-09 08:50:22 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', '63');
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 226, 'SCORE Vous suit desormais.', '2024-08-09 09:35:13 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 227, 'SCORE Vous suit desormais.', '2024-08-09 10:17:28 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 228, 'SCORE Vous suit desormais.', '2024-08-09 10:18:33 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 229, 'SCORE Vous suit desormais.', '2024-08-09 10:18:49 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 230, 'SCORE Vous suit desormais.', '2024-08-09 10:18:58 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 231, 'SCORE Vous suit desormais.', '2024-08-09 10:19:03 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 232, 'SCORE Vous suit desormais.', '2024-08-09 10:22:01 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 233, 'SCORE Vous suit desormais.', '2024-08-09 10:25:46 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 234, 'SCORE Vous suit desormais.', '2024-08-09 10:42:39 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 235, 'SCORE Vous suit desormais.', '2024-08-09 10:42:54 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 236, 'SCORE Vous suit desormais.', '2024-08-09 10:43:27 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 237, 'ADOLPHE Alexis Vous suit desormais.', '2024-08-09 10:44:03 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 238, 'ADOLPHE Alexis Vous suit desormais.', '2024-08-09 10:44:05 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 239, 'ADOLPHE Alexis Vous suit desormais.', '2024-08-09 10:44:05 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 240, 'SCORE Vous suit desormais.', '2024-08-09 11:28:21 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 241, 'SCORE Vous suit desormais.', '2024-08-09 11:28:40 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 242, 'SCORE Vous suit desormais.', '2024-08-09 11:29:57 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 243, 'SCORE Vous suit desormais.', '2024-08-09 11:35:57 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 244, 'SCORE Vous suit desormais.', '2024-08-09 11:35:59 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 245, 'SCORE Vous suit desormais.', '2024-08-09 11:39:45 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 246, 'SCORE Vous suit desormais.', '2024-08-09 11:39:57 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 247, 'SCORE Vous suit desormais.', '2024-08-09 11:40:05 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 248, 'SCORE null Vous suit desormais.', '2024-08-09 11:49:03 PM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 249, 'SCORE Vous suit desormais.', '2024-08-10 12:26:49 AM', 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 250, 'ADOLPHE Alexis Vous suit desormais.', '2024-08-12 03:25:15 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".notifications( notifid, content, notifdate, senderid, link ) VALUES ( 251, ' ADOLPHE Alexis vient de publier une Offre', '2024-08-12 03:29:56 PM', '7a0a7942-7921-4399-ac4c-8d3377556b96', null);
+INSERT INTO "public".offer( offerid, userid, title, capacity, depart, dest, scheduleddate, description, imgurl, dispo, publicationdate ) VALUES ( 75, 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', 'Transport de marchandise', '50kg', 'sssssss', 'sss', '2024-08-17', 'vvvvv', 'imgUrl-1723144300689.png', true, '2024-08-08 10:11:42 PM');
+INSERT INTO "public".offer( offerid, userid, title, capacity, depart, dest, scheduleddate, description, imgurl, dispo, publicationdate ) VALUES ( 76, 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', 'Transport de marchandise', '50kg', 'vbv', 'bvbv', '2024-08-22', 'nnbnbnb', 'imgUrl-1723146702434.png', true, '2024-08-08 10:51:43 PM');
+INSERT INTO "public".offer( offerid, userid, title, capacity, depart, dest, scheduleddate, description, imgurl, dispo, publicationdate ) VALUES ( 62, '7a0a7942-7921-4399-ac4c-8d3377556b96', 'Marchandise à transporter', '56 kg', 'Tana', 'Fianara', '2024-08-18', 'csdcdca', 'imgUrl-1723137339500.jpg', true, '2024-08-08 08:15:39 PM');
+INSERT INTO "public".offer( offerid, userid, title, capacity, depart, dest, scheduleddate, description, imgurl, dispo, publicationdate ) VALUES ( 77, '7a0a7942-7921-4399-ac4c-8d3377556b96', 'Transport de marchandise', '45 kg', 'Tana', 'DS', '2024-08-15', 'dghapdh ophjccs', 'imgUrl-1723465796114.jpg', true, '2024-08-12 03:29:56 PM');
+INSERT INTO "public".saveoffer( saveid, offerid, userid, savedate ) VALUES ( 36, 75, '7a0a7942-7921-4399-ac4c-8d3377556b96', '2024-08-09 10:45:08 PM');
+INSERT INTO "public".saveoffer( saveid, offerid, userid, savedate ) VALUES ( 37, 76, '7a0a7942-7921-4399-ac4c-8d3377556b96', '2024-08-12 03:18:06 PM');
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 247, 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', 225, true);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 245, 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', 224, true);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 254, '7a0a7942-7921-4399-ac4c-8d3377556b96', 232, true);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 244, 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', 224, false);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 246, 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', 225, false);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 260, 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', 238, false);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 261, '03a2bf26-9b69-494f-b238-44844dc9643d', 239, false);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 239, '03a2bf26-9b69-494f-b238-44844dc9643d', 219, false);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 259, 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', 237, true);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 262, 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', 240, false);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 263, '03a2bf26-9b69-494f-b238-44844dc9643d', 241, false);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 264, '03a2bf26-9b69-494f-b238-44844dc9643d', 242, false);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 265, '03a2bf26-9b69-494f-b238-44844dc9643d', 243, false);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 266, 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', 244, false);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 267, 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', 245, false);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 268, 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', 246, false);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 237, 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', 217, true);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 270, 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', 248, false);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 271, '7a0a7942-7921-4399-ac4c-8d3377556b96', 249, true);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 274, 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', 251, false);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 273, 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', 251, true);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 272, 'f914cab3-d2f0-4de9-a0b3-b1e3970d2073', 250, true);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 242, 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', 222, false);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 248, 'aa50cdf5-1016-461f-a276-1c3fee6b0c48', 226, false);
+INSERT INTO "public".sendnotification( sendnotifid, userid, notifid, viewed ) VALUES ( 249, '03a2bf26-9b69-494f-b238-44844dc9643d', 227, false);

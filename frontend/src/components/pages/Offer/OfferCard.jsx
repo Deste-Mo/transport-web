@@ -169,16 +169,20 @@ const OfferCard = ({
                 setPopupVisible={setPopupVisible}
                 content={
                   <>
-                    <SettingItem onClick={handleClick} name="Contacter" icon="bi bi-chat" />
+                    <SettingItem
+                      onClick={handleClick}
+                      name="Contacter"
+                      icon="bi bi-chat"
+                    />
                     {saved ? (
                       <SettingItem
-                        onClick={() => handleSaveOffer()}
+                        onClick={handleRevokeSavedOffer}
                         name="Sauvegarder"
                         icon="bi bi-bookmark"
                       />
                     ) : (
                       <SettingItem
-                        onClick={() => handleRevokeSavedOffer()}
+                        onClick={handleSaveOffer}
                         name="Retirer de la sauvegarde"
                         icon="bi bi-bookmark-dash"
                       />
@@ -262,27 +266,6 @@ const OfferCard = ({
             >
               Contacter
             </Button>
-            {/* {saved ? (
-              <Button
-                onClick={handleRevokeSavedOffer}
-                size="sm"
-                variant="danger"
-                icon="bi bi-bookmark-dash"
-                rounded="full"
-              >
-                Retirer de la sauvegarde
-              </Button>
-            ) : (
-              <Button
-                size="sm"
-                variant="secondary"
-                icon="bi bi-bookmark"
-                rounded="full"
-                onClick={handleSaveOffer}
-              >
-                Sauvegarder
-              </Button>
-            )} */}
           </div>
         )}
       </div>

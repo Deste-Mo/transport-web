@@ -1,5 +1,6 @@
 // TODO :
 // ! Refactor the OfferCard popup component -> done
+
 // ! New page to show all available offer in the profile page
 // ! Creating new message component for mobile device
 // ! Making expandable searchabar and serchFilter responsive
