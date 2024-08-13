@@ -9,7 +9,6 @@ const sizeVariants = {
     lg: "px-6 py-4",
   },
   text: {
-
     md: "text-lead text-black-80 max-md:text-base",
     lg: "text-subtitle-3",
   },
@@ -20,7 +19,7 @@ export function SubHeader({
   icon,
   sticky = false,
   size = "md",
-  rightContent,
+  rightContent = null,
   hideLeftContent = false,
   className,
 }) {
@@ -38,7 +37,9 @@ export function SubHeader({
           <span>{name}</span>
         </div>
       )}
-      <div className="w-full flex justify-end">{rightContent}</div>
+      {rightContent && (
+        <div className="w-full flex justify-end">{rightContent}</div>
+      )}
     </div>
   );
 }

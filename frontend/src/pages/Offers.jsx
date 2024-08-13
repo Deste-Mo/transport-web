@@ -19,16 +19,22 @@ const Offers = () => {
   const { personalInformation } = useAuth();
   const {
     offerLoading,
-    suggestedOffers, savedOffers, getSavedOffers, getSuggestedOffers, currentUserOffers, getOfferById, updateOffer,
-    
+    suggestedOffers,
+    savedOffers,
+    getSavedOffers,
+    getSuggestedOffers,
+    currentUserOffers,
+    getOfferById,
+    updateOffer,
+
     getCurrentUserOffers,
   } = useOffer();
   const { id } = useParams();
   const now = new Date();
   const [search, setSearch] = useState("");
   const [filteredOffers, setFilterefOffers] = useState(suggestedOffers);
-  const [searching, setSearching] = useState(false);
-
+  const [searching, setSearching] = useState(true);
+  const offers = id ? currentUserOffers : suggestedOffers;
   const filterOffers = () => {
     setSearching(true);
     const filterModes = JSON?.parse(localStorage.getItem("offerCardFilter"));
@@ -58,6 +64,7 @@ const Offers = () => {
         }
 
         default:
+          // filteredResult = suggestedOffers;
           break;
       }
     };
@@ -80,15 +87,20 @@ const Offers = () => {
         }
 
         case postDateFilterMode.recent: {
-          filteredResult.sort(({ publicationdate }) => {
+          filteredResult = filteredResult.sort(({ publicationdate }) => {
             return new Date().getTime() - new Date(publicationdate).getTime();
           });
         }
 
         case postDateFilterMode.old: {
-          filteredResult.sort(({ publicationdate }) => {
+          filteredResult = filteredResult.sort(({ publicationdate }) => {
             return new Date(publicationdate).getTime() - new Date().getTime();
           });
+        }
+
+        default: {
+          // filteredResult = suggestedOffers;
+          break;
         }
       }
     };
@@ -113,6 +125,7 @@ const Offers = () => {
         depart,
       }) => {
         if (!search) return true;
+        setSearching(false);
 
         return (
           accounttype?.toLowerCase()?.includes(search?.toLowerCase()) ||
@@ -124,9 +137,7 @@ const Offers = () => {
         );
       }
     );
-
     setFilterefOffers(filteredResult);
-    setSearching(false);
   };
 
   useEffect(() => {
@@ -137,14 +148,14 @@ const Offers = () => {
   useEffect(() => {
     getSavedOffers();
     getSuggestedOffers();
-    filterOffers();
+    filterOffers(suggestedOffers);
     if (id) getCurrentUserOffers(id);
   }, [id]);
 
   useEffect(() => {
     filterOffers();
-    localStorage.getItem("offerNotifId") && getOfferById(localStorage.getItem("offerNotifId"));
-
+    localStorage.getItem("offerNotifId") &&
+      getOfferById(localStorage.getItem("offerNotifId"));
   }, [search]);
 
   return (
@@ -172,15 +183,14 @@ const Offers = () => {
               placeholder="Rechercher une offre"
               setValue={setSearch}
               onFilter={filterOffers}
-              
             />
           )
         }
       />
       <div className="flex flex-col items-center justify-center gap-6 w-full">
-        {filteredOffers?.length > 0 ? (
+        {offers?.length > 0 ? (
           <Suspense fallback={<OfferCardLoading />}>
-            {filteredOffers.map((suggestion) => (
+            {offers.map((suggestion) => (
               <OfferCard
                 key={suggestion.offerid}
                 sug={suggestion}

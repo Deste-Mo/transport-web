@@ -6,7 +6,7 @@ import Button from "../../ui/Button.jsx";
 import { Icon } from "../../../styles/components.js";
 import { useApp } from "../../../context/AppProvider.jsx";
 import { SERVERLINK } from "../../../constants/index.js";
-import { useAnimation } from "framer-motion";
+import { useAnimation } from "../../../context/AnimationProvider.jsx";
 import OfferCardLoading from "../../loader/OfferCardLoading.jsx";
 import { TOAST_TYPE } from "../../../constants/index.js";
 import { useAuth } from "../../../context/AuthProvider.jsx";
@@ -91,7 +91,7 @@ const OfferCard = ({
 
     // - Deleting the post
     // setPopupVisible(false);
-    // setMessagePopup("Offre supprimé avec success", TOAST_TYPE.success);
+    setMessagePopup("Offre supprimé avec success", TOAST_TYPE.success);
   };
 
   const handleEditPost = () => {
@@ -107,6 +107,8 @@ const OfferCard = ({
     setUnavalaibleOffer(sug.offerid);
     getCurrentUserOffers();
     setPopupVisible(false);
+    setMessagePopup("L'offre est actuellement rendu expirée", TOAST_TYPE.success);
+
   };
 
   const handleUnexpirePost = () => {
@@ -114,6 +116,7 @@ const OfferCard = ({
     setAvalaibleOffer(sug.offerid);
     getCurrentUserOffers();
     setPopupVisible(false);
+    setMessagePopup("L'offre rendu non-expiré", TOAST_TYPE.success);
   };
 
   return (

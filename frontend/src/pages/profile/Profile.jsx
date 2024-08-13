@@ -159,7 +159,6 @@ export default function Profile() {
                     forCurrentUser
                     key={currentUserOffer.offerid}
                     sug={currentUserOffer}
-                    mine
                   />
                 ))
               ) : (

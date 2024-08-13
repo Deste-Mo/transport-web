@@ -237,7 +237,7 @@ const Messages = () => {
               </>
             ))
           ) : (
-            <p className="text-black-40 dark:text-white-100 w-full h-screen text-center flex items-center justify-center text-subtitle-3">
+            <p className="text-black-40 dark:text-white-100 w-full  text-center flex items-center justify-center text-subtitle-3">
               Soyez le premier à discuter
             </p>
           )}

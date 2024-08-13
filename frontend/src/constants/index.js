@@ -27,6 +27,8 @@ export const TOAST_TYPE = {
   error: "error",
 };
 
+
+
 export const OFFER_CARD_FILTERS = [
   {
     title: "Type de compte",
@@ -82,6 +84,8 @@ export const OFFER_CARD_FILTERS_MODE = {
   },
 };
 
+
+
 export const OFFER_CARD_FILTERS_TITLES = {
   accountType: "Type de compte",
   postDate: "Date de publication",
@@ -89,4 +93,22 @@ export const OFFER_CARD_FILTERS_TITLES = {
 
 export const BREAKPOINTS = {
   mobile: "767",
+};
+
+
+
+export const USERS_FILTERS_DATAS = [
+  {
+    name: "Suivi(s)",
+    active: true,
+  },
+  {
+    name: "Suggestion(s)",
+    active: false,
+  },
+];
+
+export const USERS_FILTERS = {
+  follower: "Suivi(s)",
+  suggestion: "Suggestion(s)",
 };
