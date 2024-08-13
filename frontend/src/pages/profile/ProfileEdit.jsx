@@ -12,10 +12,12 @@ import {
 import {SubHeader} from '../../components/pages/SubHeader'
 import {useAuth} from '../../context/AuthProvider'
 import {SERVERLINK} from '../../constants'
+import { useAnimation } from '../../context/AnimationProvider'
+
 
 const ProfileEdit = ({onClick}) => {
     const {handleInputChange, checkFieldError, handleError} = useForm()
-
+    const {setShowBackIcon} = useAnimation();
     const {personalInformation, token, getInformation} = useAuth()
 
     const [formData, setFormData] = useState({
@@ -85,10 +87,11 @@ const ProfileEdit = ({onClick}) => {
 
     useEffect(() => {
         getInformation(token);
-        setP(personalInformation?.profile)
+        setP(personalInformation?.profile);
+        setShowBackIcon(true);
     }, [])
     return (
-        <section className="space-y-6">
+        <section className="space-y-6 pb-[54px]">
             <SubHeader icon="bi bi-info-circle" name="Modifier les informations"/>
             <form className={`flex flex-col gap-10 shadow`} onSubmit={handleSubmit}>
                 <div className="rounded-lg flex flex-col gap-4">

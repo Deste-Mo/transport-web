@@ -12,9 +12,11 @@ import OfferCard from "../components/pages/Offer/OfferCard.jsx";
 import {useOffer} from "../context/OfferProvider.jsx";
 import {useUser} from "../context/UserProvider.jsx";
 import ProfileLeftLoading from "../components/loader/ProfileLeftLoading.jsx";
+import { useAnimation } from "../context/AnimationProvider.jsx";
 
 const NavPageLayout = () => {
     const {personalInformation, loadingInformation} = useAuth();
+    const {setShowBackIcon} = useAnimation();
     const {
         savedOffers,
         getSavedOffers,
@@ -32,6 +34,7 @@ const NavPageLayout = () => {
         getSavedOffers();
         getSuggestedOffers();
         getCurrentUserOffers();
+        setShowBackIcon(false);
     }, [])
 
     return (

@@ -30,7 +30,7 @@ const AppLayout = () => {
             getNotifications();
             getFriends();
             getCurrentUserOffers();
-        });
+        });2
 
         socket?.on("newMessage", () => {
             getUnreadMessageCount();
@@ -41,7 +41,7 @@ const AppLayout = () => {
 
     return (
 
-        loading ? <p className="text-black-100 text-title-3">Loading ...</p> : token ?
+        loading ? <p className="text-primary-100 text-title-3">Loading ...</p> : token ?
             <section className="relative scrollbar-none">
                 <Header profileImage={SERVERLINK + "/" + user.profile || "X.png"}/>
                 <div className="mt-[7em] max-md:mb-[7em] max-md:mt-[5em] scrollbar-none ">

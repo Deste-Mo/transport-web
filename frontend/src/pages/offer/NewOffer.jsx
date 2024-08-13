@@ -16,10 +16,12 @@ import {appVariants} from '../../animations/variants.js'
 import {useApp} from '../../context/AppProvider.jsx'
 import {useOffer} from '../../context/OfferProvider.jsx'
 import {globalInputVariants} from "../../styles/globals.input.js";
+import { useAnimation } from '../../context/AnimationProvider.jsx'
 
 
 const NewOffer = () => {
-    const {handleInputChange, checkFieldError, handleError} = useForm()
+    const {handleInputChange, checkFieldError, handleError} = useForm();
+    const {setShowBackIcon} = useAnimation();
 
     const {getCurrentUserOffers, updateOffer, setUpdateOffer} = useOffer();
 
@@ -32,33 +34,6 @@ const NewOffer = () => {
         capacity: '',
         scheduledDate: ''
     });
-
-    useEffect(() => {
-        updateOffer && setFormData({
-            imgUrl: updateOffer.imgurl,
-            title: updateOffer.title,
-            description: updateOffer.description,
-            depart: updateOffer.depart,
-            destination: updateOffer.dest,
-            capacity: updateOffer.capacity,
-            scheduledDate: '',
-        })
-    }, [updateOffer]);
-
-    const {token, personalInformation} = useAuth();
-
-
-    const [file, setFile] = useState({
-        name: '',
-        path: '',
-    });
-
-    useEffect(() => {
-        const getOfferToUpdate = async () => {
-            localStorage.getItem("offer") && setUpdateOffer(await JSON.parse(localStorage.getItem("offer")))
-        }
-        getOfferToUpdate();
-    }, []);
 
     const reset = () => {
         localStorage.removeItem("offer");
@@ -199,9 +174,39 @@ const NewOffer = () => {
         setFormData({...formData, [e.target.name]: e.target.value});
     }
 
+
+
     useEffect(() => {
         checkFieldError(errorData)
     }, [errorData])
+
+    useEffect(() => {
+        updateOffer && setFormData({
+            imgUrl: updateOffer.imgurl,
+            title: updateOffer.title,
+            description: updateOffer.description,
+            depart: updateOffer.depart,
+            destination: updateOffer.dest,
+            capacity: updateOffer.capacity,
+            scheduledDate: '',
+        })
+    }, [updateOffer]);
+
+    const {token, personalInformation} = useAuth();
+
+
+    const [file, setFile] = useState({
+        name: '',
+        path: '',
+    });
+
+    useEffect(() => {
+        setShowBackIcon(true);
+        const getOfferToUpdate = async () => {
+            localStorage.getItem("offer") && setUpdateOffer(await JSON.parse(localStorage.getItem("offer")))
+        }
+        getOfferToUpdate();
+    }, []);
 
     return (
         <motion.section
