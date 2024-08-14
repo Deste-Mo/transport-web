@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Initailization */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  transition: color 0.1s;
+}
+
+/* Loading fonts */
+@font-face {
+  font-family: "RobotoMd";
+  src: url("../assets/font/Roboto-Medium.ttf");
+}
+
+@font-face {
+  font-family: "RobotoSm";
+  src: url("../assets/font/Roboto-Light.ttf");
+}
+
+@font-face {
+  font-family: "RobotoBold";
+  src: url("../assets/font/Roboto-Bold.ttf");
+}
+
+
+@layer base {
+  .auth-section {
+    @apply px-16 py-6
+  }
+
+  .app-container {
+    @apply px-4 py-4
+  }
+
+  .nav-page-container {
+    @apply px-4 py-0
+  }
+
+  /*Loading animation*/
+  .loader-tag-1{
+    @apply bg-black-60 dark:bg-white-40  animate-pulse 
+  }
+  .loader-tag-2{
+    @apply  bg-black-20 dark:bg-white-10  animate-pulse 
+  }
+}
+
+@layer components {
+  .else {
+    align-self: start;
+  }
+
+  .mine {
+    align-self: end;
+  }
+  
+}
