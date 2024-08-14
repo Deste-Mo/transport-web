@@ -61,8 +61,9 @@ const AppProvider = ({ children }) => {
         setUserToChat({
             id: user.id,
             fullName: user.fullName,
-            accountType: user.accountType,
-            pic: user.pic
+            accountType: user.accounttype,
+            pic: user.pic,
+            offerId: user?.offerId
         })
 
         const messagesRes = await fetch(SERVERLINK + '/api/messages/' + await user.id, {

@@ -16,7 +16,7 @@ const ProfileDetails = () => {
                 <Profile/>
             </div>
             <div className="max-md:hidden">
-                {currentUser.id === id ? <NewOffer/> : <Offers userId={id}/>}
+                {currentUser.id === id ? <NewOffer/> : <Offers/>}
             </div>
         </section>
     );

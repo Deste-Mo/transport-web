@@ -17,22 +17,24 @@ import {
 
 const Offers = () => {
   const { personalInformation } = useAuth();
-  const {
-    offerLoading,
-    suggestedOffers, savedOffers, getSavedOffers, getSuggestedOffers, currentUserOffers, getOfferById, updateOffer,
-    
-    getCurrentUserOffers,
-  } = useOffer();
+    const { suggestedOffers, savedOffers, getSavedOffers, getSuggestedOffers, getCurrentUserOffers, currentUserOffers, getOfferById, updateOffer } = useOffer();
+
+    const user = personalInformation;
+
   const { id } = useParams();
+
+    var offersToShow = id ? currentUserOffers : suggestedOffers;
+
+    const [search, setSearch] = useState('');
+
   const now = new Date();
-  const [search, setSearch] = useState("");
-  const [filteredOffers, setFilterefOffers] = useState(suggestedOffers);
+  const [filteredOffers, setFilterefOffers] = useState(offersToShow);
   const [searching, setSearching] = useState(false);
 
   const filterOffers = () => {
     setSearching(true);
     const filterModes = JSON?.parse(localStorage.getItem("offerCardFilter"));
-    let filteredResult = suggestedOffers;
+    let filteredResult = offersToShow;
 
     const filterByAccountType = (accountTypeFilter) => {
       const accountTypeFilterMode = OFFER_CARD_FILTERS_MODE.accountType;
@@ -77,18 +79,21 @@ const Offers = () => {
               postDate.getDate() === today.getDate()
             );
           });
+          break;
         }
 
         case postDateFilterMode.recent: {
           filteredResult.sort(({ publicationdate }) => {
             return new Date().getTime() - new Date(publicationdate).getTime();
           });
+          break;
         }
 
         case postDateFilterMode.old: {
           filteredResult.sort(({ publicationdate }) => {
             return new Date(publicationdate).getTime() - new Date().getTime();
           });
+          break;
         }
       }
     };
@@ -129,23 +134,23 @@ const Offers = () => {
     setSearching(false);
   };
 
-  useEffect(() => {
-    getSuggestedOffers();
-    filterOffers();
-  }, []);
+  // useEffect(() => {
+  //   getSuggestedOffers();
+  //   filterOffers();
+  // }, []);
 
   useEffect(() => {
     getSavedOffers();
     getSuggestedOffers();
     filterOffers();
-    if (id) getCurrentUserOffers(id);
+    id && getCurrentUserOffers(id);
   }, [id]);
 
   useEffect(() => {
     filterOffers();
     localStorage.getItem("offerNotifId") && getOfferById(localStorage.getItem("offerNotifId"));
 
-  }, [search]);
+  }, []);
 
   return (
     <motion.section
@@ -161,7 +166,7 @@ const Offers = () => {
         icon="bi bi-truck"
         sticky
         rightContent={
-          suggestedOffers?.length > 0 && (
+          offersToShow?.length > 0 && (
             <SearchFilter
               filterResultsName="offerCardFilter"
               filters={OFFER_CARD_FILTERS}

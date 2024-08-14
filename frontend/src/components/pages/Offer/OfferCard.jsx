@@ -49,6 +49,7 @@ const OfferCard = ({
         fullName: sug?.firstname + " " + sug?.lastname,
         accounttype: sug?.accounttype,
         pic: image,
+        offerId: sug?.offerid
       })
     );
     navigate("/message");

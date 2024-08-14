@@ -12,7 +12,7 @@ const Conv = ({ id, userToChat }) => {
 
     const { token, personalInformation } = useAuth();
 
-    const { timeSince } = useApp();
+    const { timeSince, countUnread } = useApp();
 
     const image = SERVERLINK + "/" + userToChat?.profileimage;
 
@@ -45,7 +45,8 @@ const Conv = ({ id, userToChat }) => {
             setViewed(await verification.allSeen);
         }
         verifyStatus();
-    }, [])
+
+    }, [countUnread])
 
     return (
         <div className={`flex select-none items-center justify-between cursor-pointer w-full hover:bg-primary-20  p-6 max-md:p-4 rounded-xl ${isViewed ? 'bg-white-100 dark:bg-white-0 ' : 'bg-primary-20'}`} onClick={handleClick}>
@@ -55,7 +56,7 @@ const Conv = ({ id, userToChat }) => {
                     {isOnline ? <span className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-primary-100 absolute top-0 right-0 block" ></span> : null}
                 </div>
                 <div className="flex flex-col gap-1 items-start">
-                    <p className="text-black-100 dark:text-white-100 text-small-1">{userToChat.firstname + " " + userToChat.lastname}  <span className="font-sm">({userToChat.accounttype})</span></p>
+                    <p className="text-black-100 dark:text-white-100 text-small-1">{userToChat.firstname + (userToChat.lastname ? " " + userToChat.lastname : '')}  <span className="font-sm ml-1 bg-primary-60 py-1 px-3 rounded-lg">{userToChat.accounttype}</span></p>
                     <p className={`${isViewed ? 'text-black-80 dark:text-white-80 dark:font-sm' : 'text-black-100 dark:text-white-100 font-bold'}  text-small-1 flex items-center gap-1`}>
                         <span>
                             {personalInformation.id === userToChat.lastsender ? "Vous : " : "Nouveau : "}

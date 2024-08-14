@@ -21,7 +21,7 @@ const MessageList = () => {
 
     const navigate = useNavigate();
 
-    const { conversations, handleShowConversation } = useApp();
+    const { conversations, handleShowConversation, getUnreadMessageCount, countUnread } = useApp();
     const { friends, getFriends } = useUser();
 
     const { socket } = useSocketContext();
@@ -40,18 +40,19 @@ const MessageList = () => {
     })) : null;
 
     useEffect(() => {
-
         getFriends();
         handleShowConversation();
+    }, []);
 
-        socket?.on("newMessage", (newMessage) => {
-            setMessages([...messages, newMessage]);
+    useEffect(() => {
+        socket?.on("newMessage", () => {
             handleShowConversation();
+            getUnreadMessageCount();
         });
 
         return () => socket?.off("newMessage")
 
-    }, [socket, token, setMessages])
+    }, [socket, countUnread])
 
     return (
         <motion.section className="flex flex-col items-center justify-start w-full gap-6 relative  min-h-screen" variants={appVariants} initial="hidden" whileInView="visible" viewport={{once : true}}>

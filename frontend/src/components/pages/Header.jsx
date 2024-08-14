@@ -10,32 +10,32 @@ import Icon from "../ui/Icon.jsx";
 
 export function Header({ profileImage }) {
   const { countUnread, getUnreadMessageCount } = useApp();
-    const { unreadNotificationsCount, getUnreadNotifications } = useNotification();
+  const { unreadNotificationsCount, getUnreadNotifications } = useNotification();
   const { getFriends } = useUser();
 
   const NAV_LINKS = [
     {
       name: "Accueil",
       icon: "bi bi-grid",
-      activeIcon : "bi bi-grid-fill",
+      activeIcon: "bi bi-grid-fill",
       path: "/",
       number: 0,
     },
     {
       name: "Discussion",
       icon: "bi bi-chat",
-      activeIcon : "bi bi-chat-fill",
+      activeIcon: "bi bi-chat-fill",
 
       path: "/discussion",
       number: countUnread,
     },
     {
       name: "Offres",
-      activeIcon : "bi bi-truck",
+      activeIcon: "bi bi-truck",
 
       icon: "bi bi-truck",
       path: "/offer",
-            number: 0,
+      number: 0,
     },
     {
       name: "Suivis",
@@ -55,11 +55,11 @@ export function Header({ profileImage }) {
 
   useEffect(() => {
     getUnreadMessageCount();
-    }, [countUnread])
+  }, [countUnread]);
 
   useEffect(() => {
     getUnreadNotifications();
-    }, [unreadNotificationsCount]);
+  }, [unreadNotificationsCount]);
 
   useEffect(() => {
     getFriends();
@@ -118,7 +118,7 @@ const MobileHeader = ({ className, NAV_LINKS, profileImage }) => {
                 navlink.path.toLowerCase() === location.pathname.toLowerCase()
               }
               onClick={() => navigate(navlink.path)}
-                            number={navlink.number}
+              number={navlink.number}
             />
           ))}
         </ul>
@@ -189,17 +189,14 @@ const NavLink = ({
   return (
     <li
       onClick={onClick}
-      className={` flex flex-col justify-center items-center cursor-pointer group hover:text-primary-100 ${
-        active ? "text-primary-100" : "text-black-100 dark:text-white-100"
-      } `}
+      className={` flex flex-col justify-center items-center cursor-pointer group hover:text-primary-100 ${active ? "text-primary-100" : "text-black-100 dark:text-white-100"
+        } `}
     >
       <i className={`${active ? activeIcon : icon}  text-icon`}></i>
       <span
-        className={`${
-          forMobile ? "text-small-2" : "text-small-1"
-        } group-hover:text-primary-100 relative ${
-          active ? "text-primary-100" : "text-black-80 dark:text-white-100"
-        }`}
+        className={`${forMobile ? "text-small-2" : "text-small-1"
+          } group-hover:text-primary-100 relative ${active ? "text-primary-100" : "text-black-80 dark:text-white-100"
+          }`}
       >
         {number > 0 && (
           <div className="absolute max-md:text-small-3 max-md:font-sm bottom-10 -right-2 bg-danger-100 text-white-100 size-[24px] flex items-center justify-center px-2 py-2 rounded-full">

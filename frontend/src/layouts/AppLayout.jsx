@@ -2,15 +2,16 @@ import { useAuth } from "../context/AuthProvider.jsx";
 import { Navigate, Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import { Header } from "../components/pages/Header.jsx";
-import { SERVERLINK } from "../constants/index.js";
+import { SERVERLINK, TOAST_TYPE } from "../constants/index.js";
 import { useApp } from "../context/AppProvider.jsx";
 import { useUser } from "../context/UserProvider.jsx";
 import { useNotification } from "../context/NotficationProvider.jsx";
 import { useOffer } from "../context/OfferProvider.jsx";
 import { useSocketContext } from "../context/SocketContext.jsx";
+import { useAnimation } from "../context/AnimationProvider.jsx";
 
 const AppLayout = () => {
-    const {token, loading, personalInformation} = useAuth();
+    const { token, loading, personalInformation } = useAuth();
 
     const user = personalInformation;
     const { getUnreadMessageCount, countUnread, getUserMessages } = useApp();
@@ -20,6 +21,8 @@ const AppLayout = () => {
     const { getNotifications, getUnreadNotifications, unreadNotificationsCount } = useNotification();
 
     const { getCurrentUserOffers, getSuggestedOffers } = useOffer();
+
+    const {setMessagePopup} = useAnimation();
 
     const { socket } = useSocketContext();
 
@@ -33,11 +36,13 @@ const AppLayout = () => {
             getFriends();
             getCurrentUserOffers();
             getSuggestedOffers();
+            setMessagePopup("Nouvelle Notification", TOAST_TYPE.success);
         });
 
         socket?.on("newMessage", () => {
             getUnreadMessageCount();
             getUsers();
+            setMessagePopup("Nouveau Message", TOAST_TYPE.success);
         });
         return () => socket?.off("newMessage");
     }, [socket, countUnread, getUnreadMessageCount, unreadNotificationsCount]);

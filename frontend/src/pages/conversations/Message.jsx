@@ -1,16 +1,16 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import {useNavigate} from "react-router-dom";
-import {Button, FileInput, TextArea, TextInput} from "../../styles/components";
-import {useAuth} from "../../context/AuthProvider";
-import {useApp} from "../../context/AppProvider";
-import {useEffect, useRef, useState} from "react";
-import {useSocketContext} from "../../context/SocketContext";
-import {SERVERLINK} from "../../constants";
+import { useNavigate } from "react-router-dom";
+import { Button, FileInput, TextArea, TextInput } from "../../styles/components";
+import { useAuth } from "../../context/AuthProvider";
+import { useApp } from "../../context/AppProvider";
+import { useEffect, useRef, useState } from "react";
+import { useSocketContext } from "../../context/SocketContext";
+import { SERVERLINK } from "../../constants";
 import Icon from "../../components/ui/Icon.jsx";
-import {useForm} from "../../context/FormProvider.jsx";
-import {appVariants} from "../../animations/variants.js";
-import {motion} from "framer-motion";
+import { useForm } from "../../context/FormProvider.jsx";
+import { appVariants } from "../../animations/variants.js";
+import { motion } from "framer-motion";
 import { useUser } from "../../context/UserProvider.jsx";
 
 
@@ -18,11 +18,11 @@ const Messages = () => {
 
     const navigate = useNavigate();
 
-    const {token} = useAuth();
+    const { token } = useAuth();
 
     const { goToUserProfile } = useUser();
 
-    const { messages, userToChat, getUnreadMessageCount, getUserMessages } = useApp()
+    const { messages, userToChat, getUnreadMessageCount, getUserMessages, countUnread } = useApp()
 
     const [messInput, setMessInput] = useState("");
 
@@ -52,7 +52,7 @@ const Messages = () => {
     });
 
     const isOnline = ActiveUsers.includes(JSON.parse(localStorage.getItem('userToChat')).id);
-    const {socket} = useSocketContext();
+    const { socket } = useSocketContext();
 
 
     const handleClick = () => {
@@ -62,12 +62,19 @@ const Messages = () => {
     const navigateToProfile = () => navigate(`/profile/${userToChat.id}`)
 
     useEffect(() => {
-        getUserMessages();
         socket?.on("newMessage", () => {
-            getUserMessages();
+            getUserMessages(endOfMessagesRef);
+            getUnreadMessageCount();
         });
+
         return () => socket?.off("newMessage")
-    }, [socket]);
+
+    }, [socket, countUnread]);
+
+    useEffect(() => {
+        getUserMessages(endOfMessagesRef);
+        getUnreadMessageCount();
+    }, [countUnread]);
 
 
 
@@ -111,7 +118,7 @@ const Messages = () => {
     return (
         <motion.section
             className="flex flex-col items-center justify-center w-full gap-4  rounded-xl bg-white-100 dark:bg-black-10  h-[85vh] relative overflow-hidden"
-            variants={appVariants} initial="hidden" whileInView="visible" viewport={{once: true}}>
+            variants={appVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <div
                 className="flex items-center justify-between w-full py-4 px-6 border-0 border-b border-b-black-20  bg-white-10 top-0 z-40">
                 <div className="flex items-center justify-between ">
@@ -123,7 +130,7 @@ const Messages = () => {
                         </div>
                         <p className={"text-black-100 dark:text-white-100 text-lead"}>{userToChat.fullName}
                             <span
-                                className="text-small-1 text-black-80 dark:text-white-80">({userToChat.accounttype})</span>
+                                className="text-small-1 text-black-80 dark:text-white-80">({userToChat.accountType})</span>
                         </p>
                     </div>
                 </div>
@@ -142,74 +149,74 @@ const Messages = () => {
                 </div>
                 {
                     messages?.length > 0 ? messages.map(message =>
-                        (<>
-                                {
-                                    (message.receiverid !== userToChat.id) ? (
-                                        <div key={message.messageid} className="w-full flex justify-start">
-                                            <Message
-                                                conversationId={message.idconversation}
-                                                messageId={message.messageid}
-                                                handleShown={getUserMessages}
-                                                fileContent={message.filecontent}
-                                                formData={formData}
-                                                setAnswer={setFormData}
-                                                refmessage={message.refmessage}
-                                                message={message.content}
+                    (<>
+                        {
+                            (message.receiverid !== userToChat.id) ? (
+                                <div key={message.messageid} className="w-full flex justify-start">
+                                    <Message
+                                        conversationId={message.idconversation}
+                                        messageId={message.messageid}
+                                        handleShown={getUserMessages}
+                                        fileContent={message.filecontent}
+                                        formData={formData}
+                                        setAnswer={setFormData}
+                                        refmessage={message.refmessage}
+                                        message={message.content}
                                         sentDate={message.sentdate} />
-                                        </div>
-                                    ) : (
-                                        <div className="w-full flex justify-end">
-                                            <Message
-                                                conversationId={message.idconversation}
-                                                messageId={message.messageid}
-                                                handleShown={getUserMessages}
-                                                fileContent={message.filecontent}
-                                                refmessage={message.refmessage}
-                                                message={message.content}
+                                </div>
+                            ) : (
+                                <div className="w-full flex justify-end">
+                                    <Message
+                                        conversationId={message.idconversation}
+                                        messageId={message.messageid}
+                                        handleShown={getUserMessages}
+                                        fileContent={message.filecontent}
+                                        refmessage={message.refmessage}
+                                        message={message.content}
                                         sentDate={message.sentdate} sentByCurrentUser />
-                                        </div>
-                                    )
-                                }
-                            </>
-                        )) : (
+                                </div>
+                            )
+                        }
+                    </>
+                    )) : (
                         <p className="text-black-40 w-full h-screen text-center flex items-center justify-center text-subtitle-3">
                             Envoyer un message!
                         </p>
                     )
 
                 }
-                <div ref={endOfMessagesRef}/>
+                <div ref={endOfMessagesRef} />
             </div>
             <div className="border-0 bg-white-10 px-6 py-4 w-full border-t border-t-black-20  bottom-0 z-40">
                 {
                     formData.refMessage &&
                     <p className="max-w-[400px] break-words text-small-1 flex items-center justify-start rounded-xl text-black-60 dark:text-white-60 p-1">
-                        <Icon variant="ghost" icon="bi bi-arrow-90deg-down" className="-rotate-90" size="sm"/>
+                        <Icon variant="ghost" icon="bi bi-arrow-90deg-down" className="-rotate-90" size="sm" />
                         {formData.refMessage}
                     </p>
                 }
                 {formData.fileContent &&
-                    <Icon size="md" variant="ghost" icon="bi bi-image"/>
+                    <Icon size="md" variant="ghost" icon="bi bi-image" />
                 }
                 <form className="flex items-center justify-between gap-4" onSubmit={handleSendMessage}>
                     <FileInput inputClassName=" hidden " className="w-min"
-                               name="fileContent"
-                               setFile={setFile}
-                               onChange={(e) => handleInputChange(setFormData, e)}
-                               onError={handleError(setErrorData)}
-                               value={formData.fileContent}
-                               iconVariant="ghost"
+                        name="fileContent"
+                        setFile={setFile}
+                        onChange={(e) => handleInputChange(setFormData, e)}
+                        onError={handleError(setErrorData)}
+                        value={formData.fileContent}
+                        iconVariant="ghost"
                     />
-                    <Icon size="md" variant="ghost" icon="bi bi-emoji-smile"/>
+                    <Icon size="md" variant="ghost" icon="bi bi-emoji-smile" />
                     <TextInput rounded="full" block
-                               className="flex-1 outline-none bg-gray-100  text-base text-black-80 px-6 py-3"
-                               placeholder="Ecrire un message ...."
-                               name="message"
-                               onError={handleError(setErrorData)}
-                               onChange={(e) => handleInputChange(setFormData, e)}
-                               value={formData.message}
+                        className="flex-1 outline-none bg-gray-100  text-base text-black-80 px-6 py-3"
+                        placeholder="Ecrire un message ...."
+                        name="message"
+                        onError={handleError(setErrorData)}
+                        onChange={(e) => handleInputChange(setFormData, e)}
+                        value={formData.message}
                     />
-                    <Icon onClick={handleSendMessage} icon="bi bi-arrow-up" size="sm"/>
+                    <Icon onClick={handleSendMessage} icon="bi bi-arrow-up" size="sm" />
                 </form>
             </div>
         </motion.section>
@@ -251,16 +258,16 @@ const Message = ({ conversationId, messageId, message, sentDate, sentByCurrentUs
                         refmessage &&
                         <p className="text-small-1 flex items-center justify-start rounded-xl text-black-60 dark:text-white-60 max-w-[300px] p-1">
                             <Icon variant="ghost" icon="bi bi-arrow-90deg-down" className="-rotate-90"
-                                  size="sm"/>{refmessage}</p>
+                                size="sm" />{refmessage}</p>
                     }
                     <a href={SERVERLINK + "/" + fileContent}>
                         {
                             fileTypes.includes(fileContent.split(".")[1].toLowerCase()) ?
                                 <img src={SERVERLINK + "/" + fileContent} alt={fileContent}
-                                     className="max-w-[200px] rounded-lg"/>
+                                    className="max-w-[200px] rounded-lg" />
                                 :
                                 <div>
-                                    <Icon variant="ghost" icon="bi bi-file-earmark" size="lg"/>
+                                    <Icon variant="ghost" icon="bi bi-file-earmark" size="lg" />
                                     <span className="text-black-40 dark:text-white-60">{fileContent}</span>
                                 </div>
                         }
@@ -277,7 +284,7 @@ const Message = ({ conversationId, messageId, message, sentDate, sentByCurrentUs
                         refmessage &&
                         <p className="text-small-1 flex items-center justify-start rounded-full text-black-60 dark:text-white-60 max-w-[300px] p-1">
                             <Icon variant="ghost" icon="bi bi-arrow-90deg-down" className="-rotate-90"
-                                  size="sm"/>{refmessage}
+                                size="sm" />{refmessage}
                         </p>
 
                     }
@@ -289,11 +296,11 @@ const Message = ({ conversationId, messageId, message, sentDate, sentByCurrentUs
         }
 
         <div className={`flex items-center  w-full gap-2 ${sentByCurrentUser ? 'justify-end' : 'justify-start'}`}>
-            <Icon onClick={handleDelete} variant="ghost" icon="bi bi-trash" size="sm"/>
+            <Icon onClick={handleDelete} variant="ghost" icon="bi bi-trash" size="sm" />
             {
                 !sentByCurrentUser &&
                 <Icon onClick={answerMessage} variant="ghost" icon="bi bi-arrow-90deg-down" className="-rotate-90"
-                      size="sm"/>
+                    size="sm" />
             }
         </div>
     </div>
