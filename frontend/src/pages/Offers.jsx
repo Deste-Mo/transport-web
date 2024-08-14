@@ -14,6 +14,7 @@ import {
   OFFER_CARD_FILTERS_MODE,
   OFFER_CARD_FILTERS_TITLES,
 } from "../constants/index.js";
+import OfferFeed from "../components/pages/Offer/OfferFeed.jsx";
 
 const Offers = () => {
   const {
@@ -21,21 +22,16 @@ const Offers = () => {
     savedOffers,
     getSavedOffers,
     getSuggestedOffers,
-    currentUserOffers,
     getOfferById,
-    getCurrentUserOffers,
     filterOffers
   } = useOffer();
-  const { id } = useParams();
   const [search, setSearch] = useState("");
   const [filteredOffers, setFilteredOffers] = useState(suggestedOffers);
-  const offers = id ? currentUserOffers : filteredOffers;
   
   useEffect(() => {
     getSavedOffers();
     getSuggestedOffers();
-    if (id) getCurrentUserOffers(id);
-  }, [id]);
+  }, []);
 
   useEffect(() => {
     localStorage.getItem("offerNotifId") &&
@@ -44,7 +40,7 @@ const Offers = () => {
   
   useEffect(() => {
     setFilteredOffers(filterOffers(search, suggestedOffers));
-  }, [search, suggestedOffers])
+  }, [search, suggestedOffers]);
 
   return (
     <motion.section
@@ -77,25 +73,7 @@ const Offers = () => {
         }
       />
       <div className="flex flex-col items-center justify-center gap-6 w-full">
-        {offers?.length > 0 ? (
-          <Suspense fallback={<OfferCardLoading />}>
-            {offers.map((suggestion) => (
-              <OfferCard
-                key={suggestion.offerid}
-                sug={suggestion}
-                saved={
-                  savedOffers?.length > 0
-                    ? savedOffers.find(
-                        (offer) => offer.offerid === suggestion.offerid
-                      )
-                    : false
-                }
-              />
-            ))}
-          </Suspense>
-        ) : (
-          <div className="nothing-box">Pas d'offres</div>
-        )}
+        <OfferFeed offers={filteredOffers} savedOffers={savedOffers}/>
       </div>
     </motion.section>
   );

@@ -129,7 +129,6 @@ const OfferProvider = ({children}) => {
         setUpdateOffer(await response?.data?.offer);
         localStorage.removeItem("offerNotifId");
     }
-
     const filterOffers = (search, suggestedOffers) => {
         const filterModes = JSON?.parse(localStorage.getItem("offerCardFilter"));
         let filteredResult = suggestedOffers;

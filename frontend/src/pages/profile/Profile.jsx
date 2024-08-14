@@ -32,9 +32,7 @@ export default function Profile() {
     currentUserOffers,
     getCurrentUserOffers,
   } = useOffer();
-
-  const user = personalInformation;
-
+  
   useEffect(() => {
     getSavedOffers();
     getCurrentUserOffers();

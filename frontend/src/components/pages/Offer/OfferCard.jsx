@@ -30,19 +30,14 @@ const OfferCard = ({
   detailedProfile = true,
 }) => {
   const [detailed, setDetailed] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [popupVisible, setPopupVisible] = useState(false);
   const { timeSince } = useApp();
-  const { goToUserProfile } = useUser();
-
   const { saveOffer, retireOffer, getSavedOffers, offer } = useOffer();
-
   const navigate = useNavigate();
   const image = SERVERLINK + "/" + sug?.profileimage;
-
   const offerImage = SERVERLINK + "/" + sug?.imgurl;
 
-  const handleClick = () => {
+  const contactUser = () => {
     localStorage.setItem(
       "userToChat",
       JSON.stringify({
@@ -180,7 +175,7 @@ const OfferCard = ({
                 content={
                   <>
                     <OptionItem
-                      onClick={handleClick}
+                      onClick={contactUser}
                       name="Contacter"
                       icon="bi bi-chat"
                       setPopupVisible={setPopupVisible}
@@ -271,7 +266,7 @@ const OfferCard = ({
           <div className="flex items-center w-full gap-6 jusify-start flex-wrap">
             {/*<Icon variant="secondary" icon="bi bi-chat" size="sm"/>*/}
             <Button
-              onClick={handleClick}
+              onClick={contactUser}
               size="sm"
               variant="secondary"
               icon="bi bi-chat"
