@@ -18,11 +18,11 @@ const RecentlyFriends = ({
                              showMessageButton = false,
                              showRemoveFriendButton = false,
                              showAddFriendButton = false,
-                             showProfileButton = true,
+                             onButtonsClick = () => {
+                             },
                              className,
-    isFriend,
                          }) => {
-    const { token, personalInformation, profileInfo } = useAuth();
+    const {token, personalInformation, profileInfo} = useAuth();
 
 
     const {loading} = useApp();
@@ -35,7 +35,7 @@ const RecentlyFriends = ({
     }
         = useUser();
 
-    const { ActiveUsers } = useSocketContext();
+    const {ActiveUsers} = useSocketContext();
 
     const navigate = useNavigate();
 
@@ -43,7 +43,7 @@ const RecentlyFriends = ({
 
     const isOnline = ActiveUsers.includes(id);
 
-    const handleClick = () => {
+    const navigateToMessage = () => {
         localStorage.setItem(
             "userToChat",
             JSON.stringify({
@@ -55,7 +55,7 @@ const RecentlyFriends = ({
         );
         navigate("/message");
     };
-    
+
     const navigateToProfile = () => navigate(`/profile/${id}`)
 
 
@@ -64,9 +64,11 @@ const RecentlyFriends = ({
             className={`flex items-center flex-wrap justify-between gap-3 bg-white-100 p-4 hover:bg-primary-20 group rounded-xl dark:bg-white-0 text-black-100 dark:text-white-100 ${className}`}
         >
             <div className="flex items-center relative gap-2">
-                <img src={image} alt="" className="size-10 rounded-full cursor-pointer" onClick={() => goToUserProfile(id)}/>
+                <img src={image} alt="" className="size-10 rounded-full cursor-pointer"
+                     onClick={() => goToUserProfile(id)}/>
                 <div className="flex flex-col">
-                    <span className="group-hover:underline cursor-pointer text-small-1" onClick={() => goToUserProfile(id)}>
+                    <span className="group-hover:underline cursor-pointer text-small-1"
+                          onClick={() => goToUserProfile(id)}>
                         {name}{" "}
                         {isOnline && (
                             <span className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-primary-100 inline-block"></span>)}
@@ -77,10 +79,13 @@ const RecentlyFriends = ({
                 </div>
             </div>
             <div className="flex items-center justify-center max-sm:w-full gap-8">
-                
+
                 {showMessageButton && (
                     <i
-                        onClick={handleClick}
+                        onClick={() => {
+                            navigateToMessage();
+                            onButtonsClick();
+                        }}
                         className="bi bi-chat text-icon cursor-pointer"
                     ></i>
                 )}
@@ -88,7 +93,10 @@ const RecentlyFriends = ({
                     <Button
                         variant={"ghost"}
                         className="text-primary-100"
-                        onClick={() => followUser(profileInfo.id, id, personalInformation)}
+                        onClick={() => {
+                            followUser(profileInfo.id, id, personalInformation);
+                            onButtonsClick();
+                        }}
                     >
                         Suivre
                     </Button>
@@ -96,7 +104,10 @@ const RecentlyFriends = ({
                 {showRemoveFriendButton && (
                     <Button
                         variant="ghost"
-                        onClick={() => unFollowUsers(profileInfo.id, id)}
+                        onClick={() => {
+                            unFollowUsers(profileInfo.id, id);
+                            onButtonsClick();
+                        }}
                         className="text-danger-100"
                         size="sm"
                     >

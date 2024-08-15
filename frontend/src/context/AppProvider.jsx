@@ -53,7 +53,7 @@ const AppProvider = ({ children }) => {
 
 
         const scrollToBottom = () => {
-            // endOfMessagesRef.current?.scrollIntoView();
+            endOfMessagesRef.current?.scrollIntoView();
         };
 
         const user = await JSON.parse(localStorage.getItem('userToChat'));
@@ -63,7 +63,8 @@ const AppProvider = ({ children }) => {
             id: user.id,
             fullName: user.fullName,
             accountType: user.accounttype,
-            pic: user.pic
+            pic: user.pic,
+            offerId: user?.offerId
         })
 
         const messagesRes = await fetch(SERVERLINK + '/api/messages/' + await user.id, {

@@ -20,6 +20,7 @@ const RecentlyFriends = lazy(() =>
     import("../components/pages/RecentlyFriends.jsx")
 );
 
+// TODO : Update recentlyFriend component when its button is clicked
 const Friends = () => {
     const {
         friends,
@@ -28,6 +29,7 @@ const Friends = () => {
         getUsers,
         filterUsers,
     } = useUser();
+    const activeUserFilter = localStorage?.getItem("activeUserFilters") || USERS_FILTERS.follower
 
     const [search, setSearch] = useState("");
     const [filteredUsers, setFilteredUser] = useState([]);
@@ -41,20 +43,19 @@ const Friends = () => {
                 active: filter.name === filterName,
             }))
         )
-        console.log(filterUsers(search, friends, users))
-        
+        localStorage.setItem("activeUserFilters", filterName);
     }
-    
-    useEffect(() => {
-        setFilteredUser(filterUsers(search, friends, users));
-    }, [search])
 
     useEffect(() => {
         getUsers();
         getFriends();
-        updateActiveUserFilters(localStorage?.getItem("activeUserFilters") || USERS_FILTERS.follower)
+        updateActiveUserFilters(activeUserFilter)
     }, []);
-
+    
+    useEffect(() => {
+        setFilteredUser(filterUsers(search, friends, users));
+    }, [search])
+    
     return (
         <motion.section
             className="flex flex-col items-center justify-center gap-6 w-full "
@@ -96,7 +97,9 @@ const Friends = () => {
                                 name={friend.firstname + " " + friend.lastname}
                                 image={SERVERLINK + "/" + friend.profileimage}
                                 showMessageButton
-                                showRemoveFriendButton
+                                showRemoveFriendButton={activeUserFilter === USERS_FILTERS.follower}
+                                showAddFriendButton={activeUserFilter === USERS_FILTERS.suggestion}
+                                onButtonsClick={() => setFilteredUser(filterUsers(search, friends, users))}
                             />
                         ))
                     ) : (
@@ -104,22 +107,22 @@ const Friends = () => {
                     )
                 ) : filteredUsers?.length > 0 ? (
                     filteredUsers?.map((friend) => (
-                        <Suspense fallback={<FriendCardLoading/>}>
+                        <Suspense key={friend.userid} fallback={<FriendCardLoading/>}>
                             <RecentlyFriends
                                 className="w-full"
-                                key={friend.userid}
                                 spec={friend.userid}
                                 account={friend.accounttype}
                                 name={friend.firstname + " " + friend.lastname}
                                 image={SERVERLINK + "/" + friend.profileimage}
                                 showMessageButton
-                                showRemoveFriendButton
-
+                                showRemoveFriendButton={activeUserFilter === USERS_FILTERS.follower}
+                                showAddFriendButton={activeUserFilter === USERS_FILTERS.suggestion}
+                                onButtonsClick={() => setFilteredUser(filterUsers(search, friends, users))}
                             />
                         </Suspense>
                     ))
                 ) : (
-                    <div className="nothing-box">Pas d'ami</div>
+                    <div className="nothing-box">{activeUserFilter === USERS_FILTERS.follower ? "Aucun ami" : "Aucune suggestion"}</div>
                 )}
             </div>
         </motion.section>

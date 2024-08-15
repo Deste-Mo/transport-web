@@ -30,8 +30,9 @@ const Messages = () => {
   const { token } = useAuth();
 
   const { goToUserProfile } = useUser();
-  const { messages, userToChat, getUnreadMessageCount, getUserMessages } =
-    useApp();
+
+    const { messages, userToChat, getUnreadMessageCount, getUserMessages, countUnread } = useApp()
+
   const [messInput, setMessInput] = useState("");
   const endOfMessagesRef = useRef(null);
   const { ActiveUsers } = useSocketContext();
@@ -63,24 +64,28 @@ const Messages = () => {
   );
 
   const handleClick = () => {
-    localStorage.removeItem("userToChat");
-    navigate("/discussion");
-  };
+        localStorage.removeItem('userToChat');
+        navigate('/discussion');
+    }
+    const navigateToProfile = () => navigate(`/profile/${userToChat.id}`)
 
-  const clearFormData = () => {
-    setFormData({
-      fileContent: null,
-      message: "",
-      refMessage: "",
-    });
-  };
+    useEffect(() => {
+        socket?.on("newMessage", () => {
+            getUserMessages(endOfMessagesRef);
+            getUnreadMessageCount();
+        });
 
-  const clearFileData = () => {
-    setFile({
-      name: "",
-      path: "",
-    });
-  };
+        return () => socket?.off("newMessage")
+
+    }, [socket, countUnread]);
+
+    useEffect(() => {
+        getUserMessages(endOfMessagesRef);
+        getUnreadMessageCount();
+    }, [countUnread]);
+
+
+
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -108,22 +113,18 @@ const Messages = () => {
 
     getUserMessages(endOfMessagesRef);
 
-    clearFileData();
-    clearFormData();
-  };
+    setFormData({
+            fileContent: null,
+            message: "",
+            refMessage: "",
+        })
 
-  useEffect(() => {
-    if (width <= BREAKPOINTS.mobile) {
-      setHideMobileNavigation(true);
+        setFile({
+            name: '',
+            path: ''
+        })
+
     }
-  }, [width]);
-  useEffect(() => {
-    getUserMessages();
-    socket?.on("newMessage", () => {
-      getUserMessages();
-    });
-    return () => socket?.off("newMessage");
-  }, [socket]);
 
   return (
     <motion.section

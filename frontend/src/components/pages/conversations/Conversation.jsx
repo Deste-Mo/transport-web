@@ -12,26 +12,16 @@ const Conv = ({ id, userToChat }) => {
 
   const { token, personalInformation } = useAuth();
 
-  const { timeSince } = useApp();
+    const { timeSince, countUnread } = useApp();
 
   const image = SERVERLINK + "/" + userToChat?.profileimage;
 
   const [isViewed, setViewed] = useState(false);
 
   const handleClick = () => {
-    localStorage.setItem(
-      "userToChat",
-      JSON.stringify({
-        id: userToChat.userid,
-        fullName:
-          userToChat.firstname +
-          (!userToChat.lastname ? "" : " " + userToChat.lastname),
-        accounttype: userToChat.accounttype,
-        pic: image,
-      })
-    );
-    navigate("/message");
-  };
+        localStorage.setItem('userToChat', JSON.stringify({ id: userToChat.userid, fullName: userToChat.firstname + (!userToChat.lastname ? '' : (" " + userToChat.lastname)) , accounttype: userToChat.accounttype, pic: image }))
+        navigate('/message')
+    }
 
   const { ActiveUsers } = useSocketContext();
 
@@ -54,9 +44,10 @@ const Conv = ({ id, userToChat }) => {
       const verification = await response.json();
 
       setViewed(await verification.allSeen);
-    };
+        }
     verifyStatus();
-  }, []);
+
+    }, [countUnread])
 
   return (
     <div

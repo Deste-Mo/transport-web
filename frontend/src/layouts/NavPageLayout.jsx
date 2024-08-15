@@ -24,7 +24,6 @@ const NavPageLayout = () => {
     savedOffers,
     getSavedOffers,
     suggestedOffers,
-    currentUserOffers,
     getCurrentUserOffers,
     getSuggestedOffers,
   } = useOffer();
@@ -162,7 +161,7 @@ const DynamicLeftContent = ({ currentLocation }) => {
                 />
               ))
             ) : (
-              <div className="nothing-box">Pas d'amis</div>
+              <div className="nothing-box">Aucune Suggestion</div>
             )}
           </div>
         </>

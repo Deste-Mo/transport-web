@@ -85,23 +85,21 @@ const UserProvider = ({children}) => {
     };
     const filterUsers = (search, friends, users) => {
         // Get the active filter from localStorage or default to 'follower'
-        const activeUserFilter = localStorage?.getItem("activeUserFilter") || USERS_FILTERS.follower;
+        const activeUserFilter = localStorage?.getItem("activeUserFilters") || USERS_FILTERS.follower;
 
         switch (activeUserFilter) {
             case USERS_FILTERS.suggestion: {
-
-                localStorage.setItem("activeUserFilter", USERS_FILTERS.suggestion);
+                localStorage.setItem("activeUserFilters", USERS_FILTERS.suggestion);
                 if (!search) return users;
 
                 return users.filter(user =>
                     user.firstname.toLowerCase().includes(search.toLowerCase()) ||
                     user.lastname.toLowerCase().includes(search.toLowerCase())
                 );
-                break;
             }
 
             case USERS_FILTERS.follower: {
-                localStorage.setItem("activeUserFilter", USERS_FILTERS.follower);
+                localStorage.setItem("activeUserFilters", USERS_FILTERS.follower);
 
                 if (!search) return friends;
 
@@ -112,7 +110,7 @@ const UserProvider = ({children}) => {
             }
 
             default: {
-                localStorage.setItem("activeUserFilter", USERS_FILTERS.follower);
+                localStorage.setItem("activeUserFilters", USERS_FILTERS.follower);
                 return friends;
             }
         }

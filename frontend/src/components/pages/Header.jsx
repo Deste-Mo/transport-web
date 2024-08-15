@@ -10,8 +10,7 @@ import Icon from "../ui/Icon.jsx";
 
 export function Header({ profileImage }) {
   const { countUnread, getUnreadMessageCount } = useApp();
-  const { unreadNotificationsCount, getUnreadNotifications } =
-    useNotification();
+  const { unreadNotificationsCount, getUnreadNotifications } = useNotification();
   const { getFriends } = useUser();
 
   const NAV_LINKS = [
