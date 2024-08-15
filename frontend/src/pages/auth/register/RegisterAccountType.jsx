@@ -31,8 +31,8 @@ const RegisterAccountType = () => {
   };
 
   return (
-    <section className="absolute left-1/2 -translate-x-1/2 w-fullscreen  auth-section space-y-[128px] top-[128px]">
-      <div className="w-full text-center text-black-100 dark:text-white-100 h1 text-subtitle-1">
+    <section className="w-full  auth-section space-y-[128px] absolute top-[128px] left-1/2 -translate-x-1/2 max-md:space-y-10">
+      <div className="h1 text-subtitle-1 w-full text-center text-black-100 dark:text-white-100 max-md:text-subtitle-2">
         Selectionner votre{" "}
         <span className="text-primary-100">type de compte</span>
       </div>
