@@ -162,7 +162,7 @@ const OfferProvider = ({children}) => {
 
             switch (postDateFilter.activeFilter) {
                 case postDateFilterMode.today: {
-                    filteredResult = filteredResult.filter(({ publicationdate }) => {
+                    filteredResult = filteredResult.length > 0 && filteredResult.filter(({ publicationdate }) => {
                         const postDate = new Date(publicationdate);
                         const today = new Date();
                         return (
@@ -174,19 +174,19 @@ const OfferProvider = ({children}) => {
                     break;
                 }
                 case postDateFilterMode.recent: {
-                    filteredResult = filteredResult.sort((a, b) => {
+                    filteredResult = filteredResult.length > 0 && filteredResult.sort((a, b) => {
                         return new Date(b.publicationdate).getTime() - new Date(a.publicationdate).getTime();
                     });
                     break;
                 }
                 case postDateFilterMode.old: {
-                    filteredResult = filteredResult.sort((a, b) => {
+                    filteredResult = filteredResult.length > 0 && filteredResult.sort((a, b) => {
                         return new Date(a.publicationdate).getTime() - new Date(b.publicationdate).getTime();
                     });
                     break;
                 }
                 default: {
-                    filteredResult = filteredResult.sort((a, b) => {
+                    filteredResult = filteredResult.length > 0 && filteredResult.sort((a, b) => {
                         return new Date(b.publicationdate).getTime() - new Date(a.publicationdate).getTime();
                     });
                     break;
@@ -203,7 +203,7 @@ const OfferProvider = ({children}) => {
             }
         }
 
-        filteredResult = filteredResult.filter(
+        filteredResult = filteredResult.length > 0 && filteredResult.filter(
             ({ accounttype, capacity, firstname, lastname, title, description, depart }) => {
                 if (!search) return true;
                 

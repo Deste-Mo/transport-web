@@ -19,7 +19,7 @@ export const subscribe = async (req, res) => {
             }
         });
 
-        const confirmUrl = `http://192.168.0.104:5173/profile/${userId}`;
+        const confirmUrl = `http://localhost:5173/profile/${userId}`;
 
         const to = user.email;
         const from = 'tosyrazafitsotra@gmail.com';
@@ -63,25 +63,29 @@ export const sendConfirmMail = async (req, res) => {
             }
         });
 
-        const confirmUrl = 'http://192.168.0.104:5173/api/subscribtion/subscribe/' + userId + '/' + subId;
+        const confirmUrl = 'http://localhost:5173/api/subscribtion/subscribe/' + userId + '/' + subId;
 
         const to = "tosyrazafitsotra@gmail.com";
         const from = 'tosyrazafitsotra@gmail.com';
         const subject = 'Abonnement Media-Trans';
-        const text = `Vous recevez cet email parce que vous (ou quelqu'un d'autre) a demandé une reabonnement pour Media-Trans.\n\n` +
-            `Verifier les information suivant: \n` +
-            `Telephone: ${phone}\n` +
-            `Montant: ${montant}\n\n` +
-            `Veuillez cliquer sur le lien suivant, ou collez-le dans votre navigateur pour terminer le processus:\n\n` +
-            `${confirmUrl}\n\n` +
-            `Si Des informations ne sont pas correspondant avec votre verification, veuillez ignorer et supprimer cet email et annuler l'abonnement.\n`;
+        const html = `
+        <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4; color: #333;">
+            <h2 style="color: #333;">CONFIRMATION D'ABONNEMENT</h2>
+            <p>Verifier les information suivant:</p>
+            <p>Telephone: ${phone}</p>
+            <p>Montant: ${montant}</p>
+            <p>Vous recevez cet email parce que Quelqu'un a demandé une reabonnement pour Media-Trans.</p>
+            <p>Veuillez cliquer sur le lien suivant, ou collez-le dans votre navigateur pour terminer le processus:</p>
+            <a href="${confirmUrl}" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: #000; background-color: #FBCB34; text-decoration: none; border-radius: 5px;">Confirmer le payement</a>
+            <p>Si Des informations ne sont pas correspondant avec votre verification, veuillez ignorer et supprimer cet email et annuler l'abonnement.</p>
+        </div>
+    `;
 
-        const err = await sendEmail(transporter, to, from, subject, text);
+        const err = await sendEmail(transporter, to, from, subject, html);
 
         if (err) {
             return res.status(500).json({ message: err });
         }
-
         return res.status(200).json({ message: 'Email de Confirmation envoyé' });
 
     } catch (error) {
