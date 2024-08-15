@@ -60,7 +60,7 @@ const NavPageLayout = () => {
       <div className={`overflow-x-hidden  h-full max-h-full basis-[44%] max-lg:basis-[60%] max-md:basis-full scrollbar-none rounded-xl ${hideMobileNavigation ? 'overflow-y-hidden' : 'overflow-y-scroll'}`}>
         <Outlet />
       </div>
-
+        
       {/*Right subNav*/}
       <div className="max-h-full flex flex-col gap-10 overflow-x-hidden basis-[26%] max-lg:basis-[40%] max-md:hidden scrollbar-none">
         <div className="flex flex-col gap-4 w-full">

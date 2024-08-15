@@ -29,7 +29,7 @@
 
 @layer base {
   .auth-section {
-    @apply px-16 py-6;
+    @apply px-16 py-6 max-md:px-2;
   }
 
   .app-container {
@@ -46,6 +46,10 @@
   }
   .loader-tag-2 {
     @apply bg-black-20 dark:bg-white-10  animate-pulse;
+  }
+  
+  .auth-form {
+    @apply flex flex-col  items-start justify-center gap-[32px] w-[460px] max-md:w-full p-6 border bg-white-100 dark:bg-white-10 dark:border-none border-black-0 rounded-xl;
   }
 }
 

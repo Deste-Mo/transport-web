@@ -21,6 +21,7 @@ const TextArea = ({
   value,
   resize = true,
     titleIcon = "",
+    required=true
 }) => {
   const error = !isValid || !pattern.test(value);
   useEffect(() => {
@@ -52,7 +53,7 @@ const TextArea = ({
           name={name}
           value={value}
           autoComplete="off"
-          required={true}
+          required={required}
       />
       {error && value && (
           <small className="text-small text-danger">{errorMsg}</small>

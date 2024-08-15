@@ -299,7 +299,7 @@ const Messages = () => {
           <TextInput
             rounded="full"
             block
-            className="flex-1 outline-none bg-gray-100  text-base text-black-80 px-6 py-3"
+            className="flex-1 outline-none bg-gray-100  text-base text-black-80 px-6 py-3 max-md:px-3 max-md:py-2"
             placeholder="Ecrire un message ...."
             name="message"
             onError={handleError(setErrorData)}

@@ -7,26 +7,26 @@ import { globalInputVariants } from "../../styles/globals.input";
 import globalSelectvariants from "../../styles/globals.select";
 
 const SelectInput = ({
-  options = [],
-  name = "",
-  className = "",
-  title = "",
-  icon = "bi bi-chevron-right",
-  variant = globalInputVariants.variant.default,
-  size = "md",
-  optionId = "option",
-  rounded = globalInputVariants.rounded.default,
-  inverseIcon = false,
-  loading = options.length <= 0,
-  block = false,
-  onChange = () => {},
-  onError = () => {},
-    titleIcon = "",
-  value = "",
-}) => {
+                       options = [],
+                       name = "",
+                       className = "",
+                       title = "",
+                       icon = "bi bi-chevron-right",
+                       variant = globalInputVariants.variant.default,
+                       size = "md",
+                       optionId = "option",
+                       rounded = globalInputVariants.rounded.default,
+                       inverseIcon = false,
+                       loading = options.length <= 0,
+                       block = false,
+                       onChange = () => {},
+                       onError = () => {},
+                       titleIcon = "",
+                       value = "",
+                     }) => {
   const error = options.length <= 0 || loading;
   const [selectedItem, setSelectedItem] = useState(
-    options[0]?.option || "Loading ..."
+      options[0]?.option || "Loading ..."
   );
   const selectRef = useRef(null);
   const [opened, setOpened] = useState(false);
@@ -54,9 +54,9 @@ const SelectInput = ({
       setSelectedItem("Loading ...");
     } else {
       setSelectedItem(
-        optionId === "option"
-          ? options[0]?.option
-          : options[0]?.[optionId] + " : " + options[0]?.option
+          optionId === "option"
+              ? options[0]?.option
+              : options[0]?.[optionId] + " : " + options[0]?.option
       );
     }
   }, [loading]);
@@ -80,7 +80,7 @@ const SelectInput = ({
                   globalInputVariants.rounded[rounded]
               }  ${
                   block
-                      ? "w-full"
+                      ? `w-full`
                       : `items-start justify-start ${globalInputVariants.width} `
               } ${className}`}
           >

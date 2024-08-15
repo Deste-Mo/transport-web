@@ -5,13 +5,15 @@ import {useForm} from "../../../context/FormProvider";
 import {useEffect, useState} from "react";
 import {
     ACCOUNT_TYPES,
-    CIN_REGEX,
-    EMAIL_REGEX,
-    NAME_REGEX,
-    NIF_STAT_REGEX,
-    PHONE_REGEX,
+    CIN_REGEX, CIN_REGEX_MESSAGE,
+    EMAIL_REGEX, EMAIL_REGEX_MESSAGE, LAST_NAME_REGEX_MESSAGE,
+    NAME_REGEX, NAME_REGEX_MESSAGE,
+    NIF_STAT_REGEX, NIF_STAT_REGEX_MESSAGE,
+    PHONE_REGEX, PHONE_REGEX_MESSAGE,
     REGISRATION_STEPS
 } from "../../../constants";
+import {appVariants} from "../../../animations/variants.js";
+import {motion} from "framer-motion";
 
 const RegisterIdentification = () => {
     const {
@@ -57,18 +59,23 @@ const RegisterIdentification = () => {
 
         if (isAccountTypeForCompany) {
             setFieldError(
-                firstname || companyNumber || email || phone || adress || bio
+                firstname || companyNumber || email || phone || adress
             );
         } else {
             setFieldError(
-                firstname || userCin || email || phone || adress || bio || lastname
+                firstname || userCin || email || phone || adress  || lastname
             );
         }
     }, [inputs, errorData]);
 
     return (
-        <section
-            className="absolute left-1/2 -translate-x-1/2 w-fullscreen  auth-section space-y-[64px] top-[64px]">
+        <motion.section
+            variants={appVariants}
+            className="absolute left-1/2 -translate-x-1/2 w-fullscreen auth-section space-y-[64px] top-[64px]"
+            // initial="hidden"
+            // whileInView="visible"
+            // viewport={{once: true}}
+        >
             <div className="flex flex-col items-center justify-center gap-4">
                 <div className="flex w-full items-center justify-center">
                     <Icon
@@ -99,7 +106,7 @@ const RegisterIdentification = () => {
                                     onError={handleError(setErrorData)}
                                     onChange={(e) => handleInputChange(setInputs, e)}
                                     value={inputs.companyNumber}
-                                    errorMsg="NIF STAT inccorect"
+                                    errorMsg={NIF_STAT_REGEX_MESSAGE}
                                     pattern={NIF_STAT_REGEX}
                                 />
                             ) : (
@@ -107,7 +114,7 @@ const RegisterIdentification = () => {
                                     name="userCin"
                                     title="CIN"
                                     placeholder="Entrer votre CIN"
-                                    errorMsg="CIN incorrect"
+                                    errorMsg={CIN_REGEX_MESSAGE}
                                     pattern={CIN_REGEX}
                                     onError={handleError(setErrorData)}
                                     onChange={(e) => handleInputChange(setInputs, e)}
@@ -123,7 +130,7 @@ const RegisterIdentification = () => {
                                         ? "Entrer le nom de l'entreprise"
                                         : "Entrer votre nom"
                                 }
-                                errorMsg="Le nom doit avoir au moin 4 charachtères"
+                                errorMsg={NAME_REGEX_MESSAGE}
                                 onError={handleError(setErrorData)}
                                 onChange={(e) => handleInputChange(setInputs, e)}
                                 value={inputs.firstname}
@@ -134,7 +141,7 @@ const RegisterIdentification = () => {
                                     name="lastname"
                                     title="Prénom"
                                     placeholder="Entrer votre prénom"
-                                    errorMsg="Le prénom doit avoir au moin 4 charachtères"
+                                    errorMsg={LAST_NAME_REGEX_MESSAGE}
                                     onError={handleError(setErrorData)}
                                     onChange={(e) => handleInputChange(setInputs, e)}
                                     value={inputs.lastname}
@@ -149,7 +156,7 @@ const RegisterIdentification = () => {
                                 onError={handleError(setErrorData)}
                                 onChange={(e) => handleInputChange(setInputs, e)}
                                 value={inputs.email}
-                                errorMsg="Email incorrect"
+                                errorMsg={EMAIL_REGEX_MESSAGE}
                                 pattern={EMAIL_REGEX}
                             />
                             <TextInput
@@ -161,7 +168,7 @@ const RegisterIdentification = () => {
                                 onChange={(e) => handleInputChange(setInputs, e)}
                                 value={inputs.phone}
                                 pattern={PHONE_REGEX}
-                                errorMsg="Numéro de téléphone incorrect"
+                                errorMsg={PHONE_REGEX_MESSAGE}
                             />
                         </div>
                         <div className="flex flex-col items-center justify-center gap-6">
@@ -169,19 +176,22 @@ const RegisterIdentification = () => {
                                 name="adress"
                                 title="Adresse"
                                 type="texte"
-                                placeholder="Entrer votre adresse"
+                                placeholder="L'adresse ne doit pas etre vide"
+                                errorMsg="Entrer une adresse valide"
+                                pattern={/^.{6,}$/} //}
                                 onError={handleError(setErrorData)}
                                 onChange={(e) => handleInputChange(setInputs, e)}
                                 value={inputs.adress}
                             />
-                            
+
                             <TextArea
                                 name="bio"
-                                title="Description"
+                                title="Description *"
                                 placeholder="Entrer une description"
                                 onError={handleError(setErrorData)}
                                 onChange={(e) => handleInputChange(setInputs, e)}
                                 value={inputs.bio}
+                                required={false}
                             />
                         </div>
                     </div>
@@ -190,7 +200,7 @@ const RegisterIdentification = () => {
                     Suivant
                 </Button>
             </form>
-        </section>
+        </motion.section>
     );
 };
 

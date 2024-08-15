@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAnimation } from "../../../context/AnimationProvider";
 import api from "../../../utils/api";
-import { EMAIL_REGEX, TOAST_TYPE } from "../../../constants";
+import {EMAIL_REGEX, EMAIL_REGEX_MESSAGE, TOAST_TYPE} from "../../../constants";
 import { Button, TextInput } from "../../../styles/components";
 import { Link } from "react-router-dom";
 
@@ -44,7 +44,7 @@ const ForgotPassword = () => {
                         placeholder="Entrer votre email"
                         name="email"
                         id="email"
-                        errorMsg="Email incorrecte"
+                        errorMsg={EMAIL_REGEX_MESSAGE}
                         pattern={EMAIL_REGEX}
                         value={email}
                         // onError={handleError(setErrorData)}
