@@ -40,6 +40,7 @@ const MessageList = () => {
     })) : null;
 
     useEffect(() => {
+
         getFriends();
         handleShowConversation();
     }, []);

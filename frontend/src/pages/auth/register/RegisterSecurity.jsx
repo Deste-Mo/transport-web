@@ -1,5 +1,5 @@
 import {Button, Icon, TextInput} from "../../../styles/components";
-import {REGISRATION_STEPS, SERVERLINK, ACCOUNT_TYPES, PASSWORD_REGEX} from "../../../constants";
+import {REGISRATION_STEPS, SERVERLINK, ACCOUNT_TYPES, PASSWORD_REGEX, PASSWORD_REGEX_MESSAGE} from "../../../constants";
 import {useAuth} from "../../../context/AuthProvider";
 import {useForm} from "../../../context/FormProvider";
 import {useEffect, useState} from "react";
@@ -115,7 +115,7 @@ const RegisterSecurity = () => {
                             title="Mot de passe"
                             type="password"
                             placeholder="Entrer votre mot de passe"
-                            errorMsg="Mot de passe incorrect"
+                            errorMsg={PASSWORD_REGEX_MESSAGE}
                             pattern={PASSWORD_REGEX}
                             onError={handleError(setErrorData)}
                             onChange={(e) => handleInputChange(setInputs, e)}

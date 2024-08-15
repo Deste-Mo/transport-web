@@ -10,6 +10,7 @@ const AppProvider = ({ children }) => {
 
     const { token } = useAuth()
     const {setShowConfirmPopup} = useAnimation();
+    const [isMobile, setIsMobile] = useState(false);
 
     const [userToChat, setUserToChat] = useState({
         id: null,
@@ -57,6 +58,7 @@ const AppProvider = ({ children }) => {
         };
 
         const user = await JSON.parse(localStorage.getItem('userToChat'));
+
 
         setUserToChat({
             id: user.id,
@@ -133,6 +135,9 @@ const AppProvider = ({ children }) => {
         handleShowConversation,
         countUnread,
         setCountUnread,
+        
+        isMobile,
+        setIsMobile,
         
         // Confirm Popup
         confirmPopup,

@@ -15,7 +15,7 @@ const AuthProvider = ({children}) => {
         REGISRATION_STEPS.accoutType
     ); // In witch registration route is the user
     const [loading, setLoading] = useState(true);
-    const [loadingInformation, setLoadingInformation] = useState(false);
+    const [loadingInformation, setLoadingInformation] = useState(true);
     const [token, setToken] = useState(null);
     const [isAuth, setIsAuth] = useState(false);
     
@@ -64,12 +64,13 @@ const AuthProvider = ({children}) => {
         })
             .then(res => {
                 setPersonalInformation(res.data.personalInfo);
-                setProfileInfo(res.data.profileInfo)
+                setProfileInfo(res.data.profileInfo);
             })
             .catch(e => {
                 console.log(`Erreur : ${e.response.data.error}`);
-                // setToken(null);
-            })
+            }).finally(() => {
+                setLoadingInformation(false);
+            });
 
     };
 

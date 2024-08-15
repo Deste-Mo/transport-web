@@ -45,6 +45,7 @@ const SearchFilter = ({
                 size={size}
                 filter
                 onSearch={onSearchIconClicked}
+                block={block}
                 
             />
             <motion.div

@@ -6,7 +6,7 @@ const globalButtonVariants = {
   `,
     variant: {
         transparent: "text-white font-RobotoMd",
-        primary: "bg-primary-100 hover:bg-primary-40 text-black-100   ",
+        primary: "bg-primary-100 hover:bg-primary-40 hover:text-white-100 text-black-100   ",
         danger: "bg-danger-100 hover:bg-danger-60 text-white-100  ",
         secondary:
             "bg-black-10 text-black-100 hover:bg-black-20 dark:hover:bg-white-80 dark:hover:text-black-100   font-RobotoMd dark:bg-white-60 dark:text-black-100 ",

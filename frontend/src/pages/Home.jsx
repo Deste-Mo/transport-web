@@ -24,7 +24,7 @@ const Home = () => {
                 {
                     offers?.length > 0 ? (
                         <Suspense fallback={<OfferCardLoading/>}>
-                            {offers.map((offer) => (<OfferCard key={offer.offerid} sug={offer} saved={ savedOffers.length > 0 ? savedOffers.find(savedOffer => savedOffer.offerid === offer.offerid) : false }/>))}
+                            {offers.map((offer) => (<OfferCard  key={offer.offerid} sug={offer} saved={ savedOffers.length > 0 ? savedOffers.find(savedOffer => savedOffer.offerid === offer.offerid) : false }/>))}
                         </Suspense>
                     ) :
                         <p className="nothing-box">

@@ -9,7 +9,6 @@ const sizeVariants = {
     lg: "px-6 py-4",
   },
   text: {
-
     md: "text-lead text-black-80 max-md:text-base",
     lg: "text-subtitle-3",
   },
@@ -20,25 +19,27 @@ export function SubHeader({
   icon,
   sticky = false,
   size = "md",
-  rightContent,
+  rightContent = null,
   hideLeftContent = false,
   className,
 }) {
   return (
     <div
-      className={`flex select-none gap-4 w-full justify-between items-center z-30  rounded-xl shadow-sm  border border-black-0 bg-white-100 sticky top-0 dark:bg-white-0  dark:backdrop-blur-sm   ${
+      className={`flex select-none gap-4 max-md:gap-2 w-full justify-between items-center z-30  rounded-xl shadow-sm  border border-black-0 bg-white-100 sticky top-0 dark:bg-white-0  dark:backdrop-blur-sm   ${
         sticky && "sticky"
       } ${sizeVariants.padding[size]}`}
     >
       {!hideLeftContent && (
         <div
-          className={`flex items-center gap-4 text-black-100 dark:text-white-100 ${sizeVariants.text[size]}`}
+          className={`flex items-center gap-4 text-black-100 text-nowrap dark:text-white-100 ${sizeVariants.text[size]}`}
         >
           <i className={icon + " text-icon"}></i>
           <span>{name}</span>
         </div>
       )}
-      <div className="">{rightContent}</div>
+      {rightContent && (
+        <div className="w-full flex justify-end">{rightContent}</div>
+      )}
     </div>
   );
 }

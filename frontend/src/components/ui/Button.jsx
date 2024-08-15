@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 
 import {  defaultTransition } from "../../styles/globals";
 import globalButtonVariants from "../../styles/globals.button";
+import DefaultLoader from "../loader/DefaultLoader.jsx";
 
 
 const Button = ({
@@ -30,7 +31,7 @@ const Button = ({
   return (
     <button disabled={disabled} type={type} onClick={onClick} className={buttonClass}>
       {loading ? (
-        <i className="animate-spin bi-hourglass-top"></i>
+        <DefaultLoader className="size-4 border-4 border-white-100"/>
       ) : icon ? (
         <>
           <i className={`${icon} ${globalButtonVariants.iconSize[size]}`}></i>

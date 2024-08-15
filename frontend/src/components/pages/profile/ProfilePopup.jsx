@@ -23,8 +23,7 @@ const ProfilePopup = ({className}) => {
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (selectRef.current && !selectRef.current.contains(e.target))
-            // setTogglePopup(false)
-                return
+                setTogglePopup(false)
         };
         document.addEventListener("mousedown", handleClickOutside);
 

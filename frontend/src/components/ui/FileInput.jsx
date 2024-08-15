@@ -195,7 +195,7 @@ const BasicFileInput = ({
         icon={icon}
         size="lg"
         variant={iconVariant}
-        className="rounded-md m-0"
+        className=" m-0"
         onClick={() => handleClick(fileRef)}
       />
       <div className={inputClassName}>

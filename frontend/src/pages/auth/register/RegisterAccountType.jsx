@@ -38,7 +38,7 @@ const RegisterAccountType = () => {
       </div>
       <div className="flex flex-col items-center justify-center">
         <form
-          className="flex w-fit flex-col items-start justify-center rounded-xl border p-4 border-black-0 bg-white-100 dark:bg-white-10 dark:border-none gap-[32px]"
+          className="auth-form"
           onSubmit={handleSubmit}
         >
           <div className="flex w-full flex-col items-start justify-center gap-6">
@@ -53,6 +53,7 @@ const RegisterAccountType = () => {
                 }))}
                 onError={handleError(setErrorData)}
                 onChange={(e) => handleInputChange(setInputs, e)}
+                
               />
             </div>
           </div>

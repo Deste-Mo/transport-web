@@ -1,37 +1,48 @@
 import {createContext, useContext, useState} from "react";
-import {SERVERLINK} from "../constants/index.js";
+import {
+    SERVERLINK,
+    USERS_FILTERS,
+    USERS_FILTERS_DATAS,
+} from "../constants/index.js";
 import {useAuth} from "./AuthProvider.jsx";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const FriendContext = createContext({});
 
 const UserProvider = ({children}) => {
     const {token} = useAuth();
-
     const navigate = useNavigate();
-    
+
     const [friends, setFriends] = useState([]);
     const [loadingFriend, setLoadingFriend] = useState(true);
     const [users, setUsers] = useState([]);
     const [profileFriends, setProfileFriends] = useState([]);
     const [followersCount, setFollowersCount] = useState(0);
     const [friendFollowerCount, setFriendFollowerCount] = useState(0);
-    
+    const [activeUserFilters, setActiveUserFilters] =
+        useState(USERS_FILTERS_DATAS);
+    const [filteredUsers, setFilteredUsers] = useState(friends);
+
     const getFriends = async (userId) => {
-        const response = await axios.get(`${SERVERLINK}/api/profile/friends/${!userId ? '' : userId}`, {
-            headers: { token }
-        })
+        const response = await axios.get(
+            `${SERVERLINK}/api/profile/friends/${!userId ? "" : userId}`,
+            {
+                headers: {token},
+            }
+        );
 
         setFriends(await response?.data?.friends);
         setFollowersCount(await response?.data.friends.length);
         setFriendFollowerCount(await response?.data.profile.length);
         setProfileFriends(await response?.data.profile);
-    }
+    };
     const getUsers = async () => {
-        const response = await axios.get(`${SERVERLINK}/api/messages/users`, { headers: { token } })
+        const response = await axios.get(`${SERVERLINK}/api/messages/users`, {
+            headers: {token},
+        });
         setUsers(await response?.data?.allUsers);
-    }
+    };
     const unFollowUsers = async (profileInfoId, id) => {
         const response = await fetch(SERVERLINK + "/api/profile/unfollow/" + id, {
             method: "POST",
@@ -43,39 +54,79 @@ const UserProvider = ({children}) => {
         getFriends(profileInfoId);
         getUsers();
     };
-
     const goToUserProfile = (id) => {
         navigate(`/profile/${id}`);
-    }
-
+    };
     const followUser = async (profileInfoId, id, me) => {
-
         const content = me.fullName + " Vous suit desormais.";
 
         const response = await fetch(SERVERLINK + "/api/profile/follow/" + id, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            token: token,
-          },
-        });
-
-        const sendNotifs = await fetch(SERVERLINK + '/api/notifs/sendnotifs/' + id, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "token": token
+                token: token,
             },
-            body: JSON.stringify({ content })
         });
+
+        const sendNotifs = await fetch(
+            SERVERLINK + "/api/notifs/sendnotifs/" + id,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    token: token,
+                },
+                body: JSON.stringify({content}),
+            }
+        );
 
         getFriends(profileInfoId);
         getUsers();
     };
     
-  return (
-        <FriendContext.Provider value={
-            {
+    const updateActiveUserFilter = (filter) => {
+        localStorage.setItem("activeUserFilters", filter);
+    }
+    const filterUsers = (search, friends, users) => {
+        // Get the active filter from localStorage or default to 'follower'
+        const activeUserFilter = localStorage?.getItem("activeUserFilters") || USERS_FILTERS.follower;
+
+        switch (activeUserFilter) {
+            case USERS_FILTERS.suggestion: {
+                // localStorage.setItem("activeUserFilters", USERS_FILTERS.suggestion);
+                updateActiveUserFilter(USERS_FILTERS.suggestion);
+                if (!search) return users;
+
+                return users.filter(user =>
+                    user.firstname.toLowerCase().includes(search.toLowerCase()) ||
+                    user.lastname.toLowerCase().includes(search.toLowerCase())
+                );
+            }
+
+            case USERS_FILTERS.follower: {
+                // localStorage.setItem("activeUserFilters", USERS_FILTERS.follower)
+                updateActiveUserFilter(USERS_FILTERS.follower)
+                
+
+                if (!search) return friends;
+
+                return friends.filter(friend =>
+                    friend.firstname.toLowerCase().includes(search.toLowerCase()) ||
+                    friend.lastname.toLowerCase().includes(search.toLowerCase())
+                );
+            }
+
+            default: {
+                // localStorage.setItem("activeUserFilters", USERS_FILTERS.follower);
+                updateActiveUserFilter(USERS_FILTERS.follower)
+                return friends;
+            }
+        }
+    };
+    
+    return (
+        <FriendContext.Provider
+            value={{
                 friends,
                 followersCount,
                 users,
@@ -86,13 +137,18 @@ const UserProvider = ({children}) => {
                 friendFollowerCount,
                 profileFriends,
                 setFriends,
-                goToUserProfile
-            }}>
-        {children}
-      </FriendContext.Provider>
-  )
-} 
+                goToUserProfile,
+                filterUsers,
+                activeUserFilters,
+                filteredUsers,
+                updateActiveUserFilter,
+            }}
+        >
+            {children}
+        </FriendContext.Provider>
+    );
+};
 
 export default UserProvider;
 
-export const useUser = ()=> useContext(FriendContext);
+export const useUser = () => useContext(FriendContext);

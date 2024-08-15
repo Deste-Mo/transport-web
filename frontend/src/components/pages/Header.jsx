@@ -7,6 +7,10 @@ import { useAnimation } from "../../context/AnimationProvider.jsx";
 import { useNotification } from "../../context/NotficationProvider.jsx";
 import { useUser } from "../../context/UserProvider.jsx";
 import Icon from "../ui/Icon.jsx";
+import {useAuth} from "../../context/AuthProvider.jsx";
+import {usePreference} from "../../context/UserPreferenceProvider.jsx";
+import TemplatePopup, {OptionItem} from "../ui/TemplatePopup.jsx";
+import Button from "../ui/Button.jsx";
 
 export function Header({ profileImage }) {
   const { countUnread, getUnreadMessageCount } = useApp();
@@ -85,6 +89,10 @@ const MobileHeader = ({ className, NAV_LINKS, profileImage }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { showBackIcon } = useAnimation();
+  const { hideMobileNavigation } = useAnimation();
+
+  if (hideMobileNavigation) return ;
+
   return (
     <header
       className={`flex justify-between max-md:justify-center  items-center bi  z-40 ${className}`}
@@ -98,7 +106,6 @@ const MobileHeader = ({ className, NAV_LINKS, profileImage }) => {
               variant="secondary"
               onClick={() => navigate(-1)}
             />
-
           )}
           <h1 className="text-subtitle-2 max-lg:text-subtitle-3">
             Media <span className="text-primary-100">Trans</span>
@@ -108,7 +115,7 @@ const MobileHeader = ({ className, NAV_LINKS, profileImage }) => {
       </div>
 
       <div className="">
-        <ul className="flex  items-center w-full justify-between max-md:items-center  py-4 px-8 fixed left-0 bottom-0 bg-white-100 dark:bg-white-0 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md z-50">
+        <ul className="flex  items-center w-full justify-between max-md:items-center  py-4 px-3 fixed left-0 bottom-0 bg-white-100 dark:bg-white-0 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md z-50">
           {NAV_LINKS.map((navlink) => (
             <NavLink
               forMobile
@@ -160,7 +167,14 @@ const DesktopHeader = ({ className, NAV_LINKS, profileImage }) => {
 };
 
 const Profile = ({ profileImage, className }) => {
-  const { togglePopup, setTogglePopup } = useAnimation();
+  const [ togglePopup, setTogglePopup ]= useState(false);
+  const {logout, personalInformation} = useAuth();
+  const {darkMode, setDarkMode} = usePreference();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    setTogglePopup(false);
+    logout();
+  };
 
   return (
     <div
@@ -172,7 +186,41 @@ const Profile = ({ profileImage, className }) => {
       >
         <img src={profileImage} alt="" className="size-full rounded-full " />
       </div>
-      {togglePopup && <ProfilePopup className="fixed top-[86px] right-10" />}
+      {/*{togglePopup && <ProfilePopup className="fixed top-[86px] right-10" />}*/}
+      <TemplatePopup setPopupVisible={setTogglePopup} popupVisible={togglePopup} className="fixed top-[86px] right-10" hideOnOutsideClick={false}>
+          <OptionItem
+            onClick={() => {
+              setTogglePopup(false);
+              navigate(`/profile/${personalInformation.id}`);
+            }}
+            name="Profile"
+            icon="bi bi-person"
+          />
+          <OptionItem
+            onClick={() => {
+              setTogglePopup(false);
+            }}
+            name="Paramètres"
+            icon="bi bi-gear"
+          />
+          <OptionItem
+            onClick={() => {
+              setDarkMode(prev => !prev);
+            }}
+            name="Changer le thème"
+            icon={darkMode ? "bi bi-moon" : "bi bi-sun"}
+          />
+          <div className=" w-full p-2">
+            <Button
+                onClick={handleLogout}
+                variant="secondary"
+                size="sm"
+                block
+            >
+              Deconnexion
+            </Button>
+          </div>
+      </TemplatePopup>
     </div>
   );
 };
@@ -189,14 +237,17 @@ const NavLink = ({
   return (
     <li
       onClick={onClick}
-      className={` flex flex-col justify-center items-center cursor-pointer group hover:text-primary-100 ${active ? "text-primary-100" : "text-black-100 dark:text-white-100"
-        } `}
+      className={` flex flex-col justify-center items-center cursor-pointer group hover:text-primary-100 ${
+        active ? "text-primary-100" : "text-black-100 dark:text-white-100"
+      } `}
     >
       <i className={`${active ? activeIcon : icon}  text-icon`}></i>
       <span
-        className={`${forMobile ? "text-small-2" : "text-small-1"
-          } group-hover:text-primary-100 relative ${active ? "text-primary-100" : "text-black-80 dark:text-white-100"
-          }`}
+        className={`${
+          forMobile ? "text-small-2" : "text-small-1"
+        } group-hover:text-primary-100 relative ${
+          active ? "text-primary-100" : "text-black-80 dark:text-white-100"
+        }`}
       >
         {number > 0 && (
           <div className="absolute max-md:text-small-3 max-md:font-sm bottom-10 -right-2 bg-danger-100 text-white-100 size-[24px] flex items-center justify-center px-2 py-2 rounded-full">
