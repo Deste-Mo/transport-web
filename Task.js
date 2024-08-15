@@ -1,4 +1,4 @@
-// TODO :
+// TODO : using isMobile state in layout components
 // ! Refactor the OfferCard popup component -> done
 
 // ! New page to show all available offer in the profile page

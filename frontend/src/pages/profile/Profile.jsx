@@ -3,7 +3,7 @@ import { useAuth } from "../../context/AuthProvider";
 import { Button, Icon } from "../../styles/components";
 import { SubHeader } from "./../../components/pages/SubHeader";
 import RecentlyFriends from "./../../components/pages/RecentlyFriends";
-import { SERVERLINK } from "../../constants";
+import {SERVERLINK, USERS_FILTERS} from "../../constants";
 import OfferCard from "../../components/pages/Offer/OfferCard.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUser } from "../../context/UserProvider.jsx";
@@ -14,11 +14,9 @@ const ProfileCard = lazy(() => import("../../components/pages/profile/ProfileCar
 
 export default function Profile() {
   const { id } = useParams();
-
   const navigate = useNavigate();
-
+  const {updateActiveUserFilter} = useUser();
   const { personalInformation, getInformation, token, profileInfo } = useAuth();
-
   const {
     getFriends,
     followersCount,
@@ -32,6 +30,12 @@ export default function Profile() {
     currentUserOffers,
     getCurrentUserOffers,
   } = useOffer();
+  
+  const handleSeeAllFriends = () => {
+    updateActiveUserFilter(USERS_FILTERS.follower);
+    navigate("/friend");
+    
+  }
   
   useEffect(() => {
     getSavedOffers();
@@ -64,7 +68,7 @@ export default function Profile() {
       <div className="flex flex-col gap-6">
         <SubHeader
           icon="bi bi-broadcast"
-          name={`Suivi(e)${friendFollowerCount > 1 ? "s" : ""}`}
+          name={`Suivi(s)`}
           rightContent={
             <p className="text-black-100 dark:text-white-100">
               {friendFollowerCount}
@@ -99,11 +103,19 @@ export default function Profile() {
                 />
               ))
           ) : (
-            <div className="nothing-box">Pas d'amis</div>
+            <Button>Suivre un utilisateur</Button>
           )}
-          <Button variant="secondary" block>
-            Voir plus
-          </Button>
+          {
+            profileFriends.length > 4 && (
+              <Button
+                className="w-full"
+                variant="secondary"
+                onClick={handleSeeAllFriends}
+              >
+                Voir tous vous suivis
+              </Button>
+            )
+          }
         </div>
       </div>
       {/*For mobile screen*/}

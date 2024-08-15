@@ -1,9 +1,9 @@
-import { Outlet, useLocation } from "react-router-dom";
+import {Outlet, useLocation, useNavigate} from "react-router-dom";
 // import { ProfileLeft } from "../components/pages/ProfileLeft.jsx";
 import { SubHeader } from "../components/pages/SubHeader.jsx";
 import RecentlyFriends from "../components/pages/RecentlyFriends.jsx";
 import { useAuth } from "../context/AuthProvider.jsx";
-import { SERVERLINK } from "../constants/index.js";
+import {SERVERLINK, USERS_FILTERS} from "../constants/index.js";
 import { useApp } from "../context/AppProvider.jsx";
 import { Suspense, lazy, useEffect } from "react";
 import { NAVIGATIONS } from "../constants/home.js";
@@ -114,13 +114,15 @@ const NavPageLayout = () => {
 export default NavPageLayout;
 
 const DynamicLeftContent = ({ currentLocation }) => {
-  const { friends, users } = useUser();
+  const { friends, users, updateActiveUserFilter } = useUser();
+  const navigate = useNavigate();
+  
 
   switch (currentLocation) {
     case NAVIGATIONS.home:
       return (
         <>
-          <SubHeader name="Amis" icon="bi bi-person" />
+          <SubHeader name="Suivi(s)" icon="bi bi-broadcast" />
           <div className="flex flex-col gap-3 rounded-xl p-2 bg-white-100 dark:bg-white-0">
             {friends.length > 0 ? (
               friends.map((friend) => (
@@ -134,9 +136,15 @@ const DynamicLeftContent = ({ currentLocation }) => {
                 />
               ))
             ) : (
-              <Button block icon="bi bi-plus-lg">
-                Ajouter un ami
-              </Button>
+                <div className="flex flex-col gap-2">
+                    <p className="nothing-box">Pas de suivi(s)</p>
+                    <Button block icon="bi bi-plus-lg" onClick={() => {
+                        navigate("/friend");
+                        updateActiveUserFilter(USERS_FILTERS.suggestion)
+                    }}>
+                        Voir les suggestions
+                    </Button>
+                </div>
             )}
           </div>
         </>
@@ -145,7 +153,7 @@ const DynamicLeftContent = ({ currentLocation }) => {
     case NAVIGATIONS.friend:
       return (
         <>
-          <SubHeader name="Suggestion d'amis" icon="bi bi-person" />
+          <SubHeader name="Suggestion" icon="bi bi-broadcast" />
           <div className="flex flex-col items-center justify-center gap-6 p-2 w-full bg-white-100 dark:bg-white-0 rounded-xl">
             {users?.length > 0 ? (
               users.map((user) => (
@@ -169,25 +177,33 @@ const DynamicLeftContent = ({ currentLocation }) => {
 
     default:
       return (
-        <>
-          <SubHeader name="Amis" icon="bi bi-person" />
-          <div className="flex flex-col gap-3 rounded-xl p-2 bg-white-100 dark:bg-white-0">
-            {friends.length > 0 ? (
-              friends.map((friend) => (
-                <RecentlyFriends
-                  className="w-full"
-                  key={friend.userid}
-                  account={friend.accounttype}
-                  spec={friend.userid}
-                  name={friend.firstname + " " + friend.lastname}
-                  image={SERVERLINK + "/" + friend.profileimage}
-                />
-              ))
-            ) : (
-              <div>No friends</div>
-            )}
-          </div>
-        </>
+          <>
+              <SubHeader name="Suivi(s)" icon="bi bi-broadcast" />
+              <div className="flex flex-col gap-3 rounded-xl p-2 bg-white-100 dark:bg-white-0">
+                  {friends.length > 0 ? (
+                      friends.map((friend) => (
+                          <RecentlyFriends
+                              className="w-full"
+                              key={friend.userid}
+                              spec={friend.userid}
+                              account={friend.accounttype}
+                              name={friend.firstname + " " + friend.lastname}
+                              image={SERVERLINK + "/" + friend.profileimage}
+                          />
+                      ))
+                  ) : (
+                      <div className="flex flex-col gap-2">
+                          <p className="nothing-box">Pas de suivi(s)</p>
+                          <Button block icon="bi bi-plus-lg" onClick={() => {
+                              navigate("/friend");
+                              updateActiveUserFilter(USERS_FILTERS.suggestion)
+                          }}>
+                              Voir les suggestions
+                          </Button>
+                      </div>
+                  )}
+              </div>
+          </>
       );
   }
 };
