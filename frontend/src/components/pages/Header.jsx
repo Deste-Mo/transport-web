@@ -7,6 +7,10 @@ import { useAnimation } from "../../context/AnimationProvider.jsx";
 import { useNotification } from "../../context/NotficationProvider.jsx";
 import { useUser } from "../../context/UserProvider.jsx";
 import Icon from "../ui/Icon.jsx";
+import {useAuth} from "../../context/AuthProvider.jsx";
+import {usePreference} from "../../context/UserPreferenceProvider.jsx";
+import TemplatePopup, {OptionItem} from "../ui/TemplatePopup.jsx";
+import Button from "../ui/Button.jsx";
 
 export function Header({ profileImage }) {
   const { countUnread, getUnreadMessageCount } = useApp();
@@ -163,7 +167,14 @@ const DesktopHeader = ({ className, NAV_LINKS, profileImage }) => {
 };
 
 const Profile = ({ profileImage, className }) => {
-  const { togglePopup, setTogglePopup } = useAnimation();
+  const [ togglePopup, setTogglePopup ]= useState(false);
+  const {logout, personalInformation} = useAuth();
+  const {darkMode, setDarkMode} = usePreference();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    setTogglePopup(false);
+    logout();
+  };
 
   return (
     <div
@@ -175,7 +186,41 @@ const Profile = ({ profileImage, className }) => {
       >
         <img src={profileImage} alt="" className="size-full rounded-full " />
       </div>
-      {togglePopup && <ProfilePopup className="fixed top-[86px] right-10" />}
+      {/*{togglePopup && <ProfilePopup className="fixed top-[86px] right-10" />}*/}
+      <TemplatePopup setPopupVisible={setTogglePopup} popupVisible={togglePopup} className="fixed top-[86px] right-10" hideOnOutsideClick={false}>
+          <OptionItem
+            onClick={() => {
+              setTogglePopup(false);
+              navigate(`/profile/${personalInformation.id}`);
+            }}
+            name="Profile"
+            icon="bi bi-person"
+          />
+          <OptionItem
+            onClick={() => {
+              setTogglePopup(false);
+            }}
+            name="Paramètres"
+            icon="bi bi-gear"
+          />
+          <OptionItem
+            onClick={() => {
+              setDarkMode(prev => !prev);
+            }}
+            name="Changer le thème"
+            icon={darkMode ? "bi bi-moon" : "bi bi-sun"}
+          />
+          <div className=" w-full p-2">
+            <Button
+                onClick={handleLogout}
+                variant="secondary"
+                size="sm"
+                block
+            >
+              Deconnexion
+            </Button>
+          </div>
+      </TemplatePopup>
     </div>
   );
 };

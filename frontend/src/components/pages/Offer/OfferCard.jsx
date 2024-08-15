@@ -172,7 +172,7 @@ const OfferCard = ({
               <TemplatePopup
                 setPopupVisible={setPopupVisible}
                 popupVisible={popupVisible}
-                content={
+                children={
                   <>
                     <OptionItem
                       onClick={contactUser}
