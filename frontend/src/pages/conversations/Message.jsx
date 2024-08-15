@@ -369,48 +369,47 @@ const Message = ({
         }`}
       >
         <TemplatePopup
-          setPopupVisible={setMessagePopuVisible}
-          popupVisible={messagePopupVisible}
-          className={`absolute top-10 ${
-            sentByCurrentUser ? "-left-10 " : "-right-10"
-          }`}
-          content={
-            <div>
-              <OptionItem
+            setPopupVisible={setMessagePopuVisible}
+            popupVisible={messagePopupVisible}
+            className={`absolute top-10 ${
+                sentByCurrentUser ? "-left-10 " : "-right-10"
+            }`}
+        >
+          <div>
+            <OptionItem
                 setPopupVisible={setMessagePopuVisible}
                 name="Supprimer"
                 icon="bi bi-trash"
                 inverseIcon
                 onClick={handleDelete}
-              />
-              {!sentByCurrentUser && (
+            />
+            {!sentByCurrentUser && (
                 <OptionItem
-                  name="Répondre"
-                  icon="bi bi-reply-fill"
-                  inverseIcon
-                  onClick={answerMessage}
-                  setPopupVisible={setMessagePopuVisible}
+                    name="Répondre"
+                    icon="bi bi-reply-fill"
+                    inverseIcon
+                    onClick={answerMessage}
+                    setPopupVisible={setMessagePopuVisible}
                 />
-              )}
-            </div>
-          }
-        />
+            )}
+          </div>
+        </TemplatePopup>
         <div className="flex flex-col gap-2 w-full">
           {/* FileMessages */}
           {fileContent && (
-            <FileMessage
-              fileContent={fileContent}
-              refMessage={refmessage}
-              sentByCurrentUser={sentByCurrentUser}
-            />
+              <FileMessage
+                  fileContent={fileContent}
+                  refMessage={refmessage}
+                  sentByCurrentUser={sentByCurrentUser}
+              />
           )}
           {/* TextMessages */}
           {!message && fileContent ? null : (
-            <TextMessage
-              refMessage={refmessage}
-              sentByCurrentUser={sentByCurrentUser}
-              message={message}
-            />
+              <TextMessage
+                  refMessage={refmessage}
+                  sentByCurrentUser={sentByCurrentUser}
+                  message={message}
+              />
           )}
         </div>
 
