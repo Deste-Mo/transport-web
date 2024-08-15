@@ -8,6 +8,7 @@ import {useSocketContext} from "../../context/SocketContext";
 import {useEffect, useState} from "react";
 import FriendCardLoading from "../loader/FriendCardLoading";
 import {useUser} from "../../context/UserProvider.jsx";
+import useWindowSize from "../../hooks/useWindowSize.jsx";
 //import PropTypes from "prop-types";
 
 const RecentlyFriends = ({
@@ -22,27 +23,18 @@ const RecentlyFriends = ({
                              },
                              className,
                          }) => {
+    const id = spec;
     const {token, personalInformation, profileInfo} = useAuth();
-
-
-    const {loading} = useApp();
     const {
-        getFriends,
-        getUsers,
         followUser,
-        goToUserProfile,
         unFollowUsers,// TODO : Forget the usage (empty function)
     }
         = useUser();
-
+    const {isMobile} = useApp();
     const {ActiveUsers} = useSocketContext();
-
     const navigate = useNavigate();
-
-    const id = spec;
-
     const isOnline = ActiveUsers.includes(id);
-
+    
     const navigateToMessage = () => {
         localStorage.setItem(
             "userToChat",
@@ -55,13 +47,58 @@ const RecentlyFriends = ({
         );
         navigate("/message");
     };
+    const goToUserProfile = () => navigate(`/profile/${id}`);
 
-    const navigateToProfile = () => navigate(`/profile/${id}`)
 
 
+    const props = {
+        id,
+        isOnline,
+        goToUserProfile,
+        navigateToMessage,
+        unFollowUsers,
+        followUser,
+        spec,
+        image,
+        name,
+        account,
+        showMessageButton,
+        showRemoveFriendButton,
+        showAddFriendButton,
+        onButtonsClick,
+        className,
+        token, personalInformation, profileInfo
+    }
+
+    return <DesktopRecentlyFriends {...props} />
+    
+};
+
+export default RecentlyFriends;
+
+
+const DesktopRecentlyFriends = ({
+                                    id,
+                                    personalInformation, profileInfo,
+                                    isOnline,
+                                    goToUserProfile,
+                                    navigateToMessage,
+                                    followUser,
+                                    unFollowUsers,
+                                    spec,
+                                    image,
+                                    name,
+                                    account,
+                                    showMessageButton = false,
+                                    showRemoveFriendButton = false,
+                                    showAddFriendButton = false,
+                                    onButtonsClick = () => {
+                                    },
+                                    className,
+                                }) => {
     return (
         <div
-            className={`flex items-center flex-wrap justify-between gap-3 bg-white-100 p-4 hover:bg-primary-20 group rounded-xl dark:bg-white-0 text-black-100 dark:text-white-100 ${className}`}
+            className={`flex items-center  justify-between bg-white-100 p-4 hover:bg-primary-20 group rounded-xl dark:bg-white-0 text-black-100 dark:text-white-100 ${className}`}
         >
             <div className="flex items-center relative gap-2">
                 <img src={image} alt="" className="size-10 rounded-full cursor-pointer"
@@ -78,8 +115,7 @@ const RecentlyFriends = ({
                     </span>
                 </div>
             </div>
-            <div className="flex items-center justify-center max-sm:w-full gap-8">
-
+            <div className="flex items-center justify-center  gap-8">
                 {showMessageButton && (
                     <i
                         onClick={() => {
@@ -117,17 +153,4 @@ const RecentlyFriends = ({
             </div>
         </div>
     );
-};
-
-export default RecentlyFriends;
-
-/*
-Amis.propTypes = {
-    name: PropTypes.string.isRequired,
-    account: PropTypes.string.isRequired,
 }
-
-RecentlyFriends.propTypes = {
-    name: PropTypes.string.isRequired,
-    account: PropTypes.string.isRequired,
-}*/

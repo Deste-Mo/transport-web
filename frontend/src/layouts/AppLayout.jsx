@@ -11,12 +11,13 @@ import { useSocketContext } from "../context/SocketContext.jsx";
 import { Loader } from "../styles/components.js";
 import DefaultLoader from "../components/loader/DefaultLoader.jsx";
 import { useAnimation } from "../context/AnimationProvider.jsx";
+import useWindowSize from "../hooks/useWindowSize.jsx";
 
 const AppLayout = () => {
   const { token, loading, personalInformation } = useAuth();
   const { setHideMobileNavigation, hideMobileNaviagation } = useAnimation();
   const user = personalInformation;
-  const { getUnreadMessageCount, countUnread, getUserMessages } = useApp();
+  const { getUnreadMessageCount, countUnread, setIsMobile } = useApp();
 
   const { getFriends, getUsers } = useUser();
 
@@ -27,6 +28,7 @@ const AppLayout = () => {
   const {setMessagePopup} = useAnimation();
 
   const { socket } = useSocketContext();
+  const [width] = useWindowSize(); 
 
   useEffect(() => {
     setHideMobileNavigation(false);
@@ -53,9 +55,10 @@ const AppLayout = () => {
       return () => socket?.off("newMessage");
   }, [socket, countUnread, getUnreadMessageCount, unreadNotificationsCount]);
 
-
-
-
+    useEffect(() => {
+        setIsMobile(width < 768);
+    }, [width]);
+    
   return loading ? (
     <DefaultLoader />
   ) : token ? (
