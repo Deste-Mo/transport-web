@@ -2,7 +2,6 @@ import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcryptjs';
 import pool from "../db/connexion.js";
-import { error } from 'console';
 
 export const forgotPassword = async (req, res) => {
     const { email } = req.body;
@@ -31,16 +30,22 @@ export const forgotPassword = async (req, res) => {
                 pass: 'hpcc Lmwf epmr vxxk'
             }
         });
-
+        
         const mailOptions = {
             to: email,
             from: 'tosyrazafitsotra@gmail.com',
             subject: 'Réinitialisation du Mot de Passe',
-            text: `Vous recevez cet email parce que vous (ou quelqu'un d'autre) avez demandé la réinitialisation de votre mot de passe.\n\n` +
-                  `Veuillez cliquer sur le lien suivant, ou collez-le dans votre navigateur pour terminer le processus:\n\n` +
-                  `${resetUrl}\n\n` +
-                  `Si vous n'avez pas demandé cela, veuillez ignorer cet email et votre mot de passe restera inchangé.\n`
+            html: `
+                <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4; color: #333;">
+                    <h2 style="color: #333;">Réinitialisation du Mot de Passe</h2>
+                    <p>Vous recevez cet email parce que vous (ou quelqu'un d'autre) avez demandé la réinitialisation de votre mot de passe.</p>
+                    <p>Veuillez cliquer sur le bouton ci-dessous pour réinitialiser votre mot de passe :</p>
+                    <a href="${resetUrl}" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: #000; background-color: #FBCB34; text-decoration: none; border-radius: 5px;">Réinitialiser le Mot de Passe</a>
+                    <p>Si vous n'avez pas demandé cela, veuillez ignorer cet email et votre mot de passe restera inchangé.</p>
+                </div>
+            `
         };
+        
 
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
@@ -49,7 +54,8 @@ export const forgotPassword = async (req, res) => {
             res.status(200).json({ message: 'Email de réinitialisation envoyé' });
         });
     } catch (error) {
-        res.status(500).json({ error: 'Erreur du serveur' });
+        console.log(error);
+        res.status(500).json({ error: 'Erreur du serveur' +error });
     }
 };
 

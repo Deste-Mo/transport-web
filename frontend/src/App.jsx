@@ -30,6 +30,8 @@ import ProfileDetails from "./pages/profile/ProfileDetails.jsx";
 import ResetPassword from "./pages/auth/forgotPassword/ResetPassword.jsx";
 import ForgotPassword from "./pages/auth/forgotPassword/ForgotPassword.jsx";
 import WaitLink from "./pages/auth/forgotPassword/WaitLink.jsx";
+import SubscriptionPage from "./pages/abonement/SubscriptionPage.jsx";
+import SubscriptionSecurity from "./pages/abonement/SubscriptionSecurity.jsx";
 
 // TODO :
 /*
@@ -88,6 +90,7 @@ export default function App() {
                 {/* Friends*/}
                 <Route path="/friend" element={<Friends />} />
 
+
                 {/* Notifications*/}
                 <Route path="/notification" element={<Notifications />} />
 
@@ -97,6 +100,9 @@ export default function App() {
               </Route>
             </Route>
 
+            <Route path="/abonnement" element={<SubscriptionPage />} />
+            <Route path="/abonnement/:id/:type/paiement" element={<SubscriptionSecurity/>} />
+            
             {/* Pages Error */}
             <Route path="*" element={<NotFound />} />
             <Route path="/forbidden" element={<Forbidden />} />

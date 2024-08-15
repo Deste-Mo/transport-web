@@ -1,26 +1,34 @@
 import { Link } from "react-router-dom";
 
-
 const WaitLink = () => {
-
     return (
-        <section
-        className="w-fullscreen  auth-section space-y-[128px] absolute top-[128px] left-1/2 -translate-x-1/2 ">
-        <div className="h1 text-subtitle-1 w-full text-center text-black-100 dark:text-white-100">
-            Verifier votre
-            <span className="text-primary-100">Email</span>
-        </div>
-        {/* Main Form */}
-        <div className="flex flex-col items-center justify-center">
-            Nous avons envoyer un lien pour reinitialiser votre mot de passe
-            verifier votre email, le lien ne durera que 10 minute
-            <p className="text-small-1 text-black-80 dark:text-white-80">
-                <Link to="https://mail.google.com/mail/u/0/#inbox" className="text-primary-100 underline">
+        <section className="w-full h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-50 to-blue-100">
+            <div className="text-center max-w-lg mx-auto p-8 bg-white rounded-xl shadow-xl bg-white-100">
+                <h1 className="text-4xl font-extrabold text-gray-900 mb-6">
+                    Vérifiez votre <span className="text-primary-500">Email</span>
+                </h1>
+                <p className="text-lg text-gray-700 mb-8">
+                    Nous avons envoyé un lien pour réinitialiser votre mot de passe. Vérifiez votre email, le lien ne durera que 10 minutes.
+                </p>
+                <div className="flex justify-center items-center mb-8">
+                    <svg
+                        className="animate-spin h-16 w-16 text-primary-500"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                    >
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 0116 0A8 8 0 014 12z"></path>
+                    </svg>
+                </div>
+                <p className="text-sm text-gray-600">
+                    <Link to="https://mail.google.com/mail/u/0/#inbox" className="text-primary-100 font-semibold hover:underline">
                         Voir votre email
-                </Link>
-            </p>
-        </div>
-    </section>
+                    </Link>
+                </p>
+            </div>
+        </section>
     );
 }
 
