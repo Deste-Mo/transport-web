@@ -12,7 +12,6 @@ const FriendContext = createContext({});
 
 const UserProvider = ({children}) => {
     const {token} = useAuth();
-
     const navigate = useNavigate();
 
     const [friends, setFriends] = useState([]);
@@ -85,35 +84,40 @@ const UserProvider = ({children}) => {
         getUsers();
     };
     const filterUsers = (search, friends, users) => {
+        // Get the active filter from localStorage or default to 'follower'
         const activeUserFilter = localStorage?.getItem("activeUserFilter") || USERS_FILTERS.follower;
-        let newFilteredUsers = [];
+
         switch (activeUserFilter) {
-            case USERS_FILTERS.suggestion:
-                if (!search) return users;
+            case USERS_FILTERS.suggestion: {
+
                 localStorage.setItem("activeUserFilter", USERS_FILTERS.suggestion);
-                newFilteredUsers = users.filter((user) => {
-                    return (
-                        user.firstname.toLowerCase().includes(search.toLowerCase()) ||
-                        user.lastname.toLowerCase().includes(search.toLowerCase())
-                    );
-                });
+                if (!search) return users;
+
+                return users.filter(user =>
+                    user.firstname.toLowerCase().includes(search.toLowerCase()) ||
+                    user.lastname.toLowerCase().includes(search.toLowerCase())
+                );
                 break;
-            case USERS_FILTERS.follower:
-                if (!search) return friends;
+            }
+
+            case USERS_FILTERS.follower: {
                 localStorage.setItem("activeUserFilter", USERS_FILTERS.follower);
-                newFilteredUsers = friends.filter((friend) => {
-                    return (
-                        friend.firstname.toLowerCase().includes(search.toLowerCase()) ||
-                        friend.lastname.toLowerCase().includes(search.toLowerCase())
-                    )
-                })
-            default:
-                newFilteredUsers = friends;
-                break
+
+                if (!search) return friends;
+
+                return friends.filter(friend =>
+                    friend.firstname.toLowerCase().includes(search.toLowerCase()) ||
+                    friend.lastname.toLowerCase().includes(search.toLowerCase())
+                );
+            }
+
+            default: {
+                localStorage.setItem("activeUserFilter", USERS_FILTERS.follower);
+                return friends;
+            }
         }
-        
-        return newFilteredUsers
-    }
+    };
+    
     return (
         <FriendContext.Provider
             value={{

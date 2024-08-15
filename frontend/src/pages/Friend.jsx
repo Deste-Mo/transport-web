@@ -21,7 +21,6 @@ const RecentlyFriends = lazy(() =>
 );
 
 const Friends = () => {
-    const {personalInformation} = useAuth();
     const {
         friends,
         users,
@@ -41,7 +40,9 @@ const Friends = () => {
                 name: filter.name,
                 active: filter.name === filterName,
             }))
-        );
+        )
+        console.log(filterUsers(search, friends, users))
+        
     }
     
     useEffect(() => {
@@ -49,9 +50,9 @@ const Friends = () => {
     }, [search])
 
     useEffect(() => {
-        updateActiveUserFilters(localStorage?.getItem("activeUserFilters") || USERS_FILTERS.follower)
         getUsers();
         getFriends();
+        updateActiveUserFilters(localStorage?.getItem("activeUserFilters") || USERS_FILTERS.follower)
     }, []);
 
     return (
