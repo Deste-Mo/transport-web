@@ -31,6 +31,7 @@ import ResetPassword from "./pages/auth/forgotPassword/ResetPassword.jsx";
 import ForgotPassword from "./pages/auth/forgotPassword/ForgotPassword.jsx";
 import ProtectedProfileLayout from "./layouts/ProtectedProfileLayout.jsx";
 import NewOffer from "./pages/offer/NewOffer.jsx";
+import SavedOffers from "./pages/offer/SavedOffers.jsx";
 
 // TODO :
 /*
@@ -73,8 +74,9 @@ export default function App() {
               {/*Profile*/}
               <Route element={<ProfileLayout />}>
                 <Route path="profile/:id" element={<ProfileDetails />} />
+                <Route path="profile/:id/savedOffers" element={<SavedOffers />} />
                  
-                {/* Check the id */}
+                {/* Only the logged in user can visit this */}
                 <Route element={<ProtectedProfileLayout/>}>
                     <Route path="profile/:id/newOffer" element={<NewOffer />} />
                     <Route path="profile/:id/edit/" element={<ProfileEdit />} />

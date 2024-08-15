@@ -1,10 +1,8 @@
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
-// import { ProfileLeft } from "../components/pages/ProfileLeft.jsx";
 import { SubHeader } from "../components/pages/SubHeader.jsx";
 import RecentlyFriends from "../components/pages/RecentlyFriends.jsx";
 import { useAuth } from "../context/AuthProvider.jsx";
 import {SERVERLINK, USERS_FILTERS} from "../constants/index.js";
-import { useApp } from "../context/AppProvider.jsx";
 import { Suspense, lazy, useEffect } from "react";
 import { NAVIGATIONS } from "../constants/home.js";
 import { Button, Icon } from "../styles/components.js";
@@ -14,10 +12,10 @@ import { useUser } from "../context/UserProvider.jsx";
 import ProfileLeftLoading from "../components/loader/ProfileLeftLoading.jsx";
 import { useAnimation } from "../context/AnimationProvider.jsx";
 import useWindowSize from "../hooks/useWindowSize.jsx";
-const ProfileLeft = lazy(() => import("../components/pages/ProfileLeft.jsx"));
+const ProfileLeft = lazy(() => import("../components/pages/profile/ProfileLeft.jsx"));
 
 const NavPageLayout = () => {
-  const { personalInformation, loadingInformation } = useAuth();
+  const { personalInformation } = useAuth();
   const { setShowBackIcon, hideMobileNavigation, setHideMobileNavigation } = useAnimation();
   const [width] = useWindowSize();
   const {
@@ -33,7 +31,7 @@ const NavPageLayout = () => {
 
   useEffect(() => {
     getSavedOffers();
-    getSuggestedOffers();
+    getSuggestedOffers(user.id);
     getCurrentUserOffers();
     setShowBackIcon(false);
   }, []);

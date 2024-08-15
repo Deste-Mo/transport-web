@@ -140,7 +140,7 @@ export default function Profile() {
             />
             <div className="flex flex-col gap-4 rounded-lg">
               {savedOffers.length > 0 ? (
-                savedOffers.map((savedOffer) => (
+                savedOffers.slice(0,4).map((savedOffer) => (
                   <OfferCard key={savedOffer.saveid} sug={savedOffer} saved />
                 ))
               ) : (
@@ -148,6 +148,16 @@ export default function Profile() {
                   Pas de sauvegarde pour l'instant
                 </p>
               )}
+              {
+                savedOffers.length > 4 && (
+                  <Button
+                    className="w-full"
+                    onClick={() => navigate(`/profile/${id}/savedOffers`)}
+                  >
+                    Voir tous les offres
+                  </Button>
+                )
+              }
             </div>
           </div>
           <div className="flex flex-col gap-6">
