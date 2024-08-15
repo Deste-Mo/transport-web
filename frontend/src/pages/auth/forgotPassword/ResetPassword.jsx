@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { PASSWORD_REGEX, TOAST_TYPE } from "../../../constants";
 import api from "../../../utils/api";
 import { Button, TextInput } from "../../../styles/components";
@@ -15,16 +15,17 @@ const ResetPassword = () => {
 
     const {setMessagePopup} = useAnimation();
 
+    const navigate = useNavigate();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         api.post("/api/auth/reset-password", { token, password })
         .then(res => {
-            console.log(res.data);
-            alert('Votre mot de passe a été réinitialisé avec succès');
+            setMessagePopup(res.data.message, TOAST_TYPE.success);
+            navigate("/login");
         })
         .catch(e => {
-            console.log(`Erreur : ${e.response.data.error}`);
             setMessagePopup(e.response.data.error, TOAST_TYPE.error);
         })
     };

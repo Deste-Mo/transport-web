@@ -68,7 +68,7 @@ const Conv = ({ id, userToChat }) => {
         </div>
         <div className="flex flex-col items-start  break-words text-wrap">
           <p className="text-black-100 dark:text-white-100 text-small-1">
-            {userToChat.firstname + " " + userToChat.lastname}{" "}
+          {userToChat.firstname + (userToChat.lastname ? " " + userToChat.lastname : '')}
           </p>
           <p className="font-sm text-small-2 text-black-80 dark:text-white-80">
             {userToChat.accounttype}

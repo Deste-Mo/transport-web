@@ -17,7 +17,7 @@ import subscRoute from './routes/subscRoutes.js';
 
 import { app, io, server } from './socket/socket.js';
 
-const allowedOrigins = [process.env.FRONTEND_HOST || "http://192.168.0.104:5173"];
+const allowedOrigins = [process.env.FRONTEND_HOST || "http://localhost:5173"];
 const corsOptions = {
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {

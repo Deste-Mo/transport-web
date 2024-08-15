@@ -35,7 +35,7 @@ export const sendNotifs = async (req, res) => {
             const receiverSocketId = getReceiverSocketId(userId);
 
             if (receiverSocketId) {
-                io.to(receiverSocketId).emit("newNotif", notification)
+                io.to(receiverSocketId).emit("newNotif", notification);
             }
             return res.status(201).json({ notif: notification });
         }

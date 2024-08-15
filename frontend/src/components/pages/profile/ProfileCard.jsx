@@ -5,6 +5,9 @@ import Button from "../../ui/Button";
 import ProfileCardLoading from "../../loader/ProfileCardLoading";
 import {useUser} from "../../../context/UserProvider.jsx";
 import {useAuth} from "../../../context/AuthProvider.jsx";
+import { SERVERLINK, TOAST_TYPE } from "../../../constants/index.js";
+import { useAnimation } from "../../../context/AnimationProvider.jsx";
+import { useSocketContext } from "../../../context/SocketContext.jsx";
 
 const ProfileCard = ({
                          id,
@@ -20,10 +23,14 @@ const ProfileCard = ({
                      }) => {
     const navigate = useNavigate();
 
-    const { followUser, unFollowUsers, friends } = useUser();
-    const { personalInformation, profileInfo } = useAuth();
+    const { followUser, unFollowUsers, friends, handleSendEmailConf } = useUser();
+    const { personalInformation, profileInfo, token } = useAuth();
     const [loading, setLoading] = useState(true);
     const [isFriend, setIsFriend] = useState(false);
+
+    const { socket } = useSocketContext();
+
+    const {setMessagePopup} = useAnimation();
 
     useEffect(() => {
         setTimeout(() => setLoading(false), 1000);
@@ -72,14 +79,25 @@ const ProfileCard = ({
             </div>
 
             {forCurrentUser ? (
+                <>
                     <Button
                         block
                         size="md"
                         icon="bi bi-pencil"
                         onClick={() => navigate(`/profile/${id}/edit`)}
                     >
+
                         Modifier les informations
                     </Button>
+                    <Button
+                        block
+                        size="md"
+                        icon="bi bi-pencil"
+                        onClick={() => handleSendEmailConf(id)}
+                    >
+                        S'Abonner
+                    </Button>
+                </>
                 ) :
                 isFriend ? (
                         <Button

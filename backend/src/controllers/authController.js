@@ -142,7 +142,7 @@ export const login = async (req, res) => {
         const {email, password} = req.body;
 
         // Verifier si l'email/telephone existe et que le password correspond
-        const userExist = await pool.query("SELECT * FROM users WHERE email = $1 or phone = $2", [email, email]);
+        const userExist = await pool.query("SELECT * FROM users WHERE email = $1 or phone = $1", [email]);
 
         if (!userExist.rows[0]) {// utilisateur n'existe pas
             return res.status(500).json({error: "L'utilisateur n'existe pas"});
@@ -192,6 +192,7 @@ export const getMe = async (req, res) => {
     try {
 
         const user = req.user;
+        const isVerify = req.isVerify;
         let profile = req.user;
 
         const {profileId} = await req.params
@@ -221,6 +222,7 @@ export const getMe = async (req, res) => {
                     email: user.email,
                     phone: user.phone,
                     date: new Date(user.registerdate).toLocaleDateString(),
+                    isVerify: isVerify
                 },
                 profileInfo: {
                     id: profile.userid,
