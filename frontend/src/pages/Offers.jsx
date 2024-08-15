@@ -73,7 +73,27 @@ const Offers = () => {
         }
       />
       <div className="flex flex-col items-center justify-center gap-6 w-full">
-        <OfferFeed offers={filteredOffers} savedOffers={savedOffers}/>
+        {
+          filteredOffers?.length > 0 ? (
+              <Suspense fallback={<OfferCardLoading/>}>
+                {filteredOffers?.map((filteredOffer) => (
+                    <OfferCard
+                        key={filteredOffer.offerid}
+                        sug={filteredOffer}
+                        saved={
+                          savedOffers?.length > 0
+                              ? savedOffers.find(
+                                  (offer) => offer.offerid === filteredOffer.offerid
+                              )
+                              : false
+                        }
+                    />
+                ))}
+              </Suspense>
+          ) : (
+              <div className="nothing-box">Pas d'offres</div>
+          )
+        }
       </div>
     </motion.section>
   );

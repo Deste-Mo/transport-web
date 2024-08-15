@@ -31,7 +31,7 @@ export function SubHeader({
     >
       {!hideLeftContent && (
         <div
-          className={`flex items-center gap-4 text-black-100 dark:text-white-100 ${sizeVariants.text[size]}`}
+          className={`flex items-center gap-4 text-black-100 text-nowrap dark:text-white-100 ${sizeVariants.text[size]}`}
         >
           <i className={icon + " text-icon"}></i>
           <span>{name}</span>
