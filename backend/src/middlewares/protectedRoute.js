@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import pkg from 'express';
 import pool from '../db/connexion.js';
-import { getInformation } from '../models/users.js';
+import { getInformation, verify } from '../models/users.js';
 
 import dotenv from 'dotenv';
 
@@ -32,14 +32,24 @@ const protectedRoute = async (req, res, next) => {
             return res.status(500).json({ error: "Token invalid" });
         }
 
+        // return res.json({ payload : payload })
+
         const user = await getInformation(payload.id);
+
+        // return res.json({ user })
+
+        // console.log({req});
+        // console.log({user});
+
+        const isVerify = await verify(user.userid);
 
         if (!user) {
             return res.status(500).json({ error: "Utilisateur non trouver" });
         }
 
-        req.user = user;
-
+        req.user = await user;
+        req.isVerify = await isVerify;
+        
         next();
 
     } catch (error) {

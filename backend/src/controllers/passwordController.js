@@ -3,13 +3,14 @@ import nodemailer from 'nodemailer';
 import bcrypt from 'bcryptjs';
 import pool from "../db/connexion.js";
 import { error } from 'console';
+import { sendEmail } from '../models/mailModel.js';
 
 export const forgotPassword = async (req, res) => {
     const { email } = req.body;
 
     try {
         const userResult = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-        const user = userResult.rows[0];
+        const user = await userResult.rows[0];
 
         if (!user) {
             return res.status(400).json({ error: 'Utilisateur non trouvé' });
@@ -23,7 +24,7 @@ export const forgotPassword = async (req, res) => {
             [resetToken, resetTokenExpiry, email]
         );
 
-        const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
+        const resetUrl = `http://192.168.0.104:5173/reset-password/${resetToken}`;
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -32,24 +33,40 @@ export const forgotPassword = async (req, res) => {
             }
         });
 
-        const mailOptions = {
-            to: email,
-            from: 'tosyrazafitsotra@gmail.com',
-            subject: 'Réinitialisation du Mot de Passe',
-            text: `Vous recevez cet email parce que vous (ou quelqu'un d'autre) avez demandé la réinitialisation de votre mot de passe.\n\n` +
-                  `Veuillez cliquer sur le lien suivant, ou collez-le dans votre navigateur pour terminer le processus:\n\n` +
-                  `${resetUrl}\n\n` +
-                  `Si vous n'avez pas demandé cela, veuillez ignorer cet email et votre mot de passe restera inchangé.\n`
-        };
+        const to = email;
+        const from = 'tosyrazafitsotra@gmail.com';
+        const subject = 'Réinitialisation du Mot de Passe';
+        const text = `Vous recevez cet email parce que vous (ou quelqu'un d'autre) avez demandé la réinitialisation de votre mot de passe.\n\n` +
+            `Veuillez cliquer sur le lien suivant, ou collez-le dans votre navigateur pour terminer le processus:\n\n` +
+            `${resetUrl}\n\n` +
+            `Si vous n'avez pas demandé cela, veuillez ignorer cet email et votre mot de passe restera inchangé.\n`;
 
-        transporter.sendMail(mailOptions, (err, info) => {
-            if (err) {
-                return res.status(500).json({ error: 'Erreur lors de l\'envoi de l\'email' });
-            }
-            res.status(200).json({ message: 'Email de réinitialisation envoyé' });
-        });
+        const err = await sendEmail(transporter, to, from, subject, text);
+
+        if (err) {
+            return res.status(500).json({ error: err});
+        }
+        
+        return res.status(200).json({ message: 'Email de réinitialisation envoyé' });
+
+        // const mailOptions = {
+        //     to: email,
+        //     from: 'tosyrazafitsotra@gmail.com',
+        //     subject: 'Réinitialisation du Mot de Passe',
+        //     text: `Vous recevez cet email parce que vous (ou quelqu'un d'autre) avez demandé la réinitialisation de votre mot de passe.\n\n` +
+        //           `Veuillez cliquer sur le lien suivant, ou collez-le dans votre navigateur pour terminer le processus:\n\n` +
+        //           `${resetUrl}\n\n` +
+        //           `Si vous n'avez pas demandé cela, veuillez ignorer cet email et votre mot de passe restera inchangé.\n`
+        // };
+
+        // transporter.sendMail(mailOptions, (err, info) => {
+        //     if (err) {
+        //         return res.status(500).json({ error: 'Erreur lors de l\'envoi de l\'email' });
+        //     }
+        //     return res.status(200).json({ message: 'Email de réinitialisation envoyé' });
+        // });
     } catch (error) {
-        res.status(500).json({ error: 'Erreur du serveur' });
+        res.status(500).json({ error: 'Erreur du serveur : ' + error.message });
     }
 };
 
@@ -67,7 +84,7 @@ export const resetPassword = async (req, res) => {
         if (!user) {
             return res.status(400).json({ error: 'Votre lien de reinitialisation est expiré' });
         }
-        
+
         const salt = await bcrypt.genSalt(10);
 
         const hashedPassword = await bcrypt.hash(password, salt);
