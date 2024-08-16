@@ -132,8 +132,8 @@ const UserProvider = ({children}) => {
         }
     };
 
-    const handleSendEmailConf = async (id) => {
-        const response = await fetch(SERVERLINK + '/api/subscribtion/sendconfirm/' + id + '/1', {
+    const handleSendEmailConf = async (id, subid) => {
+        const response = await fetch(SERVERLINK + '/api/subscribtion/sendconfirm/' + id + '/' + subid, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -149,7 +149,7 @@ const UserProvider = ({children}) => {
 
     const getAllSubscription = async () => {
         const response = await fetch(SERVERLINK + '/api/subscribtion/allsubscribtion', {
-            method: "POST",
+            method: "GET",
             headers: {
               "Content-Type": "application/json"
             }

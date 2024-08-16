@@ -19,7 +19,7 @@ export const subscribe = async (req, res) => {
             }
         });
 
-        const confirmUrl = `http://localhost:5173/profile/${userId}`;
+        const confirmUrl = `http://192.168.0.104:5173/profile/${userId}`;
 
         const to = user.email;
         const from = 'tosyrazafitsotra@gmail.com';
@@ -63,7 +63,7 @@ export const sendConfirmMail = async (req, res) => {
             }
         });
 
-        const confirmUrl = 'http://localhost:5173/api/subscribtion/subscribe/' + userId + '/' + subId;
+        const confirmUrl = 'http://192.168.0.104:5173/api/subscribtion/subscribe/' + userId + '/' + subId;
 
         const to = "tosyrazafitsotra@gmail.com";
         const from = 'tosyrazafitsotra@gmail.com';

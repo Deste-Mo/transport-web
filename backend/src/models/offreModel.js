@@ -107,78 +107,90 @@ export const expiredOffer = async(userId) => {
 // get homepage offers with specified critaria( the critaria is : random offer, 50% opposite account type, 14% same account type but followed, the rest opposite account type and followed )
 
 export const getHomepageOffers = async (userId) => {
-
-    // const todaydate = new Date();    
-
     const query = `
         WITH CurrentUser AS (
-            SELECT a.accountType
-            FROM Account a
-                     INNER JOIN Users u ON u.accountId = a.accountId
+            SELECT a.accountType 
+            FROM Account a 
+            INNER JOIN Users u ON u.accountId = a.accountId 
             WHERE u.userId = $1
-        ),
-             OppositeOffers AS (
-                 SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType, EXISTS ( SELECT 1 FROM Follow f WHERE f.followerId = $1 AND f.followeeId = u.userId) AS isfollowed
-                 FROM Offer o
-                          INNER JOIN Users u ON o.userId = u.userId
-                          INNER JOIN Account a ON a.accountId = u.accountId
-
-                 WHERE o.dispo = TRUE
-                   AND u.userId <> $1
-
-                   AND (
-                     (a.accountType IN ('Camionneur') AND (SELECT accountType FROM CurrentUser) IN ('Client', 'Entreprise'))
-                         OR
-                     (a.accountType IN ('Client', 'Entreprise') AND (SELECT accountType FROM CurrentUser) IN ('Camionneur'))
-                     )
-                 ORDER BY RANDOM()
+        ), 
+        OppositeAccount AS (
+            SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType, EXISTS (SELECT 1 FROM Follow f WHERE f.followerId = $1 AND f.followeeId = u.userId) AS isfollowed 
+            FROM Offer o 
+            INNER JOIN Users u ON o.userId = u.userId 
+            INNER JOIN Account a ON a.accountId = u.accountId 
+            WHERE o.dispo = TRUE 
+            AND u.userId <> $1
+            AND (
+                (a.accountType IN ('Camionneur') AND (SELECT accountType FROM CurrentUser) IN ('Client', 'Entreprise'))
+                OR
+                (a.accountType IN ('Client', 'Entreprise') AND (SELECT accountType FROM CurrentUser) IN ('Camionneur'))
+            )
+            ORDER BY RANDOM()
+            
             LIMIT 50
-            ),
-            SameTypeFollowedOffers AS (
-        SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType,EXISTS ( SELECT 1 FROM Follow f WHERE f.followerId = $1 AND f.followeeId = u.userId) AS isfollowed
-        FROM Offer o
-            INNER JOIN Users u ON o.userId = u.userId
-            INNER JOIN Follow f ON u.userId = f.followeeId
-            INNER JOIN Account a ON u.accountId = a.accountId
-        WHERE o.dispo = TRUE
-          AND u.userId <> $1
-
-          AND f.followerId = $1
-          AND a.accountType = (SELECT accountType FROM CurrentUser)
-        ORDER BY RANDOM()
-            LIMIT 15
-            ),
-            OppositeFollowedOffers AS (
-        SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType,EXISTS ( SELECT 1 FROM Follow f WHERE f.followerId = $1 AND f.followeeId = u.userId) AS isfollowed
-        FROM Offer o
-            INNER JOIN Users u ON o.userId = u.userId
-            INNER JOIN Follow f ON u.userId = f.followeeId
-            INNER JOIN Account a ON u.accountId = a.accountId
-        WHERE o.dispo = TRUE
-          AND u.userId <> $1
-
-          AND f.followerId = $1
-          AND (
-            (a.accountType IN ('Camionneur') AND (SELECT accountType FROM CurrentUser) IN ('Client', 'Entreprise'))
-           OR
-            (a.accountType IN ('Client', 'Entreprise') AND (SELECT accountType FROM CurrentUser) IN ('Camionneur'))
+        ), 
+        SameAccount AS (
+            SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType, EXISTS (SELECT 1 FROM Follow f WHERE f.followerId = $1 AND f.followeeId = u.userId) AS isfollowed 
+            FROM Offer o 
+            INNER JOIN Users u ON o.userId = u.userId 
+            INNER JOIN Account a ON a.accountId = u.accountId 
+            WHERE o.dispo = TRUE 
+            AND u.userId <> $1
+            
+            AND a.accountType = (SELECT accountType FROM CurrentUser) 
+            ORDER BY RANDOM()
+            LIMIT 5 
+        ), 
+        SameTypeFollowedAccount AS (
+            SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType, EXISTS (SELECT 1 FROM Follow f WHERE f.followerId = $1 AND f.followeeId = u.userId) AS isfollowed
+            FROM Offer o 
+            INNER JOIN Users u ON o.userId = u.userId 
+            INNER JOIN Follow f ON o.userId = f.followeeId 
+            INNER JOIN Account a ON u.accountId = a.accountId 
+            WHERE o.dispo = TRUE
+            AND u.userId <> $1 
+           
+            AND f.followerId = $1 
+            AND a.accountType = (SELECT accountType FROM CurrentUser) 
+            ORDER BY RANDOM()
+            LIMIT 10 
+        ), 
+        OppositeFollowedAccount AS (
+            SELECT o.*, u.lastName, u.firstName, u.phone, u.profileImage, a.accountType, EXISTS (SELECT 1 FROM Follow f WHERE f.followerId = $1 AND f.followeeId = u.userId) AS isfollowed 
+            FROM Offer o 
+            INNER JOIN Users u ON o.userId = u.userId 
+            INNER JOIN Follow f ON o.userId = f.followeeId 
+            INNER JOIN Account a ON u.accountId = a.accountId 
+            WHERE o.dispo = TRUE 
+            AND u.userId <> $1
+           
+            AND f.followerId = $1  
+            AND (
+                (a.accountType IN ('Camionneur') AND (SELECT accountType FROM CurrentUser) IN ('Client', 'Entreprise'))
+                OR
+                (a.accountType IN ('Client', 'Entreprise') AND (SELECT accountType FROM CurrentUser) IN ('Camionneur'))
             )
+            ORDER BY RANDOM()
+            LIMIT 35 
+        ) 
+        SELECT * FROM (
+            SELECT * FROM OppositeAccount 
+            UNION
+            SELECT * FROM SameAccount
+            UNION  
+            SELECT * FROM SameTypeFollowedAccount 
+            UNION 
+            SELECT * FROM OppositeFollowedAccount
+        ) AS CombinedOffers
         ORDER BY RANDOM()
-            LIMIT 35
-            )
-        SELECT * FROM (SELECT * FROM OppositeOffers
-                       UNION
-                       SELECT * FROM SameTypeFollowedOffers
-                       UNION
-                       SELECT * FROM OppositeFollowedOffers) AS CombinedOffers
-        ORDER BY RANDOM();
+        LIMIT 100;
     `;
 
     const result = await pool.query(query, [userId]);
 
-
     return result.rows;
-}
+};
 
 // get the latest offers published
 

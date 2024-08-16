@@ -1,4 +1,4 @@
-export const SERVERLINK = "http://localhost:3000";
+export const SERVERLINK = "http://192.168.0.104:3000";
 
 // REGEXP
 export const EMAIL_REGEX = /^[a-z0-9_.-]+@[a-z0-9._-]+\.[a-z]{2,}$/i;

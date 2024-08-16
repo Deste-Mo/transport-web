@@ -109,7 +109,7 @@ export default function App() {
             </Route>
 
             <Route path="/abonnement" element={<SubscriptionPage />} />
-            <Route path="/abonnement/:id/:type/paiement" element={<SubscriptionSecurity/>} />
+            <Route path="/abonnement/:id/:montant/:type/paiement" element={<SubscriptionSecurity/>} />
 
             {/* Pages Error */}
             <Route path="*" element={<NotFound />} />

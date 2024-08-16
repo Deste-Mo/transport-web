@@ -93,7 +93,7 @@ const ProfileCard = ({
                         block
                         size="md"
                         icon="bi bi-pencil"
-                        onClick={() => handleSendEmailConf(id)}
+                        onClick={() => navigate(`/abonnement`)}
                     >
                         S'Abonner
                     </Button>

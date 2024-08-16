@@ -5,10 +5,11 @@ import { useAuth } from '../../context/AuthProvider';
 import { Button } from '../../styles/components';
 import { motion } from "framer-motion";
 import { Navigate, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAnimation } from '../../context/AnimationProvider';
+import { useUser } from '../../context/UserProvider';
 
-const SubscriptionCard = ({ title, price, features, onSelect, radioIdPrefix, setValue, setChecked }) => (
+const SubscriptionCard = ({ id, title, price, features, onSelect, radioIdPrefix, setValue, setChecked }) => (
   <motion.div
     whileHover={{ scale: 1.02, borderColor: "#FBCB34", boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.1)" }}
     className="flex bg-white-100 flex-col justify-between items-center min-w-[300px] min-h-[450px] w-[320px] p-6 bg-white rounded-xl border border-gray-300 transition-transform duration-300"
@@ -16,23 +17,21 @@ const SubscriptionCard = ({ title, price, features, onSelect, radioIdPrefix, set
     <h2 className="text-2xl font-semibold mb-4 text-gray-900">{title}</h2>
     <p className="text-lg text-gray-700 mb-6">{price} Ar/mois</p>
     <ul className="space-y-2 mb-6 text-gray-600">
-      {features.map((feature, index) => (
-        <li key={index} className="flex items-center">
-          <span className="inline-block w-2 h-2 mr-2 bg-primary-100 rounded-full"></span>
-          {feature}
-        </li>
-      ))}
+      <li key={id} className="flex items-center">
+        <span className="inline-block w-2 h-2 mr-2 bg-primary-100 rounded-full"></span>
+        {features}
+      </li>
     </ul>
     <div className="w-full mb-4">
       {["Mvola", "Airtel"].map((provider) => (
         <div key={provider} className="flex items-center mb-2">
-          <input 
-            type='radio' 
-            name='paiement' 
-            onChange={(e) => setValue(e.target.id)} 
-            onClick={(e) => setChecked(e.target.value)} 
-            id={`${provider}${radioIdPrefix}`} 
-            required 
+          <input
+            type='radio'
+            name='paiement'
+            onChange={(e) => setValue(e.target.id)}
+            onClick={(e) => setChecked(e.target.value)}
+            id={`${provider}${radioIdPrefix}`}
+            required
             className="mr-2"
           />
           <label htmlFor={`${provider}${radioIdPrefix}`} className="text-gray-900">{provider} Money</label>
@@ -46,26 +45,26 @@ const SubscriptionCard = ({ title, price, features, onSelect, radioIdPrefix, set
 const SubscriptionPage = () => {
   const { token, loading, personalInformation } = useAuth();
 
-  
+
 
   const navigate = useNavigate();
 
-  const {setMessagePopup} = useAnimation();
+  const { setMessagePopup } = useAnimation();
 
-  const subscriptions = [
-    { title: 'Basique', price: 500000, features: ["Vous obtenez 30 jours d'abonnement"] },
-    { title: 'Standard', price: 100000, features: ["Vous obtenez 60 jours d'abonnement"] },
-    { title: 'Premium', price: 200000, features: ["Vous obtenez 1 an d'abonnement"] },
-    { title: 'Premium', price: 200000, features: ["Vous obtenez 1 an d'abonnement"] },
-  ];
+  const { getAllSubscription, subscriptionCards, handleSendEmailConf } = useUser();
+
+  useEffect(() => {
+    getAllSubscription();
+  }, []);
 
   const [value, setValue] = useState('');
   const [check, setCheck] = useState('');
 
-  const handleSelect = (type) => {
+  const handleSelect = (title, id, subid, montant) => {
     if (check === "on") {
-      navigate(`/abonnement/${type}/${value.slice(0, -1)}/paiement`);
-    }else{
+      navigate(`/abonnement/${title}/${montant}/${value.slice(0, -1)}/paiement`);
+      handleSendEmailConf(id, subid);
+    } else {
       setMessagePopup("Veuillez selectionne le type de paiement", TOAST_TYPE.error);
     }
   };
@@ -89,14 +88,15 @@ const SubscriptionPage = () => {
             Choisissez un <span className="text-primary-100">abonnement</span>
           </div>
           <div className="flex flex-wrap justify-center items-center gap-6 w-full p-8">
-            {subscriptions.map((subscription, index) => (
+            {subscriptionCards.map((subscription) => (
               <SubscriptionCard
-                key={index}
-                radioIdPrefix={index}
-                title={subscription.title}
+                key={subscription.subid}
+                id={subscription.subid}
+                radioIdPrefix={subscription.subid}
+                title={subscription.label}
                 price={subscription.price}
-                features={subscription.features}
-                onSelect={() => handleSelect(subscription.title)}
+                features={`${subscription.duration} Jours`}
+                onSelect={() => handleSelect(subscription.label,personalInformation.id,subscription.subid, subscription.price)}
                 setValue={setValue}
                 setChecked={setCheck}
               />
