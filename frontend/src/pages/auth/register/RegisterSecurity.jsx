@@ -1,9 +1,17 @@
 import {Button, Icon, TextInput} from "../../../styles/components";
-import {REGISRATION_STEPS, SERVERLINK, ACCOUNT_TYPES, PASSWORD_REGEX, PASSWORD_REGEX_MESSAGE} from "../../../constants";
+import {
+    REGISRATION_STEPS,
+    SERVERLINK,
+    ACCOUNT_TYPES,
+    PASSWORD_REGEX,
+    PASSWORD_REGEX_MESSAGE,
+    TOAST_TYPE
+} from "../../../constants";
 import {useAuth} from "../../../context/AuthProvider";
 import {useForm} from "../../../context/FormProvider";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {useAnimation} from "../../../context/AnimationProvider.jsx";
 
 const RegisterSecurity = () => {
     const {
@@ -15,6 +23,8 @@ const RegisterSecurity = () => {
         setRegistrationStep,
         login
     } = useAuth();
+    
+    const {setMessagePopup} = useAnimation();
 
     // console.log(inputs);
 
@@ -70,11 +80,15 @@ const RegisterSecurity = () => {
                 login(data.token);
                 return;
             }
-            console.log(data.error);
-        } catch (error) {
-            console.error(error);
+            setMessagePopup("Utilisateur créé avec success !", TOAST_TYPE.success);
+
+
+        } catch (e) {
+            console.error(e);
+            setMessagePopup(e?.response?.data.error, TOAST_TYPE.error);
         }
     };
+    
 
     useEffect(() => {
         if (registrationStep !== REGISRATION_STEPS.security) navigate(-1);
@@ -88,7 +102,7 @@ const RegisterSecurity = () => {
 
     return (
         <section
-            className="absolute left-1/2 -translate-x-1/2 w-fullscreen bg-gray-80 auth-section space-y-[128px] top-[128px]">
+            className="w-full  auth-section space-y-[128px] absolute top-[128px] left-1/2 -translate-x-1/2 max-md:space-y-10">
             <div className="flex flex-col items-center justify-center gap-4">
                 <div className="flex w-full items-center justify-center">
                     <Icon
@@ -104,12 +118,11 @@ const RegisterSecurity = () => {
                 </div>
             </div>
             <form
-                className="flex w-fit flex-col items-start justify-center rounded-xl border p-6 border-black-0 bg-white-100 dark:border-none dark:bg-white-10 gap-[32px]"
+                className="auth-form mx-auto"
                 onSubmit={handleSubmit}
             >
-                <div className="flex w-full flex-col items-start justify-center gap-6">
                     <h3 className="text-subtitle-3 text-black-100 dark:text-white-100">Sécurité</h3>
-                    <div className="flex flex-col items-start justify-center gap-6">
+                    <div className="flex flex-col items-start justify-center gap-6 w-full">
                         <TextInput
                             name="password"
                             title="Mot de passe"
@@ -120,6 +133,7 @@ const RegisterSecurity = () => {
                             onError={handleError(setErrorData)}
                             onChange={(e) => handleInputChange(setInputs, e)}
                             value={inputs.password}
+                            block
                         />
                         <TextInput
                             name="confirmPassword"
@@ -131,9 +145,9 @@ const RegisterSecurity = () => {
                             onError={handleError(setErrorData)}
                             onChange={(e) => handleInputChange(setInputs, e)}
                             value={inputs.confirmPassword}
+                            block
                         />
                     </div>
-                </div>
                 <Button disabled={fieldError} block>
                     Terminer
                 </Button>

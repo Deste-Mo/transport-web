@@ -38,12 +38,12 @@ const RegisterAccountType = () => {
       </div>
       <div className="flex flex-col items-center justify-center">
         <form
-          className="auth-form"
+          className="auth-form mx-auto"
           onSubmit={handleSubmit}
         >
           <div className="flex w-full flex-col items-start justify-center gap-6">
             <h3 className="text-subtitle-3 text-black-100 dark:text-white-100">Type de compte</h3>
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center w-full">
               <SelectInput
                 title="Compte pour"
                 name="accountId"
@@ -53,7 +53,7 @@ const RegisterAccountType = () => {
                 }))}
                 onError={handleError(setErrorData)}
                 onChange={(e) => handleInputChange(setInputs, e)}
-                
+                block
               />
             </div>
           </div>
