@@ -31,11 +31,11 @@ export default function Profile() {
     getCurrentUserOffers,
   } = useOffer();
   
-  const handleSeeAllFriends = () => {
-    updateActiveUserFilter(USERS_FILTERS.follower);
+  const handleSeeUsers = (userType = USERS_FILTERS.follower) => {
+    updateActiveUserFilter(userType);
     navigate("/friend");
-    
   }
+  
   
   useEffect(() => {
     getSavedOffers();
@@ -103,14 +103,14 @@ export default function Profile() {
                 />
               ))
           ) : (
-            <Button>Suivre un utilisateur</Button>
+            <Button onClick={() => handleSeeUsers(USERS_FILTERS.suggestion)}>Suivre un utilisateur</Button>
           )}
           {
             profileFriends.length > 4 && (
               <Button
                 className="w-full"
                 variant="secondary"
-                onClick={handleSeeAllFriends}
+                onClick={() => handleSeeUsers(USERS_FILTERS.follower)}
               >
                 Voir tous vous suivis
               </Button>
