@@ -67,3 +67,9 @@ export const getCountFollow = async (reqSenderId) => {
     return rows;
 }
 
+
+// dashboard
+export const getAllUsers = async () => {
+    const result = await db.query('SELECT * FROM Users');
+    return result.rows;
+};
