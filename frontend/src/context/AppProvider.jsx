@@ -119,6 +119,10 @@ const AppProvider = ({ children }) => {
 
         return new Date(date).toLocaleDateString();
     };
+    
+    const limitTextLen= (text, limit = 14) =>{
+        return text.length > limit ? text.slice(0,limit) + ' ...' : text
+    }
 
     
     return <AppContext.Provider value={{
@@ -142,8 +146,8 @@ const AppProvider = ({ children }) => {
         // Confirm Popup
         confirmPopup,
         setConfirmPopup,
-        setConfirmMessagePopup
-
+        setConfirmMessagePopup,
+        limitTextLen
 
     }}>
         {children}

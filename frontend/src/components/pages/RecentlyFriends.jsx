@@ -30,7 +30,6 @@ const RecentlyFriends = ({
         unFollowUsers,// TODO : Forget the usage (empty function)
     }
         = useUser();
-    const {isMobile} = useApp();
     const {ActiveUsers} = useSocketContext();
     const navigate = useNavigate();
     const isOnline = ActiveUsers.includes(id);
@@ -96,6 +95,8 @@ const DesktopRecentlyFriends = ({
                                     },
                                     className,
                                 }) => {
+    const {isMobile, limitTextLen} = useApp();
+    
     return (
         <div
             className={`flex items-center  justify-between bg-white-100 p-4 hover:bg-primary-20 group rounded-xl dark:bg-white-0 text-black-100 dark:text-white-100 ${className}`}
@@ -106,7 +107,7 @@ const DesktopRecentlyFriends = ({
                 <div className="flex flex-col">
                     <span className="group-hover:underline cursor-pointer text-small-1"
                           onClick={() => goToUserProfile(id)}>
-                        {name}{" "}
+                        {isMobile ?  limitTextLen(name): name}{" "}
                         {isOnline && (
                             <span className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-primary-100 inline-block"></span>)}
                     </span>

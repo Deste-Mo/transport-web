@@ -264,7 +264,7 @@ const NewOffer = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 max-md:gap-10">
           <div className="space-y-2">
             <div className="text-black-100 dark:text-white-100 text-subtitle-2 flex items-center gap-2">
               <i className="bi bi-card-checklist"></i>
@@ -290,7 +290,7 @@ const NewOffer = () => {
             block
             value={titreData[0]}
           />
-          <div className="flex gap-4">
+          <div className="flex gap-4 max-md:flex-col">
             <TextInput
               titleIcon="bi bi-geo-alt"
               className="w-[45]"
@@ -311,7 +311,7 @@ const NewOffer = () => {
               value={formData.destination}
             />
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-4 max-md:flex-col">
             <TextInput
               titleIcon="bi bi-truck-flatbed"
               type="number"
