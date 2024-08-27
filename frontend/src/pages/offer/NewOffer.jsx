@@ -314,11 +314,10 @@ const NewOffer = () => {
           <div className="flex gap-4 max-md:flex-col">
             <TextInput
               titleIcon="bi bi-truck-flatbed"
-              type="number"
               className=""
               name="capacity"
-              pattern={/^[0-9]+$/}
-              // pattern={/^\d+(\.\d+)?\s?(kg|tonne|tonnes|Kg)$/}
+              // pattern={/^[0-9]+$/}
+              pattern={/^\d+(\.\d+)?\s?(kg|tonne|tonnes|Kg)$/}
               title="Quantité/capacité"
               onError={handleError(setErrorData)}
               onChange={(e) => handleInputChange(setFormData, e)}

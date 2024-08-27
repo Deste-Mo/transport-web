@@ -13,6 +13,7 @@ import { appVariants } from "../../animations/variants.js";
 import { useUser } from "../../context/UserProvider.jsx";
 import { Navigate, useNavigate } from "react-router-dom";
 import ExpandableSearchBar from "../../components/ui/ExpandableSearchBar.jsx";
+import {USERS_FILTERS} from "../../constants/index.js";
 
 
 const MessageList = () => {
@@ -22,11 +23,10 @@ const MessageList = () => {
     const navigate = useNavigate();
 
     const { conversations, handleShowConversation, getUnreadMessageCount, countUnread } = useApp();
-    const { friends, getFriends } = useUser();
+    const { friends, getFriends, updateActiveUserFilter } = useUser();
 
     const { socket } = useSocketContext();
-
-    const { messages, setMessages } = useApp();
+    
 
 
     const [search, setSearch] = useState('');
@@ -65,7 +65,10 @@ const MessageList = () => {
                         <ActiveUser key={friend.userid} friend={friend}/>
                     )) :
                     <div>
-                        <Button icon="bi bi-plus-lg" onClick={() => navigate("/friend")}>Ajouter un ami</Button>
+                        <Button icon="bi bi-plus-lg" onClick={() => {
+                            updateActiveUserFilter(USERS_FILTERS.suggestion);
+                            navigate("/friend");
+                        }}>Voir les suggestions</Button>
                     </div>
                 }
             </div>

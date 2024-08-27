@@ -152,7 +152,7 @@ const Messages = () => {
                 className={"size-12 rounded-full bg-black-20"}
               />
               {isOnline && (
-                <span className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-success-100 absolute top-0 right-0 block"></span>
+                <span className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-primary-100 absolute top-0 right-0 block"></span>
               )}
             </div>
             <div
@@ -189,7 +189,7 @@ const Messages = () => {
               className={"size-[134px] rounded-full bg-black-20"}
             />
             {isOnline && (
-              <span className="size-[20px] rounded-[50%] ml-2 bg-success-100 absolute top-0 right-0 block"></span>
+              <span className="size-[20px] rounded-[50%] ml-2 bg-primary-100 absolute top-0 right-0 block"></span>
             )}
           </div>
           <div
