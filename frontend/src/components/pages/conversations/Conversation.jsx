@@ -6,9 +6,11 @@ import { SERVERLINK } from "../../../constants/index.js";
 import { useSocketContext } from "../../../context/SocketContext.jsx";
 import ProfileImage from "../../../assets/images/OIP.jpg";
 import { useApp } from "../../../context/AppProvider.jsx";
+import useWindowSize from "../../../hooks/useWindowSize.jsx";
 
 const Conv = ({ id, userToChat }) => {
   const navigate = useNavigate();
+  const [width] = useWindowSize();
 
   const { token, personalInformation } = useAuth();
 
@@ -86,8 +88,8 @@ const Conv = ({ id, userToChat }) => {
                 : "Nouveau : "}
             </span>
             <span className="overflow-hidden">
-              {" " + userToChat?.lastmessage?.length > 60
-                ? userToChat.lastmessage.slice(0, 20) + " ..."
+              {" " + userToChat?.lastmessage?.length >  (width <= 760 ? 10 : 40)
+                ? userToChat.lastmessage.slice(0, (width <= 760 ? 10 : 40)) + " ..."
                 : userToChat.lastmessage}
             </span>
           </div>

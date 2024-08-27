@@ -136,19 +136,21 @@ const OfferCard = ({
               <TemplatePopup
                 popupVisible={popupVisible}
                 setPopupVisible={setPopupVisible}
-                content={
+                
+                children={
                   <>
-                    <OptionItem
-                      onClick={() => handleDeletePost()}
-                      name="Supprimer"
-                      icon="bi bi-dash"
-                      setPopupVisible={setPopupVisible}
-                    />
+                   
                     <OptionItem
                       onClick={() => handleEditPost()}
                       name="Modifier"
                       icon="bi bi-pencil"
                       setPopupVisible={setPopupVisible}
+                    />
+                    <OptionItem
+                        onClick={() => handleDeletePost()}
+                        name="Supprimer"
+                        icon="bi bi-dash"
+                        setPopupVisible={setPopupVisible}
                     />
                     {sug?.dispo ? (
                       <OptionItem
