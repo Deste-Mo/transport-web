@@ -6,7 +6,7 @@ import Profile from "./Profile.jsx";
 import {appVariants} from "../../animations/variants.js";
 import {SubHeader} from "../../components/pages/SubHeader.jsx";
 import SearchFilter from "../../components/pages/SearchFilter.jsx";
-import {OFFER_CARD_FILTERS} from "../../constants/index.js";
+import {OFFER_CARD_FILTERS, OFFER_CARD_FILTERS_PROFILE} from "../../constants/index.js";
 import {motion} from "framer-motion";
 import {useOffer} from "../../context/OfferProvider.jsx";
 import OfferCardLoading from "../../components/loader/OfferCardLoading.jsx";
@@ -15,8 +15,13 @@ const OfferCard = lazy(() => import("../../components/pages/Offer/OfferCard.jsx"
 
 const ProfileDetails = () => {
     const {personalInformation} = useAuth();
+    const {getCurrentUserOffers} = useOffer();
     const currentUser = personalInformation;
     const {id} = useParams();
+
+    // useEffect(() => {
+    //     getCurrentUserOffers(id);
+    // },[id])
 
     return (
         <section className="w-full">
@@ -33,8 +38,13 @@ export default ProfileDetails;
 
 const ProfileOffer = () => {
     const {profileInfo} = useAuth();
-    const {currentUserOffers, savedOffers } = useOffer();
+    const {currentUserOffers, savedOffers,filterOffers } = useOffer();
     const [search, setSearch] = useState("");
+    const [filteredOffers, setFilteredOffers] = useState(currentUserOffers);
+
+    useEffect(() => {
+        setFilteredOffers(filterOffers(search, currentUserOffers));
+      }, [search, currentUserOffers]);
     
     return (<motion.section
         id="offers"
@@ -52,7 +62,7 @@ const ProfileOffer = () => {
                 currentUserOffers?.length > 0 && (
                     <SearchFilter
                         filterResultsName="offerCardFilter"
-                        filters={OFFER_CARD_FILTERS}
+                        filters={OFFER_CARD_FILTERS_PROFILE}
                         variant="fill"
                         size="sm"
                         radious="full"
@@ -60,6 +70,7 @@ const ProfileOffer = () => {
                         placeholder="Rechercher une offre"
                         setValue={setSearch}
                         onFilter={() => {
+                            setFilteredOffers(filterOffers(search, currentUserOffers))
                         }
                         }
                     />
@@ -68,9 +79,9 @@ const ProfileOffer = () => {
         />
         <div className="flex flex-col items-center justify-center gap-6 w-full">
             {
-                currentUserOffers.length > 0 ? (
+                filteredOffers.length > 0 ? (
                     <Suspense fallback={<OfferCardLoading/>}>
-                        {currentUserOffers.map((currentUserOffer) => (
+                        {filteredOffers.map((currentUserOffer) => (
                             <OfferCard
                                 key={currentUserOffer.offerid}
                                 sug={currentUserOffer}

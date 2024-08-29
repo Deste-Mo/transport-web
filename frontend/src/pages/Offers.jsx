@@ -35,7 +35,7 @@ const Offers = () => {
 
   useEffect(() => {
     localStorage.getItem("offerNotifId") &&
-      getOfferById(localStorage.getItem("offerNotifId"))
+    getOfferById(localStorage.getItem("offerNotifId"))
   }, [search]);
   
   useEffect(() => {

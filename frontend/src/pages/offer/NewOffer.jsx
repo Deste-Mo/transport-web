@@ -24,67 +24,97 @@ const NewOffer = () => {
 
   const { getCurrentUserOffers, updateOffer, setUpdateOffer } = useOffer();
 
-  const titreData = ["Transport de marchandise", "Marchandise à transporter"];
+  const titreData = ['Transport de marchandise', 'Marchandise à transporter']
+  const mesureData = ['kg', 'tonnes']
+  const todaydate = new Date().toISOString().split('T')[0]
+
+  // Function to get today's date in MM/DD/YYYY format
+  const getTodayDate = () => {
+    const today = new Date()
+    const month = String(today.getMonth() + 1).padStart(2, '0')
+    const day = String(today.getDate()).padStart(2, '0')
+    const year = today.getFullYear()
+    return `${year}-${month}-${day}`
+  }
+  //   useEffect(() => {
+
+  //     console.log(getTodayDate());
+  //     console.log("today", todaydate);
+
+  // }, []);
+
+  const formatDateForInput = (dateString) => {
+    const date = new Date(dateString)
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
 
   const [formData, setFormData] = useState({
-    imgUrl: "",
-    title: "Transport de marchandise",
-    description: "",
-    depart: "",
-    destination: "",
-    capacity: "",
-    scheduledDate: "",
-  });
+    imgUrl: '',
+    title: 'Transport de marchandise',
+    description: '',
+    depart: '',
+    destination: '',
+    capacity: '',
+    scheduledDate: todaydate,
+  })
 
   useEffect(() => {
+    // updateOffer.scheduleddate && console.log(updateOffer.scheduleddate)
     updateOffer &&
       setFormData({
-        imgUrl: updateOffer.imgurl,
+        imgUrl: updateOffer.imgurl || '',
         title:
           !updateOffer.title ||
-          updateOffer.title === "undefined" ||
+          updateOffer.title === 'undefined' ||
           updateOffer.title === undefined
-            ? "Transport de marchandise"
+            ? 'Transport de marchandise'
             : updateOffer.title,
         description: updateOffer.description,
         depart: updateOffer.depart,
         destination: updateOffer.dest,
         capacity: updateOffer.capacity,
-        scheduledDate: "",
-      });
-  }, [updateOffer]);
+        scheduledDate: updateOffer.scheduleddate
+          ? formatDateForInput(updateOffer.scheduleddate)
+          : getTodayDate(),
 
-  const { token, personalInformation } = useAuth();
+      })
+     
+  }, [updateOffer])
+
+  const { token, personalInformation } = useAuth()
 
   const [file, setFile] = useState({
-    name: "",
-    path: "",
-  });
+    name: '',
+    path: '',
+  })
 
   useEffect(() => {
     const getOfferById = async () => {
-      localStorage.getItem("offer") &&
-        setUpdateOffer(await JSON.parse(localStorage.getItem("offer")));
-    };
-    getOfferById();
-  }, []);
+      localStorage.getItem('offer') &&
+        setUpdateOffer(await JSON.parse(localStorage.getItem('offer')))
+    }
+    getOfferById()
+  }, [])
 
   const reset = () => {
-    localStorage.removeItem("offer");
+    localStorage.removeItem('offer')
     setFormData({
-      imgUrl: "",
-      title: "Transport de marchandise",
-      description: "",
-      depart: "",
-      destination: "",
-      capacity: "",
-      scheduledDate: "",
-    });
+      imgUrl: '',
+      title: 'Transport de marchandise',
+      description: '',
+      depart: '',
+      destination: '',
+      capacity: '',
+      scheduledDate: todaydate,
+    })
     setFile({
-      name: "",
-      path: "",
-    });
-  };
+      name: '',
+      path: '',
+    })
+  }
 
   const [errorData, setErrorData] = useState({
     imgUrl: false,
@@ -93,63 +123,61 @@ const NewOffer = () => {
     depart: true,
     destination: true,
     capacity: true,
-    scheduledDate: false,
-  });
+    scheduledDate: true,
+  })
 
   const handleCreateOffer = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
-      const data = new FormData();
+      const data = new FormData()
 
       for (const key in formData) {
-        data.append(key, formData[key]);
+        data.append(key, formData[key])
       }
 
-      const response = await fetch(SERVERLINK + "/api/offres/newpublication", {
-        method: "POST",
+      const response = await fetch(SERVERLINK + '/api/offres/newpublication', {
+        method: 'POST',
         headers: {
           token: token,
         },
         body: data,
-      });
+      })
+      if (response.status === 200) {
+        const content = ` ${personalInformation.fullName} vient de publier une Offre`
+        const offer = await response.json()
 
-      const content = ` ${personalInformation.fullName} vient de publier une Offre`;
-      const offer = await response.json();
+        const offerId = await offer.offerid
 
-      const offerId = await offer.offerid;
-
-      const sendNotifs = await fetch(SERVERLINK + "/api/notifs/sendnotifs", {
-        method: "POST",
+        const sendNotifs = await fetch(SERVERLINK + '/api/notifs/sendnotifs', {
+          method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           token: token,
         },
         body: JSON.stringify({ content, offerId }),
-      });
+        })
+        getCurrentUserOffers()
+        setMessagePopup("L'offre publié avec success !", TOAST_TYPE.success)
 
       setFormData({
-        imgUrl: "",
-        title: "Transport de marchandise",
-        description: "",
-        depart: "",
-        destination: "",
-        capacity: "",
-        scheduledDate: "",
-      });
+          imgUrl: '',
+          title: 'Transport de marchandise',
+          description: '',
+          depart: '',
+          destination: '',
+          capacity: '',
+          scheduledDate: todaydate,
+        })
 
       setFile({
-        name: "",
-        path: "",
-      });
-
-      getCurrentUserOffers();
-    setMessagePopup("L'offre publié avec success !", TOAST_TYPE.success);
-
+          name: '',
+          path: '',
+        })
+      }
     } catch (error) {
-      console.error(error);
-    setMessagePopup(`Erreur : ${error}`, TOAST_TYPE.error);
-
+      console.error(error)
+      setMessagePopup(`Erreur : ${error}`, TOAST_TYPE.error)
     }
   };
 
@@ -157,16 +185,22 @@ const NewOffer = () => {
     e.preventDefault();
 
     try {
-      const data = new FormData();
+      const data = new FormData()
 
       for (const key in formData) {
-        data.append(key, formData[key]);
+        if (key !== 'imgUrl' || file.path) {
+          data.append(key, formData[key])
+        }
+      }
+
+      if (file.path) {
+        data.append('imgUrl', file.path)
       }
 
       const response = await fetch(
-        SERVERLINK + "/api/offres/updateofferforuser/" + updateOffer.offerid,
+        SERVERLINK + '/api/offres/updateofferforuser/' + updateOffer.offerid,
         {
-          method: "POST",
+          method: 'POST',
           headers: {
             token: token,
           },
@@ -174,45 +208,52 @@ const NewOffer = () => {
         }
       );
 
-      const res = await response.json();
+      if (response.status === 200) {
+        const res = await response.json()
 
-      const content = ` ${personalInformation.fullName} a modifié sa publication d'offre`;
-      const offerId = updateOffer.offerid;
+        const content = ` ${personalInformation.fullName} a modifié sa publication d'offre`
+        const offerId = updateOffer.offerid
 
-      const sendNotifs = await fetch(SERVERLINK + "/api/notifs/sendnotifs", {
-        method: "POST",
+        const sendNotifs = await fetch(SERVERLINK + '/api/notifs/sendnotifs', {
+          method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           token: token,
         },
         body: JSON.stringify({ content, offerId }),
-      });
+        })
 
-      setUpdateOffer(await res.offer);
-      localStorage.setItem("offer", JSON.stringify(await res.offer));
+        setUpdateOffer(await res.offer)
+        localStorage.setItem('offer', JSON.stringify(await res.offer))
 
       setFile({
-        name: "",
-        path: "",
-      });
+          name: '',
+          path: '',
+        })
 
-      getCurrentUserOffers();
-    setMessagePopup("L'offre modifié avec success !", TOAST_TYPE.success);
-
+        getCurrentUserOffers()
+        setMessagePopup("L'offre modifié avec success !", TOAST_TYPE.success)
+      }
     } catch (error) {
-      console.error(error);
-    setMessagePopup(`Erreur : ${error}`, TOAST_TYPE.error);
-
+      console.error(error)
+      setMessagePopup(`Erreur : ${error}`, TOAST_TYPE.error)
     }
-  };
+  }
 
   const handleDateInput = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    const selectedDate = new Date(e.target.value)
+    const today = new Date(getTodayDate())
+    if (selectedDate < today) {
+      // If the selected date is before today, set an error message or handle it accordingly
+      setMessagePopup('La date prévue erronée', TOAST_TYPE.error)
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value })
+    }
+  }
 
   useEffect(() => {
-    checkFieldError(errorData);
-  }, [errorData]);
+    checkFieldError(errorData)
+  }, [errorData])
 
   return (
     <motion.section
@@ -232,8 +273,8 @@ const NewOffer = () => {
           <div className=" flex flex-col gap-4">
             <div className="w-full  h-60 bg-black-10 rounded-xl flex flex-col justify-center items-center overflow-hidden">
               <img
-                className="w-full h-full object-cover rounded-xl"
-                src={file.path ? file.path : SERVERLINK + "/defaultCar.jpg"}
+                className="w-full h-full object-contain rounded-xl"
+                src={file.path ? file.path : formData.imgUrl ? SERVERLINK+ '/'+ formData.imgUrl : SERVERLINK + '/defaultPub.png'}
                 alt="Choisez une image"
               />
             </div>
@@ -255,7 +296,7 @@ const NewOffer = () => {
               name="description"
               title="Description"
               resize={true}
-              placeholder="Décrivez votre offre de transport"
+              placeholder="Décrivez ici votre offre de transport"
               onError={handleError(setErrorData)}
               onChange={(e) => handleInputChange(setFormData, e)}
               value={formData.description}
@@ -271,7 +312,7 @@ const NewOffer = () => {
               <span>Résumé </span>
             </div>
             <p className="text-black-80 text-small-1 dark:text-white-60">
-              Ajoutez un résumé pour augmenter en visibilité
+              Ajoutez un résumé pour augmenter la visibilité
             </p>
           </div>
           <SelectInput
@@ -311,18 +352,7 @@ const NewOffer = () => {
               value={formData.destination}
             />
           </div>
-          <div className="flex gap-4 max-md:flex-col">
-            <TextInput
-              titleIcon="bi bi-truck-flatbed"
-              className=""
-              name="capacity"
-              // pattern={/^[0-9]+$/}
-              pattern={/^\d+(\.\d+)?\s?(kg|tonne|tonnes|Kg)$/}
-              title="Quantité/capacité"
-              onError={handleError(setErrorData)}
-              onChange={(e) => handleInputChange(setFormData, e)}
-              value={formData.capacity}
-            />
+          <div className="flex gap-4  flex-wrap">
             <div
               className={`flex flex-col gap-2 justify-start ${globalInputVariants.width}`}
             >
@@ -336,16 +366,50 @@ const NewOffer = () => {
                 type="date"
                 name="scheduledDate"
                 id="scheduledDate"
+                required
                 onChange={handleDateInput}
                 onError={handleError(setErrorData)}
                 value={formData.scheduledDate}
                 className={`h-min  ${globalInputVariants.variant["fill"]} ${globalInputVariants.size["md"]} w-full rounded-xl`}
               />
             </div>
+            <div className="flex gap-1">
+              <TextInput
+                titleIcon="bi bi-truck-flatbed"
+                type="text"
+                className=" "
+                name="capacity"
+                // pattern={/^[0-9]+$/}
+                pattern={/^\d+(\.\d+)?\s?(kg|tonne|tonnes|Kg|KG|TONNE|TONNES|Tonne|Tonnes)$/}
+                title="Quantité/capacité"
+                onError={handleError(setErrorData)}
+                onChange={(e) => handleInputChange(setFormData, e)}
+                value={formData.capacity}
+                variant='fill'
+                placeholder='ex : 2 tonnes'
+                block
+              />
+
+              {/* <SelectInput
+                titleIcon="bi bi-box-seam"
+                className="w-full"
+                name="mesure"               
+                variant="fill"                
+                options={titreData.map((titre) => ({
+                  option: titre,
+                }))}              
+               
+                onchange={(e) => handleInputChange(setFormData, e)}
+                block
+                value={titreData[0]}
+              /> */}
+            </div>
+
+           
           </div>
         </div>
         <div className="flex  gap-4 w-full">
-          {localStorage.getItem("offer") ? (
+          {localStorage.getItem('offer') ? (
             <Button
               type="button"
               onClick={handleUpdateOffer}

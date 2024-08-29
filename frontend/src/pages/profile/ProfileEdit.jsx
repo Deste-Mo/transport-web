@@ -13,13 +13,14 @@ import {SubHeader} from '../../components/pages/SubHeader'
 import {useAuth} from '../../context/AuthProvider'
 import {SERVERLINK} from '../../constants'
 import { useAnimation } from '../../context/AnimationProvider'
+import { useNavigate, useNavigation } from 'react-router-dom'
 
 
 const ProfileEdit = ({onClick}) => {
     const {handleInputChange, checkFieldError, handleError} = useForm()
     const {setShowBackIcon} = useAnimation();
     const {personalInformation, token, getInformation} = useAuth()
-
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         profileimage: null,
         firstname: personalInformation?.firstname,
@@ -74,7 +75,7 @@ const ProfileEdit = ({onClick}) => {
             setFormData({...formData, ["profileimage"]: null});
 
             if (!res.error) {
-                alert('Enregistrement réussie !')
+                alert('Enregistrement réussi !');
             }
         } catch (error) {
             console.error(error)
@@ -125,7 +126,7 @@ const ProfileEdit = ({onClick}) => {
                     />
                     {personalInformation?.accountId !== 1 && (
                         <TextInput
-                            title="Prenom"
+                            title="Prénom"
                             name="lastname"
                             size="md"
                             className="w-full"
@@ -206,7 +207,7 @@ const ProfileEdit = ({onClick}) => {
                     <Button type="submit" block>
                         Enregistrer
                     </Button>
-                    <Button type="button" variant="ghost" block onClick={onClick}>
+                    <Button type="button" variant="ghost" block onClick={() => navigate(`/profile/${personalInformation?.id}/newOffer`)}>
                         Annuler
                     </Button>
                 </div>

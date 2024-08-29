@@ -104,10 +104,12 @@ export const deleteMessageId = async (req, res) => {
 
     const { messageId, conversationId } = req.params;
 
+    const { sentByCurrentUser } = req.body;
+
     const myId = req.user.userid;
 
     try {
-        const allMess = await deleteMessages(messageId, conversationId, myId);
+        const allMess = await deleteMessages(messageId, conversationId, myId, sentByCurrentUser);
 
         if (!allMess[0]) return res.status(200).json({allMess: {}, success: "Aucun Message"});
 

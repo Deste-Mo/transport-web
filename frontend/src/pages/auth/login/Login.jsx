@@ -3,21 +3,21 @@ import {
     TextInput
 } from "../../../styles/components";
 
-import {Link} from "react-router-dom";
-import {EMAIL_REGEX, EMAIL_REGEX_MESSAGE, PASSWORD_REGEX, PASSWORD_REGEX_MESSAGE, TOAST_TYPE} from "../../../constants";
-import {useState} from "react";
-import {useAuth} from "../../../context/AuthProvider.jsx";
-import {useForm} from "../../../context/FormProvider.jsx";
+import { Link } from "react-router-dom";
+import { EMAIL_REGEX, EMAIL_REGEX_MESSAGE, PASSWORD_REGEX, PASSWORD_REGEX_MESSAGE, TOAST_TYPE } from "../../../constants";
+import { useState } from "react";
+import { useAuth } from "../../../context/AuthProvider.jsx";
+import { useForm } from "../../../context/FormProvider.jsx";
 import api from "../../../utils/api.js";
-import {useAnimation} from "../../../context/AnimationProvider.jsx";
+import { useAnimation } from "../../../context/AnimationProvider.jsx";
 
 const Login = () => {
-    const {setErrorData, errorData, login, inputs, setInputs} = useAuth();
-    const {handleInputChange, handleError} = useForm();
+    const { setErrorData, errorData, login, inputs, setInputs } = useAuth();
+    const { handleInputChange, handleError } = useForm();
     const [loading, setLoading] = useState(false);
-    const {setMessagePopup} = useAnimation();
+    const { setMessagePopup } = useAnimation();
 
-    const {email, password} = inputs;
+    const { email, password } = inputs;
 
     const handleLogin = async (e) => {
         setLoading(true);

@@ -7,7 +7,12 @@ const router = express.Router();
 
 router.post("/send/:receiverId", protectedRoute, uploadMessFile.single('fileContent'), sendMessage);
 router.post("/delete/:messageId/:conversationId", protectedRoute, deleteMessageId);
-router.get("/conversation", protectedRoute, getConversation);
+router.get
+(
+    "/conversation", 
+    protectedRoute, 
+    getConversation
+);
 router.get("/users", protectedRoute, getAllUsers);
 router.get("/count", protectedRoute, countUnread);
 router.get("/:userIdToChat", protectedRoute, getMessages);

@@ -30,6 +30,7 @@ const RecentlyFriends = ({
         unFollowUsers,// TODO : Forget the usage (empty function)
     }
         = useUser();
+    const {isMobile} = useApp();
     const {ActiveUsers} = useSocketContext();
     const navigate = useNavigate();
     const isOnline = ActiveUsers.includes(id);

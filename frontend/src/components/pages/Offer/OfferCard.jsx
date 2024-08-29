@@ -1,3 +1,4 @@
+/* eslint-disable react/no-children-prop */
 /* eslint-disable react/prop-types */
 import { useNavigate } from "react-router-dom";
 import ProfileImage from "../../../assets/images/OIP.jpg";
@@ -15,11 +16,6 @@ import Badge from "../../ui/Badge.jsx";
 import { useUser } from "../../../context/UserProvider.jsx";
 import TemplatePopup, { OptionItem } from "../../ui/TemplatePopup.jsx";
 
-const offerDetails = `Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet Lorem ipsum
-              dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit
-              amet, Lorem ipsum dolor
-              Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet`;
-
 const MAX_OFFER_DESC = 130;
 
 const OfferCard = ({
@@ -36,6 +32,10 @@ const OfferCard = ({
   const navigate = useNavigate();
   const image = SERVERLINK + "/" + sug?.profileimage;
   const offerImage = SERVERLINK + "/" + sug?.imgurl;
+  const offerDetails = sug?.description ? sug?.description : `Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet Lorem ipsum
+              dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit
+              amet, Lorem ipsum dolor
+              Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet`;
 
   const contactUser = () => {
     localStorage.setItem(
@@ -79,8 +79,8 @@ const OfferCard = ({
 
   const handleDeletePost = async () => {
     // TODO :
-    deleteOffer(sug.offerid);
-    getCurrentUserOffers();
+    await deleteOffer(sug.offerid);
+    await getCurrentUserOffers();
     localStorage.removeItem("offer");
     setUpdateOffer();
 
@@ -97,21 +97,21 @@ const OfferCard = ({
     setPopupVisible(false);
   };
 
-  const handleExpirePost = () => {
+  const handleExpirePost = async () => {
     // TODO :
-    setUnavalaibleOffer(sug.offerid);
-    getCurrentUserOffers();
+    await setUnavalaibleOffer(sug.offerid);
+    await getCurrentUserOffers();
     setPopupVisible(false);
-    setMessagePopup("L'offre est actuellement rendu expirée", TOAST_TYPE.success);
+    setMessagePopup("L'offre actuellement indisponible", TOAST_TYPE.success);
 
   };
 
-  const handleUnexpirePost = () => {
+  const handleUnexpirePost = async () => {
     // TODO :
-    setAvalaibleOffer(sug.offerid);
-    getCurrentUserOffers();
+    await setAvalaibleOffer(sug.offerid);
+    await getCurrentUserOffers();
     setPopupVisible(false);
-    setMessagePopup("L'offre rendu non-expiré", TOAST_TYPE.success);
+    setMessagePopup("L'offre est disponible maintenant! ", TOAST_TYPE.success);
   };
 
   return (
@@ -174,6 +174,7 @@ const OfferCard = ({
               <TemplatePopup
                 setPopupVisible={setPopupVisible}
                 popupVisible={popupVisible}
+                className={'z-40'}
                 children={
                   <>
                     <OptionItem
@@ -215,7 +216,7 @@ const OfferCard = ({
                 className="text-small-1 font-md cursor-pointer hover:underline"
                 onClick={() => navigate(`/profile/${sug.userid}`)}
               >
-                {sug?.firstname + (!sug?.lastname ? "" : sug?.lastname)}
+                {sug?.firstname +' ' +(!sug?.lastname ? "" : sug?.lastname)}
               </p>
               <span className=" dark:font-sm text-small-2">
                 {sug?.accounttype}
@@ -258,11 +259,14 @@ const OfferCard = ({
             </button>
           )}
         </div>
-        {detailedProfile && (
+        {(detailedProfile && sug?.imgurl != null) && (
+          <div className="w-full h-[257px]">
           <img
             src={offerImage}
-            className="w-full h-[256px] object-cover rounded-md"
+            className="w-full h-full object-cover rounded-md"
           />
+          </div>
+          
         )}
         {!forCurrentUser && (
           <div className="flex items-center w-full gap-6 jusify-start flex-wrap">

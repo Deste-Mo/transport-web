@@ -2,7 +2,7 @@ import pool from '../db/connexion.js';
 
 export const allNotifs = async (userId) => {
 
-    const query = "SELECT N.*,S.sendnotifid, S.viewed FROM notifications N INNER JOIN sendnotification S ON N.notifid = S.notifid WHERE S.userid = $1 ORDER BY N.notifid DESC";
+    const query = "SELECT N.*,S.sendnotifid, S.viewed FROM notifications N INNER JOIN sendnotification S ON N.notifid = S.notifid WHERE S.userid = $1 ORDER BY N.notifdate DESC";
 
     const { rows } = await pool.query(query, [userId]);
 

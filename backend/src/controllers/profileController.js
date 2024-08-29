@@ -98,19 +98,14 @@ export const updateProfile = async(req, res) => {
     try {
         const keys = ['profileimage','firstname','companynumber', 'phone','address', 'email','bio', 'lastname', 'usercin', 'userid']
         
-        // return res.json(req.body)
         const formDate = keys.map(key =>{
             if(key === 'profileimage'){ return (req.file)? req.file.filename : null}
             if(key === 'userid') return (req.user.userid)
             return req.body[key]
         })
 
-        
-        // return res.json(formDate)
-
         const update = await updateUser(formDate)
-        // return res.json({accountId})
-        //  return res.status(200).json({update: update}) 
+       
         return (update)? res.status(200).json({update: update}) : res.status(404).json({error: "Update error"})
         
     } catch (error) {

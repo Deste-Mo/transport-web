@@ -1,18 +1,19 @@
-import { Server } from 'socket.io';
+import { Server } from 'socket.io'; // Importation du serveur socket 
 import http from 'http';
 import express from 'express';
 
 const app = express();
 
-const server = http.createServer(app);
+const server = http.createServer(app); // initialisation d'un serveur socket avec express
 
 const io = new Server(server, {
     cors: {
-        origin: process.env.FRONTEND_HOST || 'http://localhost:5173',
+        origin: process.env.FRONTEND_HOST || 'http://localhost:5173', // Pour la securité
         methods: ["GET", "POST"]
     }
 })
 
+// Pour retourner la liste de identifiantsocket des personnes connectes au serveur
 export const getReceiverSocketId = (receiverId) => {
     return userSocketMap[receiverId];
 };

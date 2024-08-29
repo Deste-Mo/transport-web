@@ -53,8 +53,35 @@ export const OFFER_CARD_FILTERS = [
         name: "Entreprise",
         active: false,
       },
+      {
+        name : "Camionneur",
+        active: false,
+      }
     ],
   },
+  {
+    title: "Date de publication",
+    values: [
+      {
+        name: "Tous",
+        active: true,
+      },
+      {
+        name: "Aujourd'hui",
+        active: false,
+      },
+      {
+        name: "Récente",
+        active: false,
+      },
+      {
+        name: "Ancienne",
+        active: false,
+      },
+    ],
+  },
+];
+export const OFFER_CARD_FILTERS_PROFILE = [
   {
     title: "Date de publication",
     values: [
@@ -83,6 +110,7 @@ export const OFFER_CARD_FILTERS_MODE = {
     all: "Tous",
     client: "Client",
     entreprise: "Entreprise",
+    camionneur : "Camionneur",
   },
   postDate: {
     all: "Tous",

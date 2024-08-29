@@ -3,18 +3,19 @@ import cors from "cors";
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 
-dotenv.config();
-
-const port = process.env.PORT || 3000;
-
-
 import authRoutes from './routes/authRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 import offreRoute from './routes/offreRoute.js';
 import notifsRoute from './routes/notifsRoutes.js';
+import subscRoute from './routes/subscRoutes.js';
 
 import { app, io, server } from './socket/socket.js';
+
+dotenv.config();
+
+const port = process.env.PORT || 3000;
+
 
 const allowedOrigins = [process.env.FRONTEND_HOST || "http://localhost:5173"];
 const corsOptions = {
@@ -44,6 +45,7 @@ app.use('/api/messages', messageRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/offres', offreRoute);
 app.use('/api/notifs', notifsRoute);
+app.use('/api/subscribtion', subscRoute);
 
 server.listen(port, () => {
     console.log(`server listening on port ${port}`);

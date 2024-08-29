@@ -28,9 +28,9 @@ const OfferProvider = ({children}) => {
         );
         setOffers(await response?.data?.offers);
     };
-    const getCurrentUserOffers = async (userId) => {
+    const getCurrentUserOffers = async (userId, offerId = null) => {
         const response = await axios.get(
-            `${SERVERLINK}/api/offres/allofferforuser/${!userId ? "" : userId}`,
+            `${SERVERLINK}/api/offres/allofferforuser/${!userId ? "" : userId}${ offerId ? "/"+ offerId: ""}`,
             {
                 headers: {token},
             }
@@ -148,7 +148,15 @@ const OfferProvider = ({children}) => {
                     filteredResult = filteredResult.filter(
                         ({ accounttype }) =>
                             accounttype.toLowerCase() ===
-                            accountTypeFilterMode.entreprise.toLowerCase()
+                            accountTypeFilterMode.entreprise?.toLowerCase()
+                    );
+                    break;
+                }
+                case accountTypeFilterMode.camionneur : {
+                    filteredResult = filteredResult.filter(
+                        ({accounttype}) =>
+                        accounttype?.toLowerCase() ===
+                        accountTypeFilterMode.camionneur?.toLowerCase()
                     );
                     break;
                 }
@@ -162,7 +170,7 @@ const OfferProvider = ({children}) => {
 
             switch (postDateFilter.activeFilter) {
                 case postDateFilterMode.today: {
-                    filteredResult = filteredResult.filter(({ publicationdate }) => {
+                    filteredResult = filteredResult.length > 0 && filteredResult.filter(({ publicationdate }) => {
                         const postDate = new Date(publicationdate);
                         const today = new Date();
                         return (
@@ -174,19 +182,19 @@ const OfferProvider = ({children}) => {
                     break;
                 }
                 case postDateFilterMode.recent: {
-                    filteredResult = filteredResult.sort((a, b) => {
+                    filteredResult = filteredResult.length > 0 && filteredResult.sort((a, b) => {
                         return new Date(b.publicationdate).getTime() - new Date(a.publicationdate).getTime();
                     });
                     break;
                 }
                 case postDateFilterMode.old: {
-                    filteredResult = filteredResult.sort((a, b) => {
+                    filteredResult = filteredResult.length > 0 && filteredResult.sort((a, b) => {
                         return new Date(a.publicationdate).getTime() - new Date(b.publicationdate).getTime();
                     });
                     break;
                 }
                 default: {
-                    filteredResult = filteredResult.sort((a, b) => {
+                    filteredResult = filteredResult.length > 0 && filteredResult.sort((a, b) => {
                         return new Date(b.publicationdate).getTime() - new Date(a.publicationdate).getTime();
                     });
                     break;
@@ -203,7 +211,7 @@ const OfferProvider = ({children}) => {
             }
         }
 
-        filteredResult = filteredResult.filter(
+        filteredResult = filteredResult.length > 0 && filteredResult.filter(
             ({ accounttype, capacity, firstname, lastname, title, description, depart }) => {
                 if (!search) return true;
                 
@@ -213,7 +221,8 @@ const OfferProvider = ({children}) => {
                     firstname?.toLowerCase()?.includes(search?.toLowerCase()) ||
                     lastname?.toLowerCase()?.includes(search?.toLowerCase()) ||
                     title?.toLowerCase()?.includes(search?.toLowerCase()) ||
-                    description?.toLowerCase()?.includes(search?.toLowerCase())
+                    description?.toLowerCase()?.includes(search?.toLowerCase())||
+                    depart?.toLowerCase()?.includes(search?.toLowerCase())
                 );
             }
         );

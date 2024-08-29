@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { PASSWORD_REGEX, TOAST_TYPE } from "../../../constants";
 import api from "../../../utils/api";
 import { Button, TextInput } from "../../../styles/components";
@@ -12,39 +12,39 @@ const ResetPassword = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
 
     const { token } = useParams();
-
-    const {setMessagePopup} = useAnimation();
+    const { setMessagePopup } = useAnimation();
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        api.post("/api/auth/reset-password", { token, password })
-        .then(res => {
-            console.log(res.data);
-            alert('Votre mot de passe a été réinitialisé avec succès');
-        })
-        .catch(e => {
-            console.log(`Erreur : ${e.response.data.error}`);
-            setMessagePopup(e.response.data.error, TOAST_TYPE.error);
-        })
+        if (password !== confirmPassword) {
+            setMessagePopup("Les mots de passe ne correspondent pas", TOAST_TYPE.error);
+            return;
+        }
+
+        try {
+            const res = await api.post("/api/auth/reset-password", { token, password });
+            setMessagePopup(res.data.message, TOAST_TYPE.success);
+            navigate("/login");
+        } catch (error) {
+            setMessagePopup(error.response?.data?.error || "Erreur inconnue", TOAST_TYPE.error);
+            console.log(`Erreur : ${error.response?.data?.error || error.message}`);
+        }
     };
 
     return (
-        <>
-                <section
-            className="absolute left-1/2 -translate-x-1/2 w-fullscreen bg-gray-80 auth-section space-y-[128px] top-[128px]">
-            <div className="flex flex-col items-center justify-center gap-4">
-                <div className="w-full text-center h1 text-subtitle-1 text-black-100 dark:text-white-100">
-                    Reinitialiser votre <span className="text-primary-100">mot de passe</span>
-                </div>
+        <section className="flex flex-col items-center justify-center w-full h-screen bg-gray-80 space-y-[32px] px-4">
+            <div className="text-center text-subtitle-1 text-black-100 dark:text-white-100">
+                Réinitialiser votre <span className="text-primary-100">mot de passe</span>
             </div>
+
             <form
-                className="flex w-fit flex-col items-start justify-center rounded-xl border p-4 border-black-0 bg-white-100 dark:text-white-100 gap-[32px]"
+                className="flex flex-col items-center w-full max-w-md p-6 border bg-white-100 dark:bg-white-10 dark:border-none border-black-0 rounded-xl space-y-6"
                 onSubmit={handleSubmit}
             >
-                <div className="flex w-full flex-col items-start justify-center gap-6">
                     <h3 className="text-subtitle-3 text-black-100 dark:text-white-100">Sécurité</h3>
-                    <div className="flex flex-col items-start justify-center gap-6">
+                <div className="flex flex-col w-full gap-6">
                         <TextInput
                             name="password"
                             title="Mot de passe"
@@ -52,7 +52,6 @@ const ResetPassword = () => {
                             placeholder="Entrer votre mot de passe"
                             errorMsg="Mot de passe incorrect"
                             pattern={PASSWORD_REGEX}
-                            // onError={handleError(setErrorData)}
                             onChange={(e) => setPassword(e.target.value)}
                             value={password}
                         />
@@ -62,20 +61,17 @@ const ResetPassword = () => {
                             type="password"
                             isValid={confirmPassword === password}
                             placeholder="Confirmer votre mot de passe"
-                            errorMsg={"Le mot de passe ne correspond pas"}
-                            // onError={handleError(setErrorData)}
+                        errorMsg="Le mot de passe ne correspond pas"
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             value={confirmPassword}
                         />
                     </div>
-                </div>
-                <Button  block>
+                <Button block type="submit">
                     Terminer
                 </Button>
             </form>
         </section>
-        </>
     );
-}
+};
 
 export default ResetPassword;

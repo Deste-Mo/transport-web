@@ -31,7 +31,7 @@ const Messages = () => {
 
   const { goToUserProfile } = useUser();
 
-    const { messages, userToChat, getUnreadMessageCount, getUserMessages, countUnread } = useApp()
+  const { messages, userToChat, getUnreadMessageCount, getUserMessages, countUnread } = useApp()
 
   const [messInput, setMessInput] = useState("");
   const endOfMessagesRef = useRef(null);
@@ -64,25 +64,25 @@ const Messages = () => {
   );
 
   const handleClick = () => {
-        localStorage.removeItem('userToChat');
-        navigate('/discussion');
-    }
-    const navigateToProfile = () => navigate(`/profile/${userToChat.id}`)
+    localStorage.removeItem('userToChat');
+    navigate('/discussion');
+  }
+  const navigateToProfile = () => navigate(`/profile/${userToChat.id}`)
 
-    useEffect(() => {
-        socket?.on("newMessage", () => {
-            getUserMessages(endOfMessagesRef);
-            getUnreadMessageCount();
-        });
+  useEffect(() => {
+    socket?.on("newMessage", () => {
+      getUserMessages(endOfMessagesRef);
+      getUnreadMessageCount();
+    });
 
-        return () => socket?.off("newMessage")
+    return () => socket?.off("newMessage")
 
-    }, [socket, countUnread]);
+  }, [socket, countUnread]);
 
-    useEffect(() => {
-        getUserMessages(endOfMessagesRef);
-        getUnreadMessageCount();
-    }, [countUnread]);
+  useEffect(() => {
+    getUserMessages(endOfMessagesRef);
+    getUnreadMessageCount();
+  }, [countUnread]);
 
 
 
@@ -114,17 +114,17 @@ const Messages = () => {
     getUserMessages(endOfMessagesRef);
 
     setFormData({
-            fileContent: null,
-            message: "",
-            refMessage: "",
-        })
+      fileContent: null,
+      message: "",
+      refMessage: "",
+    })
 
-        setFile({
-            name: '',
-            path: ''
-        })
+    setFile({
+      name: '',
+      path: ''
+    })
 
-    }
+  }
 
   return (
     <motion.section
@@ -212,11 +212,10 @@ const Messages = () => {
               <>
                 <div
                   key={message.messageid}
-                  className={`w-full flex ${
-                    message.receiverid !== userToChat.id
-                      ? "justify-start"
-                      : "justify-end"
-                  }`}
+                  className={`w-full flex ${message.receiverid !== userToChat.id
+                    ? "justify-start"
+                    : "justify-end"
+                    }`}
                 >
                   <Message
                     conversationId={message.idconversation}
@@ -230,8 +229,9 @@ const Messages = () => {
                         ? message.refmessage
                         : undefined
                     }
-                    message={message.content}
+                    message={message}
                     sentDate={message.sentdate}
+                    receiverid={message.receiverid}
                     sentByCurrentUser={message.receiverid === userToChat.id}
                   />
                 </div>
@@ -339,8 +339,10 @@ const Message = ({
       {
         method: "POST",
         headers: {
+          "Content-Type": "application/json",
           token: token,
         },
+        body: JSON.stringify({ sentByCurrentUser })
       }
     );
 
@@ -351,99 +353,113 @@ const Message = ({
 
   return (
     <div
-      className={`flex items-center flex-col ${
-        sentByCurrentUser ? "justify-end" : "justify-start"
-      } ${refmessage ? "gap-0" : "gap-2"} max-w-[85%] text-wrap  break-words `}
+      className={`flex items-center flex-col ${sentByCurrentUser ? "justify-end" : "justify-start"
+        } ${refmessage ? "gap-0" : "gap-2"} max-w-[85%] text-wrap  break-words `}
     >
       <p
-        className={`text-small-2 text-black-80 dark:text-white-80 dark:font-sm w-full ${
-          sentByCurrentUser ? "text-right pr-3" : "text-left pl-3"
-        }  `}
+        className={`text-small-2 text-black-80 dark:text-white-80 dark:font-sm w-full ${sentByCurrentUser ? "text-right pr-3" : "text-left pl-3"
+          }  `}
       >
         {timeSince(sentDate, 3)}
       </p>
 
       <div
-        className={`flex  gap-2 w-full items-center relative ${
-          sentByCurrentUser ? "flex-row-reverse" : "flex-row"
-        }`}
+        className={`flex  gap-2 w-full items-center relative ${sentByCurrentUser ? "flex-row-reverse" : "flex-row"
+          }`}
       >
         <TemplatePopup
-            setPopupVisible={setMessagePopuVisible}
-            popupVisible={messagePopupVisible}
-            className={`absolute top-10 ${
-                sentByCurrentUser ? "-left-10 " : "-right-10"
+          setPopupVisible={setMessagePopuVisible}
+          popupVisible={messagePopupVisible}
+          className={`absolute top-10 ${sentByCurrentUser ? "-left-10 " : "-right-10"
             }`}
         >
           <div>
             <OptionItem
-                setPopupVisible={setMessagePopuVisible}
-                name="Supprimer"
-                icon="bi bi-trash"
-                inverseIcon
-                onClick={handleDelete}
+              setPopupVisible={setMessagePopuVisible}
+              name="Supprimer"
+              icon="bi bi-trash"
+              inverseIcon
+              onClick={handleDelete}
             />
             {!sentByCurrentUser && (
-                <OptionItem
-                    name="Répondre"
-                    icon="bi bi-reply-fill"
-                    inverseIcon
-                    onClick={answerMessage}
-                    setPopupVisible={setMessagePopuVisible}
-                />
+              <OptionItem
+                name="Répondre"
+                icon="bi bi-reply-fill"
+                inverseIcon
+                onClick={answerMessage}
+                setPopupVisible={setMessagePopuVisible}
+              />
             )}
           </div>
         </TemplatePopup>
         <div className="flex flex-col gap-2 w-full">
           {/* FileMessages */}
-          {fileContent && (
-              <FileMessage
-                  fileContent={fileContent}
-                  refMessage={refmessage}
-                  sentByCurrentUser={sentByCurrentUser}
-              />
-          )}
-          {/* TextMessages */}
-          {!message && fileContent ? null : (
-              <TextMessage
-                  refMessage={refmessage}
-                  sentByCurrentUser={sentByCurrentUser}
-                  message={message}
-              />
-          )}
-        </div>
-
-        <div className="flex items-center gap-2">
-          {!sentByCurrentUser && (
-            <Icon
-              onClick={answerMessage}
-              variant="ghost"
-              icon="bi bi-reply-fill"
-              className="-rotate-180"
-              size="md"
+          {((!message.byme && !message.delmessage) && fileContent) && (
+            <FileMessage
+              fileContent={fileContent}
+              refMessage={refmessage}
+              sentByCurrentUser={sentByCurrentUser}
             />
           )}
-          <Icon
-            onClick={() => setMessagePopuVisible((prev) => !prev)}
-            variant="ghost"
-            icon="bi bi-three-dots"
-            className="rotate-90"
-            size="sm"
-          />
+          {/* TextMessages */}
+          {
+            ((!message.byme && !sentByCurrentUser) && message.delmessage) ?
+              <TextMessage
+                // refMessage={refmessage}
+                sentByCurrentUser={sentByCurrentUser}
+                message={message.delmessage}
+                isDel
+              />
+              :
+              (message.byme) ?
+                <TextMessage
+                  // refMessage={refmessage}
+                  sentByCurrentUser={sentByCurrentUser}
+                  message={message.delmessage}
+                  isDel
+                />
+                :
+                (!message.content && fileContent) ? null : (
+                  <TextMessage
+                    refMessage={refmessage}
+                    sentByCurrentUser={sentByCurrentUser}
+                    message={message.content}
+                  />
+                )}
         </div>
+        {(!message.byme && !message.delmessage) && (
+          <div className="flex items-center gap-2">
+            {
+              (!sentByCurrentUser) &&
+              <Icon
+                onClick={answerMessage}
+                variant="ghost"
+                icon="bi bi-reply-fill"
+                className="-rotate-180"
+                size="md"
+              />
+            }
+            <Icon
+              onClick={() => setMessagePopuVisible((prev) => !prev)}
+              variant="ghost"
+              icon="bi bi-three-dots"
+              className="rotate-90"
+              size="sm"
+            />
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
 const FileMessage = ({ fileContent, refMessage, sentByCurrentUser }) => {
-  const fileTypes = ["jpg", "png", "jpeg", "gif"];
+  const fileTypes = ["jpg", "png", "jpeg", "gif", "pdf"];
 
   return (
     <div
-      className={`w-full flex flex-col ${
-        sentByCurrentUser ? "items-end" : "items-start"
-      }`}
+      className={`w-full flex flex-col ${sentByCurrentUser ? "items-end" : "items-start"
+        }`}
     >
       {/* For responded messages */}
       {refMessage && <RefMessage refMessage={refMessage} />}
@@ -471,21 +487,19 @@ const FileMessage = ({ fileContent, refMessage, sentByCurrentUser }) => {
   );
 };
 
-const TextMessage = ({ refMessage, sentByCurrentUser, message }) => {
+const TextMessage = ({ refMessage, sentByCurrentUser, message, isDel }) => {
   return (
     <div
-      className={`w-full flex flex-col ${
-        sentByCurrentUser ? "items-end" : "items-start"
-      }`}
+      className={`w-full flex flex-col ${sentByCurrentUser ? "items-end" : "items-start"
+        }`}
     >
       {/* For responded messages */}
       {refMessage && <RefMessage refMessage={refMessage} />}
       <div
-        className={`px-4 py-3  rounded-3xl  min-w-[40px] w-fit max-w-full text-wrap  break-words ${
-          sentByCurrentUser ? "bg-primary-20 " : "bg-black-10 "
-        }`}
+        className={`px-4 py-3  rounded-3xl  min-w-[40px] w-fit max-w-full text-wrap  break-words ${(sentByCurrentUser && !isDel) ? "bg-primary-20 " : isDel ? "bg-black-10 border-white-60 border" : "bg-black-10 "
+          }`}
       >
-        <p className="text-small-1 text-black-100 dark:text-white-100 ">
+        <p className={`text-small-1 ${!isDel ? "text-black-100 dark:text-white-100" : "text-white-40"} `}>
           {message}
         </p>
       </div>

@@ -15,7 +15,8 @@ import {
     setSavedOffer,
     retireSavedOffer,
     getOfferById,
-    setavailableOffer
+    setavailableOffer,
+    getAllOfferByIdAndIdOffer
 } from '../models/offreModel.js';
 import { io } from '../socket/socket.js';
 
@@ -23,69 +24,36 @@ import { io } from '../socket/socket.js';
 
 export const newPublication = async (req, res) => {
     try {
+        // récupère ici l'identifiant dans la route protégée
+        const userId = req.user.userid;
+        // tableau de clé correspondant au donnée renvoyé par le frontend
+        const keys = ['title', 'capacity', 'depart','destination','scheduledDate', 'description'];
 
-        const userId = req.user.userid
+        // Récupère les données du formulaire
+        let data = keys.map(key => req.body[key]);
 
-        const {
-            title,
-            description,
-            depart,
-            destination,
-            capacity,
-            scheduledDate
-        } = req.body;
-
-        // return res.json(req.file)
-
-        // return res.json({body: req.body });
-
-        var data = [];
-
+        // Ajoute l'image si elle est présente
         if (req.file) {
-            const file = req.file.filename;
-
-            data = [
-                title,
-                capacity,
-                depart,
-                destination,
-                scheduledDate,
-                description,
-                file,
-                userId
-            ]
-            
-        } else {
-            data = [
-                title,
-                capacity,
-                depart,
-                destination,
-                scheduledDate,
-                description,
-                userId
-            ]
+            data.push(req.file.filename);
         }
 
-        // return res.json(data);
+        // Ajoute l'userId à la fin du tableau
+        data.push(userId);
 
-        // create a new offer
+        // Crée une nouvelle offre
         const offer = await createOffer(data);
 
         if (offer) {
             return res.status(200).json({ offer: offer });
         } else {
-            return res.status(400).json({ error: "Erreur lors de la modification de l'image de profile" });
+            return res.status(400).json({ error: "Erreur lors de la création de l'offre" });
         }
 
     } catch (error) {
-
-        // console.error(error);
         res.status(500).json({ error: error.message });
-
     }
-
 };
+
 
 
 // home page function to show offer
@@ -118,7 +86,7 @@ export const suggestionOffers = async (req, res) => {
     try {
         const result = await latestOffers(userId);
 
-        if (!result[0]) return result.json({ error: "No offer availaible", suggestions: {} })
+        if (!result[0]) return res.json({ error: "No offer availaible", suggestions: {} })
 
         return res.status(200).json({ suggestions: result });
     } catch (error) {
@@ -184,10 +152,53 @@ export const retireOffer = async (req, res) => {
 export const allOffersForUser = async (req, res) => {
 
     const userId = !req.params.userId ? req.user.userid : req.params.userId;
+    const dispo = (req.params.userId && req.params.userId != req.user.userid) ? true : false;
     
     try {
 
-        const allOffers = await getAllOfferById(userId);
+        const allOffers = await getAllOfferById(userId, dispo);
+
+        // console.log("AllOffersBack: " + allOffers)
+
+        if(!allOffers[0]) return res.status(200).json({all: {}})
+
+        return res.status(200).json({ all: allOffers });
+
+    } catch (error) {
+        // console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+
+}
+export const allOffersForUserId = async (req, res) => {
+
+    const userId = req.params.userId;
+    const dispo = true;
+    
+    try {
+
+        const allOffers = await getAllOfferById(userId, dispo);
+
+        // console.log("AllOffersBack: " + allOffers)
+
+        if(!allOffers[0]) return res.status(200).json({all: {}})
+
+        return res.status(200).json({ all: allOffers });
+
+    } catch (error) {
+        // console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+
+}
+export const allOffersForUserNotif = async (req, res) => {
+
+    const userId = !req.params.userId ? req.user.userid : req.params.userId;
+    const offerId = req.params.offerId ? req.params.offerId : null ;
+    
+    try {
+
+        const allOffers = await getAllOfferByIdAndIdOffer(userId, offerId);
 
         // console.log("AllOffersBack: " + allOffers)
 
@@ -249,64 +260,40 @@ export const deleteOfferForUser = async (req, res) => {
 
 export const updateOfferForUser = async (req, res) => {
     try {
+        const keys = [
+            'title', 
+            'capacity', 
+            'depart', 
+            'destination', 
+            'scheduledDate', 
+            'description'
+        ];
 
-        const { offerId } = req.params;
-        
-        const {
-            title,
-            description,
-            depart,
-            destination,
-            capacity,
-            scheduledDate
-        } = req.body;
+        // Récupére les données du formulaire
+        let data = keys.map(key => req.body[key]);
 
-        // return res.json(req.file)
-
-        // return res.json({body: req.body });
-
-        var data = [];
-
+        // Ajoute l'image si elle est présente
         if (req.file) {
-            const file = req.file.filename;
-
-            data = [
-                title,
-                capacity,
-                depart,
-                destination,
-                scheduledDate,
-                description,
-                file,
-                offerId
-            ]
-            
-        } else {
-            data = [
-                title,
-                capacity,
-                depart,
-                destination,
-                scheduledDate,
-                description,
-                offerId
-            ]
+            data.push(req.file.filename);
         }
-        
-        // create a new offer
+
+        // Ajoute l'offerId à la fin du tableau
+        data.push(req.params.offerId);
+
+        // Mise à jour de l'offre
         const result = await updateOffer(data);
         
         if (result) {
             return res.status(200).json({ offer: result });
         } else {
-            return res.status(400).json({ error: "Erreur lors de la modification de l'image de profile" });
+            return res.status(400).json({ error: "Erreur lors de la modification de l'offre" });
         }
 
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-
 };
+
 
 //set unavailable the user offer
 

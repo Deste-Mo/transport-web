@@ -14,7 +14,7 @@ const ProtectedProfileLayout = ( ) => {
     
     const verifyId = () => {
         setLoading(true)
-        setAuthorized(user.id === id);
+        setAuthorized(personalInformation.id === id);
         setLoading(false);
     }
 

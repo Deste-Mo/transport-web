@@ -3,10 +3,12 @@ import {
     SERVERLINK,
     USERS_FILTERS,
     USERS_FILTERS_DATAS,
+    TOAST_TYPE
 } from "../constants/index.js";
 import {useAuth} from "./AuthProvider.jsx";
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAnimation } from "./AnimationProvider.jsx";
 
 const FriendContext = createContext({});
 
@@ -23,6 +25,10 @@ const UserProvider = ({children}) => {
     const [activeUserFilters, setActiveUserFilters] =
         useState(USERS_FILTERS_DATAS);
     const [filteredUsers, setFilteredUsers] = useState(friends);
+
+    const [subscriptionCards, setSubscriptionCards] = useState([]);
+
+    const { setMessagePopup } = useAnimation();
 
     const getFriends = async (userId) => {
         const response = await axios.get(
@@ -123,6 +129,36 @@ const UserProvider = ({children}) => {
             }
         }
     };
+
+    const handleSendEmailConf = async (id, subid) => {
+        const response = await fetch(SERVERLINK + '/api/subscribtion/sendconfirm/' + id + '/' + subid, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "token": token
+            }
+        })
+
+        const verification = await response.json();
+        
+        setMessagePopup(await verification.message, TOAST_TYPE.success);
+
+    }
+
+    const getAllSubscription = async () => {
+        const response = await fetch(SERVERLINK + '/api/subscribtion/allsubscribtion', {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json"
+            }
+        })
+
+        const verification = await response.json();
+        
+        setSubscriptionCards(await verification.subscriptions )
+        setMessagePopup(await verification.message, TOAST_TYPE.success);
+
+    }
     
     return (
         <FriendContext.Provider
@@ -142,6 +178,9 @@ const UserProvider = ({children}) => {
                 activeUserFilters,
                 filteredUsers,
                 updateActiveUserFilter,
+                handleSendEmailConf,
+                subscriptionCards,
+                getAllSubscription
             }}
         >
             {children}

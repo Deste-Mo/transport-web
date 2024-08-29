@@ -32,6 +32,9 @@ import ForgotPassword from "./pages/auth/forgotPassword/ForgotPassword.jsx";
 import ProtectedProfileLayout from "./layouts/ProtectedProfileLayout.jsx";
 import NewOffer from "./pages/offer/NewOffer.jsx";
 import SavedOffers from "./pages/offer/SavedOffers.jsx";
+import WaitLink from "./pages/auth/forgotPassword/WaitLink.jsx";
+import SubscriptionPage from "./pages/abonement/SubscriptionPage.jsx";
+import SubscriptionSecurity from "./pages/abonement/SubscriptionSecurity.jsx";
 
 // TODO :
 /*
@@ -65,6 +68,8 @@ export default function App() {
               ></Route>
 
               <Route path="/forgot-password" element={<ForgotPassword/>} />
+
+              <Route path="/forgot-password/WaitLink" element={<WaitLink/>} />
 
               <Route path="/reset-password/:token" element={<ResetPassword/>} />
             </Route>
@@ -102,6 +107,9 @@ export default function App() {
                 <Route path="/message" element={<Messages />} />
               </Route>
             </Route>
+
+            <Route path="/abonnement" element={<SubscriptionPage />} />
+            <Route path="/abonnement/:id/:montant/:type/paiement" element={<SubscriptionSecurity/>} />
 
             {/* Pages Error */}
             <Route path="*" element={<NotFound />} />

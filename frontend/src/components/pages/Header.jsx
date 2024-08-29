@@ -90,6 +90,7 @@ const MobileHeader = ({ className, NAV_LINKS, profileImage }) => {
   const location = useLocation();
   const { showBackIcon } = useAnimation();
   const { hideMobileNavigation } = useAnimation();
+  const { personalInformation } = useAuth();
 
   if (hideMobileNavigation) return ;
 
@@ -115,8 +116,10 @@ const MobileHeader = ({ className, NAV_LINKS, profileImage }) => {
       </div>
 
       <div className="">
-        <ul className="flex  items-center w-full justify-between max-md:items-center  py-4 px-3 fixed left-0 bottom-0 bg-white-100 dark:bg-white-0 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md z-50">
-          {NAV_LINKS.map((navlink) => (
+        <ul className="flex  items-center w-full justify-between max-md:items-center  py-4 px-8 fixed left-0 bottom-0 bg-white-100 dark:bg-white-0 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md z-50">
+          {
+            personalInformation.isVerify &&
+            NAV_LINKS.map((navlink) => (
             <NavLink
               forMobile
               key={navlink.name}
@@ -137,6 +140,7 @@ const MobileHeader = ({ className, NAV_LINKS, profileImage }) => {
 const DesktopHeader = ({ className, NAV_LINKS, profileImage }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { personalInformation } = useAuth();
   return (
     <header
       className={`flex justify-between items-center bg-white-100 dark:bg-white-0 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md py-4 px-8 fixed left-0 top-0 right-0 z-40 ${className}`}
@@ -148,7 +152,9 @@ const DesktopHeader = ({ className, NAV_LINKS, profileImage }) => {
       </div>
       <div className="">
         <ul className="flex  items-end gap-20 max-lg:gap-10">
-          {NAV_LINKS.map((navlink) => (
+          {
+            personalInformation.isVerify &&
+            NAV_LINKS.map((navlink) => (
             <NavLink
               key={navlink.name}
               {...navlink}

@@ -64,9 +64,9 @@ export const getAllMessages = async (reqSenderId, userIdToChat) => {
     return rows;
 }
 
-export const deleteMessages = async (messageId, conversationId, myId) => {
+export const deleteMessages = async (messageId, conversationId, myId, sentByCurrentUser) => {
 
-    const viewed = "DELETE FROM message WHERE messageid = $1 RETURNING *";
+    const viewed = sentByCurrentUser ? "UPDATE message SET delMessage = 'Message supprimé', byme = True WHERE messageid = $1 RETURNING *" : "UPDATE message SET delMessage = 'Message supprimé' WHERE messageid = $1 RETURNING *";
 
     const lastMessage = "(SELECT M.*, C.idsender, C.idreceiver FROM message M INNER JOIN conversation C ON M.idconversation = C.idconversation WHERE M.idconversation = $1 ORDER BY M.messageId DESC LIMIT 1)"
 
@@ -92,7 +92,7 @@ export const deleteMessages = async (messageId, conversationId, myId) => {
         lastSenderId = await senderConv
     }
 
-    const answer = await pool.query(update, [conversationId, lastSenderId, message.content]);
+    const answer = await pool.query(update, [conversationId, lastSenderId, message.byme ? message.delmessage : message.content]);
 
     return rows;
 }

@@ -79,7 +79,6 @@ const Notifications = () => {
               notification={notif}
               viewed={notif.viewed}
               spec={notif.sendnotifid}
-              viewed={notif.viewed}
               date={notif.notifdate}
               icon
             />
