@@ -7,8 +7,8 @@ import {
 } from "../constants/index.js";
 import {useAuth} from "./AuthProvider.jsx";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useAnimation } from "./AnimationProvider.jsx";
+import {useNavigate} from "react-router-dom";
+import {useAnimation} from "./AnimationProvider.jsx";
 
 const FriendContext = createContext({});
 
@@ -28,7 +28,7 @@ const UserProvider = ({children}) => {
 
     const [subscriptionCards, setSubscriptionCards] = useState([]);
 
-    const { setMessagePopup } = useAnimation();
+    const {setMessagePopup} = useAnimation();
 
     const getFriends = async (userId) => {
         const response = await axios.get(
@@ -89,7 +89,7 @@ const UserProvider = ({children}) => {
         getFriends(profileInfoId);
         getUsers();
     };
-    
+
     const updateActiveUserFilter = (filter) => {
         localStorage.setItem("activeUserFilters", filter);
     }
@@ -97,13 +97,13 @@ const UserProvider = ({children}) => {
         // Get the active filter from localStorage or default to 'follower'
         const activeUserFilter = localStorage?.getItem("activeUserFilters") || USERS_FILTERS.follower;
 
+
         switch (activeUserFilter) {
             case USERS_FILTERS.suggestion: {
                 // localStorage.setItem("activeUserFilters", USERS_FILTERS.suggestion);
                 updateActiveUserFilter(USERS_FILTERS.suggestion);
                 if (!search) return users;
-
-                return users.filter(user =>
+                if (users.length > 0) return users.filter(user =>
                     user.firstname.toLowerCase().includes(search.toLowerCase()) ||
                     user.lastname.toLowerCase().includes(search.toLowerCase())
                 );
@@ -112,14 +112,13 @@ const UserProvider = ({children}) => {
             case USERS_FILTERS.follower: {
                 // localStorage.setItem("activeUserFilters", USERS_FILTERS.follower)
                 updateActiveUserFilter(USERS_FILTERS.follower)
-                
-
                 if (!search) return friends;
 
-                return friends.filter(friend =>
-                    friend.firstname.toLowerCase().includes(search.toLowerCase()) ||
-                    friend.lastname.toLowerCase().includes(search.toLowerCase())
-                );
+                if (friends.length > 0)
+                    return friends?.filter(friend =>
+                        friend.firstname.toLowerCase().includes(search.toLowerCase()) ||
+                        friend.lastname.toLowerCase().includes(search.toLowerCase())
+                    );
             }
 
             default: {
@@ -134,13 +133,13 @@ const UserProvider = ({children}) => {
         const response = await fetch(SERVERLINK + '/api/subscribtion/sendconfirm/' + id + '/' + subid, {
             method: "POST",
             headers: {
-              "Content-Type": "application/json",
-              "token": token
+                "Content-Type": "application/json",
+                "token": token
             }
         })
 
         const verification = await response.json();
-        
+
         setMessagePopup(await verification.message, TOAST_TYPE.success);
 
     }
@@ -149,17 +148,17 @@ const UserProvider = ({children}) => {
         const response = await fetch(SERVERLINK + '/api/subscribtion/allsubscribtion', {
             method: "GET",
             headers: {
-              "Content-Type": "application/json"
+                "Content-Type": "application/json"
             }
         })
 
         const verification = await response.json();
-        
-        setSubscriptionCards(await verification.subscriptions )
+
+        setSubscriptionCards(await verification.subscriptions)
         setMessagePopup(await verification.message, TOAST_TYPE.success);
 
     }
-    
+
     return (
         <FriendContext.Provider
             value={{

@@ -49,6 +49,8 @@ const Friends = () => {
         getFriends();
         updateActiveUserFilters(activeUserFilter);
         setFilteredUser(filterUsers(search, friends, users));
+        
+        
     }, []);
     
     useEffect(() => {

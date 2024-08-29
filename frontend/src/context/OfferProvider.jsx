@@ -235,7 +235,7 @@ const OfferProvider = ({children}) => {
     };
 
     const filterCurrentUserOffers = (offers) => {
-        const filterModes = JSON?.parse(localStorage.getItem("currentUserOfferFilter"));
+        const filterModes = JSON?.parse(localStorage?.getItem("currentUserOfferFilter"));
 
         return offers.filter(offer => {
             const scheduledDate = new Date(offer.scheduleddate)
@@ -252,6 +252,9 @@ const OfferProvider = ({children}) => {
                 currentDate.getMonth(),
                 currentDate.getDate(),
             )
+            
+            if (!filterModes)
+                return true;
 
             switch (filterModes[0].activeFilter) {
                 case CURRENT_USER_FILTERS_MODE.available :

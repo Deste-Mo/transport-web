@@ -183,68 +183,19 @@ export default function Profile() {
                         </div>
                     </div>
                     <div className="flex flex-col gap-6">
-                        <div className={'sticky top-0 z-50'}>
-                            {popupVisible && (<p></p>
-                                /*<div className="absolute top-10 right-10 z-50">
-                                  {
-                                    <TemplatePopup
-                                      popupVisible={popupVisible}
-                                      setPopupVisible={setPopupVisible}
-                                      children={
-                                        <>
-                                          <OptionItem
-                                            onClick={() => setFilter('all')}
-                                            name="Tous"
-                                            icon="bi bi-dash"
-                                            setPopupVisible={setPopupVisible}
-                                          />
-                                          <OptionItem
-                                            onClick={() => navigate(`/profile/${id}/newOffer`)}
-                                            name="Ajouter"
-                                            icon="bi bi-plus-lg"
-                                            setPopupVisible={setPopupVisible}
-                                          />
-                                          <OptionItem
-                                            onClick={() => setFilter('available')}
-                                            name="Disponible"
-                                            icon="bi bi-circle"
-                                            setPopupVisible={setPopupVisible}
-                                          />
-                
-                                          <OptionItem
-                                            onClick={() => setFilter('expired')}
-                                            name="Expiré"
-                                            icon="bi bi-hourglass-bottom"
-                                            setPopupVisible={setPopupVisible}
-                                          />
-                
-                                          <OptionItem
-                                            onClick={() => setFilter('unavailable')}
-                                            name="indisponible"
-                                            icon="bi bi-slash-circle"
-                                            setPopupVisible={setPopupVisible}
-                                          />
-                                        </>
-                                      }
-                                    />
-                                  }
-                                </div>*/
-                            )}
-
-
-                        </div>
+                        
                         <SubHeader
                             name="Vos Offres"
                             icon="bi bi-briefcase-fill"
                             rightContent={
-                                <div className="flex gap-2 items-center justify-center">
+                                <div className="flex gap-2 items-center justify-center ">
                                     <Icon icon="bi bi-plus-lg" size="sm"
                                           onClick={() => navigate(`/profile/${id}/newOffer`)}/>
                                     <Filter
                                         onFilter={() => setFilteredCurrentUserOffer(filterCurrentUserOffers(currentUserOffers))}
                                         filterBoxMainTitle="Filtrer les offres par"
                                         filters={CURRENT_USER_OFFER_FILTERS}
-                                        filterBoxClassName="fixed right-0 top-[64px]"/>
+                                        filterBoxClassName="fixed top-[64px] right-0"/>
                                 </div>
                             }
                         />
@@ -263,17 +214,6 @@ export default function Profile() {
 
                                 ) : < div className="nothing-box"> Pas d'offres</div>
                             }
-                            {/*{filterOffers().length > 0 ? (
-                                filterOffers().map((currentUserOffer) => (
-                                    <OfferCard
-                                        forCurrentUser
-                                        key={currentUserOffer.offerid}
-                                        sug={currentUserOffer}
-                                    />
-                                ))
-                            ) : (
-                                <div className="nothing-box">Pas d'offres</div>
-                            )}*/}
                         </div>
                     </div>
                 </>

@@ -8,8 +8,6 @@ const Filter = ({
                     filterBoxClassName = "fixed",
                     className = "",
                     filterBoxMainTitle = "Filtrer par",
-                    onClose = () => {
-                    },
                     onFilter = () => {
                     },
                     filterResultsName = "currentUserOfferFilter",
@@ -112,7 +110,7 @@ const Filter = ({
                         <i className="bi bi-funnel text-icon"></i>
                         <p className="text-base">{filterBoxMainTitle}</p>
                     </div>
-                    <Icon variant="ghost" icon="bi bi-x-lg" size="sm" onClick={onClose}/>
+                    <Icon variant="ghost" icon="bi bi-x-lg" size="sm" onClick={() => setFilterVisible(false)}/>
                 </div>
                 {loading ? (
                     <p className="text-black-100 dark:text-white-100">Loading ....</p> // TODO : Filter loading
