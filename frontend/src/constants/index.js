@@ -19,132 +19,156 @@ export const PHONE_REGEX_MESSAGE = "Veuillez saisir un numéro de téléphone au
 
 // Registration pages constants
 export const REGISRATION_STEPS = {
-  accoutType: 1,
-  identification: 2,
-  security: 3,
+    accoutType: 1,
+    identification: 2,
+    security: 3,
 };
 
 export const ACCOUNT_TYPES = {
-  camion: "Camionneur",
-  society: "Entreprise",
-  client: "Client",
+    camion: "Camionneur",
+    society: "Entreprise",
+    client: "Client",
 };
 
 export const TOAST_TYPE = {
-  success: "success",
-  error: "error",
+    success: "success",
+    error: "error",
 };
-
 
 
 export const OFFER_CARD_FILTERS = [
-  {
-    title: "Type de compte",
-    values: [
-      {
-        name: "Tous",
-        active: true,
-      },
-      {
-        name: "Client",
-        active: false,
-      },
-      {
-        name: "Entreprise",
-        active: false,
-      },
-      {
-        name : "Camionneur",
-        active: false,
-      }
-    ],
-  },
-  {
-    title: "Date de publication",
-    values: [
-      {
-        name: "Tous",
-        active: true,
-      },
-      {
-        name: "Aujourd'hui",
-        active: false,
-      },
-      {
-        name: "Récente",
-        active: false,
-      },
-      {
-        name: "Ancienne",
-        active: false,
-      },
-    ],
-  },
+    {
+        title: "Type de compte",
+        values: [
+            {
+                name: "Tous",
+                active: true,
+            },
+            {
+                name: "Client",
+                active: false,
+            },
+            {
+                name: "Entreprise",
+                active: false,
+            },
+            {
+                name: "Camionneur",
+                active: false,
+            }
+        ],
+    },
+    {
+        title: "Date de publication",
+        values: [
+            {
+                name: "Tous",
+                active: true,
+            },
+            {
+                name: "Aujourd'hui",
+                active: false,
+            },
+            {
+                name: "Récente",
+                active: false,
+            },
+            {
+                name: "Ancienne",
+                active: false,
+            },
+        ],
+    },
 ];
 export const OFFER_CARD_FILTERS_PROFILE = [
-  {
-    title: "Date de publication",
-    values: [
-      {
-        name: "Tous",
-        active: true,
-      },
-      {
-        name: "Aujourd'hui",
-        active: false,
-      },
-      {
-        name: "Récente",
-        active: false,
-      },
-      {
-        name: "Ancienne",
-        active: false,
-      },
-    ],
-  },
+    {
+        title: "Date de publication",
+        values: [
+            {
+                name: "Tous",
+                active: true,
+            },
+            {
+                name: "Aujourd'hui",
+                active: false,
+            },
+            {
+                name: "Récente",
+                active: false,
+            },
+            {
+                name: "Ancienne",
+                active: false,
+            },
+        ],
+    },
 ];
 
-export const OFFER_CARD_FILTERS_MODE = {
-  accountType: {
-    all: "Tous",
-    client: "Client",
-    entreprise: "Entreprise",
-    camionneur : "Camionneur",
-  },
-  postDate: {
-    all: "Tous",
-    today: "Aujourd'hui",
-    recent: "Récente",
-    old: "Ancienne",
-  },
-};
+export const CURRENT_USER_OFFER_FILTERS = [{
+    title: "",
+    values: [
+        {
+            name: "Tous",
+            active: true,
+        }, {
+            name: "Disponible",
+            active: false,
+        }, {
+            name: "Expiré",
+            active: false,
+        }, {
+            name: "Indisponible",
+            active: false,
+        },
 
+    ]
+}]
+
+export const CURRENT_USER_FILTERS_MODE = {
+    all : "Tous",
+    available : "Disponible",
+    expired : "Expiré",
+    unavailable : "Indisponible",
+}
+
+export const OFFER_CARD_FILTERS_MODE = {
+    accountType: {
+        all: "Tous",
+        client: "Client",
+        entreprise: "Entreprise",
+        camionneur: "Camionneur",
+    },
+    postDate: {
+        all: "Tous",
+        today: "Aujourd'hui",
+        recent: "Récente",
+        old: "Ancienne",
+    },
+};
 
 
 export const OFFER_CARD_FILTERS_TITLES = {
-  accountType: "Type de compte",
-  postDate: "Date de publication",
+    accountType: "Type de compte",
+    postDate: "Date de publication",
 };
 
 export const BREAKPOINTS = {
-  mobile: "767",
+    mobile: "767",
 };
 
 
-
 export const USERS_FILTERS_DATAS = [
-  {
-    name: "Suivi(s)",
-    active: true,
-  },
-  {
-    name: "Suggestion(s)",
-    active: false,
-  },
+    {
+        name: "Suivi(s)",
+        active: true,
+    },
+    {
+        name: "Suggestion(s)",
+        active: false,
+    },
 ];
 
 export const USERS_FILTERS = {
-  follower: "Suivi(s)",
-  suggestion: "Suggestion(s)",
+    follower: "Suivi(s)",
+    suggestion: "Suggestion(s)",
 };

@@ -1,5 +1,10 @@
 import {createContext, useContext, useState} from "react";
-import {OFFER_CARD_FILTERS_MODE, OFFER_CARD_FILTERS_TITLES, SERVERLINK} from "../constants/index.js";
+import {
+    CURRENT_USER_FILTERS_MODE,
+    OFFER_CARD_FILTERS_MODE,
+    OFFER_CARD_FILTERS_TITLES,
+    SERVERLINK
+} from "../constants/index.js";
 import axios from "axios";
 import {useAuth} from "./AuthProvider.jsx";
 
@@ -30,7 +35,7 @@ const OfferProvider = ({children}) => {
     };
     const getCurrentUserOffers = async (userId, offerId = null) => {
         const response = await axios.get(
-            `${SERVERLINK}/api/offres/allofferforuser/${!userId ? "" : userId}${ offerId ? "/"+ offerId: ""}`,
+            `${SERVERLINK}/api/offres/allofferforuser/${!userId ? "" : userId}${offerId ? "/" + offerId : ""}`,
             {
                 headers: {token},
             }
@@ -138,7 +143,7 @@ const OfferProvider = ({children}) => {
             switch (accountTypeFilter.activeFilter) {
                 case accountTypeFilterMode.client: {
                     filteredResult = filteredResult.filter(
-                        ({ accounttype }) =>
+                        ({accounttype}) =>
                             accounttype?.toLowerCase() ===
                             accountTypeFilterMode.client?.toLowerCase()
                     );
@@ -146,7 +151,7 @@ const OfferProvider = ({children}) => {
                 }
                 case accountTypeFilterMode.entreprise: {
                     filteredResult = filteredResult.filter(
-                        ({ accounttype }) =>
+                        ({accounttype}) =>
                             accounttype.toLowerCase() ===
                             accountTypeFilterMode.entreprise?.toLowerCase()
                     );
@@ -155,8 +160,8 @@ const OfferProvider = ({children}) => {
                 case accountTypeFilterMode.camionneur : {
                     filteredResult = filteredResult.filter(
                         ({accounttype}) =>
-                        accounttype?.toLowerCase() ===
-                        accountTypeFilterMode.camionneur?.toLowerCase()
+                            accounttype?.toLowerCase() ===
+                            accountTypeFilterMode.camionneur?.toLowerCase()
                     );
                     break;
                 }
@@ -170,7 +175,7 @@ const OfferProvider = ({children}) => {
 
             switch (postDateFilter.activeFilter) {
                 case postDateFilterMode.today: {
-                    filteredResult = filteredResult.length > 0 && filteredResult.filter(({ publicationdate }) => {
+                    filteredResult = filteredResult.length > 0 && filteredResult.filter(({publicationdate}) => {
                         const postDate = new Date(publicationdate);
                         const today = new Date();
                         return (
@@ -212,26 +217,59 @@ const OfferProvider = ({children}) => {
         }
 
         filteredResult = filteredResult.length > 0 && filteredResult.filter(
-            ({ accounttype, capacity, firstname, lastname, title, description, depart }) => {
+            ({accounttype, capacity, firstname, lastname, title, description, depart}) => {
                 if (!search) return true;
-                
+
                 return (
                     accounttype?.toLowerCase()?.includes(search?.toLowerCase()) ||
                     capacity?.toLowerCase()?.includes(search?.toLowerCase()) ||
                     firstname?.toLowerCase()?.includes(search?.toLowerCase()) ||
                     lastname?.toLowerCase()?.includes(search?.toLowerCase()) ||
                     title?.toLowerCase()?.includes(search?.toLowerCase()) ||
-                    description?.toLowerCase()?.includes(search?.toLowerCase())||
+                    description?.toLowerCase()?.includes(search?.toLowerCase()) ||
                     depart?.toLowerCase()?.includes(search?.toLowerCase())
                 );
             }
         );
         return filteredResult;
     };
-    
+
+    const filterCurrentUserOffers = (offers) => {
+        const filterModes = JSON?.parse(localStorage.getItem("currentUserOfferFilter"));
+
+        return offers.filter(offer => {
+            const scheduledDate = new Date(offer.scheduleddate)
+            const currentDate = new Date()
+
+            // Reset time parts to zero to only compare dates
+            const scheduledDateOnly = new Date(
+                scheduledDate.getFullYear(),
+                scheduledDate.getMonth(),
+                scheduledDate.getDate(),
+            )
+            const currentDateOnly = new Date(
+                currentDate.getFullYear(),
+                currentDate.getMonth(),
+                currentDate.getDate(),
+            )
+
+            switch (filterModes[0].activeFilter) {
+                case CURRENT_USER_FILTERS_MODE.available :
+                    return offer.dispo === true;
+                case  CURRENT_USER_FILTERS_MODE.unavailable :
+                    return offer.dispo === false
+                case CURRENT_USER_FILTERS_MODE.expired :
+                    return scheduledDateOnly < currentDateOnly
+                default :
+                    return true;
+            }
+        });
+    }
+
     return (
         <OfferContext.Provider
             value={{
+                filterCurrentUserOffers,
                 filterOffers,
                 offerLoading,
                 offers,

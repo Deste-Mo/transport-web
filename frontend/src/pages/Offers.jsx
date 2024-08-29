@@ -66,7 +66,7 @@ const Offers = () => {
               value={search}
               placeholder="Rechercher une offre"
               setValue={setSearch}
-              onFilter={() =>     setFilteredOffers(filterOffers(search, suggestedOffers))
+              onFilter={() =>  setFilteredOffers(filterOffers(search, suggestedOffers))
               }
             />
           )

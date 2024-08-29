@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import PropTypes from "prop-types";
 import {motion} from "framer-motion";
 import ExpandableSearchBar from "../ui/ExpandableSearchBar";
-import Filter from "../ui/Filter";
+import FilterBox from "../ui/FilterBox";
 
 const SearchFilter = ({
                           filters = [{}],
@@ -16,7 +16,7 @@ const SearchFilter = ({
                           variant,
                           value,
                           onFilter,
-                          onSearchIconClicked
+                          onSearchIconClicked,
                       }) => {
     const [filterVisible, setFilterVisible] = useState(false);
     const selectRef = useRef(null);
@@ -46,13 +46,13 @@ const SearchFilter = ({
                 filter
                 onSearch={onSearchIconClicked}
                 block={block}
-                
+
             />
             <motion.div
                 animate={
                     filterVisible
-                        ? {opacity: 1, pointerEvents: "auto", scale : 1}
-                        : {opacity: 0, pointerEvents: "none", scale : 0.9}
+                        ? {opacity: 1, pointerEvents: "auto", scale: 1}
+                        : {opacity: 0, pointerEvents: "none", scale: 0.9}
                 }
                 transition={{
                     duration: 0.2,
@@ -61,7 +61,7 @@ const SearchFilter = ({
                 className="fixed top-[64px] right-2 z-40"
             >
                 <div ref={selectRef} className="">
-                    <Filter
+                    <FilterBox
                         filters={filters}
                         onClose={() => setFilterVisible(false)}
                         onFilter={onFilter}

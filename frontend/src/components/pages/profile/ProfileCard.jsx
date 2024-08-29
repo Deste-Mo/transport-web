@@ -1,13 +1,11 @@
 import {useNavigate} from "react-router-dom";
-import {useApp} from "../../../context/AppProvider";
 import {useEffect, useState} from "react";
 import Button from "../../ui/Button";
-import ProfileCardLoading from "../../loader/ProfileCardLoading";
 import {useUser} from "../../../context/UserProvider.jsx";
 import {useAuth} from "../../../context/AuthProvider.jsx";
-import { SERVERLINK, TOAST_TYPE } from "../../../constants/index.js";
-import { useAnimation } from "../../../context/AnimationProvider.jsx";
-import { useSocketContext } from "../../../context/SocketContext.jsx";
+import {useAnimation} from "../../../context/AnimationProvider.jsx";
+import {useSocketContext} from "../../../context/SocketContext.jsx";
+import Icon from "../../ui/Icon.jsx";
 
 const ProfileCard = ({
                          id,
@@ -23,12 +21,12 @@ const ProfileCard = ({
                      }) => {
     const navigate = useNavigate();
 
-    const { followUser, unFollowUsers, friends, handleSendEmailConf } = useUser();
-    const { personalInformation, profileInfo, token } = useAuth();
+    const {followUser, unFollowUsers, friends, handleSendEmailConf} = useUser();
+    const {personalInformation, profileInfo, token} = useAuth();
     const [loading, setLoading] = useState(true);
     const [isFriend, setIsFriend] = useState(false);
 
-    const { socket } = useSocketContext();
+    const {socket} = useSocketContext();
 
     const {setMessagePopup} = useAnimation();
 
@@ -42,6 +40,7 @@ const ProfileCard = ({
             className="flex flex-col gap-6 rounded-xl shadow-sm border text-black-100 dark:text-white-100 border-black-0 p-4 bg-white-100 dark:bg-black-100 dark:border-none w-full">
             <div className="flex justify-center items-start">
                 <i className="disabled:bi-0-circle"></i>
+
                 <div className="flex flex-col items-center justify-center gap-4">
                     <img
                         src={image}
@@ -55,7 +54,7 @@ const ProfileCard = ({
                         </span>
                     </div>
                 </div>
-                {/*<i className="bi bi-three-dots-vertical"></i>*/}
+                {/*<Icon size="sm" variant="ghost" icon="bi bi-three-dots-vertical"/>*/}
             </div>
             <div
                 className={`flex w-full text-base text-black-100 
@@ -79,35 +78,35 @@ const ProfileCard = ({
             </div>
 
             {forCurrentUser ? (
-                <>
-                    <Button
-                        block
-                        size="md"
-                        icon="bi bi-pencil"
-                        onClick={() => navigate(`/profile/${id}/edit`)}
-                    >
-                        Modifier les informations
-                    </Button>
-                    <div className="flex gap-2">
-                    <Button
-                        block
-                        size="md"
-                        icon="bi bi-pencil"
-                        onClick={() => navigate(`/abonnement`)}
-                    >
-                        S'Abonner
-                    </Button>
+                    <div className="flex gap-2 max-[1320px]:flex-col">
                         <Button
                             block
                             size="md"
-                            icon="bi bi-plus-lg"
-                            onClick={() => navigate(`/profile/${id}/newOffer`)}
+                            icon="bi bi-pencil"
+                            onClick={() => navigate(`/profile/${id}/edit`)}
                         >
-                            Publier
+                            Modifier les informations
                         </Button>
-                    
+                        <div className="flex gap-2">
+                            <Button
+                                block
+                                size="md"
+                                icon="bi bi-plus-lg"
+                                onClick={() => navigate(`/profile/${id}/newOffer`)}
+                            >
+                                Publier
+                            </Button>
+                            <Button
+                                block
+                                size="md"
+                                icon="bi bi-wallet"
+                                onClick={() => navigate(`/abonnement`)}
+                            >
+                                S'abonner
+                            </Button>
+
+                        </div>
                     </div>
-                </>
                 ) :
                 isFriend ? (
                         <Button
@@ -115,7 +114,7 @@ const ProfileCard = ({
                             variant="danger"
                             size="md"
                             icon="bi bi-dash"
-                        onClick={() => unFollowUsers(profileInfo.id, id)}
+                            onClick={() => unFollowUsers(profileInfo.id, id)}
                         >
                             Retirer
                         </Button>

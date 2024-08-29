@@ -56,7 +56,7 @@ const ExpandableSearchBar = ({
       {expand && filter && (
         <Icon
           onClick={onFilterClick}
-          icon="bi bi-filter-circle"
+          icon="bi bi-funnel-fill"
           size="sm"
           variant="secondary"
         />
