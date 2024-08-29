@@ -1,8 +1,6 @@
 import {lazy, useEffect, useState} from "react";
 
-import {useAuth} from "../context/AuthProvider.jsx";
 import {SubHeader} from "../components/pages/SubHeader.jsx";
-import {useApp} from "../context/AppProvider.jsx";
 import {
     SERVERLINK,
     USERS_FILTERS,
@@ -49,12 +47,13 @@ const Friends = () => {
     useEffect(() => {
         getUsers();
         getFriends();
-        updateActiveUserFilters(activeUserFilter)
+        updateActiveUserFilters(activeUserFilter);
+        setFilteredUser(filterUsers(search, friends, users));
     }, []);
     
     useEffect(() => {
         setFilteredUser(filterUsers(search, friends, users));
-    }, [search])
+    }, [search, users, friends]);
     
     return (
         <motion.section
