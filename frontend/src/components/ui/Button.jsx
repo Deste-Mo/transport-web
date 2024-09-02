@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-
 import {  defaultTransition } from "../../styles/globals";
 import globalButtonVariants from "../../styles/globals.button";
 import DefaultLoader from "../loader/DefaultLoader.jsx";

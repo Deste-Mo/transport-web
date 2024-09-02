@@ -190,7 +190,7 @@ const Profile = ({ profileImage, className }) => {
         className="flex size-14 max-md:size-10 cursor-pointer items-center justify-center rounded-full shadow-xl bg-black-40"
         onClick={() => setTogglePopup((prev) => !prev)}
       >
-        <img src={profileImage} alt="" className="size-full rounded-full " />
+        <img src={profileImage} alt="" className="size-full rounded-full object-cover" />
       </div>
       {/*{togglePopup && <ProfilePopup className="fixed top-[86px] right-10" />}*/}
       <TemplatePopup setPopupVisible={setTogglePopup} popupVisible={togglePopup} className="fixed top-[86px] right-10" hideOnOutsideClick={false}>
@@ -199,7 +199,7 @@ const Profile = ({ profileImage, className }) => {
               setTogglePopup(false);
               navigate(`/profile/${personalInformation.id}`);
             }}
-            name="Profile"
+            name="Profil"
             icon="bi bi-person"
           />
           <OptionItem

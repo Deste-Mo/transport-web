@@ -26,9 +26,6 @@ const ProfileCard = ({
     const [loading, setLoading] = useState(true);
     const [isFriend, setIsFriend] = useState(false);
 
-    const {socket} = useSocketContext();
-
-    const {setMessagePopup} = useAnimation();
 
     useEffect(() => {
         setTimeout(() => setLoading(false), 1000);
@@ -42,11 +39,11 @@ const ProfileCard = ({
                 <i className="disabled:bi-0-circle"></i>
 
                 <div className="flex flex-col items-center justify-center gap-4">
-                    <img
+                    <a href={image} target="_blank"><img
                         src={image}
                         alt=""
-                        className="size-[84px] bg-black-20 rounded-full"
-                    />
+                        className="size-[256px] max-md:size-[128px] object-cover bg-black-20 rounded-full"
+                    /></a>
                     <div className="flex flex-col gap-1 items-center justify-center text-subtitle-2">
                         <span>{name}</span>
                         <span className="text-black-60 dark:text-white-100 dark:font-sm text-small-1 font-light">

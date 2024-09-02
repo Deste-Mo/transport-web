@@ -3,7 +3,7 @@ import SavePublication from "./SavePublication";
 
 export const Offer = ({className, fullName, accountType, postedTime, title, price}) => {
     return (
-        <div className={`"flex flex-col gap-4 px-4 py-8 bg-white-100 rounded-lg ${className}`}>
+        <div className={`flex flex-col gap-4 px-4 py-8 bg-white-100 rounded-lg ${className}`}>
             <div className="flex flex-col gap-2 ">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-4">

@@ -33,7 +33,7 @@ const ProfileLeft = ({
                         src={image}
                         alt=""
                         className={`size-[84px]
-            bg-black-20 rounded-full`}
+            bg-black-20 object-cover rounded-full`}
                     />
                     <div className="flex flex-col gap-1 items-center justify-center ">
                         <p className="text-lead text-black-100 dark:text-white-100">{name}</p>
