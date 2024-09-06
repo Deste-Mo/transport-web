@@ -98,7 +98,7 @@ export const deleteMessages = async (messageId, conversationId, myId, sentByCurr
         lastSenderId = await senderConv
     }
 
-    const answer = await pool.query(update, [conversationId, lastSenderId, message.byme ? message.delmessage : message.content]);
+    const answer = await pool.query(update, [conversationId, lastSenderId, message.bysender ? message.delmessage : message.content]);
 
     return rows;
 }

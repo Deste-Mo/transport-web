@@ -26,24 +26,32 @@ const ProfileCard = ({
     const [loading, setLoading] = useState(true);
     const [isFriend, setIsFriend] = useState(false);
 
+    const { socket } = useSocketContext();
+
+    const {setMessagePopup} = useAnimation();
 
     useEffect(() => {
         setTimeout(() => setLoading(false), 1000);
         setIsFriend(friends.length > 0 ? friends.find(friend => friend.userid === id) : false);
     }, [friends, id])
 
+    const newOffer = () => {
+        console.log(localStorage.getItem('offer'))
+        localStorage.getItem('offer') && localStorage.removeItem('offer');
+        navigate(`/profile/${id}/newOffer`);
+    }
+
     return (
         <div
             className="flex flex-col gap-6 rounded-xl shadow-sm border text-black-100 dark:text-white-100 border-black-0 p-4 bg-white-100 dark:bg-black-100 dark:border-none w-full">
             <div className="flex justify-center items-start">
                 <i className="disabled:bi-0-circle"></i>
-
                 <div className="flex flex-col items-center justify-center gap-4">
-                    <a href={image} target="_blank"><img
+                    <img
                         src={image}
                         alt=""
-                        className="size-[256px] max-md:size-[128px] object-cover bg-black-20 rounded-full"
-                    /></a>
+                        className="max-md:size-[84px] size-[184px] bg-black-20 rounded-full object-contain"
+                    />
                     <div className="flex flex-col gap-1 items-center justify-center text-subtitle-2">
                         <span>{name}</span>
                         <span className="text-black-60 dark:text-white-100 dark:font-sm text-small-1 font-light">
@@ -51,7 +59,7 @@ const ProfileCard = ({
                         </span>
                     </div>
                 </div>
-                {/*<Icon size="sm" variant="ghost" icon="bi bi-three-dots-vertical"/>*/}
+                {/*<i className="bi bi-three-dots-vertical"></i>*/}
             </div>
             <div
                 className={`flex w-full text-base text-black-100 
@@ -111,7 +119,7 @@ const ProfileCard = ({
                             variant="danger"
                             size="md"
                             icon="bi bi-dash"
-                            onClick={() => unFollowUsers(profileInfo.id, id)}
+                        onClick={() => unFollowUsers(profileInfo.id, id)}
                         >
                             Retirer
                         </Button>

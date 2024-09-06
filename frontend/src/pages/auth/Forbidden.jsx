@@ -15,7 +15,7 @@ const Forbidden = () => {
         onClick={() => navigate("/")}
         className="cursor-pointer text-lead text-primary-100 text-center"
       >
-        Return Back
+        Retourner à l'accueil
       </p>
     </section>
   );

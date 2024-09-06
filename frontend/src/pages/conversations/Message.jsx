@@ -36,7 +36,7 @@ const Messages = () => {
   const [messInput, setMessInput] = useState("");
   const endOfMessagesRef = useRef(null);
   const { ActiveUsers } = useSocketContext();
-  const [answerMess, setAnswer] = useState(null);
+  const [answerMess, setAnswer] = useState('');
   const { handleInputChange, checkFieldError, handleError } = useForm();
   const { socket } = useSocketContext();
   const { setHideMobileNavigation, hideMobileNavigation } = useAnimation();
@@ -217,23 +217,107 @@ const Messages = () => {
                     : "justify-end"
                     }`}
                 >
-                  <Message
-                    conversationId={message.idconversation}
-                    messageId={message.messageid}
-                    handleShown={getUserMessages}
-                    fileContent={message.filecontent}
-                    formData={formData}
-                    setAnswer={setFormData}
-                    refmessage={
-                      message.receiverid === userToChat.id
-                        ? message.refmessage
-                        : undefined
-                    }
-                    message={message}
-                    sentDate={message.sentdate}
-                    receiverid={message.receiverid}
-                    sentByCurrentUser={message.receiverid === userToChat.id}
-                  />
+                  {
+                    (message.bysender === 1 && message.byreceiver < 1)
+                      ?
+                      <Message
+                        conversationId={message.idconversation}
+                        messageId={message.messageid}
+                        handleShown={getUserMessages}
+                        fileContent={message.filecontent}
+                        formData={formData}
+                        setAnswer={setFormData}
+                        refmessage={message.refmessage}
+                        message={message}
+                        sentDate={message.sentdate}
+                        receiverid={message.receiverid}
+                        sentByCurrentUser={message.receiverid === userToChat.id}
+                        otherId={userToChat.id}
+                      />
+                      :
+                      // Supprimer pour le receveur
+                      (message.bysender > 0 && message.byreceiver > 0)
+                        ?
+                        !(message.receiverid === userToChat.id)
+                          ?
+                          null
+                          :
+                          (message.bysender > 1 && (message.receiverid === userToChat.id))
+                            ?
+                            null
+                            :
+                            <Message
+                              conversationId={message.idconversation}
+                              messageId={message.messageid}
+                              handleShown={getUserMessages}
+                              fileContent={message.filecontent}
+                              formData={formData}
+                              setAnswer={setFormData}
+                              refmessage={message.refmessage}
+                              message={message}
+                              sentDate={message.sentdate}
+                              receiverid={message.receiverid}
+                              sentByCurrentUser={message.receiverid === userToChat.id}
+                              otherId={userToChat.id}
+                            />
+                        :
+                        (message.bysender > 1 && message.byreceiver < 1)
+                          ?
+                          (message.receiverid === userToChat.id)
+                            ?
+                            null
+                            :
+                            <Message
+                              conversationId={message.idconversation}
+                              messageId={message.messageid}
+                              handleShown={getUserMessages}
+                              fileContent={message.filecontent}
+                              formData={formData}
+                              setAnswer={setFormData}
+                              refmessage={message.refmessage}
+                              message={message}
+                              sentDate={message.sentdate}
+                              receiverid={message.receiverid}
+                              sentByCurrentUser={message.receiverid === userToChat.id}
+                              otherId={userToChat.id}
+                            />
+                          :
+                          (message.bysender < 1 && message.byreceiver > 0)
+                            ?
+                            !(message.receiverid === userToChat.id)
+                              ?
+                              null
+                              :
+                              <Message
+                                conversationId={message.idconversation}
+                                messageId={message.messageid}
+                                handleShown={getUserMessages}
+                                fileContent={message.filecontent}
+                                formData={formData}
+                                setAnswer={setFormData}
+                                refmessage={message.refmessage}
+                                message={message}
+                                sentDate={message.sentdate}
+                                receiverid={message.receiverid}
+                                sentByCurrentUser={message.receiverid === userToChat.id}
+                                otherId={userToChat.id}
+                              />
+                            :
+                            <Message
+                              conversationId={message.idconversation}
+                              messageId={message.messageid}
+                              handleShown={getUserMessages}
+                              fileContent={message.filecontent}
+                              formData={formData}
+                              setAnswer={setFormData}
+                              refmessage={message.refmessage}
+                              message={message}
+                              sentDate={message.sentdate}
+                              receiverid={message.receiverid}
+                              sentByCurrentUser={message.receiverid === userToChat.id}
+                              otherId={userToChat.id}
+                            />
+                  }
                 </div>
               </>
             ))
@@ -255,13 +339,15 @@ const Messages = () => {
               <p className="text-base text-black-100 dark:text-white-100">
                 {userToChat.fullName}
               </p>
-              <Icon icon="bi bi-x-circle" size="md" variant="ghost" />
-            </div>
-            <div className="max-w-[80%] break-words text-small-1 flex items-center justify-start gap-2 rounded-xl text-black-60 dark:text-white-60 p-1">
               <Icon
                 onClick={() => {
                   // TODO : Close reply message
+                  setFormData({ ...formData, ["refMessage"]: '' })
                 }}
+                icon="bi bi-x-circle" size="md" variant="ghost" />
+            </div>
+            <div className="max-w-[80%] break-words text-small-1 flex items-center justify-start gap-2 rounded-xl text-black-60 dark:text-white-60 p-1">
+              <Icon
                 variant="ghost"
                 icon="bi bi-reply-fill"
                 className="rotate-180"
@@ -323,19 +409,40 @@ const Message = ({
   formData,
   refmessage,
   fileContent,
-  handleShown,
+  otherId,
 }) => {
   const { timeSince } = useApp();
   const { token } = useAuth();
-  const { setConfirmMessagePopup, getUserMessages } = useApp();
+  const { setConfirmMessagePopup, getUserMessages, getUnreadMessageCount, countUnread } = useApp();
   const [messagePopupVisible, setMessagePopuVisible] = useState(false);
+  const endOfMessagesRef = useRef(null);
+
 
   const answerMessage = () => {
-    setAnswer({ ...formData, ["refMessage"]: message });
+    setAnswer({ ...formData, ["refMessage"]: message.content });
   };
+
   const handleDelete = async () => {
     const response = await fetch(
       SERVERLINK + "/api/messages/delete/" + messageId + "/" + conversationId,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+        body: JSON.stringify({ sentByCurrentUser, otherId })
+      }
+    );
+
+    const answer = await response.json();
+
+    await getUserMessages(endOfMessagesRef);
+  };
+
+  const handleDeleteForMe = async () => {
+    const response = await fetch(
+      SERVERLINK + "/api/messages/deleteforme/" + messageId,
       {
         method: "POST",
         headers: {
@@ -348,8 +455,8 @@ const Message = ({
 
     const answer = await response.json();
 
-    getUserMessages();
-  };
+    await getUserMessages(endOfMessagesRef);
+  }
 
   return (
     <div
@@ -374,14 +481,25 @@ const Message = ({
             }`}
         >
           <div>
-            <OptionItem
-              setPopupVisible={setMessagePopuVisible}
-              name="Supprimer"
-              icon="bi bi-trash"
-              inverseIcon
-              onClick={handleDelete}
-            />
-            {!sentByCurrentUser && (
+            {
+              message.bysender < 1 ?
+                <OptionItem
+                  setPopupVisible={setMessagePopuVisible}
+                  name="Supprimer"
+                  icon="bi bi-trash"
+                  inverseIcon
+                  onClick={handleDelete}
+                />
+                :
+                <OptionItem
+                  setPopupVisible={setMessagePopuVisible}
+                  name="Supprimer pour moi"
+                  icon="bi bi-trash"
+                  inverseIcon
+                  onClick={handleDeleteForMe}
+                />
+            }
+            {(!sentByCurrentUser && message.bysender < 1) && (
               <OptionItem
                 name="Répondre"
                 icon="bi bi-reply-fill"
@@ -394,7 +512,7 @@ const Message = ({
         </TemplatePopup>
         <div className="flex flex-col gap-2 w-full">
           {/* FileMessages */}
-          {((!message.byme && !message.delmessage) && fileContent) && (
+          {(fileContent && message.bysender < 1) && (
             <FileMessage
               fileContent={fileContent}
               refMessage={refmessage}
@@ -403,17 +521,17 @@ const Message = ({
           )}
           {/* TextMessages */}
           {
-            ((!message.byme && !sentByCurrentUser) && message.delmessage) ?
+            ((!message.bysender && !sentByCurrentUser) && message.delmessage)
+              ?
               <TextMessage
-                // refMessage={refmessage}
                 sentByCurrentUser={sentByCurrentUser}
                 message={message.delmessage}
                 isDel
               />
+              // null
               :
-              (message.byme) ?
+              (message.bysender > 0) ?
                 <TextMessage
-                  // refMessage={refmessage}
                   sentByCurrentUser={sentByCurrentUser}
                   message={message.delmessage}
                   isDel
@@ -421,33 +539,63 @@ const Message = ({
                 :
                 (!message.content && fileContent) ? null : (
                   <TextMessage
-                    refMessage={refmessage}
+                    refMessage={(!fileContent) && refmessage}
                     sentByCurrentUser={sentByCurrentUser}
                     message={message.content}
                   />
-                )}
+                )
+          }
         </div>
-        {(!message.byme && !message.delmessage) && (
-          <div className="flex items-center gap-2">
-            {
-              (!sentByCurrentUser) &&
+        {
+
+          (message.bysender > 1 && message.byreceiver < 1)
+            ?
+            !sentByCurrentUser
+              ?
               <Icon
-                onClick={answerMessage}
+                onClick={() => setMessagePopuVisible((prev) => !prev)}
                 variant="ghost"
-                icon="bi bi-reply-fill"
-                className="-rotate-180"
-                size="md"
+                icon="bi bi-three-dots"
+                className="rotate-90"
+                size="sm"
               />
-            }
-            <Icon
-              onClick={() => setMessagePopuVisible((prev) => !prev)}
-              variant="ghost"
-              icon="bi bi-three-dots"
-              className="rotate-90"
-              size="sm"
-            />
-          </div>
-        )}
+              :
+              null
+            :
+            (message.bysender < 2 && message.byreceiver > 0)
+              ?
+              sentByCurrentUser
+                ?
+                <Icon
+                  onClick={() => setMessagePopuVisible((prev) => !prev)}
+                  variant="ghost"
+                  icon="bi bi-three-dots"
+                  className="rotate-90"
+                  size="sm"
+                />
+                :
+                null
+              :
+              <div className="flex items-center gap-2">
+                {
+                  !(message.bysender > 0) &&
+                  <Icon
+                    onClick={answerMessage}
+                    variant="ghost"
+                    icon="bi bi-reply-fill"
+                    className="-rotate-180"
+                    size="md"
+                  />
+                }
+                <Icon
+                  onClick={() => setMessagePopuVisible((prev) => !prev)}
+                  variant="ghost"
+                  icon="bi bi-three-dots"
+                  className="rotate-90"
+                  size="sm"
+                />
+              </div>
+        }
       </div>
     </div>
   );

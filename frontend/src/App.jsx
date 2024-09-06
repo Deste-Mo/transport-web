@@ -35,6 +35,7 @@ import SavedOffers from "./pages/offer/SavedOffers.jsx";
 import WaitLink from "./pages/auth/forgotPassword/WaitLink.jsx";
 import SubscriptionPage from "./pages/abonement/SubscriptionPage.jsx";
 import SubscriptionSecurity from "./pages/abonement/SubscriptionSecurity.jsx";
+import EditOffer from "./pages/offer/EditOffer.jsx";
 
 // TODO :
 /*
@@ -85,6 +86,7 @@ export default function App() {
                 <Route element={<ProtectedProfileLayout/>}>
                     <Route path="profile/:id/newOffer" element={<NewOffer />} />
                     <Route path="profile/:id/edit/" element={<ProfileEdit />} />
+                    <Route path="profile/:id/editOffer" element={<EditOffer />} />
                 </Route>
                   
               </Route>

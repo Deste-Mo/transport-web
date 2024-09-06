@@ -36,12 +36,7 @@ const NewOffer = () => {
     const year = today.getFullYear()
     return `${year}-${month}-${day}`
   }
-  //   useEffect(() => {
 
-  //     console.log(getTodayDate());
-  //     console.log("today", todaydate);
-
-  // }, []);
 
   const formatDateForInput = (dateString) => {
     const date = new Date(dateString)
@@ -60,29 +55,11 @@ const NewOffer = () => {
     capacity: '',
     scheduledDate: todaydate,
   })
-
+  
   useEffect(() => {
-    // updateOffer.scheduleddate && console.log(updateOffer.scheduleddate)
-    updateOffer &&
-      setFormData({
-        imgUrl: updateOffer.imgurl || '',
-        title:
-          !updateOffer.title ||
-          updateOffer.title === 'undefined' ||
-          updateOffer.title === undefined
-            ? 'Transport de marchandise'
-            : updateOffer.title,
-        description: updateOffer.description,
-        depart: updateOffer.depart,
-        destination: updateOffer.dest,
-        capacity: updateOffer.capacity,
-        scheduledDate: updateOffer.scheduleddate
-          ? formatDateForInput(updateOffer.scheduleddate)
-          : getTodayDate(),
-
-      })
-     
-  }, [updateOffer])
+    setShowBackIcon(true);
+  }, [])
+  
 
   const { token, personalInformation } = useAuth()
 
@@ -389,36 +366,13 @@ const NewOffer = () => {
                 placeholder='ex : 2 tonnes'
                 block
               />
-
-              {/* <SelectInput
-                titleIcon="bi bi-box-seam"
-                className="w-full"
-                name="mesure"               
-                variant="fill"                
-                options={titreData.map((titre) => ({
-                  option: titre,
-                }))}              
-               
-                onchange={(e) => handleInputChange(setFormData, e)}
-                block
-                value={titreData[0]}
-              /> */}
             </div>
 
            
           </div>
         </div>
         <div className="flex  gap-4 w-full">
-          {localStorage.getItem('offer') ? (
-            <Button
-              type="button"
-              onClick={handleUpdateOffer}
-              block
-              children="Modifier"
-            />
-          ) : (
             <Button type="submit" block children="Publier" />
-          )}
           <Button
             type="button"
             onClick={reset}

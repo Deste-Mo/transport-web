@@ -1,6 +1,6 @@
 /* eslint-disable react/no-children-prop */
 /* eslint-disable react/prop-types */
-import { useNavigate } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import ProfileImage from "../../../assets/images/OIP.jpg";
 import React, { useEffect, useRef, useState } from "react";
 import Button from "../../ui/Button.jsx";
@@ -27,8 +27,9 @@ const OfferCard = ({
 }) => {
   const [detailed, setDetailed] = useState(false);
   const [popupVisible, setPopupVisible] = useState(false);
+  const {id} = useParams();
   const { timeSince } = useApp();
-  const { saveOffer, retireOffer, getSavedOffers } = useOffer();
+  const { saveOffer, retireOffer, getSavedOffers, offer } = useOffer();
   const navigate = useNavigate();
   const image = SERVERLINK + "/" + sug?.profileimage;
   const offerImage = SERVERLINK + "/" + sug?.imgurl;
@@ -93,6 +94,7 @@ const OfferCard = ({
     // TODO :
     getOfferById(sug.offerid);
     localStorage.setItem("offer", JSON.stringify(sug));
+    navigate(`profile/${id}/editOffer`)
     // - Editing the post
     setPopupVisible(false);
   };

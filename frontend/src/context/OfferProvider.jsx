@@ -35,7 +35,7 @@ const OfferProvider = ({children}) => {
     };
     const getCurrentUserOffers = async (userId, offerId = null) => {
         const response = await axios.get(
-            `${SERVERLINK}/api/offres/allofferforuser/${!userId ? "" : userId}${offerId ? "/" + offerId : ""}`,
+            `${SERVERLINK}/api/offres/allofferforuser/${!userId ? "" : userId}${ offerId ? "/"+ offerId: ""}`,
             {
                 headers: {token},
             }
@@ -175,7 +175,7 @@ const OfferProvider = ({children}) => {
 
             switch (postDateFilter.activeFilter) {
                 case postDateFilterMode.today: {
-                    filteredResult = filteredResult.length > 0 && filteredResult.filter(({publicationdate}) => {
+                    filteredResult = filteredResult.length > 0 && filteredResult.filter(({ publicationdate }) => {
                         const postDate = new Date(publicationdate);
                         const today = new Date();
                         return (
@@ -217,7 +217,7 @@ const OfferProvider = ({children}) => {
         }
 
         filteredResult = filteredResult.length > 0 && filteredResult.filter(
-            ({accounttype, capacity, firstname, lastname, title, description, depart}) => {
+            ({ accounttype, capacity, firstname, lastname, title, description, depart }) => {
                 if (!search) return true;
 
                 return (
@@ -237,7 +237,8 @@ const OfferProvider = ({children}) => {
     const filterCurrentUserOffers = (offers) => {
         const filterModes = JSON?.parse(localStorage?.getItem("currentUserOfferFilter"));
 
-        return offers.filter(offer => {
+        if (offers.length > 0) 
+        return offers?.filter(offer => {
             const scheduledDate = new Date(offer.scheduleddate)
             const currentDate = new Date()
 

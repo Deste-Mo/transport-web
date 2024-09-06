@@ -1,4 +1,4 @@
-import {createContext, useContext, useState} from "react";
+import { createContext, useContext, useState } from "react";
 import {
     SERVERLINK,
     USERS_FILTERS,
@@ -12,8 +12,8 @@ import {useAnimation} from "./AnimationProvider.jsx";
 
 const FriendContext = createContext({});
 
-const UserProvider = ({children}) => {
-    const {token} = useAuth();
+const UserProvider = ({ children }) => {
+    const { token } = useAuth();
     const navigate = useNavigate();
 
     const [friends, setFriends] = useState([]);
@@ -28,7 +28,7 @@ const UserProvider = ({children}) => {
 
     const [subscriptionCards, setSubscriptionCards] = useState([]);
 
-    const {setMessagePopup} = useAnimation();
+    const { setMessagePopup } = useAnimation();
 
     const getFriends = async (userId) => {
         const response = await axios.get(
@@ -45,20 +45,20 @@ const UserProvider = ({children}) => {
     };
     const getUsers = async () => {
         const response = await axios.get(`${SERVERLINK}/api/messages/users`, {
-            headers: {token},
+            headers: { token },
         });
         setUsers(await response?.data?.allUsers);
     };
     const unFollowUsers = async (profileInfoId, id) => {
-        const response = await fetch(SERVERLINK + "/api/profile/unfollow/" + id, {
+        await fetch(SERVERLINK + "/api/profile/unfollow/" + id, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 token: token,
             },
         });
-        getFriends(profileInfoId);
-        getUsers();
+        await getFriends(profileInfoId);
+        await getUsers();
     };
     const goToUserProfile = (id) => {
         navigate(`/profile/${id}`);
@@ -66,7 +66,7 @@ const UserProvider = ({children}) => {
     const followUser = async (profileInfoId, id, me) => {
         const content = me.fullName + " Vous suit desormais.";
 
-        const response = await fetch(SERVERLINK + "/api/profile/follow/" + id, {
+        await fetch(SERVERLINK + "/api/profile/follow/" + id, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -86,8 +86,8 @@ const UserProvider = ({children}) => {
             }
         );
 
-        getFriends(profileInfoId);
-        getUsers();
+        await getFriends(profileInfoId);
+        await getUsers();
     };
 
     const updateActiveUserFilter = (filter) => {
