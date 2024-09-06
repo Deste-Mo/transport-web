@@ -77,7 +77,7 @@ const Messages = () => {
 
     return () => socket?.off("newMessage")
 
-  }, [socket, countUnread]);
+  }, [socket, countUnread, getUnreadMessageCount, getUserMessages]);
 
   useEffect(() => {
     getUserMessages(endOfMessagesRef);

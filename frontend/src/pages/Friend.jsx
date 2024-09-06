@@ -95,7 +95,7 @@ const Friends = () => {
                                 key={friend.userid}
                                 spec={friend.userid}
                                 account={friend.accounttype}
-                                name={friend.firstname + " " + friend.lastname}
+                                name={friend.firstname + " " + (friend.lastname? friend.lastname : '')}
                                 image={SERVERLINK + "/" + friend.profileimage}
                                 showMessageButton
                                 showRemoveFriendButton={activeUserFilter === USERS_FILTERS.follower}
@@ -113,7 +113,7 @@ const Friends = () => {
                                 className="w-full"
                                 spec={friend.userid}
                                 account={friend.accounttype}
-                                name={friend.firstname + " " + friend.lastname}
+                                name={friend.firstname + " " +( friend.lastname? friend.lastname : '')}
                                 image={SERVERLINK + "/" + friend.profileimage}
                                 showMessageButton
                                 showRemoveFriendButton={activeUserFilter === USERS_FILTERS.follower}
@@ -123,7 +123,7 @@ const Friends = () => {
                         </Suspense>
                     ))
                 ) : (
-                    <div className="nothing-box">{activeUserFilter === USERS_FILTERS.follower ? "Aucun ami" : "Aucune suggestion"}</div>
+                    <div className="nothing-box">{activeUserFilter === USERS_FILTERS.follower ? "Aucun suivi" : "Aucune suggestion"}</div>
                 )}
             </div>
         </motion.section>

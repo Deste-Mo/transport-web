@@ -3,6 +3,11 @@ import cors from "cors";
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 
+dotenv.config();
+
+const port = process.env.PORT || 3000;
+
+
 import authRoutes from './routes/authRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
@@ -12,12 +17,7 @@ import subscRoute from './routes/subscRoutes.js';
 
 import { app, io, server } from './socket/socket.js';
 
-dotenv.config();
-
-const port = process.env.PORT || 3000;
-
-
-const allowedOrigins = [process.env.FRONTEND_HOST || "http://localhost:5173"];
+const allowedOrigins = [process.env.FRONTEND_HOST || "http://192.168.1.108:5173"];
 const corsOptions = {
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {

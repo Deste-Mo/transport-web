@@ -38,7 +38,7 @@ export default ProfileDetails;
 
 const ProfileOffer = () => {
     const {profileInfo} = useAuth();
-    const {currentUserOffers, savedOffers,filterOffers } = useOffer();
+    const {currentUserOffers, savedOffers,filterOffers, getSavedOffers } = useOffer();
     const [search, setSearch] = useState("");
     const [filteredOffers, setFilteredOffers] = useState(currentUserOffers);
 
@@ -88,7 +88,7 @@ const ProfileOffer = () => {
                                 saved={
                                     savedOffers?.length > 0
                                         ? savedOffers.find(
-                                            (offer) => offer.offerid === currentUserOffers.offerid
+                                            (offer) => offer.offerid === currentUserOffer.offerid
                                         )
                                         : false
                                 }

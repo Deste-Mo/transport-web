@@ -6,7 +6,7 @@ import {useEffect, useState} from "react";
 import {
     ACCOUNT_TYPES,
     CIN_REGEX, CIN_REGEX_MESSAGE,
-    EMAIL_REGEX, EMAIL_REGEX_MESSAGE, LAST_NAME_REGEX_MESSAGE,
+    EMAIL_REGEX, EMAIL_REGEX_MESSAGE, LAST_NAME_REGEX, LAST_NAME_REGEX_MESSAGE,
     NAME_REGEX, NAME_REGEX_MESSAGE,
     NIF_STAT_REGEX, NIF_STAT_REGEX_MESSAGE,
     PHONE_REGEX, PHONE_REGEX_MESSAGE,
@@ -148,7 +148,7 @@ const RegisterIdentification = () => {
                                     onError={handleError(setErrorData)}
                                     onChange={(e) => handleInputChange(setInputs, e)}
                                     value={inputs.lastname}
-                                    pattern={NAME_REGEX}
+                                    pattern={LAST_NAME_REGEX}
                                     block
                                 />
                             )}

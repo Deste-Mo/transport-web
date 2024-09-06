@@ -145,7 +145,7 @@ const NewOffer = () => {
       })
       if (response.status === 200) {
         const content = ` ${personalInformation.fullName} vient de publier une Offre`
-        const offer = await response.json()
+        const { offer } = await response.json()
 
         const offerId = await offer.offerid
 

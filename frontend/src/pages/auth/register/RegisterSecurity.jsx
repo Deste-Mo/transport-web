@@ -76,11 +76,12 @@ const RegisterSecurity = () => {
             const data = await response.json();
 
             if (!data.error) {
-                alert("Inscription réussie !");
+                // alert("Inscription réussie !");
                 login(data.token);
+                setMessagePopup("Utilisateur créé avec success !", TOAST_TYPE.success);
                 return;
             }
-            setMessagePopup("Utilisateur créé avec success !", TOAST_TYPE.success);
+            setMessagePopup(data.error, TOAST_TYPE.error);
 
 
         } catch (e) {

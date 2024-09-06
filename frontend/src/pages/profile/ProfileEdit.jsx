@@ -11,14 +11,14 @@ import {
 } from '../../styles/components'
 import {SubHeader} from '../../components/pages/SubHeader'
 import {useAuth} from '../../context/AuthProvider'
-import {SERVERLINK} from '../../constants'
+import {SERVERLINK, TOAST_TYPE} from '../../constants'
 import { useAnimation } from '../../context/AnimationProvider'
 import { useNavigate, useNavigation } from 'react-router-dom'
 
 
 const ProfileEdit = ({onClick}) => {
     const {handleInputChange, checkFieldError, handleError} = useForm()
-    const {setShowBackIcon} = useAnimation();
+    const {setShowBackIcon, setMessagePopup} = useAnimation();
     const {personalInformation, token, getInformation} = useAuth()
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -75,7 +75,7 @@ const ProfileEdit = ({onClick}) => {
             setFormData({...formData, ["profileimage"]: null});
 
             if (!res.error) {
-                alert('Enregistrement réussi !');
+                setMessagePopup("Informations modifiés avec success !", TOAST_TYPE.success);
             }
         } catch (error) {
             console.error(error)

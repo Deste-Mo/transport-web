@@ -129,7 +129,7 @@ const DynamicLeftContent = ({ currentLocation }) => {
                   key={friend.userid}
                   spec={friend.userid}
                   account={friend.accounttype}
-                  name={friend.firstname + " " + friend.lastname}
+                  name={friend.firstname + " " + (friend.lastname? friend.lastname : '')}
                   image={SERVERLINK + "/" + friend.profileimage}
                 />
               ))

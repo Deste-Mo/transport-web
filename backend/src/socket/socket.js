@@ -8,7 +8,7 @@ const server = http.createServer(app); // initialisation d'un serveur socket ave
 
 const io = new Server(server, {
     cors: {
-        origin: process.env.FRONTEND_HOST || 'http://localhost:5173', // Pour la securité
+        origin: process.env.FRONTEND_HOST || 'http://192.168.1.108:5173', // Pour la securité
         methods: ["GET", "POST"]
     }
 })
