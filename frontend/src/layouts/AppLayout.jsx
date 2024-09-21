@@ -30,14 +30,11 @@ const AppLayout = () => {
     const {socket} = useSocketContext();
     const [width] = useWindowSize();
 
-    useEffect(() => {
+/*    useEffect(() => {
         setHideMobileNavigation(false);
-    }, []);
+    });*/
 
     useEffect(() => {
-
-        // handleFriends()
-
         socket?.on("newNotif", () => {
             getNotifications();
             getUnreadNotifications();
@@ -57,7 +54,7 @@ const AppLayout = () => {
 
     useEffect(() => {
         setIsMobile(width < 768);
-    }, [width]);
+    }, [width, setIsMobile]);
     
     return loading ? (
         <DefaultLoader/>

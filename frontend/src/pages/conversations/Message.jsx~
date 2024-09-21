@@ -120,6 +120,7 @@ const Messages = () => {
   }, [socket, countUnread, getUnreadMessageCount, getUserMessages]);
 
   useEffect(() => {
+    setHideMobileNavigation(true)
     getUserMessages(endOfMessagesRef);
     getUnreadMessageCount();
   }, [countUnread]);

@@ -17,9 +17,11 @@ const SearchFilter = ({
                           value,
                           onFilter,
                           onSearchIconClicked,
+    expanded
                       }) => {
     const [filterVisible, setFilterVisible] = useState(false);
     const selectRef = useRef(null);
+    
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (selectRef.current && !selectRef.current.contains(e.target))
@@ -29,11 +31,12 @@ const SearchFilter = ({
 
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+    
     return (
         <div
             className={` ${
                 block && "w-full"
-            } relative ${className}`}
+            }  ${className} `}
         >
             <ExpandableSearchBar
                 onFilterClick={() => setFilterVisible((prev) => !prev)}
@@ -44,6 +47,7 @@ const SearchFilter = ({
                 radious={radious}
                 size={size}
                 filter
+                expanded={expanded}
                 onSearch={onSearchIconClicked}
                 block={block}
 

@@ -37,13 +37,7 @@ const EditOffer = () => {
         const year = today.getFullYear()
         return `${year}-${month}-${day}`
     }
-    //   useEffect(() => {
-
-    //     console.log(getTodayDate());
-    //     console.log("today", todaydate);
-
-    // }, []);
-
+    
     const formatDateForInput = (dateString) => {
         const date = new Date(dateString)
         const year = date.getFullYear()

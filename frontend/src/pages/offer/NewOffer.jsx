@@ -36,8 +36,7 @@ const NewOffer = () => {
     const year = today.getFullYear()
     return `${year}-${month}-${day}`
   }
-
-
+  
   const formatDateForInput = (dateString) => {
     const date = new Date(dateString)
     const year = date.getFullYear()
@@ -45,6 +44,13 @@ const NewOffer = () => {
     const day = String(date.getDate()).padStart(2, '0')
     return `${year}-${month}-${day}`
   }
+
+  const { token, personalInformation } = useAuth()
+
+  const [file, setFile] = useState({
+    name: '',
+    path: '',
+  })
 
   const [formData, setFormData] = useState({
     imgUrl: '',
@@ -55,25 +61,16 @@ const NewOffer = () => {
     capacity: '',
     scheduledDate: todaydate,
   })
+
+  setShowBackIcon(true);
   
-  useEffect(() => {
-    setShowBackIcon(true);
-  }, [])
   
-
-  const { token, personalInformation } = useAuth()
-
-  const [file, setFile] = useState({
-    name: '',
-    path: '',
-  })
-
   useEffect(() => {
     const getOfferById = async () => {
       localStorage.getItem('offer') &&
         setUpdateOffer(await JSON.parse(localStorage.getItem('offer')))
     }
-    getOfferById()
+     getOfferById()
   }, [])
 
   const reset = () => {

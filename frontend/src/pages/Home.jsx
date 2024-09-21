@@ -19,7 +19,7 @@ const Home = () => {
     
     return (
         <motion.section className="flex flex-col items-center justify-center gap-6 w-full " variants={appVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <SubHeader name="Actualites" icon="bi bi-grid-fill" rightContent={<ExpandableSearchBar variant="fill" size="sm" radious="full" placeholder="Rechercher un offre"/>} />
+            <SubHeader name="Actualites" icon="bi bi-grid-fill" />
             <div className="flex flex-col items-center justify-center gap-[64px] w-full ">
                 {
                     offers?.length > 0 ? (

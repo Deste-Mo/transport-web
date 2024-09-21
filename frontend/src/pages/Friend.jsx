@@ -2,6 +2,7 @@ import {lazy, useEffect, useState} from "react";
 
 import {SubHeader} from "../components/pages/SubHeader.jsx";
 import {
+    OFFER_CARD_FILTERS,
     SERVERLINK,
     USERS_FILTERS,
     USERS_FILTERS_DATAS,
@@ -13,6 +14,7 @@ import {useUser} from "../context/UserProvider.jsx";
 import Badge from "../components/ui/Badge.jsx";
 import {Suspense} from "react";
 import FriendCardLoading from "../components/loader/FriendCardLoading.jsx";
+import SearchFilter from "../components/pages/SearchFilter.jsx";
 
 const RecentlyFriends = lazy(() =>
     import("../components/pages/RecentlyFriends.jsx")
@@ -69,9 +71,12 @@ const Friends = () => {
                 name="Suivis"
                 icon="bi bi-broadcast"
                 rightContent={
-                    <ExpandableSearchBar block setValue={setSearch} value={search}/>
+                    <ExpandableSearchBar className="max-sm:hidden" block setValue={setSearch} value={search}/>
                 }
             />
+            {/*Mobile navigation*/}
+            <ExpandableSearchBar className="sm:hidden sticky top-[72px] z-40" expanded block setValue={setSearch} value={search}/>
+            
             <div className="flex items-center gap-4">
                 {activeUserFilters.map((userFilter) => (
                     <Badge

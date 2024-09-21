@@ -11,7 +11,6 @@ const ProfileCard = ({
                          id,
                          name,
                          account,
-                         profile = false,
                          email,
                          image,
                          phone,

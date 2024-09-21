@@ -1,32 +1,32 @@
-import { Button, TextInput } from "../../styles/components";
-import React, { useState, useEffect } from "react";
-import { useAuth } from "../../context/AuthProvider";
-import { useApp } from "../../context/AppProvider";
-import { useSocketContext } from "../../context/SocketContext";
+import {Button, TextInput} from "../../styles/components";
+import React, {useState, useEffect} from "react";
+import {useAuth} from "../../context/AuthProvider";
+import {useApp} from "../../context/AppProvider";
+import {useSocketContext} from "../../context/SocketContext";
 import ActiveUser from "../../components/pages/conversations/ActiveUser.jsx";
-import { SubHeader } from "../../components/pages/SubHeader.jsx";
+import {SubHeader} from "../../components/pages/SubHeader.jsx";
 import SearchBar from "../../components/ui/SearchBar.jsx";
 import ProfileImage from "../../assets/images/OIP.jpg";
 import Conv from "../../components/pages/conversations/Conversation.jsx";
-import { motion } from "framer-motion";
-import { appVariants } from "../../animations/variants.js";
-import { useUser } from "../../context/UserProvider.jsx";
-import { Navigate, useNavigate } from "react-router-dom";
+import {motion} from "framer-motion";
+import {appVariants} from "../../animations/variants.js";
+import {useUser} from "../../context/UserProvider.jsx";
+import {Navigate, useNavigate} from "react-router-dom";
 import ExpandableSearchBar from "../../components/ui/ExpandableSearchBar.jsx";
-import {USERS_FILTERS} from "../../constants/index.js";
+import {OFFER_CARD_FILTERS, USERS_FILTERS} from "../../constants/index.js";
+import SearchFilter from "../../components/pages/SearchFilter.jsx";
 
 
 const MessageList = () => {
 
-    const { token } = useAuth();
+    const {token} = useAuth();
 
     const navigate = useNavigate();
 
-    const { conversations, handleShowConversation, getUnreadMessageCount, countUnread } = useApp();
-    const { friends, getFriends, updateActiveUserFilter } = useUser();
+    const {conversations, handleShowConversation, getUnreadMessageCount, countUnread} = useApp();
+    const {friends, getFriends, updateActiveUserFilter} = useUser();
 
-    const { socket } = useSocketContext();
-    
+    const {socket} = useSocketContext();
 
 
     const [search, setSearch] = useState('');
@@ -56,8 +56,14 @@ const MessageList = () => {
     }, [socket, countUnread])
 
     return (
-        <motion.section className="flex flex-col items-center justify-start w-full gap-6 relative  min-h-screen" variants={appVariants} initial="hidden" whileInView="visible" viewport={{once : true}}>
-                <SubHeader name={"Messages"} icon={"bi bi-chat"} rightContent={<ExpandableSearchBar setValue={setSearch} placeholder={"Rechercher un ami"} value={search}/>}/>
+        <motion.section className="flex flex-col items-center justify-start w-full gap-6 relative  min-h-screen"
+                        variants={appVariants} initial="hidden" whileInView="visible" viewport={{once: true}}>
+            <SubHeader name="Messages" icon="bi bi-chat"
+                       rightContent={<ExpandableSearchBar className="max-sm:hidden" setValue={setSearch} placeholder={"Rechercher un ami"}
+                                                          value={search}/>}/>
+            {/*Mobile navigation*/}
+            <ExpandableSearchBar expanded className="sm:hidden sticky top-[72px] z-40" setValue={setSearch} placeholder={"Rechercher un ami"}
+                                 value={search}/>
             <div
                 className="w-full h-fit bg-white-100 dark:bg-black-100 dark:border-none flex justify-start overflow-x-scroll p-4 border border-black-0 rounded-2xl scrollbar-none ">
                 {friends.length > 0 ?
@@ -75,13 +81,14 @@ const MessageList = () => {
 
             {/* <SearchBar variant={"fill"} block size={"lg"} value={search} setValue={setSearch} placeholder={"Rechercher un ami"} /> */}
 
-            <div className="w-full h-[60vh] scrollbar-none overflow-y-scroll bg-white-100 dark:bg-white-0 dark:border-none  flex flex-col gap-3 overflow-hidden p-2  rounded-xl border border-black-0">
+            <div
+                className="w-full h-[60vh] scrollbar-none overflow-y-scroll bg-white-100 dark:bg-white-0 dark:border-none  flex flex-col gap-3 overflow-hidden p-2  rounded-xl border border-black-0">
                 {
                     search ?
                         SearchFriends?.length > 0 ?
                             SearchFriends.map(conversation => (
-                                <Conv key={conversation.userid} id={conversation.userid} userToChat={conversation} />
-                            )
+                                    <Conv key={conversation.userid} id={conversation.userid} userToChat={conversation}/>
+                                )
                             )
                             :
                             <p className="nothing-box">
@@ -89,14 +96,14 @@ const MessageList = () => {
                             </p>
                         :
                         conversations.length > 0 ?
-                    conversations.map(conversation => (
-                            <Conv key={conversation.userid} id={conversation.userid} userToChat={conversation}/>
-                        )
-                    )
-                    :
+                            conversations.map(conversation => (
+                                    <Conv key={conversation.userid} id={conversation.userid} userToChat={conversation}/>
+                                )
+                            )
+                            :
                             <p className="w-full px-4 py-10 text-center text-black-80 bg-white-100 border border-black-0 rounded-xl dark:border-none dark:bg-black-10 dark:text-white-60">
                                 Commencez une Conversation
-                    </p>
+                            </p>
                 }
             </div>
         </motion.section>

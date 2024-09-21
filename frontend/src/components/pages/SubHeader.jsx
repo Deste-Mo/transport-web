@@ -5,7 +5,7 @@ import { useUser } from "../../context/UserProvider";
 
 const sizeVariants = {
   padding: {
-    md: "px-6 py-3",
+    md: "px-6 py-4",
     lg: "px-6 py-4",
   },
   text: {
@@ -21,11 +21,10 @@ export function SubHeader({
   size = "md",
   rightContent = null,
   hideLeftContent = false,
-  className,
 }) {
   return (
     <div
-      className={`flex select-none gap-4 max-md:gap-2 w-full justify-between items-center z-30  rounded-xl shadow-sm  border border-black-0 bg-white-100 sticky top-0 dark:bg-white-0  dark:backdrop-blur-sm   ${
+      className={`flex select-none gap-10 max-md:gap-4 w-full justify-between items-center z-30  rounded-xl shadow-sm  border border-black-0 bg-white-100 sticky top-0 dark:bg-white-0  dark:backdrop-blur-sm   ${
         sticky && "sticky"
       } ${sizeVariants.padding[size]}`}
     >

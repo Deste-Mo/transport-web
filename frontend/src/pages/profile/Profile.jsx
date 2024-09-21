@@ -39,13 +39,14 @@ export default function Profile() {
         getCurrentUserOffers,
         filterCurrentUserOffers,
     } = useOffer();
+    const [popupVisible, setPopupVisible] = useState(false);
+    const [filteredCurrentUserOffer, setFilteredCurrentUserOffer] = useState(currentUserOffers);
 
     const handleSeeUsers = (userType = USERS_FILTERS.follower) => {
         updateActiveUserFilter(userType);
         navigate("/friend");
     }
-    const [popupVisible, setPopupVisible] = useState(false);
-    const [filteredCurrentUserOffer, setFilteredCurrentUserOffer] = useState(currentUserOffers);
+
 
 
     useEffect(() => {
@@ -143,9 +144,23 @@ export default function Profile() {
             {/*For other user*/}
             {profileInfo.id !== personalInformation.id && (
                 <div className="md:hidden visible">
-                    <Offers userId={id}/>
+                    {
+                        filteredCurrentUserOffer?.length > 0 ? (
+                            <Suspense fallback={<OfferCardLoading/>}>
+                                {filteredCurrentUserOffer?.map((filteredCurrentUserOffer) => (
+                                    <OfferCard
+                                        forCurrentUser
+                                        key={filteredCurrentUserOffer.offerid}
+                                        sug={filteredCurrentUserOffer}
+                                    />
+                                ))}
+                            </Suspense>
+
+                        ) : < div className="nothing-box"> Pas d'offres</div>
+                    }
                 </div>
             )}
+            
             {/* For the current user */}
             {profileInfo.id === personalInformation.id && (
                 <>

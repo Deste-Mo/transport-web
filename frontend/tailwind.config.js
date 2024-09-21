@@ -30,6 +30,7 @@ export default {
         40: "#18181866", // 40% opacity
         20: "#18181833", // 20% opacity
         10: "#8888881a", // 10% opacity
+        
         0: "rgba(138,137,137,0.2)", // for border
       },
       white: {
@@ -39,7 +40,9 @@ export default {
         40: "#ffffff66", // 40% opacity
         20: "#ffffff33", // 20% opacity
         10: "#ffffff1a", // 10% opacity
+        
         0 : "#303030",
+        1 : "#454545"
       },
       gray: {
         100: "#f0f2f5",

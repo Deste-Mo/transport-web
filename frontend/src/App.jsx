@@ -1,8 +1,5 @@
-// Main import
+
 import {Routes, Route} from "react-router-dom";
-
-
-// Components
 import Home from './pages/Home';
 import Labo from './pages/labo/Labo';
 import AppLayout from "./layouts/AppLayout.jsx";
@@ -36,14 +33,6 @@ import WaitLink from "./pages/auth/forgotPassword/WaitLink.jsx";
 import SubscriptionPage from "./pages/abonement/SubscriptionPage.jsx";
 import SubscriptionSecurity from "./pages/abonement/SubscriptionSecurity.jsx";
 import EditOffer from "./pages/offer/EditOffer.jsx";
-
-// TODO :
-/*
-  - Animation Skeleton
-  - Theme changer
-  - Settings
-*/
-
 
 export default function App() {
 
@@ -121,9 +110,7 @@ export default function App() {
 
             {/*Not implemented routes and components*/}
             <Route path="/securite" element={<Security />} />
-
-
-
+              
             {/* Labo (Only for testing components)*/}
             <Route path="/labo" element={<Labo />}></Route>
           </Route>
