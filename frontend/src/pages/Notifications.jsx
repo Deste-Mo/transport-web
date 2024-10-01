@@ -71,7 +71,7 @@ const Notifications = () => {
           </Button>
         }
       />
-      <div className="flex flex-col  w-full gap-4">
+      <div className="flex flex-col  w-full gap-2">
         {notifications.length > 0 ? (
           notifications.map((notif) => (
             <Notification

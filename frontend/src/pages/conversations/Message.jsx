@@ -636,13 +636,13 @@ const FileMessage = ({ fileContent, refMessage, sentByCurrentUser }) => {
 const TextMessage = ({ refMessage, sentByCurrentUser, message, isDel }) => {
   return (
     <div
-      className={`w-full flex flex-col ${sentByCurrentUser ? "items-end" : "items-start"
+      className={`w-full  flex flex-col ${sentByCurrentUser ? "items-end" : "items-start"
         }`}
     >
       {/* For responded messages */}
       {refMessage && <RefMessage refMessage={refMessage} />}
       <div
-        className={`px-4 py-3  rounded-3xl  min-w-[40px] w-fit max-w-full text-wrap  break-words ${(sentByCurrentUser && !isDel) ? "bg-primary-20 " : isDel ? "bg-black-10 border-white-60 border" : "bg-black-10 "
+        className={`px-4 py-3  rounded-3xl  min-w-[40px] w-fit max-w-full text-wrap  break-words ${(sentByCurrentUser && !isDel) ? "bg-primary-20 " : isDel ? "bg-black-0 border-white-60 border" : "bg-black-0 "
           }`}
       >
         <p className={`text-small-1 ${!isDel ? "text-black-100 dark:text-white-100" : "text-white-40"} `}>

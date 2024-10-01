@@ -65,10 +65,10 @@ export function Notification({notification, spec, icon = false, viewed = false})
              className={`flex flex-col gap-6 rounded-xl p-4  group transition-color duration-300  border  ${notification.viewed || vues ? "bg-white-100 border-black-0 dark:bg-white-10 dark:border-none" : "bg-primary-40 border-primary-40"}`}>
             <div className="flex items-center justify-between w-full">
                 <div className="flex items-start gap-2 flex-col" onClick={handleClick}>
-                    <p className="text-base text-black-100 dark:text-white-100 group-hover:underline cursor-pointer">{notification.content}</p>
-                    <div className="flex  gap-1  justify-start items-center">
-                        <div className={`size-2 rounded-full ${viewed || vues ? 'bg-black-60' : 'bg-primary-100'}`}></div>
-                        <p className="text-small-1 text-black-60 dark:text-white-100 dark:font-sm">{timeSince(notification.notifdate, 2)}</p>
+                    <p className="text-base max-md:text-small-1 text-black-100 dark:text-white-100 group-hover:underline cursor-pointer">{notification.content}</p>
+                    <div className="flex  gap-2  justify-start items-center">
+                        <div className={`size-2 rounded-full ${viewed || vues ? 'dark:bg-white-60 bg-black-60' : 'bg-primary-100'}`}></div>
+                        <p className="text-small-1 max-sm:text-small-2 text-black-60 dark:text-white-100 dark:font-sm">{timeSince(notification.notifdate, 2)}</p>
                     </div>
 
                 </div>
