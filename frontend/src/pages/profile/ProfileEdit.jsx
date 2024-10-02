@@ -1,6 +1,6 @@
 import globalFormStyle from '../../styles/global.form'
 import {useForm} from '../../context/FormProvider'
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useMemo} from 'react'
 import {
     TextInput,
     SelectInput,
@@ -32,7 +32,8 @@ const ProfileEdit = ({onClick}) => {
         email: personalInformation?.email,
         bio: personalInformation?.bio,
     })
-
+    const { setHideMobileNavigation,hideMobileNavigation } = useAnimation();
+    
     const [profile, setP] = useState(null)
 
     const [errorData, setErrorData] = useState({
@@ -82,6 +83,10 @@ const ProfileEdit = ({onClick}) => {
         }
     }
 
+/*    useMemo(() =>{
+        setHideMobileNavigation(true)
+    }, [hideMobileNavigation]);*/
+    
     useEffect(() => {
         checkFieldError(errorData)
     }, [errorData])
@@ -94,7 +99,7 @@ const ProfileEdit = ({onClick}) => {
     return (
         <section className="space-y-6 pb-[54px]">
             <SubHeader icon="bi bi-info-circle" name="Modifier les informations"/>
-            <form className={`flex flex-col gap-10 shadow`} onSubmit={handleSubmit}>
+            <form className={`flex flex-col gap-10 shadow p-4 rounded-2xl bg-white-100 dark:bg-transparent`} onSubmit={handleSubmit}>
                 <div className="rounded-lg flex flex-col gap-4">
                     <div
                         className="w-full  h-60 bg-black-10 rounded-xl flex flex-col justify-center items-center overflow-hidden">

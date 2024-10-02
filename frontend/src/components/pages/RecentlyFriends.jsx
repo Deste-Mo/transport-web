@@ -146,7 +146,6 @@ const DesktopRecentlyFriends = ({
                             unFollowUsers(profileInfo.id, id);
                             onButtonsClick();
                         }}
-                        className="text-danger-100"
                         size="sm"
                     >
                         Retirer

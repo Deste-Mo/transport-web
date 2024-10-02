@@ -42,14 +42,14 @@ const ProfileCard = ({
 
     return (
         <div
-            className="flex flex-col gap-6 rounded-xl shadow-sm border text-black-100 dark:text-white-100 border-black-0 p-4 bg-white-100 dark:bg-black-100 dark:border-none w-full">
+            className="flex flex-col gap-6 rounded-xl shadow-sm border text-black-100 dark:text-white-100 border-black-0 p-4 bg-white-100 dark:bg-white-0 dark:border-none w-full">
             <div className="flex justify-center items-start">
                 <i className="disabled:bi-0-circle"></i>
                 <div className="flex flex-col items-center justify-center gap-4">
                     <img
                         src={image}
                         alt=""
-                        className="max-md:size-[84px] size-[184px] bg-black-20 rounded-full object-contain"
+                        className="max-md:size-[84px] size-[184px] bg-black-20 rounded-full object-cover"
                     />
                     <div className="flex flex-col gap-1 items-center justify-center text-subtitle-2">
                         <span>{name}</span>

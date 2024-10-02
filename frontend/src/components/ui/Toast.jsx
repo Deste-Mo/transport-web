@@ -22,7 +22,7 @@ const Toast = ({
       ></i>
       <div className="flex flex-col">
         {/* <p className="text-lead">{error ? "success" : "Error"}</p> */}
-        <p className={`text-base text-black-80 dark:text-white-80`}>
+        <p className={`text-base text-black-80 text-nowrap dark:text-white-80`}>
           {message || "Some message"}
         </p>
       </div>

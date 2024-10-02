@@ -239,7 +239,7 @@ const NewOffer = () => {
     >
       <SubHeader sticky name="Nouvel Offre" icon="bi bi-plus-circle-fill" />
       <form
-        className="flex flex-col gap-10 p-2  "
+        className="flex flex-col gap-10 p-2 bg-white-100 dark:bg-transparent rounded-2xl p-4 "
         onSubmit={(e) => handleCreateOffer(e)}
       >
         {/* formulaire parties */}

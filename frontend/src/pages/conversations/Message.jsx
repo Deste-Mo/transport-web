@@ -12,7 +12,7 @@ import TemplatePopup, {
 } from "../../components/ui/TemplatePopup.jsx";
 import { useAuth } from "../../context/AuthProvider";
 import { useApp } from "../../context/AppProvider";
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import { useSocketContext } from "../../context/SocketContext";
 import { BREAKPOINTS, SERVERLINK } from "../../constants";
 import Mess from "../../components/pages/conversations/Message.jsx";
@@ -39,7 +39,7 @@ const Messages = () => {
   const [answerMess, setAnswer] = useState('');
   const { handleInputChange, checkFieldError, handleError } = useForm();
   const { socket } = useSocketContext();
-  const { setHideMobileNavigation, hideMobileNavigation } = useAnimation();
+  const { setHideMobileNavigation,hideMobileNavigation } = useAnimation();
   const [width] = useWindowSize();
 
   const [formData, setFormData] = useState({
@@ -106,9 +106,14 @@ const Messages = () => {
       name: '',
       path: ''
     })
-
+    
   }
-
+  
+  useMemo(() =>{
+    setHideMobileNavigation(true)
+  }, [hideMobileNavigation]);
+  
+  
   useEffect(() => {
     socket?.on("newMessage", () => {
       getUserMessages(endOfMessagesRef);
@@ -642,7 +647,7 @@ const TextMessage = ({ refMessage, sentByCurrentUser, message, isDel }) => {
       {/* For responded messages */}
       {refMessage && <RefMessage refMessage={refMessage} />}
       <div
-        className={`px-4 py-3  rounded-3xl  min-w-[40px] w-fit max-w-full text-wrap  break-words ${(sentByCurrentUser && !isDel) ? "bg-primary-20 " : isDel ? "bg-black-0 border-white-60 border" : "bg-black-0 "
+        className={`px-4 py-3  rounded-3xl  min-w-[40px] w-fit max-w-full text-wrap  break-words ${(sentByCurrentUser && !isDel) ? "bg-primary-80 " : isDel ? "bg-black-0 border-white-60 border" : "bg-black-0 "
           }`}
       >
         <p className={`text-small-1 ${!isDel ? "text-black-100 dark:text-white-100" : "text-white-40"} `}>

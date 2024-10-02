@@ -40,11 +40,9 @@ const NavPageLayout = () => {
     }, []);
     
     useEffect(() => {
-        setHideMobileNavigation(pathname.toLowerCase() === '/message');
-        console.log(pathname.toLowerCase() === '/message')
+        setHideMobileNavigation(false);
     }, [pathname])
-
-
+    
     return (
         <section
             className={`flex items-start  w-full justify-between nav-page-container gap-10 h-[86vh]  scrollbar-none relative ${hideMobileNavigation ? 'max-md:h-screen overflow-hidden' : 'max-md:h-[80vh]'} `}>

@@ -103,7 +103,7 @@ const RegisterSecurity = () => {
 
     return (
         <section
-            className="w-full  auth-section space-y-[128px] absolute top-[128px] left-1/2 -translate-x-1/2 max-md:space-y-10">
+            className="auth-section">
             <div className="flex flex-col items-center justify-center gap-4">
                 <div className="flex w-full items-center justify-center">
                     <Icon

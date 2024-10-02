@@ -9,7 +9,7 @@ const NotFound = () => {
         404{" "}
       </p>
       <p className="text-black-60 dark:text-white-60 text-center text-subtitle-1">
-        Page not found
+        Page non trouvée
       </p>
       <p
         onClick={() => navigate("/")}

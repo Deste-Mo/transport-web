@@ -1,11 +1,12 @@
 export const toastVariants =  {
     visible : {
         opacity : 1,
-        x : 0,
+        scale : 1,
+
     },
     hidden : {
         opacity: 0,
-        x : "100%",
+        scale : 0
     }
 }
 

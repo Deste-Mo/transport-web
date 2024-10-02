@@ -9,7 +9,7 @@ const Unauthorized = () => {
         401{" "}
       </p>
       <p className="text-black-60 dark:text-white-60 text-center text-subtitle-1">
-        Unauthorized
+        Non-Autorisé
       </p>
       <p
         onClick={() => navigate("/")}

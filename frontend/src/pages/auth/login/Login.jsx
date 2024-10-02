@@ -40,10 +40,10 @@ const Login = () => {
 
     return (
         <section
-            className="w-full  auth-section space-y-[128px] absolute top-[128px] left-1/2 -translate-x-1/2 max-md:space-y-10">
+            className="auth-section">
             <div className="h1 text-subtitle-1 w-full text-center text-black-100 dark:text-white-100 max-md:text-subtitle-2">
-                Connecter vous dans votre compte
-                <span className="text-primary-100"> Media Trans</span>
+                Connectez vous dans votre compte
+                <span className="text-primary-100 "> Media Trans</span>
             </div>
             {/* Main Form */}
             <div className="flex flex-col items-center justify-center w-full">
