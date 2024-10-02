@@ -94,7 +94,7 @@ const OfferCard = ({
     // TODO :
     getOfferById(sug.offerid);
     localStorage.setItem("offer", JSON.stringify(sug));
-    navigate(`profile/${id}/editOffer`)
+    navigate(`/profile/${id}/editOffer`)
     // - Editing the post
     setPopupVisible(false);
   };
