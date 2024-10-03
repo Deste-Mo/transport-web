@@ -175,7 +175,7 @@ const EditOffer = () => {
 
                 getCurrentUserOffers()
                 setMessagePopup("L'offre modifié avec success !", TOAST_TYPE.success);
-                navigate(`profile/${id}`)
+                navigate(`/profile/${id}`)
             }
         } catch (error) {
             console.error(error)

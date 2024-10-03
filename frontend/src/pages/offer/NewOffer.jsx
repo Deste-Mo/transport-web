@@ -301,7 +301,7 @@ const NewOffer = () => {
             }))}
             icon="bi bi-caret-down-fill"
             onError={handleError(setErrorData)}
-            onchange={(e) => handleInputChange(setFormData, e)}
+            onChange={(e) => handleInputChange(setFormData, e)}
             block
             value={titreData[0]}
           />

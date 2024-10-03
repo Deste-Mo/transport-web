@@ -104,8 +104,9 @@ const UserProvider = ({ children }) => {
                 updateActiveUserFilter(USERS_FILTERS.suggestion);
                 if (!search) return users;
                 if (users.length > 0) return users.filter(user =>
-                    user.firstname.toLowerCase().includes(search.toLowerCase()) ||
-                    user.lastname.toLowerCase().includes(search.toLowerCase())
+                    
+                    user?.firstname?.toLowerCase().includes(search.toLowerCase()) ||
+                    user?.lastname?.toLowerCase().includes(search.toLowerCase())
                 );
             }
 
@@ -116,8 +117,8 @@ const UserProvider = ({ children }) => {
 
                 if (friends.length > 0)
                     return friends?.filter(friend =>
-                        friend.firstname.toLowerCase().includes(search.toLowerCase()) ||
-                        friend.lastname.toLowerCase().includes(search.toLowerCase())
+                        friend?.firstname?.toLowerCase().includes(search.toLowerCase()) ||
+                        friend?.lastname?.toLowerCase().includes(search.toLowerCase())
                     );
             }
 
