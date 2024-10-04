@@ -37,8 +37,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                                                         </FormProvider>
                                                     </ProfileProvider>
                                                 </NotficationProvider>
-                                            </UserProvider>
-                                                
+                                            </UserProvider>                                             
                                         </OfferProvider>
                                     </DiscussionProvider>
                                 </HomeProvider>

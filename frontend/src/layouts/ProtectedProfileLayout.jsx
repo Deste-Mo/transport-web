@@ -8,19 +8,28 @@ const ProtectedProfileLayout = ( ) => {
     const {id} = useParams();
     const  [authorized, setAuthorized] = useState(false);
     const [loading ,setLoading] = useState(true);
-    const {personalInformation} = useAuth();
-    const user = personalInformation;
-    
+    const {personalInformation, getInformation, token} = useAuth();
+
+    // const [user, setUser] = useState(personalInformation);
+
+    useEffect(() => {
+        getInformation(token);
+        verifyId();
+    }, [])
     
     const verifyId = () => {
         setLoading(true)
-        setAuthorized(personalInformation.id === id);
+        console.log( personalInformation.id === id, "id1: " + personalInformation.id + "id2: " + id)
+        setAuthorized( personalInformation.id === id);
         setLoading(false);
     }
 
-    useEffect(() => {
-        verifyId();
-    }, []);
+    // useEffect(() => {
+    //     setUser(personalInformation)
+    // }, [personalInformation])
+
+    // useEffect(() => {
+    // }, []);
     
     return (
         <motion.section

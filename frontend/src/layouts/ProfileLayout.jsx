@@ -3,20 +3,25 @@ import Profile from "../pages/profile/Profile.jsx";
 import {appVariants} from "../animations/variants.js";
 import {motion} from "framer-motion";
 import {useEffect, useState} from "react";
+import { useUser } from "../context/UserProvider.jsx";
+import { useAuth } from "../context/AuthProvider.jsx";
 
 const ProfileLayout = () => {
     const [validProfile, setValidProfile] = useState(false);
     const [loading, setLoading] = useState(true);
     const {id} = useParams();
+    const {getUserExists} = useUser();
     const checkProfile = () => {
         setLoading(true);
         // TODO : Check if the profile id is valid
-        setValidProfile(true);
+        setValidProfile(getUserExists(id));
         setLoading(false);
     }
+    const { getInformation, token } = useAuth();
 
     useEffect(() => {
         checkProfile();
+        // getInformation(token, id);
     }, [])
     return (
         <motion.section

@@ -25,6 +25,8 @@ export default function Profile() {
     const navigate = useNavigate()
     const {updateActiveUserFilter} = useUser()
     const {personalInformation, getInformation, token, profileInfo} = useAuth()
+
+    const { removeOfferInStorage } = useOffer();
     const {
         getFriends,
         followersCount,
@@ -205,7 +207,7 @@ export default function Profile() {
                             rightContent={
                                 <div className="flex gap-2 items-center justify-center ">
                                     <Icon icon="bi bi-plus-lg" size="sm"
-                                          onClick={() => navigate(`/profile/${id}/newOffer`)}/>
+                                          onClick={() => removeOfferInStorage(id)}/>
                                     <Filter
                                         onFilter={() => setFilteredCurrentUserOffer(filterCurrentUserOffers(currentUserOffers))}
                                         filterBoxMainTitle="Filtrer les offres par"
@@ -223,6 +225,7 @@ export default function Profile() {
                                                 forCurrentUser
                                                 key={filteredCurrentUserOffer.offerid}
                                                 sug={filteredCurrentUserOffer}
+                                                isInProfileDetails = {true}
                                             />
                                         ))}
                                     </Suspense>

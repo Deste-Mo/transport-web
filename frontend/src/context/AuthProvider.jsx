@@ -1,13 +1,24 @@
-import {createContext, useContext, useEffect, useLayoutEffect, useState} from "react";
-import {ACCOUNT_TYPES, REGISRATION_STEPS, SERVERLINK, TOAST_TYPE} from "../constants/index.js";
-import {useLocation, useNavigate} from "react-router-dom";
+import {
+    createContext,
+    useContext,
+    useEffect,
+    useLayoutEffect,
+    useState
+} from "react";
+import {
+    ACCOUNT_TYPES,
+    REGISRATION_STEPS,
+    SERVERLINK,
+    TOAST_TYPE
+} from "../constants/index.js";
+import { useLocation, useNavigate } from "react-router-dom";
 import api from "../utils/api.js";
 import axios from "axios";
-import {useAnimation} from "./AnimationProvider.jsx";
+import { useAnimation } from "./AnimationProvider.jsx";
 axios.defaults.withCredentials = true;
 export const AuthContext = createContext({});
 
-const AuthProvider = ({children}) => {
+const AuthProvider = ({ children }) => {
     const [personalInformation, setPersonalInformation] = useState([]);
     const [profileInfo, setProfileInfo] = useState([]);
     const [registerMode, setRegisterMode] = useState(ACCOUNT_TYPES.camion);
@@ -18,7 +29,7 @@ const AuthProvider = ({children}) => {
     const [loadingInformation, setLoadingInformation] = useState(true);
     const [token, setToken] = useState(null);
     const [isAuth, setIsAuth] = useState(false);
-    
+
     const navigate = useNavigate();
 
     // Register handler
@@ -93,6 +104,39 @@ const AuthProvider = ({children}) => {
         navigate("/");
     }
 
+    // const refreshToken = async () => {
+    //     axios
+    //         .get(`${SERVERLINK}/api/auth/token`)
+    //         .then((res) => {
+    //             // console.log(`New access token : ${res.data.accessToken}`);
+    //             if (res.status === 200) {
+    //                 setToken(res.data.accessToken);
+    //                 updateAuthorization(res.data.accessToken);
+    //             }
+    //         })
+    //         .catch((e) => {
+    //             console.log(`Erreur : ${e.response.data.error}`);
+    //             updateAuthorization(null);
+    //         })
+    // };
+
+    // useEffect(() => {
+    //     setLoading(true);
+
+    //     refreshToken().finally(() => {
+    //         setLoading(false);
+    //     });
+
+    //     // refreshToken();
+
+    //     const interval = setInterval(() => {
+    //         refreshToken();
+
+    //     }, 10 * 60 * 1000) // senser se changer tout les 10 min à changer en fonction de notre access token sa durée de vie 
+    //     return () => clearInterval(interval);
+
+    // }, []);
+
 
     useEffect(() => {
         setLoading(true);
@@ -107,14 +151,16 @@ const AuthProvider = ({children}) => {
                     console.log(`Erreur : ${e.response.data.error}`);
                     updateAuthorization(null);
                 }).finally(() => {
-                setLoading(false);
-            })
+                    setLoading(false);
+                })
 
         };
+
+        // setInterval(() => {
         refreshToken();
-        
+        // }, 600000);
     }, [token]);
-    
+
     return (
         <AuthContext.Provider
             value={{

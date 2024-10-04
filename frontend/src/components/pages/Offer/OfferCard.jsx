@@ -1,35 +1,37 @@
 /* eslint-disable react/no-children-prop */
 /* eslint-disable react/prop-types */
-import {useNavigate, useParams} from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ProfileImage from "../../../assets/images/OIP.jpg";
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "../../ui/Button.jsx";
-import {Icon} from "../../../styles/components.js";
-import {useApp} from "../../../context/AppProvider.jsx";
-import {SERVERLINK} from "../../../constants/index.js";
-import {useAnimation} from "../../../context/AnimationProvider.jsx";
+import { Icon } from "../../../styles/components.js";
+import { useApp } from "../../../context/AppProvider.jsx";
+import { SERVERLINK } from "../../../constants/index.js";
+import { useAnimation } from "../../../context/AnimationProvider.jsx";
 import OfferCardLoading from "../../loader/OfferCardLoading.jsx";
-import {TOAST_TYPE} from "../../../constants/index.js";
-import {useAuth} from "../../../context/AuthProvider.jsx";
-import {useOffer} from "../../../context/OfferProvider.jsx";
+import { TOAST_TYPE } from "../../../constants/index.js";
+import { useAuth } from "../../../context/AuthProvider.jsx";
+import { useOffer } from "../../../context/OfferProvider.jsx";
 import Badge from "../../ui/Badge.jsx";
-import {useUser} from "../../../context/UserProvider.jsx";
-import TemplatePopup, {OptionItem} from "../../ui/TemplatePopup.jsx";
+import { useUser } from "../../../context/UserProvider.jsx";
+import TemplatePopup, { OptionItem } from "../../ui/TemplatePopup.jsx";
 
 const MAX_OFFER_DESC = 130;
 
 const OfferCard = ({
-                       className,
-                       saved = false,
-                       sug,
-                       forCurrentUser = false,
-                       detailedProfile = true,
-                   }) => {
+    className,
+    saved = false,
+    sug,
+    forCurrentUser = false,
+    detailedProfile = true,
+    njcam = false,
+    isInProfileDetails = false,
+}) => {
     const [detailed, setDetailed] = useState(false);
+    const [isEnable, setEnable] = useState(sug?.dispo);
     const [popupVisible, setPopupVisible] = useState(false);
-    const {id} = useParams();
-    const {timeSince} = useApp();
-    const {saveOffer, retireOffer, getSavedOffers, offer} = useOffer();
+    const { timeSince } = useApp();
+    const { saveOffer, retireOffer, getSavedOffers, offer } = useOffer();
     const navigate = useNavigate();
     const image = SERVERLINK + "/" + sug?.profileimage;
     const offerImage = SERVERLINK + "/" + sug?.imgurl;
@@ -51,6 +53,8 @@ const OfferCard = ({
         navigate("/message");
     };
 
+    const {id} = useParams();
+
     const handleSaveOffer = async () => {
         await saveOffer(await sug?.offerid);
         await getSavedOffers();
@@ -65,7 +69,7 @@ const OfferCard = ({
         setPopupVisible((prev) => !prev);
     };
 
-    const {setMessagePopup} = useAnimation();
+    const { setMessagePopup } = useAnimation();
 
     const {
         getOfferById,
@@ -76,8 +80,14 @@ const OfferCard = ({
         deleteOffer,
     } = useOffer();
 
-    const {token} = useAuth();
+    const { token } = useAuth();
 
+    const NJCAM = {
+        Infos: "Njcam est une entrprise qui prend en charge la vente de Camera de securite et la surveillance Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet et blanditiis eaque, enim vitae perspiciatis. Porro minus iusto voluptatem, ducimus nemo autem cum, placeat iste nostrum tempora quibusdam quia commodi",
+        Image: SERVERLINK + '/njcamlogo.jpg',
+        ImageOffer: SERVERLINK + '/njcamoffer.jpg',
+        Link: 'https://facebook.com'
+    }
     const handleDeletePost = async () => {
         // TODO :
         await deleteOffer(sug.offerid);
@@ -94,7 +104,7 @@ const OfferCard = ({
         // TODO :
         getOfferById(sug.offerid);
         localStorage.setItem("offer", JSON.stringify(sug));
-        navigate(`/profile/${id}/editOffer`)
+        navigate("/profile/" + id)
         // - Editing the post
         setPopupVisible(false);
     };
@@ -104,6 +114,7 @@ const OfferCard = ({
         await setUnavalaibleOffer(sug.offerid);
         await getCurrentUserOffers();
         setPopupVisible(false);
+        setEnable(false);
         setMessagePopup("L'offre actuellement indisponible", TOAST_TYPE.success);
 
     };
@@ -113,22 +124,26 @@ const OfferCard = ({
         await setAvalaibleOffer(sug.offerid);
         await getCurrentUserOffers();
         setPopupVisible(false);
+        setEnable(true);
         setMessagePopup("L'offre est disponible maintenant! ", TOAST_TYPE.success);
     };
 
     return (
         <div className="flex flex-col items-start justify-start w-full gap-2 ">
-            <div className="flex items-center gap-x-6 gap-y-2 flex-wrap">
-                <Badge text={sug?.title} icon="bi bi-box"/>
-                <Badge text={sug?.depart + " vers " + sug?.dest} icon="bi bi-map"/>
-                <Badge
-                    text={
-                        "Prévue le " + new Date(sug?.scheduleddate).toLocaleDateString()
-                    }
-                    icon="bi bi-calendar2-event"
-                />
-                <Badge text={sug?.capacity} icon="bi bi-truck"/>
-            </div>
+            {
+                !njcam &&
+                <div className="flex items-center gap-x-6 gap-y-2 flex-wrap">
+                    <Badge text={sug?.title} icon="bi bi-box" />
+                    <Badge text={sug?.depart + " vers " + sug?.dest} icon="bi bi-map" />
+                    <Badge
+                        text={
+                            "Prévue le " + new Date(sug?.scheduleddate).toLocaleDateString()
+                        }
+                        icon="bi bi-calendar2-event"
+                    />
+                    <Badge text={sug?.capacity} icon="bi bi-truck" />
+                </div>
+            }
             <div
                 className={`relative flex flex-col gap-3 w-full items-center ${className} bg-white-100   dark:text-white-100 dark:font-sm dark:bg-white-0 dark:border-none rounded-xl p-4 max-md:p-2 border border-black-0`}
             >
@@ -208,45 +223,88 @@ const OfferCard = ({
                 )}
                 <div className="w-full flex items-center justify-between rounded-2xl">
                     <div className="flex items-center gap-2">
-                        <img
-                            onClick={() => navigate(`/profile/${sug.userid}`)}
-                            className="size-[40px] object-cover rounded-full cursor-pointer"
-                            src={image}
-                        />
+                        {
+                            !njcam ?
+                                <img
+                                    onClick={() => navigate(`/profile/${sug.userid}`)}
+                                    className="size-[40px] object-cover rounded-full cursor-pointer"
+                                    src={image}
+                                />
+                                :
+                                <a href={NJCAM.Link}>
+                                    <img
+                                        className="size-[40px] object-cover rounded-full cursor-pointer"
+                                        src={NJCAM.Image}
+                                    />
+                                </a>
+                        }
                         <div className="flex flex-col items-start">
-                            <p
-                                className="text-small-1 font-md cursor-pointer hover:underline"
-                                onClick={() => navigate(`/profile/${sug.userid}`)}
-                            >
-                                {sug?.firstname + ' ' + (!sug?.lastname ? "" : sug?.lastname)}
-                            </p>
+                            {
+                                !njcam ?
+                                    <p
+                                        className="text-small-1 font-md cursor-pointer hover:underline"
+                                        onClick={() => navigate(`/profile/${sug.userid}`)}
+                                    >
+                                        {sug?.firstname + ' ' + (!sug?.lastname ? "" : sug?.lastname)}
+                                    </p>
+                                    :
+                                    <a href={NJCAM.Link}>
+                                        <p
+                                            className="text-small-1 font-md cursor-pointer hover:underline"
+                                        >
+                                            {'NJCAM System Security'}
+                                        </p>
+                                    </a>
+                            }
                             <span className=" dark:font-sm text-small-2">
-                {sug?.accounttype}
-              </span>
-                            <div className="flex items-center gap-2  dark:text-white-100 text-black-80 ">
-                                <i className="bi bi-clock"></i>
-                                <span className="text-small-2  ">
-                  {timeSince(sug?.publicationdate, 4)}
-                </span>
-                            </div>
+                                {!njcam ? sug?.accounttype : 'Entreprise'}
+                            </span>
+                            {
+                                !njcam &&
+                                <div className="flex items-center gap-2  dark:text-white-100 text-black-80">
+                                    <i className="bi bi-clock"></i>
+                                    <span className="text-small-2  ">
+                                        {timeSince(sug?.publicationdate, 4)}
+                                    </span>
+                                </div>
+                            }
                         </div>
                     </div>
-                    <div className="flex flex-col gap-2 items-center">
-                        <Icon
-                            onClick={() => toggleOfferCardPopup()}
-                            size="sm"
-                            variant="ghost"
-                            icon="bi bi-three-dots-vertical"
-                        />
-                    </div>
+                    {
+                        !njcam &&
+                        <div className="flex gap-2 items-center">
+                            {
+                                isInProfileDetails &&
+                                <Badge
+                                    text={`${isEnable ? "Disponible" : "Indisponible"}`}
+                                    icon={"bi bi-clock"}
+                                    badgeClassName={`${isEnable ? "bg-success-80 text-black-80 hover:bg-success-100" : "bg-danger-80 hover:bg-danger-100"}`}
+                                    iconClassName={`${isEnable ? "text-success-100" : "text-danger-100"}`}
+                                />
+                            }
+                            <Icon
+                                onClick={() => toggleOfferCardPopup()}
+                                size="sm"
+                                variant="ghost"
+                                icon="bi bi-three-dots-vertical"
+                            />
+                        </div>
+                    }
                 </div>
                 <div className="w-full flex flex-col gap-4 items-start justify-cente  rounded-2xl  ">
                     <p className="text-small-1 text-black-100 dark:text-white-100 dark:font-sm ">
-                        {offerDetails.length > MAX_OFFER_DESC
+                        {!njcam ? (offerDetails.length > MAX_OFFER_DESC
                             ? detailed
                                 ? offerDetails
                                 : offerDetails.slice(0, MAX_OFFER_DESC) + " ..."
-                            : offerDetails}
+                            : offerDetails)
+                            :
+                            (NJCAM.Infos.length > MAX_OFFER_DESC
+                                ? detailed
+                                    ? NJCAM.Infos
+                                    : NJCAM.Infos.slice(0, MAX_OFFER_DESC) + " ..."
+                                : NJCAM.Infos)
+                        }
                     </p>
 
                     {offerDetails.length > MAX_OFFER_DESC && (
@@ -261,27 +319,51 @@ const OfferCard = ({
                         </button>
                     )}
                 </div>
-                {(detailedProfile && sug?.imgurl != null) && (
+                {((detailedProfile && sug?.imgurl != null) || njcam) && (
                     <div className="w-full h-[257px]">
-                        <img
-                            src={offerImage}
-                            className="w-full h-full object-cover rounded-md"
-                        />
+                        {
+                            !njcam ?
+                                <img
+                                    src={offerImage}
+                                    className="w-full h-full object-cover rounded-md"
+                                />
+                                :
+                                <a href={NJCAM.Link}>
+                                    <img
+                                        src={NJCAM.ImageOffer}
+                                        className="w-full h-full object-cover rounded-md"
+                                    />
+                                </a>
+                        }
                     </div>
 
                 )}
                 {!forCurrentUser && (
                     <div className="flex items-center w-full gap-6 jusify-start flex-wrap">
                         {/*<Icon variant="secondary" icon="bi bi-chat" size="sm"/>*/}
-                        <Button
-                            onClick={contactUser}
-                            size="sm"
-                            variant="secondary"
-                            icon="bi bi-chat"
-                            block
-                        >
-                            Contacter
-                        </Button>
+                        {
+                            !njcam ?
+                                <Button
+                                    onClick={contactUser}
+                                    size="sm"
+                                    variant="secondary"
+                                    icon="bi bi-chat"
+                                    block
+                                >
+                                    Contacter
+                                </Button>
+                                :
+                                <a href={NJCAM.Link}>
+                                    <Button
+                                        size="sm"
+                                        variant="secondary"
+                                        icon="bi bi-chat"
+                                        block
+                                    >
+                                        Contacter
+                                    </Button>
+                                </a>
+                        }
                     </div>
                 )}
             </div>

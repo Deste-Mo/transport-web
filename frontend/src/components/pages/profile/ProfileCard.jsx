@@ -6,6 +6,7 @@ import {useAuth} from "../../../context/AuthProvider.jsx";
 import {useAnimation} from "../../../context/AnimationProvider.jsx";
 import {useSocketContext} from "../../../context/SocketContext.jsx";
 import Icon from "../../ui/Icon.jsx";
+import { useOffer } from "../../../context/OfferProvider.jsx";
 
 const ProfileCard = ({
                          id,
@@ -27,18 +28,14 @@ const ProfileCard = ({
 
     const { socket } = useSocketContext();
 
+    const { removeOfferInStorage } = useOffer();
+
     const {setMessagePopup} = useAnimation();
 
     useEffect(() => {
         setTimeout(() => setLoading(false), 1000);
         setIsFriend(friends.length > 0 ? friends.find(friend => friend.userid === id) : false);
     }, [friends, id])
-
-    const newOffer = () => {
-        console.log(localStorage.getItem('offer'))
-        localStorage.getItem('offer') && localStorage.removeItem('offer');
-        navigate(`/profile/${id}/newOffer`);
-    }
 
     return (
         <div
@@ -96,7 +93,7 @@ const ProfileCard = ({
                                 block
                                 size="md"
                                 icon="bi bi-plus-lg"
-                                onClick={() => navigate(`/profile/${id}/newOffer`)}
+                                onClick={() => removeOfferInStorage(id)}
                             >
                                 Publier
                             </Button>

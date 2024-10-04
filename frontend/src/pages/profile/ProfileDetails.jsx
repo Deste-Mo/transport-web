@@ -19,9 +19,9 @@ const ProfileDetails = () => {
     const currentUser = personalInformation;
     const {id} = useParams();
 
-    // useEffect(() => {
-    //     getCurrentUserOffers(id);
-    // },[id])
+    useEffect(() => {
+        getCurrentUserOffers(id);
+    },[id])
 
     return (
         <section className="w-full">
@@ -43,8 +43,12 @@ const ProfileOffer = () => {
     const [filteredOffers, setFilteredOffers] = useState(currentUserOffers);
 
     useEffect(() => {
-        setFilteredOffers(filterOffers(search, currentUserOffers));
-      }, [search, currentUserOffers]);
+        setFilteredOffers(currentUserOffers);
+    }, [currentUserOffers])
+
+    // useEffect(() => {
+    //     setFilteredOffers(filterOffers(search, currentUserOffers));
+    //   }, [search]);
     
     return (<motion.section
         id="offers"

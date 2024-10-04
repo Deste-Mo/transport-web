@@ -160,6 +160,20 @@ const UserProvider = ({ children }) => {
 
     }
 
+    const getUserExists = async (id) =>  {
+        const response = await fetch(SERVERLINK + '/api/profile/exist/' + id, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "token": token
+            }
+        })
+
+        const verification = await response.json();
+
+        return verification;
+    }
+
     return (
         <FriendContext.Provider
             value={{
@@ -180,7 +194,8 @@ const UserProvider = ({ children }) => {
                 updateActiveUserFilter,
                 handleSendEmailConf,
                 subscriptionCards,
-                getAllSubscription
+                getAllSubscription,
+                getUserExists
             }}
         >
             {children}

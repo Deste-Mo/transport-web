@@ -1,10 +1,10 @@
-import {useAuth} from "../context/AuthProvider.jsx";
-import {SubHeader} from "../components/pages/SubHeader.jsx";
-import {appVariants} from "../animations/variants.js";
-import {motion} from "framer-motion";
-import {lazy, Suspense, useEffect, useState} from "react";
-import {useOffer} from "../context/OfferProvider.jsx";
-import {useParams} from "react-router-dom";
+import { useAuth } from "../context/AuthProvider.jsx";
+import { SubHeader } from "../components/pages/SubHeader.jsx";
+import { appVariants } from "../animations/variants.js";
+import { motion } from "framer-motion";
+import { lazy, Suspense, useEffect, useState } from "react";
+import { useOffer } from "../context/OfferProvider.jsx";
+import { useParams } from "react-router-dom";
 import OfferCardLoading from "../components/loader/OfferCardLoading.jsx";
 import SearchFilter from "../components/pages/SearchFilter.jsx";
 
@@ -29,18 +29,21 @@ const Offers = () => {
     const [filteredOffers, setFilteredOffers] = useState(suggestedOffers);
 
     useEffect(() => {
-        getSavedOffers();
         getSuggestedOffers();
     }, []);
 
     useEffect(() => {
+      setFilteredOffers(suggestedOffers);
+    }, [suggestedOffers])
+
+    useEffect(() => {
         localStorage.getItem("offerNotifId") &&
-        getOfferById(localStorage.getItem("offerNotifId"))
+            getOfferById(localStorage.getItem("offerNotifId"))
     }, [search]);
 
     useEffect(() => {
         setFilteredOffers(filterOffers(search, suggestedOffers));
-    }, [search, suggestedOffers]);
+    }, [search]);
 
     return (
         <motion.section
@@ -49,7 +52,7 @@ const Offers = () => {
             variants={appVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{once: true}}
+            viewport={{ once: true }}
         >
 
             <SubHeader
@@ -89,11 +92,11 @@ const Offers = () => {
                 onFilter={() => setFilteredOffers(filterOffers(search, suggestedOffers))
                 }
             />
-            
+
             <div className="flex flex-col items-center justify-center gap-6 w-full">
                 {
                     filteredOffers?.length > 0 ? (
-                        <Suspense fallback={<OfferCardLoading/>}>
+                        <Suspense fallback={<OfferCardLoading />}>
                             {filteredOffers?.map((filteredOffer) => (
                                 <OfferCard
                                     key={filteredOffer.offerid}

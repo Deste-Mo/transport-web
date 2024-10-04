@@ -33,7 +33,7 @@ const NavPageLayout = () => {
     
     useEffect(() => {
         getSavedOffers();
-        getSuggestedOffers(user.id);
+        getSuggestedOffers();
         getCurrentUserOffers();
         setShowBackIcon(false);
 

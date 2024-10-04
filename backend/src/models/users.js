@@ -37,10 +37,24 @@ export const verify = async (userId) => {
     return rows[0].isverify;
 }
 
+export const getIfUserExist = async (id) => {
+    const query = "SELECT count(*) as count FROM users WHERE userid = $1";
+
+    const {rows} = await pool.query(query, [id])
+
+    return rows[0].count;
+}
+
 export const getUser = async (email, cin, nif, phone) => {
     const query = "SELECT * FROM users WHERE email = $1 or phone = $2 or usercin = $3 or companynumber = $4";
     const { rows } = await pool.query(query, [email, phone, cin, nif]);
     return rows[0];
+};
+
+export const getUserUpdate = async (email, cin, phone, userid) => {
+    const query = "SELECT userid FROM users WHERE (email = $1 OR phone = $2 OR usercin = $3) AND userid != $4";
+    const { rows } = await pool.query(query, [email, phone, cin, userid]);
+    return rows;
 };
 
 export const getInformation = async (userId) => {

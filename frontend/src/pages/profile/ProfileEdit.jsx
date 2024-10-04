@@ -1,6 +1,6 @@
 import globalFormStyle from '../../styles/global.form'
-import {useForm} from '../../context/FormProvider'
-import {useState, useEffect, useMemo} from 'react'
+import { useForm } from '../../context/FormProvider'
+import { useState, useEffect, useMemo } from 'react'
 import {
     TextInput,
     SelectInput,
@@ -9,22 +9,37 @@ import {
     TextArea,
     Icon,
 } from '../../styles/components'
-import {SubHeader} from '../../components/pages/SubHeader'
-import {useAuth} from '../../context/AuthProvider'
-import {SERVERLINK, TOAST_TYPE} from '../../constants'
+import { SubHeader } from '../../components/pages/SubHeader'
+import { useAuth } from '../../context/AuthProvider'
+import { SERVERLINK, TOAST_TYPE } from '../../constants'
 import { useAnimation } from '../../context/AnimationProvider'
 import { useNavigate, useNavigation } from 'react-router-dom'
+import {
+    CIN_REGEX,
+    CIN_REGEX_MESSAGE,
+    EMAIL_REGEX,
+    EMAIL_REGEX_MESSAGE,
+    LAST_NAME_REGEX,
+    LAST_NAME_REGEX_MESSAGE,
+    NAME_REGEX,
+    NAME_REGEX_MESSAGE,
+    NIF_STAT_REGEX,
+    NIF_STAT_REGEX_MESSAGE,
+    PHONE_REGEX,
+    PHONE_REGEX_MESSAGE,
+} from "../../constants";
 
 
-const ProfileEdit = ({onClick}) => {
-    const {handleInputChange, checkFieldError, handleError} = useForm()
-    const {setShowBackIcon, setMessagePopup} = useAnimation();
-    const {personalInformation, token, getInformation} = useAuth()
+
+const ProfileEdit = ({ onClick }) => {
+    const { handleInputChange, checkFieldError, handleError } = useForm()
+    const { setShowBackIcon, setMessagePopup } = useAnimation();
+    const { personalInformation, token, getInformation } = useAuth()
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         profileimage: null,
         firstname: personalInformation?.firstname,
-    lastname: !personalInformation?.lastname ? '' : personalInformation?.lastname,
+        lastname: !personalInformation?.lastname ? '' : personalInformation?.lastname,
         usercin: personalInformation?.usercin,
         companynumber: personalInformation?.companynumber,
         phone: personalInformation?.phone,
@@ -32,20 +47,25 @@ const ProfileEdit = ({onClick}) => {
         email: personalInformation?.email,
         bio: personalInformation?.bio,
     })
-    const { setHideMobileNavigation,hideMobileNavigation } = useAnimation();
-    
+    const { setHideMobileNavigation, hideMobileNavigation } = useAnimation();
+
     const [profile, setP] = useState(null)
 
+    const [fieldsError, setFieldsError] = useState(false);
+
+
     const [errorData, setErrorData] = useState({
-        profileimage: false,
-        lastname: false,
-        firstname: false,
-        usercin: false,
-        phone: false,
-        address: false,
-        email: false,
-        bio: false,
-    })
+        profileimage: true,
+        firstname: true,
+        lastname: true,
+        companynumber: true,
+        usercin: true,
+        phone: true,
+        address: true,
+        email: true,
+        bio: true
+    });
+
 
     const [file, setFile] = useState({
         name: '',
@@ -73,20 +93,29 @@ const ProfileEdit = ({onClick}) => {
             const res = await response.json()
 
             getInformation(token)
-            setFormData({...formData, ["profileimage"]: null});
+            setFormData({ ...formData, ["profileimage"]: null });
 
-            if (!res.error) {
-                setMessagePopup("Informations modifiés avec success !", TOAST_TYPE.success);
+            // if (!res.error) {
+            //     setMessagePopup("Informations modifiés avec success !", TOAST_TYPE.success);
+            // }
+
+            if (response.status === 200) {
+                setMessagePopup("Information modifiée avec succès!", TOAST_TYPE.success)
+            } else if (response.status === 500) {
+                setMessagePopup("Veuillez verifier vos informations", TOAST_TYPE.error)
+            }else if(response.status === 400){
+                setMessagePopup("Utilisateur déjà existant", TOAST_TYPE.error)
             }
         } catch (error) {
             console.error(error)
+            setMessagePopup(error, TOAST_TYPE.error)
         }
     }
 
-/*    useMemo(() =>{
-        setHideMobileNavigation(true)
-    }, [hideMobileNavigation]);*/
-    
+    /*    useMemo(() =>{
+            setHideMobileNavigation(true)
+        }, [hideMobileNavigation]);*/
+
     useEffect(() => {
         checkFieldError(errorData)
     }, [errorData])
@@ -96,9 +125,34 @@ const ProfileEdit = ({onClick}) => {
         setP(personalInformation?.profile);
         setShowBackIcon(true);
     }, [])
+
+    useEffect(() => {
+        const {
+            profileimage,
+            lastname,
+            firstname,
+            companynumber,
+            usercin,
+            phone,
+            address,
+            email,
+            bio
+        } = errorData;
+
+        if (personalInformation?.accountId === 1) {
+            setFieldsError(
+                firstname || companynumber || email || phone || address
+            )
+        } else {
+            setFieldsError(
+                firstname || lastname || usercin || email || phone || address
+            )
+        }
+    }, [formData, errorData]);
+
     return (
         <section className="space-y-6 pb-[54px]">
-            <SubHeader icon="bi bi-info-circle" name="Modifier les informations"/>
+            <SubHeader icon="bi bi-info-circle" name="Modifier les informations" />
             <form className={`flex flex-col gap-10 shadow p-4 rounded-2xl bg-white-100 dark:bg-transparent`} onSubmit={handleSubmit}>
                 <div className="rounded-lg flex flex-col gap-4">
                     <div
@@ -106,7 +160,7 @@ const ProfileEdit = ({onClick}) => {
                         <img
                             className="w-full h-full  object-contain rounded-xl"
                             src={file.path ? file.path : SERVERLINK + '/' + profile}
-                            alt="Choisez une image"
+                            alt="Choisissez une image"
                         />
                     </div>
                     <FileInput
@@ -128,6 +182,8 @@ const ProfileEdit = ({onClick}) => {
                         onChange={(e) => handleInputChange(setFormData, e)}
                         block
                         value={formData.firstname}
+                        pattern={NAME_REGEX}
+                        errorMsg={NAME_REGEX_MESSAGE}
                     />
                     {personalInformation?.accountId !== 1 && (
                         <TextInput
@@ -139,6 +195,8 @@ const ProfileEdit = ({onClick}) => {
                             onChange={(e) => handleInputChange(setFormData, e)}
                             block
                             value={formData.lastname}
+                            errorMsg={LAST_NAME_REGEX_MESSAGE}
+                            pattern={LAST_NAME_REGEX}
                         />
                     )}
                     {personalInformation?.accountId === 1 ? (
@@ -151,6 +209,8 @@ const ProfileEdit = ({onClick}) => {
                             onChange={(e) => handleInputChange(setFormData, e)}
                             block
                             value={formData.companynumber}
+                            pattern={NIF_STAT_REGEX}
+                            errorMsg={NIF_STAT_REGEX_MESSAGE}
                         />
                     ) : (
                         <TextInput
@@ -162,6 +222,8 @@ const ProfileEdit = ({onClick}) => {
                             onChange={(e) => handleInputChange(setFormData, e)}
                             block
                             value={formData.usercin}
+                            errorMsg={CIN_REGEX_MESSAGE}
+                            pattern={CIN_REGEX}
                         />
                     )}
 
@@ -174,6 +236,8 @@ const ProfileEdit = ({onClick}) => {
                         onChange={(e) => handleInputChange(setFormData, e)}
                         block
                         value={formData.phone}
+                        errorMsg={PHONE_REGEX_MESSAGE}
+                        pattern={PHONE_REGEX}
                     />
                     <TextInput
                         title="Email"
@@ -184,6 +248,8 @@ const ProfileEdit = ({onClick}) => {
                         onChange={(e) => handleInputChange(setFormData, e)}
                         block
                         value={formData.email}
+                        pattern={EMAIL_REGEX}
+                        errorMsg={EMAIL_REGEX_MESSAGE}
                     />
                     <TextInput
                         title="Adresse"
@@ -194,6 +260,8 @@ const ProfileEdit = ({onClick}) => {
                         onChange={(e) => handleInputChange(setFormData, e)}
                         block
                         value={formData.address}
+                        errorMsg="Entrer une adresse valide"
+                        pattern={/^.{6,}$/}
                     />
                     <TextArea
                         className="w-full"
@@ -209,10 +277,16 @@ const ProfileEdit = ({onClick}) => {
 
                 </div>
                 <div className="flex  justify-between w-full gap-2">
-                    <Button type="submit" block>
+                    <Button type="submit" disabled={fieldsError} block>
                         Enregistrer
                     </Button>
-                    <Button type="button" variant="ghost" block onClick={() => navigate(`/profile/${personalInformation?.id}/newOffer`)}>
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        block
+                        onClick={() =>
+                            navigate(`/profile/${personalInformation?.id}`)
+                        }>
                         Annuler
                     </Button>
                 </div>

@@ -46,6 +46,10 @@ const SelectInput = ({
   }, [loading]);
 
   useEffect(() => {
+    setSelectedItem(value);
+  }, [value])
+
+  useEffect(() => {
     onChange({ target: { value: selectedItem, name: name } });
   }, [selectedItem]);
 

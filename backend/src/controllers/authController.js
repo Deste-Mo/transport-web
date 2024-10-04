@@ -81,7 +81,7 @@ export const signup = async (req, res) => {
         const user = await getUser(email, usercin, companynumber, phone);
 
         if (user) {
-            return res.status(400).json({error: "L'utilisateur existe Dejas"});
+            return res.status(400).json({error: "L'utilisateur existe Déjas"});
         }
 
         // Crypter le mots de passe

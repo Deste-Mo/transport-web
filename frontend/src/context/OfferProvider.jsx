@@ -7,6 +7,7 @@ import {
 } from "../constants/index.js";
 import axios from "axios";
 import {useAuth} from "./AuthProvider.jsx";
+import { useNavigate } from "react-router-dom";
 
 const OfferContext = createContext({});
 
@@ -21,6 +22,8 @@ const OfferProvider = ({children}) => {
     const [updateOffer, setUpdateOffer] = useState({});
     const [pubNumber, setPubNumber] = useState(0);
     const [savedPubNumber, setSavedPubNumber] = useState(0);
+
+    const navigate = useNavigate();
 
     const getOffers = async () => {
         const response = await axios.get(
@@ -53,6 +56,7 @@ const OfferProvider = ({children}) => {
         setSavedPubNumber(await response?.data?.saved.length);
         setSavedOffers(await response?.data?.saved);
     };
+    
     const getSuggestedOffers = async () => {
         const response = await axios.get(
             `${SERVERLINK}/api/offres/suggestionoffers`,
@@ -62,6 +66,7 @@ const OfferProvider = ({children}) => {
         );
         setSuggestedOffers(await response?.data?.suggestions);
     }
+
     const setUnavalaibleOffer = async (offerId) => {
 
         const response = await fetch(SERVERLINK + '/api/offres/setunavailableoffer/' + await offerId, {
@@ -134,31 +139,38 @@ const OfferProvider = ({children}) => {
         setUpdateOffer(await response?.data?.offer);
         localStorage.removeItem("offerNotifId");
     }
-    const filterOffers = (search, suggestedOffers) => {
-        const filterModes = JSON?.parse(localStorage.getItem("offerCardFilter"));
+
+    const removeOfferInStorage = async (id) => {
+        localStorage.getItem("offer") && localStorage.removeItem("offer");
+        navigate("/profile/" + id)
+        setUpdateOffer({});
+    }
+
+    const filterOffers = async (search, suggestedOffers) => {
+        const filterModes = await JSON?.parse(localStorage.getItem("offerCardFilter"));
         let filteredResult = suggestedOffers;
 
         const filterByAccountType = (accountTypeFilter) => {
             const accountTypeFilterMode = OFFER_CARD_FILTERS_MODE.accountType;
             switch (accountTypeFilter.activeFilter) {
                 case accountTypeFilterMode.client: {
-                    filteredResult = filteredResult.filter(
-                        ({accounttype}) =>
+                    filteredResult = filteredResult.length > 0 && filteredResult.filter(
+                        ({ accounttype }) =>
                             accounttype?.toLowerCase() ===
                             accountTypeFilterMode.client?.toLowerCase()
                     );
                     break;
                 }
                 case accountTypeFilterMode.entreprise: {
-                    filteredResult = filteredResult.filter(
-                        ({accounttype}) =>
+                    filteredResult = filteredResult.length > 0 && filteredResult.filter(
+                        ({ accounttype }) =>
                             accounttype.toLowerCase() ===
                             accountTypeFilterMode.entreprise?.toLowerCase()
                     );
                     break;
                 }
                 case accountTypeFilterMode.camionneur : {
-                    filteredResult = filteredResult.filter(
+                    filteredResult = filteredResult.length > 0 && filteredResult.filter(
                         ({accounttype}) =>
                             accounttype?.toLowerCase() ===
                             accountTypeFilterMode.camionneur?.toLowerCase()
@@ -226,7 +238,7 @@ const OfferProvider = ({children}) => {
                     firstname?.toLowerCase()?.includes(search?.toLowerCase()) ||
                     lastname?.toLowerCase()?.includes(search?.toLowerCase()) ||
                     title?.toLowerCase()?.includes(search?.toLowerCase()) ||
-                    description?.toLowerCase()?.includes(search?.toLowerCase()) ||
+                    description?.toLowerCase()?.includes(search?.toLowerCase())||
                     depart?.toLowerCase()?.includes(search?.toLowerCase())
                 );
             }
@@ -294,7 +306,8 @@ const OfferProvider = ({children}) => {
                 setSavedPubNumber,
                 setUnavalaibleOffer,
                 setAvalaibleOffer,
-                deleteOffer
+                deleteOffer,
+                removeOfferInStorage
             }}>
             {children}
         </OfferContext.Provider>
