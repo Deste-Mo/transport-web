@@ -207,7 +207,10 @@ export default function Profile() {
                             rightContent={
                                 <div className="flex gap-2 items-center justify-center ">
                                     <Icon icon="bi bi-plus-lg" size="sm"
-                                          onClick={() => removeOfferInStorage(id)}/>
+                                          onClick={() => {
+                                              removeOfferInStorage(id)
+                                              navigate(`/profile/${id}/newOffer`)
+                                          }}/>
                                     <Filter
                                         onFilter={() => setFilteredCurrentUserOffer(filterCurrentUserOffers(currentUserOffers))}
                                         filterBoxMainTitle="Filtrer les offres par"

@@ -41,16 +41,16 @@ const ProfilePopup = ({className}) => {
                     setTogglePopup(false);
                     navigate(`/profile/${currentUser.id}`);
                 }}
-                name="Profile"
+                name="Profil"
                 icon="bi bi-person"
             />
-            <SettingItem
+           {/* <SettingItem
                 onClick={() => {
                     setTogglePopup(false);
                 }}
                 name="Paramètres"
                 icon="bi bi-gear"
-            />
+            />*/}
             <SettingItem
                 onClick={() => {
 

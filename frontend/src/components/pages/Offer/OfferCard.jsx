@@ -1,37 +1,37 @@
 /* eslint-disable react/no-children-prop */
 /* eslint-disable react/prop-types */
-import { useNavigate, useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import ProfileImage from "../../../assets/images/OIP.jpg";
-import React, { useEffect, useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Button from "../../ui/Button.jsx";
-import { Icon } from "../../../styles/components.js";
-import { useApp } from "../../../context/AppProvider.jsx";
-import { SERVERLINK } from "../../../constants/index.js";
-import { useAnimation } from "../../../context/AnimationProvider.jsx";
+import {Icon} from "../../../styles/components.js";
+import {useApp} from "../../../context/AppProvider.jsx";
+import {SERVERLINK} from "../../../constants/index.js";
+import {useAnimation} from "../../../context/AnimationProvider.jsx";
 import OfferCardLoading from "../../loader/OfferCardLoading.jsx";
-import { TOAST_TYPE } from "../../../constants/index.js";
-import { useAuth } from "../../../context/AuthProvider.jsx";
-import { useOffer } from "../../../context/OfferProvider.jsx";
+import {TOAST_TYPE} from "../../../constants/index.js";
+import {useAuth} from "../../../context/AuthProvider.jsx";
+import {useOffer} from "../../../context/OfferProvider.jsx";
 import Badge from "../../ui/Badge.jsx";
-import { useUser } from "../../../context/UserProvider.jsx";
-import TemplatePopup, { OptionItem } from "../../ui/TemplatePopup.jsx";
+import {useUser} from "../../../context/UserProvider.jsx";
+import TemplatePopup, {OptionItem} from "../../ui/TemplatePopup.jsx";
 
 const MAX_OFFER_DESC = 130;
 
 const OfferCard = ({
-    className,
-    saved = false,
-    sug,
-    forCurrentUser = false,
-    detailedProfile = true,
-    njcam = false,
-    isInProfileDetails = false,
-}) => {
+                       className,
+                       saved = false,
+                       sug,
+                       forCurrentUser = false,
+                       detailedProfile = true,
+                       njcam = false,
+                       isInProfileDetails = false,
+                   }) => {
     const [detailed, setDetailed] = useState(false);
     const [isEnable, setEnable] = useState(sug?.dispo);
     const [popupVisible, setPopupVisible] = useState(false);
-    const { timeSince } = useApp();
-    const { saveOffer, retireOffer, getSavedOffers, offer } = useOffer();
+    const {timeSince} = useApp();
+    const {saveOffer, retireOffer, getSavedOffers, offer} = useOffer();
     const navigate = useNavigate();
     const image = SERVERLINK + "/" + sug?.profileimage;
     const offerImage = SERVERLINK + "/" + sug?.imgurl;
@@ -69,7 +69,7 @@ const OfferCard = ({
         setPopupVisible((prev) => !prev);
     };
 
-    const { setMessagePopup } = useAnimation();
+    const {setMessagePopup} = useAnimation();
 
     const {
         getOfferById,
@@ -80,7 +80,7 @@ const OfferCard = ({
         deleteOffer,
     } = useOffer();
 
-    const { token } = useAuth();
+    const {token} = useAuth();
 
     const NJCAM = {
         Infos: "Njcam est une entrprise qui prend en charge la vente de Camera de securite et la surveillance Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet et blanditiis eaque, enim vitae perspiciatis. Porro minus iusto voluptatem, ducimus nemo autem cum, placeat iste nostrum tempora quibusdam quia commodi",
@@ -104,7 +104,7 @@ const OfferCard = ({
         // TODO :
         getOfferById(sug.offerid);
         localStorage.setItem("offer", JSON.stringify(sug));
-        navigate("/profile/" + id)
+        navigate(`/profile/${id}/editOffer`)
         // - Editing the post
         setPopupVisible(false);
     };
@@ -133,15 +133,15 @@ const OfferCard = ({
             {
                 !njcam &&
                 <div className="flex items-center gap-x-6 gap-y-2 flex-wrap">
-                    <Badge text={sug?.title} icon="bi bi-box" />
-                    <Badge text={sug?.depart + " vers " + sug?.dest} icon="bi bi-map" />
+                    <Badge text={sug?.title} icon="bi bi-box"/>
+                    <Badge text={sug?.depart + " vers " + sug?.dest} icon="bi bi-map"/>
                     <Badge
                         text={
                             "Prévue le " + new Date(sug?.scheduleddate).toLocaleDateString()
                         }
                         icon="bi bi-calendar2-event"
                     />
-                    <Badge text={sug?.capacity} icon="bi bi-truck" />
+                    <Badge text={sug?.capacity} icon="bi bi-truck"/>
                 </div>
             }
             <div
@@ -275,12 +275,7 @@ const OfferCard = ({
                         <div className="flex gap-2 items-center">
                             {
                                 isInProfileDetails &&
-                                <Badge
-                                    text={`${isEnable ? "Disponible" : "Indisponible"}`}
-                                    icon={"bi bi-clock"}
-                                    badgeClassName={`${isEnable ? "bg-success-80 text-black-80 hover:bg-success-100" : "bg-danger-80 hover:bg-danger-100"}`}
-                                    iconClassName={`${isEnable ? "text-success-100" : "text-danger-100"}`}
-                                />
+                                    <Badge text={isEnable ? "Disponible" : "Indisponible"} icon="bi bi-clock" />
                             }
                             <Icon
                                 onClick={() => toggleOfferCardPopup()}
@@ -294,10 +289,10 @@ const OfferCard = ({
                 <div className="w-full flex flex-col gap-4 items-start justify-cente  rounded-2xl  ">
                     <p className="text-small-1 text-black-100 dark:text-white-100 dark:font-sm ">
                         {!njcam ? (offerDetails.length > MAX_OFFER_DESC
-                            ? detailed
-                                ? offerDetails
-                                : offerDetails.slice(0, MAX_OFFER_DESC) + " ..."
-                            : offerDetails)
+                                ? detailed
+                                    ? offerDetails
+                                    : offerDetails.slice(0, MAX_OFFER_DESC) + " ..."
+                                : offerDetails)
                             :
                             (NJCAM.Infos.length > MAX_OFFER_DESC
                                 ? detailed
@@ -368,6 +363,7 @@ const OfferCard = ({
                 )}
             </div>
         </div>
-    );
+    )
+        ;
 };
 export default OfferCard;

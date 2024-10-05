@@ -206,13 +206,13 @@ const Profile = ({profileImage, className}) => {
                     name="Profil"
                     icon="bi bi-person"
                 />
-                <OptionItem
+                {/*<OptionItem
                     onClick={() => {
                         setTogglePopup(false);
                     }}
                     name="Paramètres"
                     icon="bi bi-gear"
-                />
+                />*/}
                 <OptionItem
                     onClick={() => {
                         setDarkMode(prev => !prev);

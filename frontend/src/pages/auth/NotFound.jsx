@@ -15,7 +15,7 @@ const NotFound = () => {
         onClick={() => navigate("/")}
         className="cursor-pointer text-lead text-primary text-center"
       >
-        Return Back
+        Retourner à l'accueil
       </p>
     </section>
   );

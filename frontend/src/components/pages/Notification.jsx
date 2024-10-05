@@ -71,7 +71,7 @@ export function Notification({notification, spec, icon = false, viewed = false})
                 duration: 0.5,
                 ease: 'easeInOut', // Use the easeInOut easing function
             }}
-            className={`flex flex-col gap-6 rounded-xl p-4  group transition-color duration-300  border  ${!notification.viewed || !vues ? "bg-white-100 border-black-0 dark:bg-white-10 dark:border-none" : "bg-primary-20 border-none"}`}>
+            className={`flex flex-col gap-6 rounded-xl p-4  group transition-color duration-300  border  ${notification.viewed || vues ? "bg-white-100 border-black-0 dark:bg-white-10 dark:border-none" : "bg-primary-20 border-none"}`}>
             <div className="flex items-center justify-between w-full">
                 <div className="flex items-start gap-2 flex-col" onClick={handleClick}>
                     <p className="text-small-1 text-black-100 dark:text-white-100 group-hover:underline cursor-pointer">{notification.content}</p>

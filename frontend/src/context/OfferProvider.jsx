@@ -146,31 +146,31 @@ const OfferProvider = ({children}) => {
         setUpdateOffer({});
     }
 
-    const filterOffers = async (search, suggestedOffers) => {
-        const filterModes = await JSON?.parse(localStorage.getItem("offerCardFilter"));
+    const filterOffers = (search, suggestedOffers) => {
+        const filterModes = JSON?.parse(localStorage.getItem("offerCardFilter"));
         let filteredResult = suggestedOffers;
 
         const filterByAccountType = (accountTypeFilter) => {
             const accountTypeFilterMode = OFFER_CARD_FILTERS_MODE.accountType;
             switch (accountTypeFilter.activeFilter) {
                 case accountTypeFilterMode.client: {
-                    filteredResult = filteredResult.length > 0 && filteredResult.filter(
-                        ({ accounttype }) =>
+                    filteredResult = filteredResult.filter(
+                        ({accounttype}) =>
                             accounttype?.toLowerCase() ===
                             accountTypeFilterMode.client?.toLowerCase()
                     );
                     break;
                 }
                 case accountTypeFilterMode.entreprise: {
-                    filteredResult = filteredResult.length > 0 && filteredResult.filter(
-                        ({ accounttype }) =>
+                    filteredResult = filteredResult.filter(
+                        ({accounttype}) =>
                             accounttype.toLowerCase() ===
                             accountTypeFilterMode.entreprise?.toLowerCase()
                     );
                     break;
                 }
                 case accountTypeFilterMode.camionneur : {
-                    filteredResult = filteredResult.length > 0 && filteredResult.filter(
+                    filteredResult = filteredResult.filter(
                         ({accounttype}) =>
                             accounttype?.toLowerCase() ===
                             accountTypeFilterMode.camionneur?.toLowerCase()
@@ -238,7 +238,7 @@ const OfferProvider = ({children}) => {
                     firstname?.toLowerCase()?.includes(search?.toLowerCase()) ||
                     lastname?.toLowerCase()?.includes(search?.toLowerCase()) ||
                     title?.toLowerCase()?.includes(search?.toLowerCase()) ||
-                    description?.toLowerCase()?.includes(search?.toLowerCase())||
+                    description?.toLowerCase()?.includes(search?.toLowerCase()) ||
                     depart?.toLowerCase()?.includes(search?.toLowerCase())
                 );
             }

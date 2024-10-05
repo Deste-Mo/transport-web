@@ -93,7 +93,10 @@ const ProfileCard = ({
                                 block
                                 size="md"
                                 icon="bi bi-plus-lg"
-                                onClick={() => removeOfferInStorage(id)}
+                                onClick={() => {
+                                    removeOfferInStorage(id);
+                                    navigate(`/profile/${id}/newOffer`)
+                                }}
                             >
                                 Publier
                             </Button>

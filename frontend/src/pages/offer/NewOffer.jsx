@@ -107,15 +107,6 @@ const NewOffer = () => {
 
   setShowBackIcon(true);
 
-  useEffect(() => {
-    const getOfferById = async () => {
-      localStorage.getItem('offer') ?
-        setUpdateOffer(await JSON.parse(localStorage.getItem('offer')))
-        :
-        reset();
-    }
-    getOfferById()
-  }, [updateOffer])
 
   const reset = () => {
     localStorage.removeItem('offer')
@@ -272,6 +263,17 @@ const NewOffer = () => {
       setFormData({ ...formData, [e.target.name]: e.target.value })
     }
   }
+
+  useEffect(() => {
+    const getOfferById = async () => {
+      localStorage.getItem('offer') ?
+          setUpdateOffer(await JSON.parse(localStorage.getItem('offer')))
+          :
+          reset();
+    }
+    getOfferById()
+  }, [updateOffer])
+
 
   useEffect(() => {
     checkFieldError(errorData)

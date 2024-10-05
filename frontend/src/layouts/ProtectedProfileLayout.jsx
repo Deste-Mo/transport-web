@@ -19,17 +19,10 @@ const ProtectedProfileLayout = ( ) => {
     
     const verifyId = () => {
         setLoading(true)
-        console.log( personalInformation.id === id, "id1: " + personalInformation.id + "id2: " + id)
         setAuthorized( personalInformation.id === id);
         setLoading(false);
     }
-
-    // useEffect(() => {
-    //     setUser(personalInformation)
-    // }, [personalInformation])
-
-    // useEffect(() => {
-    // }, []);
+    
     
     return (
         <motion.section
