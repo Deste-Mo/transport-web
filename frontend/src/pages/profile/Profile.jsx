@@ -136,7 +136,7 @@ export default function Profile() {
                                 variant="secondary"
                                 onClick={() => handleSeeUsers(USERS_FILTERS.follower)}
                             >
-                                Voir tous vous suivis
+                                Voir tous vos suivis
                             </Button>
                         )
                     }

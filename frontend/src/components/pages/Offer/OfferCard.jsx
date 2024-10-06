@@ -83,7 +83,7 @@ const OfferCard = ({
     const {token} = useAuth();
 
     const NJCAM = {
-        Infos: "Njcam est une entrprise qui prend en charge la vente de Camera de securite et la surveillance Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet et blanditiis eaque, enim vitae perspiciatis. Porro minus iusto voluptatem, ducimus nemo autem cum, placeat iste nostrum tempora quibusdam quia commodi",
+    Infos: "Njcam est une entreprise qui propose des équipements de surveillance de haute qualité, tels que des caméras de surveillance, et assurer une intégration complète avec les systèmes de gestion existants.Elle fourni des solutions informatiques intégrées, gére les infrastructures technologiques des clients, et développe des logiciels adaptés aux besoins du marché\n",
         Image: SERVERLINK + '/njcamlogo.jpg',
         ImageOffer: SERVERLINK + '/njcamoffer.jpg',
         Link: 'https://facebook.com'
@@ -97,7 +97,7 @@ const OfferCard = ({
 
         // - Deleting the post
         // setPopupVisible(false);
-        setMessagePopup("Offre supprimé avec success", TOAST_TYPE.success);
+        setMessagePopup("Offre supprimé avec succès", TOAST_TYPE.success);
     };
 
     const handleEditPost = () => {
@@ -115,7 +115,7 @@ const OfferCard = ({
         await getCurrentUserOffers();
         setPopupVisible(false);
         setEnable(false);
-        setMessagePopup("L'offre actuellement indisponible", TOAST_TYPE.success);
+        setMessagePopup("Offre indisponible, vous seule peut le consulter", TOAST_TYPE.success);
 
     };
 

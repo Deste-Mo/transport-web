@@ -65,12 +65,12 @@ const SubscriptionPage = () => {
       navigate(`/abonnement/${title}/${montant}/${value.slice(0, -1)}/paiement`);
       handleSendEmailConf(id, subid);
     } else {
-      setMessagePopup("Veuillez selectionne le type de paiement", TOAST_TYPE.error);
+      setMessagePopup("Veuillez sélectionner le type de paiement", TOAST_TYPE.error);
     }
   };
 
   if (loading) {
-    return <p className="text-black-100 text-title-3 text-primary-60 flex h-[100vh] w-full justify-center items-center">Loading ...</p>;
+    return <p className="text-black-100 text-title-3 text-primary-60 flex h-[100vh] w-full justify-center items-center">Chargement ...</p>;
   }
 
   if (!token) {

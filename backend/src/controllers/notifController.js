@@ -40,7 +40,7 @@ export const sendNotifs = async (req, res) => {
             return res.status(201).json({ notif: notification });
         }
 
-        return res.status(200).json({ message: "Creation de notif impossible!" });
+        return res.status(200).json({ message: "Création de notification impossible!" });
 
     } catch (error) {
         return res.status(500).json({ "sendNotifsError": error.message });
@@ -72,7 +72,7 @@ export const sendNotifsNewPub = async (req, res) => {
             return res.status(201).json({ notif: notification });
         }
 
-        return res.status(200).json({ message: "Creation de notif impossible!" });
+        return res.status(200).json({message: "Création de notification impossible!" });
 
     } catch (error) {
         return res.status(500).json({ "sendNotifsError": error.message });
@@ -90,7 +90,7 @@ export const delAllNotifications = async (req, res) => {
 
         if(!delAll) return res.status(400).json({error: "Erreur lors de la suppression des notifications"});
 
-        return res.status(200).json({success: "Tout les notifs sont supprimés"});
+        return res.status(200).json({success: "Tout les notifications sont supprimés"});
 
     } catch (error) {
         return res.status(500).json({ "delAllNotifsError": error.message });
@@ -107,7 +107,7 @@ export const deleteNotifications = async (req, res) => {
 
         if(!del) return res.status(400).json({error: "Erreur lors de la suppression de la notification"});
 
-        return res.status(200).json({success: "La notif est supprimée"});
+        return res.status(200).json({success: "Notification supprimée"});
 
     } catch (error) {
         return res.status(500).json({ "delOneNotifsError": error.message });
@@ -124,7 +124,7 @@ export const setNotificationViewed = async (req, res) => {
 
         if(!setV) return res.status(400).json({error: "Erreur lors de la mise en vue de la notification"});
 
-        return res.status(200).json({success: "La notif est vue desormais", view: setV.viewed});
+        return res.status(200).json({success: "notification vue", view: setV.viewed});
 
     } catch (error) {
         return res.status(500).json({ "ViewOneNotifsError": error.message });
@@ -141,7 +141,7 @@ export const setAllNotificationViewed = async (req, res) => {
 
         if(!setV) return res.status(400).json({error: "Erreur lors de la mise en vue de la notification"});
 
-        return res.status(200).json({success: "La notif est vue desormais", view: setV.viewed});
+        return res.status(200).json({success: "notification vue", view: setV.viewed});
 
     } catch (error) {
         return res.status(500).json({ "ViewOneNotifsError": error.message });
@@ -156,9 +156,9 @@ export const getNotificationViewed = async (req, res) => {
 
         const getV = await getCountNotifUnread(userId);
 
-        if(!getV) return res.status(400).json({error: "Erreur lors de la prise de nombre de non vue des notification"});
+        if(!getV) return res.status(400).json({error: "Erreur lors de la prise de nombre de non vue des notifications"});
 
-        return res.status(200).json({success: "Le nombre de unread notif est obtenu", count: getV.count});
+        return res.status(200).json({success: "Le nombre de notification non lue est obtenu", count: getV.count});
 
     } catch (error) {
         return res.status(500).json({ "getCountUnreadNotifsError": error.message });

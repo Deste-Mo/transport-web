@@ -169,7 +169,7 @@ const NewOffer = () => {
           body: JSON.stringify({ content, offerId }),
         })
         getCurrentUserOffers()
-        setMessagePopup("L'offre publié avec success !", TOAST_TYPE.success)
+        setMessagePopup("L'offre est publié avec succès !", TOAST_TYPE.success)
 
         setFormData({
           imgUrl: '',
@@ -245,7 +245,7 @@ const NewOffer = () => {
         })
 
         getCurrentUserOffers()
-        setMessagePopup("L'offre modifié avec success !", TOAST_TYPE.success)
+        setMessagePopup("L'offre est modifié avec succès !", TOAST_TYPE.success)
       }
     } catch (error) {
       console.error(error)
@@ -258,7 +258,7 @@ const NewOffer = () => {
     const today = new Date(getTodayDate())
     if (selectedDate < today) {
       // If the selected date is before today, set an error message or handle it accordingly
-      setMessagePopup('La date prévue erronée', TOAST_TYPE.error)
+      setMessagePopup('La date prévue est erronée', TOAST_TYPE.error)
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value })
     }
@@ -372,6 +372,8 @@ const NewOffer = () => {
               className=""
               name="destination"
               title="Destination"
+              placeholder="Entrez la destination"
+
               onError={handleError(setErrorData)}
               onChange={(e) => handleInputChange(setFormData, e)}
               value={formData.destination}

@@ -34,7 +34,7 @@ const ProtectedProfileLayout = ( ) => {
         >
             {
                 loading ? (
-                    <p>Loading ...</p> // TODO : Loading component
+                    <p>Chargement ...</p> // TODO : Loading component
                 ) : (
                     authorized ? <Outlet/> : <Navigate to={"/forbidden"}/>
                 )

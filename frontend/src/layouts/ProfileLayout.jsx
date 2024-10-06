@@ -32,7 +32,7 @@ const ProfileLayout = () => {
             viewport={{once: true}}
         >
             {
-                loading ? <p>Loading ...</p> // TODO : Loading animation component
+                loading ? <p>Chargement ...</p> // TODO : Loading animation component
                     :
                     validProfile ? (
                         <>

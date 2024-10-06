@@ -99,7 +99,7 @@ const SubscriptionSecurity = () => {
                     )}
                   </p>
                   <p className="mb-4">2 - Une fois votre transfert effectué dans le délai imparti, le traitement sera effectué dans les prochaines heures.</p>
-                  <p>3 - <span className="text-green-400">Cf CGU Art 3.21</span>, n'exécutez le paiement (1) à partir du numéro 038 05 253 83 que si ce numéro est validé par notre système.</p>
+                  <p>3 - <span className="text-green-400">Cf CGU Art 3.21</span>, n'exécutez le paiement (1)qu' à partir du numéro 038 05 253 83 que si ce numéro est validé par notre système.</p>
                 </div>
                 <a href='/abonnement' className="flex justify-end text-primary-100 hover:underline">← Retour</a>
               </motion.div>

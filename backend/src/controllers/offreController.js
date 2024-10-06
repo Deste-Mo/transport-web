@@ -86,7 +86,7 @@ export const suggestionOffers = async (req, res) => {
     try {
         const result = await latestOffers(userId);
 
-        if (!result[0]) return res.json({ error: "No offer availaible", suggestions: {} })
+        if (!result[0]) return res.json({ error: "Aucun offre disponible", suggestions: {} })
 
         return res.status(200).json({ suggestions: result });
     } catch (error) {
@@ -122,7 +122,7 @@ export const saveOffer = async (req, res) => {
 
         if (!result) return res.json({ error: "Erreur lors de l'ajout" });
 
-        return res.status(200).json({ success: "Saved successfully" });
+        return res.status(200).json({ success: "Enregisté avec succès" });
     } catch (error) {
         // console.error(error);
         res.status(500).json({ error: error.message });
@@ -138,9 +138,9 @@ export const retireOffer = async (req, res) => {
     try {
         const result = await retireSavedOffer(userId, offerId);
 
-        if (!result) return res.json({ error: "Erreur lors de suppression du sauvegarde publication" })
+        if (!result) return res.json({ error: "Erreur lors de suppression du sauvegarde de la publication" })
 
-        return res.status(200).json({ success: "Retire successfully" });
+        return res.status(200).json({ success: "Retiré avec succès" });
     } catch (error) {
         // console.error(error);
         res.status(500).json({ error: error.message });
