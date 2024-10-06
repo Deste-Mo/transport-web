@@ -69,6 +69,7 @@ const AuthProvider = ({ children }) => {
     }
 
     const getInformation = async (accessToken, userId) => {
+        setLoadingInformation(true);
         api.get(`${SERVERLINK}/api/auth/me/${!userId ? '' : userId}`, {
             headers: {
                 token: accessToken,

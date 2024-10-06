@@ -23,6 +23,8 @@ const NewOffer = () => {
   const { setShowBackIcon, setMessagePopup } = useAnimation();
 
   const { getCurrentUserOffers, updateOffer, setUpdateOffer } = useOffer();
+  const { token, personalInformation } = useAuth()
+  
 
   const titreData = ['Transport de marchandise', 'Marchandise à transporter']
   const todaydate = new Date().toISOString().split('T')[0]
@@ -39,6 +41,11 @@ const NewOffer = () => {
   const mesureUnit = ['kg', 'tonnes']
 
   const [isEditOffer, setIsEditOffer] = useState(false);
+
+  const [file, setFile] = useState({
+    name: '',
+    path: '',
+  })
 
   const formatDateForInput = (dateString) => {
     const date = new Date(dateString)
@@ -62,57 +69,6 @@ const NewOffer = () => {
     capacity: '',
     scheduledDate: todaydate,
   })
-   
-
-
-  useEffect(() => {
-    const fullCap = `${mesureData.cap} ${mesureData.unit}`;
-    setFormData((prev) => ({
-      ...prev,
-      capacity: fullCap,
-    }));
-  }, [mesureData]);
-
-  useEffect(() => {
-    // updateOffer.scheduleddate && console.log(updateOffer.scheduleddate)
-    if (updateOffer) {
-      setFormData({
-        imgUrl: updateOffer.imgurl || '',
-        title:
-          (!updateOffer.title ||
-            updateOffer.title === 'undefined' ||
-            updateOffer.title === undefined)
-            ? 'Transport de marchandise'
-            : updateOffer.title,
-        description: updateOffer.description || '',
-        depart: updateOffer.depart || '',
-        destination: updateOffer.dest || '',
-        capacity: updateOffer.capacity || '',
-        scheduledDate: updateOffer.scheduleddate
-          ? formatDateForInput(updateOffer.scheduleddate)
-          : getTodayDate(),
-
-      })
-
-      setIsEditOffer(true);
-    } else {
-      reset();
-    }
-  }, [updateOffer])
-
-  useEffect(() => {
-    setShowBackIcon(true);
-  }, [])
-
-  const { token, personalInformation } = useAuth()
-
-  const [file, setFile] = useState({
-    name: '',
-    path: '',
-  })
-
-  
-
 
   const reset = () => {
     localStorage.removeItem('offer')
@@ -217,14 +173,14 @@ const NewOffer = () => {
       }
 
       const response = await fetch(
-        SERVERLINK + '/api/offres/updateofferforuser/' + updateOffer.offerid,
-        {
-          method: 'POST',
-          headers: {
-            token: token,
-          },
-          body: data,
-        }
+          SERVERLINK + '/api/offres/updateofferforuser/' + updateOffer.offerid,
+          {
+            method: 'POST',
+            headers: {
+              token: token,
+            },
+            body: data,
+          }
       );
 
       if (response.status === 200) {
@@ -271,6 +227,7 @@ const NewOffer = () => {
   }
 
   useEffect(() => {
+    setShowBackIcon(true);
     const getOfferById = async () => {
       localStorage.getItem('offer') ?
           setUpdateOffer(await JSON.parse(localStorage.getItem('offer')))
@@ -280,7 +237,41 @@ const NewOffer = () => {
     getOfferById()
   }, [])
 
+  useEffect(() => {
+    const fullCap = `${mesureData.cap} ${mesureData.unit}`;
+    setFormData((prev) => ({
+      ...prev,
+      capacity: fullCap,
+    }));
+  }, [mesureData]);
 
+  useEffect(() => {
+    // updateOffer.scheduleddate && console.log(updateOffer.scheduleddate)
+    if (updateOffer) {
+      setFormData({
+        imgUrl: updateOffer.imgurl || '',
+        title:
+          (!updateOffer.title ||
+            updateOffer.title === 'undefined' ||
+            updateOffer.title === undefined)
+            ? 'Transport de marchandise'
+            : updateOffer.title,
+        description: updateOffer.description || '',
+        depart: updateOffer.depart || '',
+        destination: updateOffer.dest || '',
+        capacity: updateOffer.capacity || '',
+        scheduledDate: updateOffer.scheduleddate
+          ? formatDateForInput(updateOffer.scheduleddate)
+          : getTodayDate(),
+
+      })
+
+      setIsEditOffer(true);
+    } else {
+      reset();
+    }
+  }, [updateOffer])
+  
   useEffect(() => {
     checkFieldError(errorData)
   }, [errorData])

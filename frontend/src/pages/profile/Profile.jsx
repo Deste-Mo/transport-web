@@ -247,7 +247,7 @@ const OfferList = ({
                        currentUserOffers
                    }) => {
     const navigate = useNavigate();
-    
+    const {id} = useParams();
 
     return (
         <div className="flex flex-col gap-6">

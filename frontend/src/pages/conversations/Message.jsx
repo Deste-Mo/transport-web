@@ -490,7 +490,6 @@ const Message = ({
                     }  `}
                 >
                     {timeSince(sentDate, 3)}
-                    {sentDate}
                 </p>
 
                 <div
