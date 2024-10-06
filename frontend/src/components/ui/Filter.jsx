@@ -114,7 +114,7 @@ const Filter = ({
                     <Icon variant="ghost" icon="bi bi-x-lg" size="sm" onClick={() => setFilterVisible(false)}/>
                 </div>
                 {loading ? (
-                    <p className="text-black-100 dark:text-white-100">Loading ....</p> // TODO : Filter loading
+                    <p className="text-black-100 dark:text-white-100">Chargement ....</p> // TODO : Filter loading
                 ) : (
                     filterDatas?.map((filter) => (
                         <div key={filter.title} className="flex flex-col gap-3 items-start ">

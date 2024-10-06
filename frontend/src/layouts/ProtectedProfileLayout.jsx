@@ -13,7 +13,6 @@ const ProtectedProfileLayout = ( ) => {
     const [user, setUser] = useState(personalInformation);
 
     useEffect(() => {
-        console.log(user.id === id, "user: " + user.id, "id: " + id)
         verifyId();
     }, [user])
 

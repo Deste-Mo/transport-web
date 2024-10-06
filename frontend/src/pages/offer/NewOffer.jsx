@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import { useForm } from "../../context/FormProvider";
 import {
   TextInput,
@@ -62,6 +62,8 @@ const NewOffer = () => {
     capacity: '',
     scheduledDate: todaydate,
   })
+   
+
 
   useEffect(() => {
     const fullCap = `${mesureData.cap} ${mesureData.unit}`;
@@ -98,6 +100,10 @@ const NewOffer = () => {
     }
   }, [updateOffer])
 
+  useEffect(() => {
+    setShowBackIcon(true);
+  }, [])
+
   const { token, personalInformation } = useAuth()
 
   const [file, setFile] = useState({
@@ -105,7 +111,7 @@ const NewOffer = () => {
     path: '',
   })
 
-  setShowBackIcon(true);
+  
 
 
   const reset = () => {
@@ -372,6 +378,7 @@ const NewOffer = () => {
               className=""
               name="destination"
               title="Destination"
+              placeholder="Entrer la destination"
               onError={handleError(setErrorData)}
               onChange={(e) => handleInputChange(setFormData, e)}
               value={formData.destination}
