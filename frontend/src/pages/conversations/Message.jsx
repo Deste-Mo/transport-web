@@ -379,12 +379,12 @@ const Messages = () => {
             value={formData.fileContent}
             iconVariant="ghost"
           />
-          <Icon
+        {/*  <Icon
             size="md"
             variant="ghost"
             icon="bi bi-emoji-smile"
             className="max-md:hidden"
-          />
+          />*/}
           <TextInput
             rounded="full"
             block
@@ -620,7 +620,7 @@ const FileMessage = ({ fileContent, refMessage, sentByCurrentUser }) => {
           <img
             src={SERVERLINK + "/" + fileContent}
             alt={fileContent}
-            className="max-h-full object-cover rounded-xl"
+            className="max-h-full object-cover rounded-xl dark:text-white-100 text-black-100"
           />
         ) : (
           // {For other files}

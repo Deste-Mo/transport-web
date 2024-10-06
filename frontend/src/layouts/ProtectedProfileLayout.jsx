@@ -10,16 +10,24 @@ const ProtectedProfileLayout = ( ) => {
     const [loading ,setLoading] = useState(true);
     const {personalInformation, getInformation, token} = useAuth();
 
-    // const [user, setUser] = useState(personalInformation);
+    const [user, setUser] = useState(personalInformation);
 
     useEffect(() => {
-        getInformation(token);
+        console.log(user.id === id, "user: " + user.id, "id: " + id)
         verifyId();
+    }, [user])
+
+    useEffect(() => {
+        setUser(personalInformation);
+    }, [personalInformation])
+
+    useEffect(() => {
+        getInformation();
     }, [])
     
     const verifyId = () => {
         setLoading(true)
-        setAuthorized( personalInformation.id === id);
+        setAuthorized( user.id === id);
         setLoading(false);
     }
     

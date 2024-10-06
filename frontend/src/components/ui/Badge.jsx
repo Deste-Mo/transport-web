@@ -13,7 +13,7 @@ const Badge = (
     <div
       onClick={onClick}
       className={` ${active && "bg-primary-80  dark:bg-primary-40"
-        } text-small-2 rounded-full px-4 py-2 bg-primary-20 flex gap-2 select-none   group dark:bg-primary-20 dark:text-white-100  ${badgeClassName}`}
+        } text-small-2 rounded-full cursor-pointer px-4 py-2 bg-primary-20 flex gap-2 select-none   group dark:bg-primary-20 dark:text-white-100  ${badgeClassName}`}
     >
       {icon && (
         <i

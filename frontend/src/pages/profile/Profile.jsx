@@ -21,10 +21,14 @@ const ProfileCard = lazy(() =>
 )
 
 export default function Profile() {
+
     const {id} = useParams()
+    
     const navigate = useNavigate()
     const {updateActiveUserFilter} = useUser()
     const {personalInformation, getInformation, token, profileInfo} = useAuth()
+
+    const [user, setUser] = useState(profileInfo)
 
     const { removeOfferInStorage } = useOffer();
     const {
@@ -56,6 +60,10 @@ export default function Profile() {
     }, [])
 
     useEffect(() => {
+        setUser(profileInfo)
+    }, [profileInfo]);
+
+    useEffect(() => {
         setFilteredCurrentUserOffer(filterCurrentUserOffers(currentUserOffers));
     }, [currentUserOffers])
 
@@ -77,15 +85,15 @@ export default function Profile() {
                 <SubHeader icon="bi bi-person-fill" name="Profile"/>
                 <Suspense fallback={<ProfileCardLoading/>}>
                     <ProfileCard
-                        id={profileInfo.id}
-                        account={profileInfo?.accounttype}
+                        id={user.id}
+                        account={user?.accounttype}
                         countFollow={followersCount}
-                        name={profileInfo?.fullName}
-                        date={profileInfo?.date}
-                        email={profileInfo?.email}
-                        image={SERVERLINK + "/" + profileInfo?.profile}
-                        phone={profileInfo?.phone}
-                        forCurrentUser={profileInfo.id === personalInformation.id}
+                        name={user?.fullName}
+                        date={user?.date}
+                        email={user?.email}
+                        image={SERVERLINK + "/" + user?.profile}
+                        phone={user?.phone}
+                        forCurrentUser={user.id === personalInformation.id}
                     />
                 </Suspense>
             </div>

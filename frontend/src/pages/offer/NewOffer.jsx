@@ -272,7 +272,7 @@ const NewOffer = () => {
           reset();
     }
     getOfferById()
-  }, [updateOffer])
+  }, [])
 
 
   useEffect(() => {

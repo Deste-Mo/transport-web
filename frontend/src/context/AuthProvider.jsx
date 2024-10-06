@@ -132,34 +132,34 @@ const AuthProvider = ({ children }) => {
     //     const interval = setInterval(() => {
     //         refreshToken();
 
-    //     }, 10 * 60 * 1000) // senser se changer tout les 10 min à changer en fonction de notre access token sa durée de vie 
+    //     }, 13000) // senser se changer tout les 10 min à changer en fonction de notre access token sa durée de vie 
     //     return () => clearInterval(interval);
 
-    // }, []);
+    // }, [token]);
+
+    const refreshToken = async () => {
+        axios.get(`${SERVERLINK}/api/auth/token`)
+            .then(res => {
+                // console.log(`New access token : ${res.data.accessToken}`);
+                setToken(res.data.accessToken);
+                getInformation(res.data.accessToken);
+            })
+            .catch(e => {
+                console.log(`Erreur : ${e.response.data.error}`);
+                updateAuthorization(null);
+            }).finally(() => {
+                setLoading(false);
+            })
+
+    };
 
 
     useEffect(() => {
         setLoading(true);
-        const refreshToken = async () => {
-            axios.get(`${SERVERLINK}/api/auth/token`)
-                .then(res => {
-                    // console.log(`New access token : ${res.data.accessToken}`);
-                    setToken(res.data.accessToken);
-                    getInformation(res.data.accessToken);
-                })
-                .catch(e => {
-                    console.log(`Erreur : ${e.response.data.error}`);
-                    updateAuthorization(null);
-                }).finally(() => {
-                    setLoading(false);
-                })
-
-        };
-
         // setInterval(() => {
         refreshToken();
         // }, 600000);
-    }, [token]);
+    }, []);
 
     return (
         <AuthContext.Provider
@@ -185,7 +185,8 @@ const AuthProvider = ({ children }) => {
                 isAuth,
                 updateAuthorization,
                 setProfileInfo,
-                profileInfo
+                profileInfo,
+                refreshToken
             }}
         >
             {children}

@@ -78,6 +78,7 @@ const Filter = ({
         setFilterDatas(savedFilters);
         setLoading(false);
     }, []);
+    
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (selectRef.current && !selectRef.current.contains(e.target))

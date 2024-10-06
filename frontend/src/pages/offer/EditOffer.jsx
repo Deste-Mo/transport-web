@@ -210,7 +210,7 @@ const EditOffer = () => {
     >
       <SubHeader sticky name="Modifier un Offre" icon="bi bi-pencil" />
       <form
-        className="flex flex-col gap-10 p-2  "
+        className="flex flex-col gap-10 p-4  bg-white-100 rounded-2xl dark:bg-transparent"
         onSubmit={(e) => handleUpdateOffer(e)}
       >
         {/* formulaire parties */}
