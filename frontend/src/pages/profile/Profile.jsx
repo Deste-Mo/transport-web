@@ -108,7 +108,7 @@ export default function Profile() {
             {/* For the current user */}
             {profileInfo.id === personalInformation.id && (
                 <>
-                    {/*<SavedOfferList savedOffers={savedOffers}/>*/}
+                    <SavedOfferList savedOffers={savedOffers}/>
                     <OfferList filteredCurrentUserOffer={filteredCurrentUserOffer}
                                removeOfferInStorage={removeOfferInStorage}
                                filterCurrentUserOffers={filterCurrentUserOffers}
@@ -252,7 +252,7 @@ const OfferList = ({
                 name="Vos Offres"
                 icon="bi bi-briefcase-fill"
                 rightContent={
-                    <div className="flex gap-2 items-center justify-center ">
+                    <div className=" flex gap-2 items-center justify-center ">
                         <Icon icon="bi bi-plus-lg" size="sm"
                               onClick={() => {
                                   removeOfferInStorage(id)
@@ -262,7 +262,8 @@ const OfferList = ({
                             onFilter={() => setFilteredCurrentUserOffer(filterCurrentUserOffers(currentUserOffers))}
                             filterBoxMainTitle="Filtrer les offres par"
                             filters={CURRENT_USER_OFFER_FILTERS}
-                            filterBoxClassName="fixed top-[64px] left-0"
+                            filterBoxClassName="absolute top-[64px] right-0 z-50"
+                            className=""
                         />
                     </div>
                 }

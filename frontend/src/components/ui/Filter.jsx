@@ -5,7 +5,7 @@ import {motion} from "framer-motion";
 
 const Filter = ({
                     filters = [],
-                    filterBoxClassName = "fixed",
+                    filterBoxClassName = "fixed z-50",
                     className = "",
                     filterBoxMainTitle = "Filtrer par",
                     onFilter = () => {
@@ -104,7 +104,7 @@ const Filter = ({
                     duration: 0.2,
                 }}
                 initial={false}
-                className={`bg-white-100 shadow-sm border border-black-0 dark:bg-white-0 p-4 rounded-xl text-black-100 dark:text-white-100 flex flex-col gap-4 items-start justify-center max-w-[420px] ${filterBoxClassName}`}
+                className={`bg-white-100 shadow-sm border border-black-0 dark:bg-white-0 p-4 rounded-xl text-black-100 dark:text-white-100 flex flex-col gap-4 items-start justify-center min-w-[320px] max-w-[420px] ${filterBoxClassName}`}
             >
                 <div className="flex w-full justify-between items-center">
                     <div className="flex items-center gap-2">

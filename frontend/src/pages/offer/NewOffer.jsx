@@ -298,7 +298,7 @@ const NewOffer = () => {
         className="flex flex-col gap-10 p-2 bg-white-100 dark:bg-transparent rounded-2xl p-4 "
         onSubmit={(e) => handleCreateOffer(e)}
       >
-        {/* formulaire parties */}
+         formulaire parties 
         <div className="flex flex-col gap-6">
           <div className=" flex flex-col gap-4">
             <div className="w-full  h-60 bg-black-10 rounded-xl flex flex-col justify-center items-center overflow-hidden">
@@ -319,7 +319,7 @@ const NewOffer = () => {
             />
           </div>
 
-          {/* Informations sections */}
+           Informations sections 
           <div className="flex flex-col gap-4">
             <TextArea
               titleIcon="bi bi-pencil"

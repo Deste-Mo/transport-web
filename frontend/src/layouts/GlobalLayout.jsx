@@ -16,10 +16,14 @@ const GlobalLayout = () => {
             <motion.div
                 initial={"hidden"}
                 exit={{opacity: 0, scale: 0}}
-                animate={showMessagePopup ? "visible" : "hidden"} 
+                animate={showMessagePopup ? "visible" : "hidden"}
                 variants={toastVariants}
-                className="fixed top-10 -translate-x-1/2 left-1/2">
-
+                style={{
+                    translateX: "-50%", // Replace Tailwind's `-translate-x-1/2`
+                    left: "50%"         // Keep horizontal centering
+                }}
+                className="fixed top-10">
+                
                 <Toast
                     onClick={() => setShowMessagePopup(false)} message={toast?.message}
                     error={toast?.type === TOAST_TYPE.error}
