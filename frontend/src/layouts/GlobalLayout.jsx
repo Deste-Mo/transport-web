@@ -12,17 +12,17 @@ const GlobalLayout = () => {
     const {confirmPopup, setConfirmPopup} = useApp();
 
     return (
-        <section >
+        <section className="relative w-ful ">
             <motion.div
-                initial = {"hidden"}
+                initial={"hidden"}
                 exit={{opacity: 0, scale: 0}}
-                animate={showMessagePopup ? "visible" : "hidden"} variants={toastVariants}
-                className="fixed left-[50%] -translate-x-1/2 top-10  z-50 max-md:w-[95%]"
-                >
+                animate={showMessagePopup ? "visible" : "hidden"} 
+                variants={toastVariants}
+                className="fixed top-10 -translate-x-1/2 left-1/2">
+
                 <Toast
                     onClick={() => setShowMessagePopup(false)} message={toast?.message}
                     error={toast?.type === TOAST_TYPE.error}
-                    className={"w-full"}
                 />
             </motion.div>
             <motion.div initial={false}
