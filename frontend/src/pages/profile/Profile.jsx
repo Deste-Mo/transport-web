@@ -246,6 +246,8 @@ const OfferList = ({
                        currentUserOffers
                    }) => {
     const navigate = useNavigate();
+    
+
     return (
         <div className="flex flex-col gap-6">
             <SubHeader

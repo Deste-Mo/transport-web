@@ -15,6 +15,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import api from "../utils/api.js";
 import axios from "axios";
 import { useAnimation } from "./AnimationProvider.jsx";
+import {REFRESH_TOKEN_INTERVAL} from "../constants/auth.js";
 axios.defaults.withCredentials = true;
 export const AuthContext = createContext({});
 
@@ -104,40 +105,10 @@ const AuthProvider = ({ children }) => {
         navigate("/");
     }
 
-    // const refreshToken = async () => {
-    //     axios
-    //         .get(`${SERVERLINK}/api/auth/token`)
-    //         .then((res) => {
-    //             // console.log(`New access token : ${res.data.accessToken}`);
-    //             if (res.status === 200) {
-    //                 setToken(res.data.accessToken);
-    //                 updateAuthorization(res.data.accessToken);
-    //             }
-    //         })
-    //         .catch((e) => {
-    //             console.log(`Erreur : ${e.response.data.error}`);
-    //             updateAuthorization(null);
-    //         })
-    // };
-
-    // useEffect(() => {
-    //     setLoading(true);
-
-    //     refreshToken().finally(() => {
-    //         setLoading(false);
-    //     });
-
-    //     // refreshToken();
-
-    //     const interval = setInterval(() => {
-    //         refreshToken();
-
-    //     }, 13000) // senser se changer tout les 10 min à changer en fonction de notre access token sa durée de vie 
-    //     return () => clearInterval(interval);
-
-    // }, [token]);
+    
 
     const refreshToken = async () => {
+        setLoading(true)
         axios.get(`${SERVERLINK}/api/auth/token`)
             .then(res => {
                 // console.log(`New access token : ${res.data.accessToken}`);
@@ -150,15 +121,16 @@ const AuthProvider = ({ children }) => {
             }).finally(() => {
                 setLoading(false);
             })
-
     };
-
-
+    
     useEffect(() => {
-        setLoading(true);
-        // setInterval(() => {
+        // setLoading(true);
         refreshToken();
-        // }, 600000);
+        
+        const intervalId = setInterval(() => {
+            refreshToken();
+        }, REFRESH_TOKEN_INTERVAL);
+        return () => clearInterval(intervalId);
     }, []);
 
     return (

@@ -10,6 +10,7 @@ import {OFFER_CARD_FILTERS, OFFER_CARD_FILTERS_PROFILE} from "../../constants/in
 import {motion} from "framer-motion";
 import {useOffer} from "../../context/OfferProvider.jsx";
 import OfferCardLoading from "../../components/loader/OfferCardLoading.jsx";
+import ExpandableSearchBar from "../../components/ui/ExpandableSearchBar.jsx";
 
 const OfferCard = lazy(() => import("../../components/pages/Offer/OfferCard.jsx"));
 
@@ -48,7 +49,7 @@ const UserOffer = () => {
 
     useEffect(() => {
         setFilteredOffers(filterOffers(search, currentUserOffers));
-      }, [search]);
+    }, [search, currentUserOffers]);
 
     return (
         <motion.section
@@ -67,6 +68,7 @@ const UserOffer = () => {
                 rightContent={
                     currentUserOffers?.length > 0 && (
                         <SearchFilter
+                            className="max-[990px]:hidden"
                             filterResultsName="offerCardFilter"
                             filters={OFFER_CARD_FILTERS_PROFILE}
                             variant="fill"
@@ -83,9 +85,27 @@ const UserOffer = () => {
                     )
                 }
             />
+            {/*Mobile search Filter*/}
+            <SearchFilter
+                expanded
+                className="[990px]:hidden"
+                filterResultsName="offerCardFilter"
+                filters={OFFER_CARD_FILTERS_PROFILE}
+                variant="fill"
+                size="sm"
+                radious="full"
+                value={search}
+                placeholder="Rechercher une offre"
+                setValue={setSearch}
+                onFilter={() => {
+                    setFilteredOffers(filterOffers(search, currentUserOffers))
+                }
+                }
+            />
+
             <div className="flex flex-col items-center justify-center gap-6 w-full">
                 {
-                    filteredOffers.length > 0 ? (
+                    filteredOffers.length > 0 && (
                         <Suspense fallback={<OfferCardLoading/>}>
                             {filteredOffers.map((currentUserOffer) => (
                                 <OfferCard
@@ -100,9 +120,13 @@ const UserOffer = () => {
                                     }
                                 />
                             ))}
-                        </Suspense>
-                    ) : <p className="nothing-box">{profileInfo.firstname + " n' a pas d'offre pour le moment"}</p>
+                        </Suspense>)
                 }
+                {currentUserOffers.length <= 0 &&
+                    <p className="nothing-box">{profileInfo.firstname + " n' a pas d'offre pour le moment"}</p>
+                }
+                {filteredOffers.length <= 0 &&
+                    <p className="nothing-box">{"Aucune offre trouvé"}</p>}
             </div>
         </motion.section>)
 }
