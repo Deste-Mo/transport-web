@@ -101,7 +101,7 @@ const MobileNavigation = ({className, NAV_LINKS, profileImage}) => {
             className={`flex justify-between max-md:justify-center  items-center bi  z-40 ${className}`}
         >
             <div
-                className="flex  items-center w-full justify-between max-md:items-center gap-20 max-lg:gap-10 py-4 px-8 fixed left-0 top-0 bg-white-100 dark:bg-white-0 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md z-50">
+                className="flex  items-center w-full justify-between max-md:items-center gap-20 max-lg:gap-10 py-4 px-8 fixed left-0 top-0 bg-white-100 dark:bg-white-0 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md z-40">
                 <div className="flex items-center gap-14 logo ">
                     {showBackIcon && (
                         <Icon
@@ -119,7 +119,7 @@ const MobileNavigation = ({className, NAV_LINKS, profileImage}) => {
             </div>
 
             <div className="">
-                <ul className="flex  items-center w-full justify-between max-md:items-center  py-4 px-8 fixed left-0 bottom-0 bg-white-100 dark:bg-white-0 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md z-50">
+                <ul className="flex  items-center w-full justify-between max-md:items-center  py-4 px-8 fixed left-0 bottom-0 bg-white-100 dark:bg-white-0 text-black-100 dark:backdrop-blur-sm dark:text-white-100 shadow-md z-40">
                     {
                         personalInformation.isVerify &&
                         NAV_LINKS.map((navlink) => (
@@ -206,13 +206,13 @@ const Profile = ({profileImage, className}) => {
                     name="Profil"
                     icon="bi bi-person"
                 />
-                <OptionItem
+                {/*<OptionItem
                     onClick={() => {
                         setTogglePopup(false);
                     }}
                     name="Paramètres"
                     icon="bi bi-gear"
-                />
+                />*/}
                 <OptionItem
                     onClick={() => {
                         setDarkMode(prev => !prev);

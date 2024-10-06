@@ -6,7 +6,7 @@ export const PASSWORD_REGEX = /^[a-zA-Z0-9-_.#]{8,}$/;
 export const NAME_REGEX = /^[a-z0-9.-_#]{4,}$/i;
 export const LAST_NAME_REGEX = /^[a-z0-9.-_#\s]{4,}$/i;
 export const CIN_REGEX = /^[0-9]{5}[2|1][0-9]{6}$/;
-export const NIF_STAT_REGEX = /^[0-9]{5,}$/;
+export const NIF_STAT_REGEX = /^[0-9]{10,15}$/;
 export const PHONE_REGEX = /^(\+261)?(032|033|034|037|038|020)[0-9]{7}$/;
 
 export const EMAIL_REGEX_MESSAGE = "Veuillez saisir une adresse e-mail valide (exemple : exemple@domaine.com)";
@@ -14,7 +14,7 @@ export const PASSWORD_REGEX_MESSAGE = "Le mot de passe doit comporter au moins 8
 export const LAST_NAME_REGEX_MESSAGE = "Le prénom doit comporter au moins 4 caractères (lettres, chiffres, - , _ , . , #)";
 export const NAME_REGEX_MESSAGE = "Le nom doit comporter au moins 4 caractères (lettres, chiffres, - , _ , . , #, espaces)";
 export const CIN_REGEX_MESSAGE = "Le CIN doit comporter 12 chiffres (exemple : 1234567123456)";
-export const NIF_STAT_REGEX_MESSAGE = "Le NIF doit comporter au moins 5 chiffres";
+export const NIF_STAT_REGEX_MESSAGE = "Le NIF doit comporter au moins 10 à 15 chiffres";
 export const PHONE_REGEX_MESSAGE = "Veuillez saisir un numéro de téléphone au format +261 (32|33|34|37|38|020)XXXXXXX ou 0(32|33|34|37|38|020)XXXXXXX, où X représente un chiffre";
 
 // Registration pages constants

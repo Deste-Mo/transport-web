@@ -1,13 +1,25 @@
-import {createContext, useContext, useEffect, useLayoutEffect, useState} from "react";
-import {ACCOUNT_TYPES, REGISRATION_STEPS, SERVERLINK, TOAST_TYPE} from "../constants/index.js";
-import {useLocation, useNavigate} from "react-router-dom";
+import {
+    createContext,
+    useContext,
+    useEffect,
+    useLayoutEffect,
+    useState
+} from "react";
+import {
+    ACCOUNT_TYPES,
+    REGISRATION_STEPS,
+    SERVERLINK,
+    TOAST_TYPE
+} from "../constants/index.js";
+import { useLocation, useNavigate } from "react-router-dom";
 import api from "../utils/api.js";
 import axios from "axios";
-import {useAnimation} from "./AnimationProvider.jsx";
+import { useAnimation } from "./AnimationProvider.jsx";
+import {REFRESH_TOKEN_INTERVAL} from "../constants/auth.js";
 axios.defaults.withCredentials = true;
 export const AuthContext = createContext({});
 
-const AuthProvider = ({children}) => {
+const AuthProvider = ({ children }) => {
     const [personalInformation, setPersonalInformation] = useState([]);
     const [profileInfo, setProfileInfo] = useState([]);
     const [registerMode, setRegisterMode] = useState(ACCOUNT_TYPES.camion);
@@ -18,7 +30,7 @@ const AuthProvider = ({children}) => {
     const [loadingInformation, setLoadingInformation] = useState(true);
     const [token, setToken] = useState(null);
     const [isAuth, setIsAuth] = useState(false);
-    
+
     const navigate = useNavigate();
 
     // Register handler
@@ -57,6 +69,7 @@ const AuthProvider = ({children}) => {
     }
 
     const getInformation = async (accessToken, userId) => {
+        setLoadingInformation(true);
         api.get(`${SERVERLINK}/api/auth/me/${!userId ? '' : userId}`, {
             headers: {
                 token: accessToken,
@@ -93,28 +106,34 @@ const AuthProvider = ({children}) => {
         navigate("/");
     }
 
+    
 
-    useEffect(() => {
-        setLoading(true);
-        const refreshToken = async () => {
-            axios.get(`${SERVERLINK}/api/auth/token`)
-                .then(res => {
-                    // console.log(`New access token : ${res.data.accessToken}`);
-                    setToken(res.data.accessToken);
-                    getInformation(res.data.accessToken);
-                })
-                .catch(e => {
-                    console.log(`Erreur : ${e.response.data.error}`);
-                    updateAuthorization(null);
-                }).finally(() => {
+    const refreshToken = async () => {
+        setLoading(true)
+        axios.get(`${SERVERLINK}/api/auth/token`)
+            .then(res => {
+                // console.log(`New access token : ${res.data.accessToken}`);
+                setToken(res.data.accessToken);
+                getInformation(res.data.accessToken);
+            })
+            .catch(e => {
+                console.log(`Erreur : ${e.response.data.error}`);
+                updateAuthorization(null);
+            }).finally(() => {
                 setLoading(false);
             })
-
-        };
+    };
+    
+    useEffect(() => {
+        // setLoading(true);
         refreshToken();
         
-    }, [token]);
-    
+        const intervalId = setInterval(() => {
+            refreshToken();
+        }, REFRESH_TOKEN_INTERVAL);
+        return () => clearInterval(intervalId);
+    }, []);
+
     return (
         <AuthContext.Provider
             value={{
@@ -139,7 +158,8 @@ const AuthProvider = ({children}) => {
                 isAuth,
                 updateAuthorization,
                 setProfileInfo,
-                profileInfo
+                profileInfo,
+                refreshToken
             }}
         >
             {children}

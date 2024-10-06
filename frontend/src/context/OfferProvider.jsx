@@ -7,6 +7,7 @@ import {
 } from "../constants/index.js";
 import axios from "axios";
 import {useAuth} from "./AuthProvider.jsx";
+import { useNavigate } from "react-router-dom";
 
 const OfferContext = createContext({});
 
@@ -21,6 +22,8 @@ const OfferProvider = ({children}) => {
     const [updateOffer, setUpdateOffer] = useState({});
     const [pubNumber, setPubNumber] = useState(0);
     const [savedPubNumber, setSavedPubNumber] = useState(0);
+
+    const navigate = useNavigate();
 
     const getOffers = async () => {
         const response = await axios.get(
@@ -41,6 +44,7 @@ const OfferProvider = ({children}) => {
             }
         );
         setPubNumber(await response?.data?.all.length);
+        // console.log("offer", response?.data?.all)
         setCurrentUserOffers(await response?.data?.all);
         setPubNumber(await response?.data?.all.length)
     }
@@ -53,6 +57,7 @@ const OfferProvider = ({children}) => {
         setSavedPubNumber(await response?.data?.saved.length);
         setSavedOffers(await response?.data?.saved);
     };
+    
     const getSuggestedOffers = async () => {
         const response = await axios.get(
             `${SERVERLINK}/api/offres/suggestionoffers`,
@@ -62,6 +67,7 @@ const OfferProvider = ({children}) => {
         );
         setSuggestedOffers(await response?.data?.suggestions);
     }
+
     const setUnavalaibleOffer = async (offerId) => {
 
         const response = await fetch(SERVERLINK + '/api/offres/setunavailableoffer/' + await offerId, {
@@ -134,6 +140,13 @@ const OfferProvider = ({children}) => {
         setUpdateOffer(await response?.data?.offer);
         localStorage.removeItem("offerNotifId");
     }
+
+    const removeOfferInStorage = async (id) => {
+        localStorage.getItem("offer") && localStorage.removeItem("offer");
+        navigate("/profile/" + id)
+        setUpdateOffer({});
+    }
+
     const filterOffers = (search, suggestedOffers) => {
         const filterModes = JSON?.parse(localStorage.getItem("offerCardFilter"));
         let filteredResult = suggestedOffers;
@@ -294,7 +307,8 @@ const OfferProvider = ({children}) => {
                 setSavedPubNumber,
                 setUnavalaibleOffer,
                 setAvalaibleOffer,
-                deleteOffer
+                deleteOffer,
+                removeOfferInStorage
             }}>
             {children}
         </OfferContext.Provider>

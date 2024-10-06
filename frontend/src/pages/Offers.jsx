@@ -89,7 +89,7 @@ const Offers = () => {
                 onFilter={() => setFilteredOffers(filterOffers(search, suggestedOffers))
                 }
             />
-            
+
             <div className="flex flex-col items-center justify-center gap-6 w-full">
                 {
                     filteredOffers?.length > 0 ? (

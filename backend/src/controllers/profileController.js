@@ -1,4 +1,4 @@
-import { follow, getAllFriend, getCountFollow, unfollow, updateUser } from "../models/users.js";
+import { follow, getAllFriend, getCountFollow, getIfUserExist, getUser, getUserUpdate, unfollow, updateUser } from "../models/users.js";
 
 
 export const followUser = (req, res) => {
@@ -72,6 +72,16 @@ export const allFriend = async (req, res) => {
 
 }
 
+export const getUserExistId = async (req, res) => {
+
+    const profileId = await req.params.userId;
+
+    const answer = await getIfUserExist(profileId);
+
+    return res.status(200).json({exist: (answer == 1 )});
+    
+}
+
 export const countFollow = async (req, res) => {
 
     try {
@@ -103,6 +113,14 @@ export const updateProfile = async(req, res) => {
             if(key === 'userid') return (req.user.userid)
             return req.body[key]
         })
+
+        const user = await getUserUpdate(req.body?.email, req.body.usercin ? req.body.usercin : req.body.companynumber, req.body?.phone, req.user?.userid);
+
+        console.log({user});
+
+        if (user.length > 0) {
+            return res.status(400).json({error: "L'utilisateur existe Déjas"});
+        }
 
         const update = await updateUser(formDate)
        

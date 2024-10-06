@@ -29,21 +29,19 @@ const NavPageLayout = () => {
 
     const user = personalInformation;
     const pathname = useLocation().pathname;
-    
-    
+
+
     useEffect(() => {
         getSavedOffers();
-        getSuggestedOffers(user.id);
+        getSuggestedOffers();
         getCurrentUserOffers();
         setShowBackIcon(false);
 
     }, []);
-    
-    useEffect(() => {
-        setHideMobileNavigation(pathname.toLowerCase() === '/message');
-        console.log(pathname.toLowerCase() === '/message')
-    }, [pathname])
 
+    useEffect(() => {
+        setHideMobileNavigation(false);
+    }, [pathname])
 
     return (
         <section

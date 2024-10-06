@@ -173,13 +173,12 @@ export const allOffersForUser = async (req, res) => {
 export const allOffersForUserId = async (req, res) => {
 
     const userId = req.params.userId;
-    const dispo = true;
+    const dispo = false;
     
     try {
 
         const allOffers = await getAllOfferById(userId, dispo);
-
-        // console.log("AllOffersBack: " + allOffers)
+         // console.log("AllOffersBack: " + allOffers)
 
         if(!allOffers[0]) return res.status(200).json({all: {}})
 

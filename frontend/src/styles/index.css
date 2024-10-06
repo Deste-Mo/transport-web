@@ -28,9 +28,6 @@
 }
 
 @layer base {
-  .auth-section {
-    @apply px-16 py-6 max-md:px-2;
-  }
 
   .app-container {
     @apply px-4 py-4;
@@ -48,8 +45,14 @@
     @apply bg-black-20 dark:bg-white-10  animate-pulse;
   }
   
+  
+  /*Auth pages*/
   .auth-form {
-    @apply flex flex-col  items-start justify-center gap-[32px] w-[460px] max-md:w-full p-6 max-md:p-3 border bg-white-100 dark:bg-white-10 dark:border-none border-black-0 rounded-xl;
+    @apply flex flex-col  items-start justify-center gap-[32px] w-[460px] max-md:w-full p-6 max-md:p-3 border bg-white-100  dark:bg-transparent dark:border-none border-black-0 rounded-xl;
+  }
+  
+  .auth-section{
+    @apply w-full  space-y-[64px] absolute top-[128px] left-1/2 -translate-x-1/2 max-md:space-y-10  px-16 py-6 max-md:px-2
   }
 }
 

@@ -9,13 +9,13 @@ const NotFound = () => {
         404{" "}
       </p>
       <p className="text-black-60 dark:text-white-60 text-center text-subtitle-1">
-        Page not found
+        Page non trouvée
       </p>
       <p
         onClick={() => navigate("/")}
         className="cursor-pointer text-lead text-primary text-center"
       >
-        Return Back
+        Retourner à l'accueil
       </p>
     </section>
   );

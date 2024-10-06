@@ -24,5 +24,6 @@
             "database": "transport_database",
             "username": "postgres"
         }
-    ]
+    ],
+    "window.title": "${dirty}${activeEditorShort}${separator}${rootName}${separator}${profileName}${separator}${appName}${separator}[Branch: finalBranch]"
 }

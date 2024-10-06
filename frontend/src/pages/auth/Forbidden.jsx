@@ -9,7 +9,7 @@ const Forbidden = () => {
         403{" "}
       </p>
       <p className="text-black-60 dark:text-white-60 text-center text-subtitle-1">
-        Forbidden
+        Non Autorisé
       </p>
       <p
         onClick={() => navigate("/")}

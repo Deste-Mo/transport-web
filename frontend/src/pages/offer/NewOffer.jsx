@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import { useForm } from "../../context/FormProvider";
 import {
   TextInput,
@@ -23,9 +23,10 @@ const NewOffer = () => {
   const { setShowBackIcon, setMessagePopup } = useAnimation();
 
   const { getCurrentUserOffers, updateOffer, setUpdateOffer } = useOffer();
+  const { token, personalInformation } = useAuth()
+  
 
   const titreData = ['Transport de marchandise', 'Marchandise à transporter']
-  const mesureData = ['kg', 'tonnes']
   const todaydate = new Date().toISOString().split('T')[0]
 
   // Function to get today's date in MM/DD/YYYY format
@@ -36,7 +37,16 @@ const NewOffer = () => {
     const year = today.getFullYear()
     return `${year}-${month}-${day}`
   }
-  
+
+  const mesureUnit = ['kg', 'tonnes']
+
+  const [isEditOffer, setIsEditOffer] = useState(false);
+
+  const [file, setFile] = useState({
+    name: '',
+    path: '',
+  })
+
   const formatDateForInput = (dateString) => {
     const date = new Date(dateString)
     const year = date.getFullYear()
@@ -45,11 +55,9 @@ const NewOffer = () => {
     return `${year}-${month}-${day}`
   }
 
-  const { token, personalInformation } = useAuth()
-
-  const [file, setFile] = useState({
-    name: '',
-    path: '',
+  const [mesureData, setMesureData] = useState({
+    cap: '',
+    unit: 'kg'
   })
 
   const [formData, setFormData] = useState({
@@ -61,17 +69,6 @@ const NewOffer = () => {
     capacity: '',
     scheduledDate: todaydate,
   })
-
-  setShowBackIcon(true);
-  
-  
-  useEffect(() => {
-    const getOfferById = async () => {
-      localStorage.getItem('offer') &&
-        setUpdateOffer(await JSON.parse(localStorage.getItem('offer')))
-    }
-     getOfferById()
-  }, [])
 
   const reset = () => {
     localStorage.removeItem('offer')
@@ -88,6 +85,8 @@ const NewOffer = () => {
       name: '',
       path: '',
     })
+
+    setIsEditOffer(false)
   }
 
   const [errorData, setErrorData] = useState({
@@ -125,16 +124,16 @@ const NewOffer = () => {
 
         const sendNotifs = await fetch(SERVERLINK + '/api/notifs/sendnotifs', {
           method: 'POST',
-        headers: {
+          headers: {
             'Content-Type': 'application/json',
-          token: token,
-        },
-        body: JSON.stringify({ content, offerId }),
+            token: token,
+          },
+          body: JSON.stringify({ content, offerId }),
         })
         getCurrentUserOffers()
         setMessagePopup("L'offre publié avec success !", TOAST_TYPE.success)
 
-      setFormData({
+        setFormData({
           imgUrl: '',
           title: 'Transport de marchandise',
           description: '',
@@ -144,7 +143,7 @@ const NewOffer = () => {
           scheduledDate: todaydate,
         })
 
-      setFile({
+        setFile({
           name: '',
           path: '',
         })
@@ -159,6 +158,8 @@ const NewOffer = () => {
     e.preventDefault();
 
     try {
+      // setCapacity();
+
       const data = new FormData()
 
       for (const key in formData) {
@@ -172,14 +173,14 @@ const NewOffer = () => {
       }
 
       const response = await fetch(
-        SERVERLINK + '/api/offres/updateofferforuser/' + updateOffer.offerid,
-        {
-          method: 'POST',
-          headers: {
-            token: token,
-          },
-          body: data,
-        }
+          SERVERLINK + '/api/offres/updateofferforuser/' + updateOffer.offerid,
+          {
+            method: 'POST',
+            headers: {
+              token: token,
+            },
+            body: data,
+          }
       );
 
       if (response.status === 200) {
@@ -190,17 +191,17 @@ const NewOffer = () => {
 
         const sendNotifs = await fetch(SERVERLINK + '/api/notifs/sendnotifs', {
           method: 'POST',
-        headers: {
+          headers: {
             'Content-Type': 'application/json',
-          token: token,
-        },
-        body: JSON.stringify({ content, offerId }),
+            token: token,
+          },
+          body: JSON.stringify({ content, offerId }),
         })
 
         setUpdateOffer(await res.offer)
         localStorage.setItem('offer', JSON.stringify(await res.offer))
 
-      setFile({
+        setFile({
           name: '',
           path: '',
         })
@@ -226,6 +227,52 @@ const NewOffer = () => {
   }
 
   useEffect(() => {
+    setShowBackIcon(true);
+    const getOfferById = async () => {
+      localStorage.getItem('offer') ?
+          setUpdateOffer(await JSON.parse(localStorage.getItem('offer')))
+          :
+          reset();
+    }
+    getOfferById()
+  }, [])
+
+  useEffect(() => {
+    const fullCap = `${mesureData.cap} ${mesureData.unit}`;
+    setFormData((prev) => ({
+      ...prev,
+      capacity: fullCap,
+    }));
+  }, [mesureData]);
+
+  useEffect(() => {
+    // updateOffer.scheduleddate && console.log(updateOffer.scheduleddate)
+    if (updateOffer) {
+      setFormData({
+        imgUrl: updateOffer.imgurl || '',
+        title:
+          (!updateOffer.title ||
+            updateOffer.title === 'undefined' ||
+            updateOffer.title === undefined)
+            ? 'Transport de marchandise'
+            : updateOffer.title,
+        description: updateOffer.description || '',
+        depart: updateOffer.depart || '',
+        destination: updateOffer.dest || '',
+        capacity: updateOffer.capacity || '',
+        scheduledDate: updateOffer.scheduleddate
+          ? formatDateForInput(updateOffer.scheduleddate)
+          : getTodayDate(),
+
+      })
+
+      setIsEditOffer(true);
+    } else {
+      reset();
+    }
+  }, [updateOffer])
+  
+  useEffect(() => {
     checkFieldError(errorData)
   }, [errorData])
 
@@ -239,17 +286,17 @@ const NewOffer = () => {
     >
       <SubHeader sticky name="Nouvel Offre" icon="bi bi-plus-circle-fill" />
       <form
-        className="flex flex-col gap-10 p-2  "
+        className="flex flex-col gap-10 p-2 bg-white-100 dark:bg-transparent rounded-2xl p-4 "
         onSubmit={(e) => handleCreateOffer(e)}
       >
-        {/* formulaire parties */}
+ 
         <div className="flex flex-col gap-6">
           <div className=" flex flex-col gap-4">
             <div className="w-full  h-60 bg-black-10 rounded-xl flex flex-col justify-center items-center overflow-hidden">
               <img
                 className="w-full h-full object-contain rounded-xl"
-                src={file.path ? file.path : formData.imgUrl ? SERVERLINK+ '/'+ formData.imgUrl : SERVERLINK + '/defaultPub.png'}
-                alt="Choisez une image"
+                src={file.path ? file.path : formData.imgUrl ? SERVERLINK + '/' + formData.imgUrl : SERVERLINK + '/defaultPub.png'}
+                alt="Choisissez une image"
               />
             </div>
             <FileInput
@@ -259,10 +306,10 @@ const NewOffer = () => {
               onChange={(e) => handleInputChange(setFormData, e)}
               onError={handleError(setErrorData)}
               block
+              inputDisabled={isEditOffer}
             />
           </div>
-
-          {/* Informations sections */}
+          
           <div className="flex flex-col gap-4">
             <TextArea
               titleIcon="bi bi-pencil"
@@ -301,9 +348,9 @@ const NewOffer = () => {
             }))}
             icon="bi bi-caret-down-fill"
             onError={handleError(setErrorData)}
-            onchange={(e) => handleInputChange(setFormData, e)}
+            onChange={(e) => handleInputChange(setFormData, e)}
             block
-            value={titreData[0]}
+            value={formData.title}
           />
           <div className="flex gap-4 max-md:flex-col">
             <TextInput
@@ -321,6 +368,7 @@ const NewOffer = () => {
               className=""
               name="destination"
               title="Destination"
+              placeholder="Entrer la destination"
               onError={handleError(setErrorData)}
               onChange={(e) => handleInputChange(setFormData, e)}
               value={formData.destination}
@@ -342,7 +390,6 @@ const NewOffer = () => {
                 id="scheduledDate"
                 required
                 onChange={handleDateInput}
-                onError={handleError(setErrorData)}
                 value={formData.scheduledDate}
                 className={`h-min  ${globalInputVariants.variant["fill"]} ${globalInputVariants.size["md"]} w-full rounded-xl`}
               />
@@ -350,26 +397,49 @@ const NewOffer = () => {
             <div className="flex gap-1">
               <TextInput
                 titleIcon="bi bi-truck-flatbed"
-                type="text"
+                type="number"
                 className=" "
-                name="capacity"
+                name="cap"
                 // pattern={/^[0-9]+$/}
-                pattern={/^\d+(\.\d+)?\s?(kg|tonne|tonnes|Kg|KG|TONNE|TONNES|Tonne|Tonnes)$/}
+                // pattern={/^\d+(\.\d+)?\s?(kg|tonne|tonnes|Kg|KG|TONNE|TONNES|Tonne|Tonnes)$/}
                 title="Quantité/capacité"
                 onError={handleError(setErrorData)}
-                onChange={(e) => handleInputChange(setFormData, e)}
-                value={formData.capacity}
+                onChange={(e) => handleInputChange(setMesureData, e)}
+                value={setMesureData.cap}
                 variant='fill'
                 placeholder='ex : 2 tonnes'
                 block
               />
+              <SelectInput
+                // className=" end-2"
+                title="unité"
+                // titleIcon="bi bi-truck-flatbed"
+                name="unit"
+                variant="fill"
+                options={mesureUnit.map((titre) => ({
+                  option: titre,
+                }))}
+
+                onChange={(e) => handleInputChange(setMesureData, e)}
+                block
+                value={mesureData[0]}
+              />
             </div>
 
-           
+
           </div>
         </div>
         <div className="flex  gap-4 w-full">
-            <Button type="submit" block children="Publier" />
+          {localStorage.getItem('offer') ? (
+            <Button
+              type="button"
+              onClick={handleUpdateOffer}
+              block
+              children="Modifier"
+            />
+          ) : (
+          <Button type="submit" block children="Publier" />
+          )}
           <Button
             type="button"
             onClick={reset}

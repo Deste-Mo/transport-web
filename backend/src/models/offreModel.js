@@ -76,6 +76,10 @@ export const getOfferById = async (offerId) =>{
 // delete a offer publication for a user (used for the unset function )
 
 export const deleteOfferById = async (offerId) =>{
+    const query = "DELETE FROM SAVEOFFER WHERE offerId = $1";
+
+    const res = await pool.query(query, [offerId]);
+
     const result = await pool.query('DELETE FROM Offer WHERE offerId = $1', [offerId]);
 
     return result.rowCount;

@@ -10,8 +10,9 @@ import {OFFER_CARD_FILTERS, OFFER_CARD_FILTERS_PROFILE} from "../../constants/in
 import {motion} from "framer-motion";
 import {useOffer} from "../../context/OfferProvider.jsx";
 import OfferCardLoading from "../../components/loader/OfferCardLoading.jsx";
+import ExpandableSearchBar from "../../components/ui/ExpandableSearchBar.jsx";
+import OtherUserOfferList from "../../components/pages/OtherUserOfferList.jsx";
 
-const OfferCard = lazy(() => import("../../components/pages/Offer/OfferCard.jsx"));
 
 const ProfileDetails = () => {
     const {personalInformation} = useAuth();
@@ -19,9 +20,9 @@ const ProfileDetails = () => {
     const currentUser = personalInformation;
     const {id} = useParams();
 
-    // useEffect(() => {
-    //     getCurrentUserOffers(id);
-    // },[id])
+    useEffect(() => {
+        getCurrentUserOffers(id);
+    }, [id])
 
     return (
         <section className="w-full">
@@ -29,74 +30,10 @@ const ProfileDetails = () => {
                 <Profile/>
             </div>
             <div className="max-md:hidden">
-                {currentUser.id === id ? <NewOffer/> : <ProfileOffer/>}
+                {currentUser.id === id ? <NewOffer/> : <OtherUserOfferList/>}
             </div>
         </section>
     );
 };
 export default ProfileDetails;
 
-const ProfileOffer = () => {
-    const {profileInfo} = useAuth();
-    const {currentUserOffers, savedOffers,filterOffers, getSavedOffers } = useOffer();
-    const [search, setSearch] = useState("");
-    const [filteredOffers, setFilteredOffers] = useState(currentUserOffers);
-
-    useEffect(() => {
-        setFilteredOffers(filterOffers(search, currentUserOffers));
-      }, [search, currentUserOffers]);
-    
-    return (<motion.section
-        id="offers"
-        className="flex flex-col items-center justify-center w-full gap-6"
-        variants={appVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{once: true}}
-    >
-        <SubHeader
-            name="Offres"
-            icon="bi bi-truck"
-            sticky
-            rightContent={
-                currentUserOffers?.length > 0 && (
-                    <SearchFilter
-                        filterResultsName="offerCardFilter"
-                        filters={OFFER_CARD_FILTERS_PROFILE}
-                        variant="fill"
-                        size="sm"
-                        radious="full"
-                        value={search}
-                        placeholder="Rechercher une offre"
-                        setValue={setSearch}
-                        onFilter={() => {
-                            setFilteredOffers(filterOffers(search, currentUserOffers))
-                        }
-                        }
-                    />
-                )
-            }
-        />
-        <div className="flex flex-col items-center justify-center gap-6 w-full">
-            {
-                filteredOffers.length > 0 ? (
-                    <Suspense fallback={<OfferCardLoading/>}>
-                        {filteredOffers.map((currentUserOffer) => (
-                            <OfferCard
-                                key={currentUserOffer.offerid}
-                                sug={currentUserOffer}
-                                saved={
-                                    savedOffers?.length > 0
-                                        ? savedOffers.find(
-                                            (offer) => offer.offerid === currentUserOffer.offerid
-                                        )
-                                        : false
-                                }
-                            />
-                        ))}
-                    </Suspense>
-                ) : <p className="nothing-box">{profileInfo.firstname + " n' a pas d'offre pour le moment"}</p>
-            }
-        </div>
-    </motion.section>)
-}

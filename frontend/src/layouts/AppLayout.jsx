@@ -14,7 +14,7 @@ import {useAnimation} from "../context/AnimationProvider.jsx";
 import useWindowSize from "../hooks/useWindowSize.jsx";
 
 const AppLayout = () => {
-    const {token, loading, personalInformation} = useAuth();
+    const {token, loading, personalInformation, getInformation} = useAuth();
     const {setHideMobileNavigation, hideMobileNaviagation} = useAnimation();
     const user = personalInformation;
     const {getUnreadMessageCount, countUnread, setIsMobile} = useApp();
@@ -55,6 +55,10 @@ const AppLayout = () => {
     useEffect(() => {
         setIsMobile(width < 768);
     }, [width, setIsMobile]);
+
+    // useEffect(() => {
+    //     getInformation(token);
+    // }, [])
     
     return loading ? (
         <DefaultLoader/>

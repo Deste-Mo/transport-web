@@ -19,6 +19,7 @@ const FileInput = ({
   iconVariant,
   icon = "bi bi-folder",
   style = fileInputStyle.BASIC,
+  inputDisabled = false,
 }) => {
   const fileRef = useRef(null);
   const [error, setError] = useState(true);
@@ -76,6 +77,7 @@ const FileInput = ({
           handleClick={handleClick}
           handleChangeFile={handleChangeFile}
           setError={setError}
+          inputDisabled={inputDisabled}
         />
       );
     case fileInputStyle.MODERNE:
@@ -96,6 +98,7 @@ const FileInput = ({
           handleClick={handleClick}
           handleChangeFile={handleChangeFile}
           setError={setError}
+          inputDisabled={inputDisabled}
         />
       );
     default:
@@ -114,49 +117,12 @@ const FileInput = ({
           handleClick={handleClick}
           handleChangeFile={handleChangeFile}
           setError={setError}
+          inputDisabled={inputDisabled}
         />
       );
   }
 };
 
-{
-  /* <div className={fileInputClassName}>
-      <Icon
-        icon={icon}
-        size="lg"
-        variant={iconVariant}
-        className="rounded-md m-0"
-        onClick={() => handleClick(fileRef)}
-      />
-      <div className={inputClassName}>
-        <input
-          ref={fileRef}
-          type="file"
-          className="-z-10 hidden text-black w-[0.1px] h-[0.1px] input-file dark:text-white"
-          accept=".png,.jpeg, .jpg"
-          onChange={(e) => {
-            handleChangeFile(e);
-            onChange(e);
-            setError(fileRef.current?.value === "");
-          }}
-          name={name}
-        />
-        <label htmlFor="" className="text-black-40 dark:text-white-40">
-          {fileRef.current?.value
-            ?.split("\\")
-            [fileRef.current?.value?.split("\\").length - 1].substr(-20) ||
-            "Ajoutez un photo"}
-        </label>
-      </div>
-      <Icon
-        className={inputClassName}
-        size="md"
-        variant="danger"
-        icon="bi-trash"
-        onClick={removeFiles}
-      />
-    </div> */
-}
 
 FileInput.propTypes = {
   setFile: PropTypes.func,
@@ -185,6 +151,7 @@ const BasicFileInput = ({
   handleClick,
   setError,
   handleChangeFile,
+  inputDisabled = false,
 }) => {
   const fileInputClassName = `flex items-center justify-between ${
     block ? "w-full" : `null`
@@ -197,6 +164,7 @@ const BasicFileInput = ({
         variant={iconVariant}
         className=" m-0"
         onClick={() => handleClick(fileRef)}
+        disabled={inputDisabled}
       />
       <div className={inputClassName}>
         <input
@@ -210,6 +178,7 @@ const BasicFileInput = ({
             setError(fileRef.current?.value === "");
           }}
           name={name}
+          disabled={inputDisabled}
         />
         <label htmlFor="" className="text-black-40 dark:text-white-40">
           {fileRef.current?.value
@@ -224,6 +193,7 @@ const BasicFileInput = ({
         variant="danger"
         icon="bi-trash"
         onClick={removeFiles}
+        disabled={inputDisabled}
       />
     </div>
   );
@@ -244,6 +214,7 @@ const ModernFileInput = ({
   handleClick,
   setError,
   handleChangeFile,
+  inputDisabled = false,
 }) => {
   const fileInputClassName = `flex flex-col gap-2 items-center justify-between ${
     block && "w-full"
@@ -289,6 +260,7 @@ const ModernFileInput = ({
             setError(fileRef.current?.value === "");
           }}
           name={name}
+          disabled={inputDisabled}
         />
         <label htmlFor="" className="text-black-40 dark:text-white-40">
           {fileRef.current?.value

@@ -71,12 +71,9 @@ const RegisterIdentification = () => {
     return (
         <motion.section
             variants={appVariants}
-            className="w-full  auth-section space-y-[128px] absolute top-[128px] left-1/2 -translate-x-1/2 max-md:space-y-10"
-            // initial="hidden"
-            // whileInView="visible"
-            // viewport={{once: true}}
+            className="auth-section top-[64px]"
         >
-            <div className="flex flex-col items-center justify-center gap-4">
+            <div className="flex flex-col items-start justify-center gap-4">
                 <div className="flex w-full items-center justify-center">
                     <Icon
                         icon="bi bi-arrow-left"
