@@ -15,6 +15,7 @@ import TemplatePopup, {
 } from '../../components/ui/TemplatePopup.jsx'
 import Filter from "../../components/ui/Filter.jsx";
 import OfferCardLoading from "../../components/loader/OfferCardLoading.jsx";
+import OtherUserOfferList from "../../components/pages/OtherUserOfferList.jsx";
 
 const ProfileCard = lazy(() =>
     import('../../components/pages/profile/ProfileCard.jsx'),
@@ -102,7 +103,7 @@ export default function Profile() {
             {/*For other user*/}
             {profileInfo.id !== personalInformation.id && (
                 <div className="md:hidden visible">
-                    <OtherUserOfferList filteredCurrentUserOffer={filteredCurrentUserOffer}/>
+                    <OtherUserOfferList/>
                 </div>
             )}
             {/* For the current user */}
@@ -181,7 +182,7 @@ const FollowerList = ({friendFollowerCount, profileFriends, friends, handleSeeUs
     )
 }
 
-const OtherUserOfferList = ({filteredCurrentUserOffer}) => {
+/*const OtherUserOfferList = ({filteredCurrentUserOffer}) => {
     return (
         filteredCurrentUserOffer?.length > 0 ? (
             <Suspense fallback={<OfferCardLoading/>}>
@@ -196,7 +197,7 @@ const OtherUserOfferList = ({filteredCurrentUserOffer}) => {
 
         ) : < div className="nothing-box"> Pas d'offres</div>
     )
-}
+}*/
 
 const SavedOfferList = ({savedOffers}) => {
     const navigate = useNavigate();

@@ -26,15 +26,37 @@ const AppProvider = ({ children }) => {
     const [confirmPopup, setConfirmPopup] = useState({
         message :  "Some message ?",
         confirmed : false,
+        visible : false,
     });
     const setConfirmMessagePopup = (message) => {
-        setConfirmPopup({
+        setConfirmPopup((prev) => ({
+            ...prev,
             message,
-            confirmed : false,
-        })
+            visible : false,
+            confirmed: false,
+        }));
         setShowConfirmPopup(true);
         return confirmPopup.confirmed;
     }
+
+    const showConfirmPopup = (message) => {
+        return new Promise((resolve) => {
+            setConfirmMessagePopup(message);
+            setConfirmPopup((prev) => ({
+                ...prev,
+                visible: true,
+                onConfirm: () => {
+                    resolve(true);
+                    setConfirmPopup((prev) => ({ ...prev, visible: false}));
+                },
+                onCancel: () => {
+                    resolve(false);
+                    setConfirmPopup((prev) => ({ ...prev, visible: false}));
+                },
+            }));
+        });
+    };
+    
     
     const handleShowConversation = async () => {
 
@@ -125,7 +147,7 @@ const AppProvider = ({ children }) => {
     }
 
     
-    return <AppContext.Provider value={{
+    return (<AppContext.Provider value={{
         // CONVERSATION
         getUserMessages,
         userToChat,
@@ -145,13 +167,12 @@ const AppProvider = ({ children }) => {
         
         // Confirm Popup
         confirmPopup,
-        setConfirmPopup,
-        setConfirmMessagePopup,
+        showConfirmPopup,
         limitTextLen
 
     }}>
         {children}
-    </AppContext.Provider>
+    </AppContext.Provider>)
 }
 export default AppProvider;
 
