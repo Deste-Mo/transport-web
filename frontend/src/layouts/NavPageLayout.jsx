@@ -29,8 +29,8 @@ const NavPageLayout = () => {
 
     const user = personalInformation;
     const pathname = useLocation().pathname;
-    
-    
+
+
     useEffect(() => {
         getSavedOffers();
         getSuggestedOffers();
@@ -38,11 +38,11 @@ const NavPageLayout = () => {
         setShowBackIcon(false);
 
     }, []);
-    
+
     useEffect(() => {
         setHideMobileNavigation(false);
     }, [pathname])
-    
+
     return (
         <section
             className={`flex items-start  w-full justify-between nav-page-container gap-10 h-[86vh]  scrollbar-none relative ${hideMobileNavigation ? 'max-md:h-screen overflow-hidden' : 'max-md:h-[80vh]'} `}>

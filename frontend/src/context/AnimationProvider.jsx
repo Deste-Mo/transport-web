@@ -6,7 +6,7 @@ const AnimationContext = createContext({});
 const AnimationProvider = ({ children }) => {
   const [togglePopup, setTogglePopup] = useState(false);
   const [showMessagePopup, setShowMessagePopup] = useState(false);
-  const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+  const [showConfirmPopup, setShowConfirmPopup] = useState(true);
   const [showBackIcon, setShowBackIcon] = useState(false);
   const [hideMobileNavigation, setHideMobileNavigation] = useState(false);
 

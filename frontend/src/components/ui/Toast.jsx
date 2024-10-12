@@ -9,7 +9,7 @@ const Toast = ({
 }) => {
   return (
     <div
-      className={`flex items-center gap-6 bg-white-100 dark:bg-white-0 dark:backdrop-blur-sm border border-black-0  py-3 px-6 rounded-xl justify-between w-fit dark:text-white-100 ${
+      className={` flex items-center gap-6 bg-white-100 dark:bg-white-0 dark:backdrop-blur-sm border border-black-0  py-3 px-6 rounded-xl justify-between w-fit dark:text-white-100 ${
         !error
           ? "bg-success-100 text-black-100"
           : "bg-danger-100 text-black-100"

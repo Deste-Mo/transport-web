@@ -30,7 +30,7 @@ const OfferCard = ({
     const [detailed, setDetailed] = useState(false);
     const [isEnable, setEnable] = useState(sug?.dispo);
     const [popupVisible, setPopupVisible] = useState(false);
-    const {timeSince} = useApp();
+    const {timeSince, showConfirmPopup} = useApp();
     const {saveOffer, retireOffer, getSavedOffers, offer} = useOffer();
     const navigate = useNavigate();
     const image = SERVERLINK + "/" + sug?.profileimage;
@@ -39,7 +39,19 @@ const OfferCard = ({
               dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit
               amet, Lorem ipsum dolor
               Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet`;
+    const {setMessagePopup} = useAnimation();
 
+    const {
+        getOfferById,
+        getCurrentUserOffers,
+        setUpdateOffer,
+        setUnavalaibleOffer,
+        setAvalaibleOffer,
+        deleteOffer,
+    } = useOffer();
+
+    const {token} = useAuth();
+    
     const contactUser = () => {
         localStorage.setItem(
             "userToChat",
@@ -68,36 +80,26 @@ const OfferCard = ({
     const toggleOfferCardPopup = () => {
         setPopupVisible((prev) => !prev);
     };
-
-    const {setMessagePopup} = useAnimation();
-
-    const {
-        getOfferById,
-        getCurrentUserOffers,
-        setUpdateOffer,
-        setUnavalaibleOffer,
-        setAvalaibleOffer,
-        deleteOffer,
-    } = useOffer();
-
-    const {token} = useAuth();
-
+    
     const NJCAM = {
-    Infos: "Njcam est une entreprise qui propose des équipements de surveillance de haute qualité, tels que des caméras de surveillance, et assurer une intégration complète avec les systèmes de gestion existants.Elle fourni des solutions informatiques intégrées, gére les infrastructures technologiques des clients, et développe des logiciels adaptés aux besoins du marché\n",
+        Infos: "Njcam est une entrprise qui prend en charge la vente de Camera de securite et la surveillance Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet et blanditiis eaque, enim vitae perspiciatis. Porro minus iusto voluptatem, ducimus nemo autem cum, placeat iste nostrum tempora quibusdam quia commodi",
         Image: SERVERLINK + '/njcamlogo.jpg',
         ImageOffer: SERVERLINK + '/njcamoffer.jpg',
         Link: 'https://facebook.com'
     }
     const handleDeletePost = async () => {
         // TODO :
+        
+        const userConfirmed = await showConfirmPopup("Voulez vous vraiment supprimer ce message ?")
+        if (!userConfirmed)
+            return
+        
         await deleteOffer(sug.offerid);
         await getCurrentUserOffers();
         localStorage.removeItem("offer");
         setUpdateOffer();
 
-        // - Deleting the post
-        // setPopupVisible(false);
-        setMessagePopup("Offre supprimé avec succès", TOAST_TYPE.success);
+        setMessagePopup("Offre supprimé avec success", TOAST_TYPE.success);
     };
 
     const handleEditPost = () => {
@@ -115,7 +117,7 @@ const OfferCard = ({
         await getCurrentUserOffers();
         setPopupVisible(false);
         setEnable(false);
-        setMessagePopup("Offre indisponible, vous seule peut le consulter", TOAST_TYPE.success);
+        setMessagePopup("L'offre actuellement indisponible", TOAST_TYPE.success);
 
     };
 

@@ -1,4 +1,3 @@
-
 import {Routes, Route} from "react-router-dom";
 import Home from './pages/Home';
 import Labo from './pages/labo/Labo';
@@ -37,84 +36,83 @@ import EditOffer from "./pages/offer/EditOffer.jsx";
 export default function App() {
 
     return (
-      <div className="App">
-        <Routes>
-          <Route element={<GlobalLayout />}>
-            {/* Auth */}
-            <Route element={<AuthLayout />}>
-              <Route path="/login" element={<Login />}></Route>
+        <div className="App">
+            <Routes>
+                <Route element={<GlobalLayout/>}>
+                    {/* Auth */}
+                    <Route element={<AuthLayout/>}>
+                        <Route path="/login" element={<Login/>}></Route>
 
-              <Route
-                path="/registerAccountType"
-                element={<RegisterAccountType />}
-              ></Route>
-              <Route
-                path="/registerIdentification"
-                element={<RegisterIdentification />}
-              ></Route>
-              <Route
-                path="/registerSecurity"
-                element={<RegisterSecurity />}
-              ></Route>
+                        <Route
+                            path="/registerAccountType"
+                            element={<RegisterAccountType/>}
+                        ></Route>
+                        <Route
+                            path="/registerIdentification"
+                            element={<RegisterIdentification/>}
+                        ></Route>
+                        <Route
+                            path="/registerSecurity"
+                            element={<RegisterSecurity/>}
+                        ></Route>
 
-              <Route path="/forgot-password" element={<ForgotPassword/>} />
+                        <Route path="/forgot-password" element={<ForgotPassword/>}/>
 
-              <Route path="/forgot-password/WaitLink" element={<WaitLink/>} />
+                        <Route path="/forgot-password/WaitLink" element={<WaitLink/>}/>
 
-              <Route path="/reset-password/:token" element={<ResetPassword/>} />
-            </Route>
+                        <Route path="/reset-password/:token" element={<ResetPassword/>}/>
+                    </Route>
 
-            {/* App */}
-            <Route element={<AppLayout />}>
-              {/*Profile*/}
-              <Route element={<ProfileLayout />}>
-                <Route path="profile/:id" element={<ProfileDetails />} />
-                <Route path="profile/:id/savedOffers" element={<SavedOffers />} />
-                 
-                {/* Only the logged in user can visit this */}
-                <Route element={<ProtectedProfileLayout/>}>
-                    <Route path="profile/:id/newOffer" element={<NewOffer />} />
-                    <Route path="profile/:id/edit/" element={<ProfileEdit />} />
-                    <Route path="profile/:id/editOffer" element={<EditOffer />} />
+                    {/* App */}
+                    <Route element={<AppLayout/>}>
+                        {/*Profile*/}
+                        <Route element={<ProfileLayout/>}>
+                            <Route path="profile/:id" element={<ProfileDetails/>}/>
+                            <Route path="profile/:id/savedOffers" element={<SavedOffers/>}/>
+
+                            {/* Only the logged in user can visit this */}
+                            <Route element={<ProtectedProfileLayout/>}>
+                                <Route path="profile/:id/newOffer" element={<NewOffer/>}/>
+                                <Route path="profile/:id/edit/" element={<ProfileEdit/>}/>
+                                <Route path="profile/:id/editOffer" element={<EditOffer/>}/>
+                            </Route>
+                        </Route>
+
+                        <Route element={<NavPageLayout/>}>
+                            {/*Home*/}
+                            <Route path="/" element={<Home/>}></Route>
+
+                            {/* Offers*/}
+                            <Route path="/offer" element={<Offers/>}/>
+
+                            {/* Friends*/}
+                            <Route path="/friend" element={<Friends/>}/>
+
+                            {/* Notifications*/}
+                            <Route path="/notification" element={<Notifications/>}/>
+
+                            {/*Messages*/}
+                            <Route path="/discussion" element={<MessageList/>}/>
+                            <Route path="/message" element={<Messages/>}/>
+                        </Route>
+                    </Route>
+
+                    <Route path="/abonnement" element={<SubscriptionPage/>}/>
+                    <Route path="/abonnement/:id/:montant/:type/paiement" element={<SubscriptionSecurity/>}/>
+
+                    {/* Pages Error */}
+                    <Route path="*" element={<NotFound/>}/>
+                    <Route path="/forbidden" element={<Forbidden/>}/>
+                    <Route path="/notFound" element={<NotFound/>}/>
+                    <Route path="/unauthorized" element={<Unauthorized/>}/>
+
+                    {/*Not implemented routes and components*/}
+                    <Route path="/securite" element={<Security/>}/>
+
+                    {/* Labo (Only for testing components)*/}
+                    <Route path="/labo" element={<Labo/>}></Route>
                 </Route>
-                  
-              </Route>
-
-              <Route element={<NavPageLayout />}>
-                {/*Home*/}
-                <Route path="/" element={<Home />}></Route>
-
-                {/* Offers*/}
-                <Route path="/offer" element={<Offers />} />
-
-                {/* Friends*/}
-                <Route path="/friend" element={<Friends />} />
-
-                {/* Notifications*/}
-                <Route path="/notification" element={<Notifications />} />
-
-                {/*Messages*/}
-                <Route path="/discussion" element={<MessageList />} />
-                <Route path="/message" element={<Messages />} />
-              </Route>
-            </Route>
-
-            <Route path="/abonnement" element={<SubscriptionPage />} />
-            <Route path="/abonnement/:id/:montant/:type/paiement" element={<SubscriptionSecurity/>} />
-
-            {/* Pages Error */}
-            <Route path="*" element={<NotFound />} />
-            <Route path="/forbidden" element={<Forbidden />} />
-            <Route path="/notFound" element={<NotFound />} />
-            <Route path="/unauthorized" element={<Unauthorized />} />
-
-            {/*Not implemented routes and components*/}
-            <Route path="/securite" element={<Security />} />
-              
-            {/* Labo (Only for testing components)*/}
-            <Route path="/labo" element={<Labo />}></Route>
-          </Route>
-        </Routes>
-      </div>
+            </Routes>
+        </div>
     );
 }

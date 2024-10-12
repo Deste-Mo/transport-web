@@ -9,7 +9,7 @@ export const subscribe = async (req, res) => {
         const subscribtion = await getSubscription(subId);
         const user = await getInformation(userId);
 
-        const message = "Vous êtes désormais réabonner pour " + (await subscribtion).duration + " jours";
+        const message = "Vous etes esormais reabonner pour " + (await subscribtion).duration + " jours";
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -74,10 +74,10 @@ export const sendConfirmMail = async (req, res) => {
             <p>Verifier les information suivant:</p>
             <p>Telephone: ${phone}</p>
             <p>Montant: ${montant}</p>
-            <p>Vous recevez cet email parce que Quelqu'un a demandé une réabonnement pour Media-Trans.</p>
+            <p>Vous recevez cet email parce que Quelqu'un a demandé une reabonnement pour Media-Trans.</p>
             <p>Veuillez cliquer sur le lien suivant, ou collez-le dans votre navigateur pour terminer le processus:</p>
             <a href="${confirmUrl}" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: #000; background-color: #FBCB34; text-decoration: none; border-radius: 5px;">Confirmer le payement</a>
-            <p>Si des informations ne sont pas correspondant avec votre verification, veuillez ignorer et supprimer cet email et annuler l'abonnement.</p>
+            <p>Si Des informations ne sont pas correspondant avec votre verification, veuillez ignorer et supprimer cet email et annuler l'abonnement.</p>
         </div>
     `;
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import { useForm } from "../../context/FormProvider";
 import {
   TextInput,
@@ -23,6 +23,8 @@ const NewOffer = () => {
   const { setShowBackIcon, setMessagePopup } = useAnimation();
 
   const { getCurrentUserOffers, updateOffer, setUpdateOffer } = useOffer();
+  const { token, personalInformation } = useAuth()
+  
 
   const titreData = ['Transport de marchandise', 'Marchandise à transporter']
   const todaydate = new Date().toISOString().split('T')[0]
@@ -39,6 +41,11 @@ const NewOffer = () => {
   const mesureUnit = ['kg', 'tonnes']
 
   const [isEditOffer, setIsEditOffer] = useState(false);
+
+  const [file, setFile] = useState({
+    name: '',
+    path: '',
+  })
 
   const formatDateForInput = (dateString) => {
     const date = new Date(dateString)
@@ -62,51 +69,6 @@ const NewOffer = () => {
     capacity: '',
     scheduledDate: todaydate,
   })
-
-  useEffect(() => {
-    const fullCap = `${mesureData.cap} ${mesureData.unit}`;
-    setFormData((prev) => ({
-      ...prev,
-      capacity: fullCap,
-    }));
-  }, [mesureData]);
-
-  useEffect(() => {
-    // updateOffer.scheduleddate && console.log(updateOffer.scheduleddate)
-    if (updateOffer) {
-      setFormData({
-        imgUrl: updateOffer.imgurl || '',
-        title:
-          (!updateOffer.title ||
-            updateOffer.title === 'undefined' ||
-            updateOffer.title === undefined)
-            ? 'Transport de marchandise'
-            : updateOffer.title,
-        description: updateOffer.description || '',
-        depart: updateOffer.depart || '',
-        destination: updateOffer.dest || '',
-        capacity: updateOffer.capacity || '',
-        scheduledDate: updateOffer.scheduleddate
-          ? formatDateForInput(updateOffer.scheduleddate)
-          : getTodayDate(),
-
-      })
-
-      setIsEditOffer(true);
-    } else {
-      reset();
-    }
-  }, [updateOffer])
-
-  const { token, personalInformation } = useAuth()
-
-  const [file, setFile] = useState({
-    name: '',
-    path: '',
-  })
-
-  setShowBackIcon(true);
-
 
   const reset = () => {
     localStorage.removeItem('offer')
@@ -169,7 +131,7 @@ const NewOffer = () => {
           body: JSON.stringify({ content, offerId }),
         })
         getCurrentUserOffers()
-        setMessagePopup("L'offre est publié avec succès !", TOAST_TYPE.success)
+        setMessagePopup("L'offre publié avec success !", TOAST_TYPE.success)
 
         setFormData({
           imgUrl: '',
@@ -211,14 +173,14 @@ const NewOffer = () => {
       }
 
       const response = await fetch(
-        SERVERLINK + '/api/offres/updateofferforuser/' + updateOffer.offerid,
-        {
-          method: 'POST',
-          headers: {
-            token: token,
-          },
-          body: data,
-        }
+          SERVERLINK + '/api/offres/updateofferforuser/' + updateOffer.offerid,
+          {
+            method: 'POST',
+            headers: {
+              token: token,
+            },
+            body: data,
+          }
       );
 
       if (response.status === 200) {
@@ -245,7 +207,7 @@ const NewOffer = () => {
         })
 
         getCurrentUserOffers()
-        setMessagePopup("L'offre est modifié avec succès !", TOAST_TYPE.success)
+        setMessagePopup("L'offre modifié avec success !", TOAST_TYPE.success)
       }
     } catch (error) {
       console.error(error)
@@ -258,13 +220,14 @@ const NewOffer = () => {
     const today = new Date(getTodayDate())
     if (selectedDate < today) {
       // If the selected date is before today, set an error message or handle it accordingly
-      setMessagePopup('La date prévue est erronée', TOAST_TYPE.error)
+      setMessagePopup('La date prévue erronée', TOAST_TYPE.error)
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value })
     }
   }
 
   useEffect(() => {
+    setShowBackIcon(true);
     const getOfferById = async () => {
       localStorage.getItem('offer') ?
           setUpdateOffer(await JSON.parse(localStorage.getItem('offer')))
@@ -272,9 +235,43 @@ const NewOffer = () => {
           reset();
     }
     getOfferById()
+  }, [])
+
+  useEffect(() => {
+    const fullCap = `${mesureData.cap} ${mesureData.unit}`;
+    setFormData((prev) => ({
+      ...prev,
+      capacity: fullCap,
+    }));
+  }, [mesureData]);
+
+  useEffect(() => {
+    // updateOffer.scheduleddate && console.log(updateOffer.scheduleddate)
+    if (updateOffer) {
+      setFormData({
+        imgUrl: updateOffer.imgurl || '',
+        title:
+          (!updateOffer.title ||
+            updateOffer.title === 'undefined' ||
+            updateOffer.title === undefined)
+            ? 'Transport de marchandise'
+            : updateOffer.title,
+        description: updateOffer.description || '',
+        depart: updateOffer.depart || '',
+        destination: updateOffer.dest || '',
+        capacity: updateOffer.capacity || '',
+        scheduledDate: updateOffer.scheduleddate
+          ? formatDateForInput(updateOffer.scheduleddate)
+          : getTodayDate(),
+
+      })
+
+      setIsEditOffer(true);
+    } else {
+      reset();
+    }
   }, [updateOffer])
-
-
+  
   useEffect(() => {
     checkFieldError(errorData)
   }, [errorData])
@@ -292,7 +289,7 @@ const NewOffer = () => {
         className="flex flex-col gap-10 p-2 bg-white-100 dark:bg-transparent rounded-2xl p-4 "
         onSubmit={(e) => handleCreateOffer(e)}
       >
-        {/* formulaire parties */}
+ 
         <div className="flex flex-col gap-6">
           <div className=" flex flex-col gap-4">
             <div className="w-full  h-60 bg-black-10 rounded-xl flex flex-col justify-center items-center overflow-hidden">
@@ -312,8 +309,7 @@ const NewOffer = () => {
               inputDisabled={isEditOffer}
             />
           </div>
-
-          {/* Informations sections */}
+          
           <div className="flex flex-col gap-4">
             <TextArea
               titleIcon="bi bi-pencil"
@@ -372,8 +368,7 @@ const NewOffer = () => {
               className=""
               name="destination"
               title="Destination"
-              placeholder="Entrez la destination"
-
+              placeholder="Entrer la destination"
               onError={handleError(setErrorData)}
               onChange={(e) => handleInputChange(setFormData, e)}
               value={formData.destination}

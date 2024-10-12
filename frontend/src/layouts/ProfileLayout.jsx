@@ -5,6 +5,7 @@ import {motion} from "framer-motion";
 import {useEffect, useState} from "react";
 import { useUser } from "../context/UserProvider.jsx";
 import { useAuth } from "../context/AuthProvider.jsx";
+import DefaultLoader from "../components/loader/DefaultLoader.jsx";
 
 const ProfileLayout = () => {
     const [validProfile, setValidProfile] = useState(false);
@@ -25,14 +26,14 @@ const ProfileLayout = () => {
     }, [])
     return (
         <motion.section
-            className="flex items-start  w-full justify-between nav-page-container h-[86vh]"
+            className="flex items-start  w-full justify-between nav-page-container h-[86vh] relative"
             variants={appVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{once: true}}
         >
             {
-                loading ? <p>Chargement ...</p> // TODO : Loading animation component
+                loading ? <DefaultLoader/> // TODO : Loading animation component
                     :
                     validProfile ? (
                         <>

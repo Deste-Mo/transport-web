@@ -67,9 +67,9 @@ export default {
           100: "#DE911E",
         },
       },
-      
+
     },
-    
+
     fontFamily: {
       sans: "RobotoMd",
       bold: "RobotoBold",
@@ -95,7 +95,7 @@ export default {
   variants: {
     extend: {
       scrollbar: ['rounded', 'hover'],
-      
+
     },
   },
 

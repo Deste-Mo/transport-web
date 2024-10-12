@@ -30,7 +30,7 @@ export const sendMessage = async (req, res) => {
                 :
                 await conversationExist(senderId, receiverId);
 
-        if (!conversation) return res.status(400).json({ error: "Erreur lors de la génération de la conversation" });
+        if (!conversation) return res.status(400).json({ error: "Erreur lors de la generation du conversation" });
 
         const createMessage = await createNewMessage(message, lastMess, refMessage, fileContent, conversation.idconversation, receiverId, senderId);
 
@@ -46,7 +46,7 @@ export const sendMessage = async (req, res) => {
         }
 
 
-        return res.status(201).json({ success: true, message: "Message envoyé" });
+        return res.status(201).json({ success: true, message: "Message envoyer" });
 
     } catch (error) {
         return res.status(500).json({ error: error.message });

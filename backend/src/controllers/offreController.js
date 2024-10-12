@@ -86,7 +86,7 @@ export const suggestionOffers = async (req, res) => {
     try {
         const result = await latestOffers(userId);
 
-        if (!result[0]) return res.json({ error: "Aucun offre disponible", suggestions: {} })
+        if (!result[0]) return res.json({ error: "No offer availaible", suggestions: {} })
 
         return res.status(200).json({ suggestions: result });
     } catch (error) {
@@ -122,7 +122,7 @@ export const saveOffer = async (req, res) => {
 
         if (!result) return res.json({ error: "Erreur lors de l'ajout" });
 
-        return res.status(200).json({ success: "Enregisté avec succès" });
+        return res.status(200).json({ success: "Saved successfully" });
     } catch (error) {
         // console.error(error);
         res.status(500).json({ error: error.message });
@@ -138,9 +138,9 @@ export const retireOffer = async (req, res) => {
     try {
         const result = await retireSavedOffer(userId, offerId);
 
-        if (!result) return res.json({ error: "Erreur lors de suppression du sauvegarde de la publication" })
+        if (!result) return res.json({ error: "Erreur lors de suppression du sauvegarde publication" })
 
-        return res.status(200).json({ success: "Retiré avec succès" });
+        return res.status(200).json({ success: "Retire successfully" });
     } catch (error) {
         // console.error(error);
         res.status(500).json({ error: error.message });
@@ -173,13 +173,12 @@ export const allOffersForUser = async (req, res) => {
 export const allOffersForUserId = async (req, res) => {
 
     const userId = req.params.userId;
-    const dispo = true;
+    const dispo = false;
     
     try {
 
         const allOffers = await getAllOfferById(userId, dispo);
-
-        // console.log("AllOffersBack: " + allOffers)
+         // console.log("AllOffersBack: " + allOffers)
 
         if(!allOffers[0]) return res.status(200).json({all: {}})
 

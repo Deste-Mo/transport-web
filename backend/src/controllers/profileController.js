@@ -10,11 +10,11 @@ export const followUser = (req, res) => {
 
         const request = follow(userToFollow, userId);
 
-        if(!request) return res.status(400).json({error: "Erreur lors de la requête de suivie de la personne"});
+        if(!request) return res.status(400).json({error: "Erreur lors de la requete de suivre la personne"});
 
         return res.status(201).json({message: "Réussis"});
     } catch (error) {
-        console.error("Erreur au niveau de l'envoie de requête pour suivre la personne: " + error.message);
+        console.error("Erreur au niveau de l'envoie de requete pour suivre la personne: " + error.message);
         return res.status(500).json({error})
     }
 
@@ -29,7 +29,7 @@ export const unfollowUser = (req, res) => {
 
         const request = unfollow(userToUnfollow, userId);
 
-        if(!request) return res.status(400).json({error: "Erreur lors de la requête de retention de la personne"});
+        if(!request) return res.status(400).json({error: "Erreur lors de la requete de retirer la personne"});
 
         return res.status(201).json({message: "Réussis"});
     } catch (error) {
@@ -66,7 +66,7 @@ export const allFriend = async (req, res) => {
         return res.status(200).json({friends, profile});
 
     } catch (error) {
-        console.error("Erreur au niveau de l'envoie de requête pour suivre la personne: " + error.message);
+        console.error("Erreur au niveau de l'envoie de requete pour suivre la personne: " + error.message);
         return res.status(500).json({error: error.message})
     }
 
@@ -97,7 +97,7 @@ export const countFollow = async (req, res) => {
         return res.status(200).json({count: count});
 
     } catch (error) {
-        console.error("Erreur au niveau de l'envoie de requête pour suivre la personne: " + error.message);
+        console.error("Erreur au niveau de l'envoie de requete pour suivre la personne: " + error.message);
         return res.status(500).json({error})
     }
 
@@ -127,7 +127,7 @@ export const updateProfile = async(req, res) => {
         return (update)? res.status(200).json({update: update}) : res.status(404).json({error: "Update error"})
         
     } catch (error) {
-        console.error("Erreur au niveau de l'envoie de requête pour mettre à jour la personne: " + error.message);
+        console.error("Erreur au niveau de l'envoie de requete pour mettre à jour la personne: " + error.message);
         return res.status(500).json({error: error.message});
     }
 }

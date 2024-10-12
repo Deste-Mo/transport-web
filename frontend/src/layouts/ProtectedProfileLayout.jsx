@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {useAuth} from "../context/AuthProvider.jsx";
 import {appVariants} from "../animations/variants.js";
 import {motion} from "framer-motion";
+import DefaultLoader from "../components/loader/DefaultLoader.jsx";
 
 const ProtectedProfileLayout = ( ) => {
     const {id} = useParams();
@@ -10,19 +11,25 @@ const ProtectedProfileLayout = ( ) => {
     const [loading ,setLoading] = useState(true);
     const {personalInformation, getInformation, token} = useAuth();
 
-    // const [user, setUser] = useState(personalInformation);
+    const [user, setUser] = useState(personalInformation);
 
     useEffect(() => {
-        getInformation(token);
         verifyId();
+    }, [user])
+
+    useEffect(() => {
+        setUser(personalInformation);
+    }, [personalInformation])
+
+    useEffect(() => {
+        getInformation();
     }, [])
     
     const verifyId = () => {
         setLoading(true)
-        setAuthorized( personalInformation.id === id);
+        setAuthorized( user.id === id);
         setLoading(false);
     }
-    
     
     return (
         <motion.section
@@ -34,7 +41,7 @@ const ProtectedProfileLayout = ( ) => {
         >
             {
                 loading ? (
-                    <p>Chargement ...</p> // TODO : Loading component
+                    <DefaultLoader/> // TODO : Loading component
                 ) : (
                     authorized ? <Outlet/> : <Navigate to={"/forbidden"}/>
                 )

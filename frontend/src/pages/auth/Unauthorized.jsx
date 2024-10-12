@@ -15,7 +15,7 @@ const Unauthorized = () => {
         onClick={() => navigate("/")}
         className="cursor-pointer text-lead text-primary text-center"
       >
-        Retour
+        Return Back
       </p>
     </section>
   );

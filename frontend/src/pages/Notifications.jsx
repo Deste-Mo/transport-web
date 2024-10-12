@@ -85,7 +85,7 @@ const Notifications = () => {
           ))
         ) : (
             <p className="w-full px-4 py-10 text-center text-black-80 bg-white-100 border border-black-0 rounded-xl dark:border-none dark:bg-black-10 dark:text-white-60">
-              Pas de notification
+              Pas de notificacion
             </p>
         )}
       </div>
