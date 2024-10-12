@@ -227,7 +227,7 @@ const Profile = ({profileImage, className}) => {
                         size="sm"
                         block
                     >
-                        Deconnexion
+                        Déconnexion
                     </Button>
                 </div>
             </TemplatePopup>

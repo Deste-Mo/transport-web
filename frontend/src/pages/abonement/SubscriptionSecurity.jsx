@@ -37,7 +37,7 @@ const SubscriptionSecurity = () => {
                             children="Choix d'abonnement" variant="secondary"/>
                     <div
                         className="text-center text-gray-900 dark:text-white-100 md:text-[40px] text-subtitle-1 max-md:text-subtitle-1 font-bold">
-                        <span className="text-primary-100">Résumé</span> de votre payement
+                        <span className="text-primary-100">Résumé</span> de votre paiement
                     </div>
                 </div>
                 <div className="flex flex-col items-center w-full max-w-4xl gap-6 ">

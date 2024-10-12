@@ -172,7 +172,7 @@ const EditOffer = () => {
         });
 
         getCurrentUserOffers();
-        setMessagePopup("L'offre modifié avec success !", TOAST_TYPE.success);
+        setMessagePopup("L'offre est modifié avec succès !", TOAST_TYPE.success);
         navigate(`/profile/${id}`);
       }
     } catch (error) {
@@ -186,7 +186,7 @@ const EditOffer = () => {
     const today = new Date(getTodayDate());
     if (selectedDate < today) {
       // If the selected date is before today, set an error message or handle it accordingly
-      setMessagePopup("La date prévue erronée", TOAST_TYPE.error);
+      setMessagePopup("La date prévue est erronée", TOAST_TYPE.error);
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
@@ -299,6 +299,7 @@ const EditOffer = () => {
               className=""
               name="destination"
               title="Destination"
+              placeholder="Entrez la destination"
               onError={handleError(setErrorData)}
               onChange={(e) => handleInputChange(setFormData, e)}
               value={formData.destination}
@@ -320,7 +321,7 @@ const EditOffer = () => {
                 id="scheduledDate"
                 required
                 onChange={handleDateInput}
-                onError={handleError(setErrorData)}
+                // onError={handleError(setErrorData)}
                 value={formData.scheduledDate}
                 className={`h-min  ${globalInputVariants.variant["fill"]} ${globalInputVariants.size["md"]} w-full rounded-xl`}
               />

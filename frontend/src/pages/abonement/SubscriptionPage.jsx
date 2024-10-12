@@ -20,7 +20,7 @@ const SubscriptionCard = ({id, title, price, features, onSelect, radioIdPrefix, 
             className="text-[30px] text-black-100 dark:text-white-100 ">{price} Ar </p>
             <span className="text-base text-black-100 dark:text-white-100">Mois</span></div>
         <div key={id} className="flex items-center text-base text-gray-500 dark:text-white-80">
-            {features} d'access
+            {features} d'accès
         </div>
         <div className="w-full space-y-4 text-black-100 text-base  dark:text-white-100">
             <p className="text-center">Mode de payement</p>
@@ -61,7 +61,7 @@ const SubscriptionPage = () => {
             navigate(`/abonnement/${title}/${montant}/${value.slice(0, -1)}/paiement`);
             handleSendEmailConf(id, subid);
         } else {
-            setMessagePopup("Veuillez selectionne le type de paiement", TOAST_TYPE.error);
+      setMessagePopup("Veuillez sélectionner le type de paiement", TOAST_TYPE.error);
         }
     };
 

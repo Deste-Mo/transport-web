@@ -70,7 +70,7 @@ export const resetPassword = async (req, res) => {
         const user = userResult.rows[0];
 
         if (!user) {
-            return res.status(400).json({ error: 'Votre lien de reinitialisation est expiré' });
+            return res.status(400).json({ error: 'Votre lien de réinitialisation est expiré' });
         }
 
         const salt = await bcrypt.genSalt(10);

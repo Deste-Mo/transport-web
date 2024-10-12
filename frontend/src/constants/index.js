@@ -13,7 +13,7 @@ export const EMAIL_REGEX_MESSAGE = "Veuillez saisir une adresse e-mail valide (e
 export const PASSWORD_REGEX_MESSAGE = "Le mot de passe doit comporter au moins 8 caractères (lettres, chiffres, - , _ , . , #)";
 export const LAST_NAME_REGEX_MESSAGE = "Le prénom doit comporter au moins 4 caractères (lettres, chiffres, - , _ , . , #)";
 export const NAME_REGEX_MESSAGE = "Le nom doit comporter au moins 4 caractères (lettres, chiffres, - , _ , . , #, espaces)";
-export const CIN_REGEX_MESSAGE = "Le CIN doit comporter 12 chiffres (exemple : 1234567123456)";
+export const CIN_REGEX_MESSAGE = "Le CIN doit comporter 12 chiffres (exemple : 1234517123456) dont le 6ème est '1' ou '2'";
 export const NIF_STAT_REGEX_MESSAGE = "Le NIF doit comporter au moins 10 à 15 chiffres";
 export const PHONE_REGEX_MESSAGE = "Veuillez saisir un numéro de téléphone au format +261 (32|33|34|37|38|020)XXXXXXX ou 0(32|33|34|37|38|020)XXXXXXX, où X représente un chiffre";
 

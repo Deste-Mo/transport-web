@@ -74,12 +74,12 @@ export const signup = async (req, res) => {
 
         // Verifie si les champs sont vide
         if (!firstname || !password || !confirmPassword || !phone || !adress || !accountid) {
-            return res.status(400).json({error: "Completer tous les champs s'il vous plait"});
+            return res.status(400).json({error: "Completez tous les champs s'il vous plaît"});
         }
 
         if (accountid === 2 || accountid === 3) {
             if (!usercin) {
-                return res.status(400).json({error: "Completer tous les champs Obligatoire s'il vous plait (CIN)"});
+                return res.status(400).json({error: "Completez tous les champs Obligatoire s'il vous plait (CIN)"});
             }
 
             data = [
@@ -342,7 +342,7 @@ export const setImageProfile = async (req, res) => {
             return res
                 .status(400)
                 .json({
-                    error: "Erreur lors de la modification de l'image de profile",
+          error: "Erreur lors de la modification de l'image de profil",
                 });
         }
 
@@ -422,7 +422,7 @@ export const getMe = async (req, res) => {
         }
 
         if (!user && !profile) {
-            return res.status(500).json({error: "L'utilisateur existe pas"});
+            return res.status(500).json({error: "L'utilisateur n'existe pas"});
         }
 
         return res.status(200).json(
