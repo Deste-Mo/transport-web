@@ -226,7 +226,7 @@ const EditOffer = () => {
                     ? SERVERLINK + "/" + formData.imgUrl
                     : SERVERLINK + "/defaultPub.png"
                 }
-                alt="Choisez une image"
+                alt="Choisissez une image"
               />
             </div>
             <FileInput
