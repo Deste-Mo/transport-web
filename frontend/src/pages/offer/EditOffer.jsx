@@ -151,7 +151,7 @@ const EditOffer = () => {
       if (response.status === 200) {
         const res = await response.json();
 
-        const content = ` ${personalInformation.fullName} a modifié sa publication d'offre`;
+        const content = ` ${personalInformation.fullName} a modifié son offre de transport`;
         const offerId = updateOffer.offerid;
 
         const sendNotifs = await fetch(SERVERLINK + "/api/notifs/sendnotifs", {
@@ -172,7 +172,7 @@ const EditOffer = () => {
         });
 
         getCurrentUserOffers();
-        setMessagePopup("L'offre est modifié avec succès !", TOAST_TYPE.success);
+        setMessagePopup("L'offre a été modifiée avec succès !", TOAST_TYPE.success);
         navigate(`/profile/${id}`);
       }
     } catch (error) {
@@ -186,7 +186,7 @@ const EditOffer = () => {
     const today = new Date(getTodayDate());
     if (selectedDate < today) {
       // If the selected date is before today, set an error message or handle it accordingly
-      setMessagePopup("La date prévue est erronée", TOAST_TYPE.error);
+      setMessagePopup("La date prévue ne peut pas être dans le passé.", TOAST_TYPE.error);
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
