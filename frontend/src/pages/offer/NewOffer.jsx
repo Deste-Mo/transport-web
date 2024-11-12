@@ -85,6 +85,10 @@ const NewOffer = () => {
       name: '',
       path: '',
     })
+    setMesureData({
+      cap: '',
+      unit: 'kg'
+    })
 
     setIsEditOffer(false)
   }
@@ -406,7 +410,7 @@ const NewOffer = () => {
                 title="Quantité/capacité"
                 onError={handleError(setErrorData)}
                 onChange={(e) => handleInputChange(setMesureData, e)}
-                value={setMesureData.cap}
+                value={mesureData.cap}
                 variant='fill'
                 placeholder='ex : 2 tonnes'
                 block
@@ -423,7 +427,7 @@ const NewOffer = () => {
 
                 onChange={(e) => handleInputChange(setMesureData, e)}
                 block
-                value={mesureData[0]}
+                value={mesureData.unit}
               />
             </div>
 
