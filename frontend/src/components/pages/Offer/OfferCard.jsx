@@ -35,10 +35,7 @@ const OfferCard = ({
     const navigate = useNavigate();
     const image = SERVERLINK + "/" + sug?.profileimage;
     const offerImage = SERVERLINK + "/" + sug?.imgurl;
-    const offerDetails = sug?.description ? sug?.description : `Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet Lorem ipsum
-              dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit
-              amet, Lorem ipsum dolor
-              Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet`;
+    const offerDetails = sug?.description ? sug?.description : `Il n'y a pas de description pour cet offre.`;
     const {setMessagePopup} = useAnimation();
 
     const {
@@ -90,7 +87,7 @@ const OfferCard = ({
     const handleDeletePost = async () => {
         // TODO :
         
-        const userConfirmed = await showConfirmPopup("Voulez vous vraiment supprimer ce message ?")
+        const userConfirmed = await showConfirmPopup("Voulez vous vraiment supprimer cet offre ?")
         if (!userConfirmed)
             return
         
@@ -99,7 +96,7 @@ const OfferCard = ({
         localStorage.removeItem("offer");
         setUpdateOffer();
 
-        setMessagePopup("Offre supprimé avec succès", TOAST_TYPE.success);
+        setMessagePopup("Offre a été supprimée avec succès", TOAST_TYPE.success);
     };
 
     const handleEditPost = () => {
