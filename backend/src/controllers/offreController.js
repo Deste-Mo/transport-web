@@ -122,7 +122,7 @@ export const saveOffer = async (req, res) => {
 
         if (!result) return res.json({ error: "Erreur lors de l'ajout" });
 
-        return res.status(200).json({ success: "Enregisté avec succès" });
+        return res.status(200).json({ success: "Enregistré avec succès" });
     } catch (error) {
         // console.error(error);
         res.status(500).json({ error: error.message });
@@ -138,7 +138,7 @@ export const retireOffer = async (req, res) => {
     try {
         const result = await retireSavedOffer(userId, offerId);
 
-        if (!result) return res.json({ error: "Erreur lors de suppression du sauvegarde publication" })
+        if (!result) return res.json({ error: "Erreur lors de la suppression du sauvegarde de la publication" })
 
         return res.status(200).json({ success: "Retiré avec succès" });
     } catch (error) {
