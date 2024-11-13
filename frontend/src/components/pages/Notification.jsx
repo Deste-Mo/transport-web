@@ -13,12 +13,13 @@ export function Notification({notification, spec, icon = false, viewed = false})
     const [vues, setVues] = useState(false);
     const notifid = spec;
     const {token} = useAuth();
-    const {timeSince} = useApp();
+    const {timeSince, isMobile, limitTextLen} = useApp();
     const {goToUserProfile} = useUser();
 
     const {getNotifications, getUnreadNotifications} = useNotification()
     const navigate = useNavigate()
     const [notificationDeleted, setNotificationDeleted] = useState(false);
+    
 
     const handleViewed = async () => {
         const response = await fetch(SERVERLINK + "/api/notifs/viewnotifs/" + notifid, {
@@ -77,7 +78,7 @@ export function Notification({notification, spec, icon = false, viewed = false})
                     <div className="flex  gap-2  justify-start items-center">
                         <div
                             className={`size-2 rounded-full ${viewed || vues ? 'dark:bg-white-60 bg-black-60' : 'bg-primary-100'}`}></div>
-                        <p className="text-small-1 text-black-100 dark:text-white-100 group-hover:underline cursor-pointer">{notification.content}</p>
+                        <p className="text-small-1 text-black-100 dark:text-white-100 group-hover:underline cursor-pointer">{isMobile ? limitTextLen(notification.content, 40) : notification.content}</p>
                     </div>
 
 

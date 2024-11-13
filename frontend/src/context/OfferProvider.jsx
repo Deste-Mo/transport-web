@@ -132,8 +132,6 @@ const OfferProvider = ({children}) => {
         await response.json();
     };
     const getOfferById = async (offerId) => {
-        // console.log("My token: " + token)
-
         const response = await axios.get(SERVERLINK + '/api/offres/offreToUp/' + offerId, {
             headers: {token: token}
         });

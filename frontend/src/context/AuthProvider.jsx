@@ -70,7 +70,7 @@ const AuthProvider = ({ children }) => {
 
     const getInformation = async (accessToken, userId) => {
         setLoadingInformation(true);
-        api.get(`${SERVERLINK}/api/auth/me/${!userId ? '' : userId}`, {
+        axios.get(`${SERVERLINK}/api/auth/me/${!userId ? '' : userId}`, {
             headers: {
                 token: accessToken,
             }
@@ -78,6 +78,7 @@ const AuthProvider = ({ children }) => {
             .then(res => {
                 setPersonalInformation(res.data.personalInfo);
                 setProfileInfo(res.data.profileInfo);
+                // console.log('info', res.data);
             })
             .catch(e => {
                 console.log(`Erreur : ${e.response.data.error}`);

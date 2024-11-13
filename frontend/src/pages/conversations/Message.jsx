@@ -666,7 +666,7 @@ const TextMessage = ({refMessage, sentByCurrentUser, message, isDel}) => {
             {/* For responded messages */}
             {refMessage && <RefMessage refMessage={refMessage}/>}
             <div
-                className={`px-4 py-3  rounded-2xl  min-w-[40px] w-fit max-w-full text-wrap  break-words ${(sentByCurrentUser && !isDel) ? "bg-accent-d/80 " : isDel ? "bg-black-0 border-white-60 border " : "bg-primary-d/10 dark:bg-primary-l/10 "
+                className={`px-4 py-3  rounded-2xl  min-w-[40px] w-fit max-w-full text-wrap  break-words ${(sentByCurrentUser && !isDel) ? "bg-accent-d/80 " : isDel ? "bg-transparent border border-text-l dark:border-text-d text-text-l  dark:text-text-d " : "bg-primary-d/10 dark:bg-primary-l/10 "
                 }`}
             >
                 <p className={`text-small-1 font-bold ${(sentByCurrentUser && !isDel) ? "text-text-l " : isDel ? "" : "text-text-l dark:text-text-d"} `}>

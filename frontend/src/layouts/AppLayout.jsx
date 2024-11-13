@@ -30,9 +30,6 @@ const AppLayout = () => {
     const {socket} = useSocketContext();
     const [width] = useWindowSize();
 
-/*    useEffect(() => {
-        setHideMobileNavigation(false);
-    });*/
 
     useEffect(() => {
         socket?.on("newNotif", () => {
@@ -55,10 +52,7 @@ const AppLayout = () => {
     useEffect(() => {
         setIsMobile(width < 768);
     }, [width, setIsMobile]);
-
-    // useEffect(() => {
-    //     getInformation(token);
-    // }, [])
+    
     
     return loading ? (
         <DefaultLoader/>

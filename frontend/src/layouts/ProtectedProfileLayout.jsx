@@ -1,53 +1,49 @@
 import {Navigate, Outlet, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useEffect, useLayoutEffect, useMemo, useState} from "react";
 import {useAuth} from "../context/AuthProvider.jsx";
 import {appVariants} from "../animations/variants.js";
 import {motion} from "framer-motion";
 import DefaultLoader from "../components/loader/DefaultLoader.jsx";
+import axios from "axios";
+import {SERVERLINK} from "../constants/index.js";
+import useFetchUser from "../hooks/useFetchUser.js";
 
-const ProtectedProfileLayout = ( ) => {
-    const {id} = useParams();
-    const  [authorized, setAuthorized] = useState(false);
-    const [loading ,setLoading] = useState(true);
-    const {personalInformation, getInformation, token} = useAuth();
-
-    const [user, setUser] = useState(personalInformation);
-
-    useEffect(() => {
-        verifyId();
-    }, [user])
+const ProtectedProfileLayout = () => {
+    const {id: userIdParam} = useParams();
+    const {token} = useAuth();
+    const [authorized, setAuthorized] = useState(false);
+    const [loadingValidation, setLoadingValidation] = useState(true);
+    const {loading, error, user} = useFetchUser({token});
 
     useEffect(() => {
-        setUser(personalInformation);
-    }, [personalInformation])
+        setLoadingValidation(true);
+        if (!loading && user?.id && userIdParam) {
+            setAuthorized(user.id === userIdParam);
+            setLoadingValidation(false);
+        }
+    }, [loading, user, userIdParam]);
 
-    useEffect(() => {
-        getInformation();
-    }, [])
-    
-    const verifyId = () => {
-        setLoading(true)
-        setAuthorized( user.id === id);
-        setLoading(false);
+    if (loading || loadingValidation) {
+        return <DefaultLoader/>;
     }
-    
+
+    if (error) {
+        console.error("Failed to fetch user:", error);
+        return
+    }
+
     return (
         <motion.section
-            className=""
+            className="protected-layout"
             variants={appVariants}
             initial="hidden"
-            whileInView="visible"
-            viewport={{once: true}}
+            animate="visible"
+            exit="exit"
         >
-            {
-                loading ? (
-                    <DefaultLoader/> // TODO : Loading component
-                ) : (
-                    authorized ? <Outlet/> : <Navigate to={"/forbidden"}/>
-                )
-            }
-            </motion.section>
-    )
+            {authorized ? <Outlet/> : <Navigate to={`/profile/${user.id}`}/>}
+        </motion.section>
+    );
 }
+
 
 export default ProtectedProfileLayout;
