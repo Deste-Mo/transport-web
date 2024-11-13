@@ -151,9 +151,9 @@ const ProfileEdit = ({ onClick }) => {
     }, [formData, errorData]);
 
     return (
-        <section className="space-y-6 pb-[54px]">
+        <section className="space-y-6 pb-[54px] bg-secondary-l rounded-2xl   dark:bg-secondary-d">
             <SubHeader icon="bi bi-info-circle" name="Modifier les informations" />
-            <form className={`flex flex-col gap-10 shadow p-4 rounded-2xl bg-white-100 dark:bg-transparent`} onSubmit={handleSubmit}>
+            <form className={`flex flex-col gap-10 p-4 `} onSubmit={handleSubmit}>
                 <div className="rounded-lg flex flex-col gap-4">
                     <div
                         className="w-full  h-60 bg-black-10 rounded-xl flex flex-col justify-center items-center overflow-hidden">

@@ -97,7 +97,7 @@ export default function Profile() {
                     />
                 </Suspense>
             </div>
-            
+
             <FollowerList friendFollowerCount={friendFollowerCount} friends={friends} profileFriends={profileFriends}
                           handleSeeUsers={handleSeeUsers} personalInformation={personalInformation}/>
             {/*For other user*/}
@@ -116,7 +116,7 @@ export default function Profile() {
                                currentUserOffers={currentUserOffers}
                                setFilteredCurrentUserOffer={setFilteredCurrentUserOffer}
                     />
-                   
+
                 </>
             )}
         </div>
@@ -136,45 +136,64 @@ const FollowerList = ({friendFollowerCount, profileFriends, friends, handleSeeUs
                     </p>
                 }
             />
-            <div className="bg-white-100 dark:bg-white-0 flex flex-col gap-4 rounded-xl p-2">
+            <div className="bg-secondary-l dark:bg-secondary-d flex flex-col justify-center px-0  gap-4 rounded-xl overflow-hidden">
                 {profileFriends.length > 0 ? (
-                    profileFriends
-                        .slice(0, 4)
-                        .map((friend) => (
-                            <RecentlyFriends
-                                className="w-full"
-                                key={friend.userid}
-                                spec={friend.userid}
-                                name={
-                                    friend.firstname +
-                                    (!friend.lastname ? "" : " " + friend.lastname)
-                                }
-                                image={SERVERLINK + "/" + friend.profileimage}
-                                message
-                                showRemoveFriendButton={
-                                    friends.length > 0
-                                        ? friends.find((fr) => fr.userid === friend.userid)
-                                        : false
-                                }
-                                showAddFriendButton={
-                                    friends.length > 0
-                                        ? !friends.find((fr) => fr.userid === friend.userid)
-                                        : false
-                                }
-                            />
-                        ))
+                    <div>
+                        {profileFriends
+                            .slice(0, 4)
+                            .map((friend) => (
+                                <RecentlyFriends
+                                    className="w-full"
+                                    key={friend.userid}
+                                    spec={friend.userid}
+                                    name={
+                                        friend.firstname +
+                                        (!friend.lastname ? "" : " " + friend.lastname)
+                                    }
+                                    image={SERVERLINK + "/" + friend.profileimage}
+                                    message
+                                    showRemoveFriendButton={
+                                        friends.length > 0
+                                            ? friends.find((fr) => fr.userid === friend.userid)
+                                            : false
+                                    }
+                                    showAddFriendButton={
+                                        friends.length > 0
+                                            ? !friends.find((fr) => fr.userid === friend.userid)
+                                            : false
+                                    }
+                                    showMessageButton
+                                />
+                            ))
+                        }
+                    </div>
                 ) : (
-                    personalInformation.id === id ? <Button onClick={() => handleSeeUsers(USERS_FILTERS.suggestion)}>Suivre un utilisateur</Button> : <div className="nothing-box">Cet utilisateur n'a pas de suivi</div>
+                    <div className={'p-4 '}>
+                        {personalInformation.id === id ?
+
+                            <Button
+                                variant={'secondary'}
+                                onClick={() => handleSeeUsers(USERS_FILTERS.suggestion)}>
+                                Suivre
+                                un utilisateur
+                            </Button>
+                            :
+                            <div className="nothing-box">
+                                Cet utilisateur n'a aucun suivi
+                            </div>}
+                    </div>
                 )}
                 {
                     profileFriends.length > 4 && (
-                        <Button
-                            className="w-full"
-                            variant="secondary"
-                            onClick={() => handleSeeUsers(USERS_FILTERS.follower)}
-                        >
-                            Voir tous vous suivis
-                        </Button>
+                        <div className={'p-4 pt-0'}>
+                            <Button
+                                className="w-full "
+                                variant="secondary"
+                                onClick={() => handleSeeUsers(USERS_FILTERS.follower)}
+                            >
+                                Voir tous vous suivis
+                            </Button>
+                        </div>
                     )
                 }
             </div>

@@ -13,7 +13,7 @@ import DefaultLoader from "../../components/loader/DefaultLoader.jsx";
 const SubscriptionCard = ({id, title, price, features, onSelect, radioIdPrefix, setValue, setChecked}) => (
     <motion.div
         // whileHover={{ scale: 1.02, borderColor: "#FBCB34", boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.1)" }}
-        className="flex bg-white-100 gap-10 flex-col  items-center max-sm:w-full w-[360px] p-4 bg-white rounded-xl dark:bg-[#1e1e1e] "
+        className="flex gap-10 flex-col  items-center max-sm:w-full w-[360px] p-4  rounded-xl bg-secondary-l dark:bg-secondary-d "
     >
         <h2 className="text-[24px] text-primary-80 dark:text-primary-100">{title[0].toLocaleUpperCase() + title.slice(1).toLocaleLowerCase()}</h2>
         <div className="flex flex-col gap-1 justify-center items-center"><p

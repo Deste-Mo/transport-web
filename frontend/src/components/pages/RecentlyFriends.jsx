@@ -94,13 +94,23 @@ const DesktopRecentlyFriends = ({
                                     showAddFriendButton = false,
                                     onButtonsClick = () => {
                                     },
+                                    withConfirmation = false,
                                     className,
                                 }) => {
-    const {isMobile, limitTextLen} = useApp();
+    const {isMobile, limitTextLen, showConfirmPopup} = useApp();
+    
+    const showConfirm = async () => {
+        const userConfirmed = await showConfirmPopup("Voulez vous vraiment supprimer ce message ?")
+        if (!userConfirmed)
+            return
+
+        unFollowUsers(profileInfo.id, id);
+    }
+    
     
     return (
         <div
-            className={`flex items-center  justify-between bg-white-100 p-4 hover:bg-primary-20 group rounded-xl dark:bg-white-0 text-black-100 dark:text-white-100 ${className}`}
+            className={`flex items-center  justify-between  p-4 hover:bg-primary-d/10 dark:hover:bg-primary-l/10 group  text-black-100 dark:text-white-100 ${className}`}
         >
             <div className="flex items-center relative gap-2">
                 <img src={image} alt="" className="size-10 rounded-full cursor-pointer"
@@ -119,18 +129,21 @@ const DesktopRecentlyFriends = ({
             </div>
             <div className="flex items-center justify-center  gap-8">
                 {showMessageButton && (
-                    <i
+                    <Button
+                        size="sm"
+                        variant={"secondary-2"}
                         onClick={() => {
                             navigateToMessage();
                             onButtonsClick();
                         }}
-                        className="bi bi-chat text-icon cursor-pointer"
-                    ></i>
+                    >
+                        Contacter
+                    </Button>
                 )}
                 {(showAddFriendButton && personalInformation.id !== spec) && (
                     <Button
-                        variant={"ghost"}
-                        className="text-primary-100"
+                        size="sm"
+                        variant={"outline"}
                         onClick={() => {
                             followUser(profileInfo.id, id, personalInformation);
                             onButtonsClick();
@@ -141,12 +154,12 @@ const DesktopRecentlyFriends = ({
                 )}
                 {showRemoveFriendButton && (
                     <Button
-                        variant="ghost"
+                        size={'sm'}
+                        variant="secondary-2"
                         onClick={() => {
-                            unFollowUsers(profileInfo.id, id);
+                            showConfirm();
                             onButtonsClick();
                         }}
-                        size="sm"
                     >
                         Retirer
                     </Button>

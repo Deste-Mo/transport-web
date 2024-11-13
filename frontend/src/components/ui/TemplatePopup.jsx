@@ -19,7 +19,7 @@ const TemplatePopup = ({ setPopupVisible, popupVisible, children, className , hi
   return (
    popupVisible && ( <div
     ref={selectRef}
-    className={`flex select-none flex-col items-center z-40 justify-center gap-4 w-max  rounded-xl bg-white-100 dark:bg-white-0 dark:backdrop-blur-sm shadow-sm border border-black-0 overflow-hidden ${className}`}
+    className={`flex select-none flex-col items-center z-40 justify-center gap-4 w-max  rounded-xl bg-secondary-l dark:bg-secondary-d dark:backdrop-blur-sm shadow-sm border border-black-0 overflow-hidden ${className}`}
   >
     <div>
       {children}
@@ -33,7 +33,7 @@ export default TemplatePopup;
 export const OptionItem = ({ name, icon, onClick, inverseIcon = true, iconClassName, setPopupVisible = () => {}}) => {
   return (
     <div
-      className={`flex items-center text-black-100 dark:text-white-100 z-40 justify-between w-full px-6 py-3 hover:bg-black-10  gap-x-4 cursor-pointer border-b border-black-0  ${inverseIcon ? 'flex-row-reverse' : 'flex-row'} `}
+      className={`flex items-center text-text-l dark:text-text-d z-40 justify-between w-full px-6 py-3 hover:bg-primary-d/10 dark:hover:bg-primary-l/10 black-10  gap-x-4 cursor-pointer border-b border-black-0  ${inverseIcon ? 'flex-row-reverse' : 'flex-row'} `}
       onClick={() => {
         onClick();
         setPopupVisible(false);

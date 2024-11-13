@@ -54,8 +54,8 @@ const Conv = ({ id, userToChat }) => {
 
   return (
     <div
-      className={`flex select-none items-center justify-between cursor-pointer w-full hover:bg-primary-20  p-6 max-md:p-4 rounded-xl ${
-        isViewed ? "bg-white-100 dark:bg-white-0 " : "bg-primary-20"
+      className={`flex select-none items-center justify-between cursor-pointer w-full hover:bg-primary-d/10 dark:hover:bg-primary-l/10 p-6 max-md:p-4 ${
+        isViewed ? "bg-secondary-l dark:bg-secondary-d " : "bg-accent-d/10"
       }`}
       onClick={handleClick}
     >
@@ -73,14 +73,14 @@ const Conv = ({ id, userToChat }) => {
           <p className="text-black-100 dark:text-white-100 text-small-1">
           {userToChat.firstname + (userToChat.lastname ? " " + userToChat.lastname : '')}
           </p>
-          <p className="font-sm text-small-2 text-black-80 dark:text-white-80">
+          <p className="font-sm text-small-2 text-text-sec-l dark:text-text-sec-d">
             {userToChat.accounttype}
           </p>
           <div
             className={`${
               isViewed
-                ? "text-black-80 dark:text-white-80 dark:font-sm"
-                : "text-black-100 dark:text-white-100 font-bold "
+                ? "text-text-sec-l dark:text-text-sec-d dark:font-sm"
+                : "text-text-l dark:text-text-d font-bold "
             }   text-small-1 flex items-center gap-1`}
           >
             <span>

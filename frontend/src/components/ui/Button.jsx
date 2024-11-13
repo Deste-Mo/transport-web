@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import {  defaultTransition } from "../../styles/globals";
 import globalButtonVariants from "../../styles/globals.button";
 import DefaultLoader from "../loader/DefaultLoader.jsx";
+import {cn} from "../../utils/cn.js";
 
 
 const Button = ({
@@ -23,12 +24,12 @@ const Button = ({
     block ? "w-full" : "w-fit"
   } ${
     disabled ? globalButtonVariants.variant.disabled : globalButtonVariants.variant[variant]
-  } ${transition} ${globalButtonVariants.size[size]} ${className} ${
+  } ${transition} ${globalButtonVariants.size[size]}  ${
     icon ? (inverseIcon ? "flex-row-reverse" : "flex-row") : ""
   } overflow-hidden select-none flex items-center justify-center  font-RobotoMd`;
 
   return (
-    <button disabled={disabled} type={type} onClick={onClick} className={buttonClass}>
+    <button disabled={disabled} type={type} onClick={onClick} className={cn(buttonClass, className)}>
       {loading ? (
         <DefaultLoader className="size-4 border-4 border-white-100"/>
       ) : icon ? (

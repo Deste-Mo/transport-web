@@ -79,7 +79,7 @@ const Messages = () => {
         for (const key in formData) {
             data.append(key, formData[key]);
         }
-        
+
         const userToChat = await JSON.parse(localStorage.getItem("userToChat")).id;
 
         const response = await fetch(
@@ -132,17 +132,18 @@ const Messages = () => {
 
     return (
         <motion.section
-            className="flex flex-col items-center justify-center w-full gap-0 rounded-xl bg-white-100 dark:bg-black-10  h-[85vh] max-md:h-full relative overflow-hidden"
+            className="flex flex-col items-center justify-center w-full gap-0 rounded-xl border border-gray-300 dark:border-neutral-800   h-[85vh] max-md:h-full relative overflow-hidden"
             variants={appVariants}
             initial={false}
             whileInView={!hideMobileNavigation && "visible"}
             viewport={{once: true}}
         >
             <div
-                className="flex items-center justify-between w-full py-4 px-3 border-0 border-b border-b-black-20  bg-white-10 top-0 z-40 max-md:fixed max-md:top-0 bg-white-100 dark:bg-white-0">
+                className="flex items-center justify-between w-full py-4 px-3 border-0 border-b border-b-black-20  bg-secondary-l dark:bg-secondary-d top-0 z-40 max-md:fixed max-md:top-0 ">
                 {/* Message header */}
                 <div className="flex items-center justify-between gap-3 ">
                     <Icon
+                        size={'sm'}
                         variant="ghost"
                         icon="bi bi-chevron-left "
                         onClick={handleClick}
@@ -154,23 +155,23 @@ const Messages = () => {
                         >
                             <img
                                 src={userToChat?.pic}
-                                className={"size-12 rounded-full bg-black-20"}
+                                className={"size-[32px] rounded-full bg-black-20"}
                             />
-                            {isOnline && (
+                            {!isOnline && (
                                 <span
-                                    className="h-[10px] w-[10px] rounded-[50%] ml-2 bg-primary-100 absolute top-0 right-0 block"></span>
+                                    className="size-[8px] rounded-[50%] ml-2 bg-primary-100 absolute top-0 right-0 block"></span>
                             )}
                         </div>
                         <div
                             className={
-                                "text-black-100 dark:text-white-100 text-lead cursor-pointer "
+                                " text-black-100 dark:text-white-100   cursor-pointer "
                             }
                             onClick={() => goToUserProfile(userToChat.id)}
                         >
-                            <p className="hover:underline">{userToChat?.fullName}</p>
-                            <span className="text-small-2 text-black-80 dark:text-white-80">
-                {userToChat?.accountType}
-              </span>
+                            <p className="hover:underline text-small-1">{userToChat?.fullName}</p>
+                            <span className="text-small-2 font-medium text-black-80 dark:text-white-80">
+                                {userToChat?.accountType}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -340,7 +341,7 @@ const Messages = () => {
 
             {/* Input container */}
             <div
-                className="border-0 bg-white-10 px-3 py-4 w-full border-t border-t-black-20  bottom-0 z-40 max-md:fixed max-md:bottom-0 bg-white-100 dark:bg-white-0 ">
+                className="bg-secondary-l dark:bg-secondary-d px-3 py-4 w-full border-t border-t-black-20  bottom-0 z-40 max-md:fixed max-md:bottom-0  ">
                 {/* Reply component for text messages */}
                 {formData.refMessage && (
                     <div className="space-y-1 w-full">
@@ -393,7 +394,7 @@ const Messages = () => {
             className="max-md:hidden"
           />*/}
                     <TextInput
-                        rounded="full"
+                        rounded="2xl"
                         block
                         className="flex-1 outline-none bg-gray-100  text-base text-black-80 px-6 py-3 max-md:px-3 max-md:py-2"
                         placeholder="Ecrire un message ...."
@@ -428,8 +429,6 @@ const Message = ({
     const endOfMessagesRef = useRef(null);
 
 
-    
-    
     const answerMessage = () => {
         setAnswer({...formData, ["refMessage"]: message.content});
     };
@@ -438,7 +437,7 @@ const Message = ({
         const userConfirmed = await showConfirmPopup("Voulez vous vraiment supprimer ce message ?")
         if (!userConfirmed)
             return
-        
+
         const response = await fetch(
             SERVERLINK + "/api/messages/delete/" + messageId + "/" + conversationId,
             {
@@ -452,14 +451,14 @@ const Message = ({
         );
         const answer = await response.json();
         await getUserMessages(endOfMessagesRef);
-        
+
     }
 
     const handleDeleteForMe = async () => {
         const userConfirmed = await showConfirmPopup("Voulez vous vraiment supprimer ce message ?")
         if (!userConfirmed)
             return
-        
+
         const response = await fetch(
             SERVERLINK + "/api/messages/deleteforme/" + messageId,
             {
@@ -667,10 +666,10 @@ const TextMessage = ({refMessage, sentByCurrentUser, message, isDel}) => {
             {/* For responded messages */}
             {refMessage && <RefMessage refMessage={refMessage}/>}
             <div
-                className={`px-4 py-3  rounded-3xl  min-w-[40px] w-fit max-w-full text-wrap  break-words ${(sentByCurrentUser && !isDel) ? "bg-primary-80 " : isDel ? "bg-black-0 border-white-60 border" : "bg-black-0 "
+                className={`px-4 py-3  rounded-2xl  min-w-[40px] w-fit max-w-full text-wrap  break-words ${(sentByCurrentUser && !isDel) ? "bg-accent-d/80 " : isDel ? "bg-black-0 border-white-60 border " : "bg-primary-d/10 dark:bg-primary-l/10 "
                 }`}
             >
-                <p className={`text-small-1 ${!isDel ? "text-black-100 dark:text-white-100" : "text-white-40"} `}>
+                <p className={`text-small-1 font-bold ${(sentByCurrentUser && !isDel) ? "text-text-l " : isDel ? "" : "text-text-l dark:text-text-d"} `}>
                     {message}
                 </p>
             </div>

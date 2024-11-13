@@ -20,7 +20,7 @@ const Home = () => {
     return (
         <motion.section className="flex flex-col items-center justify-center gap-6 w-full " variants={appVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <SubHeader name="Actualites" icon="bi bi-grid-fill" />
-            <div className="flex flex-col items-center justify-center gap-[64px] w-full ">
+            <div className="flex flex-col items-center justify-center gap-y-4 w-full ">
                 {
                     offers?.length > 0 ? (
                         <Suspense fallback={<OfferCardLoading/>}>

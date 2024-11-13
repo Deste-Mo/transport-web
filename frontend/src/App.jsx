@@ -42,7 +42,6 @@ export default function App() {
                     {/* Auth */}
                     <Route element={<AuthLayout/>}>
                         <Route path="/login" element={<Login/>}></Route>
-
                         <Route
                             path="/registerAccountType"
                             element={<RegisterAccountType/>}

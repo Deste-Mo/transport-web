@@ -1,32 +1,27 @@
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import Button from "../../../components/ui/Button.jsx";
+import {Icon} from "../../../styles/components.js";
 
 const WaitLink = () => {
+    const navigate = useNavigate();
     return (
-        <section className="w-full h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-50 to-blue-100">
-            <div className="text-center max-w-lg mx-auto p-8 bg-white rounded-xl shadow-xl bg-white-100">
-                <h1 className="text-4xl font-extrabold text-gray-900 mb-6">
-                    Vérifiez votre <span className="text-primary-500">Email</span>
-                </h1>
-                <p className="text-lg text-gray-700 mb-8">
+        <section className="w-full h-screen flex flex-col gap-10 items-center justify-center">
+            <div className={'flex gap-2 text-lead flex-col items-center text-text-l dark:text-text-d'}><Icon onClick={() => navigate('/')} variant={'secondary-2'} icon={'bi bi-arrow-left'} size={'sm'}/> <p>Retourner vers la page de connexion</p></div>
+            <div className="text-center flex flex-col gap-6 max-w-lg max-md:w-[94%] mx-auto p-8 bg-secondary-l dark:bg-secondary-d rounded-xl ">
+                <div className={'flex flex-col gap-1'}>
+                    <i className={'bi bi-envelope text-[48px] text-text-l dark:text-text-d'}/>
+                    <h1 className="text-subtitle-2 text-text-l dark:text-text-d ">
+                        Vérifiez votre <span className="text-primary-500">Email</span>
+                    </h1>
+                </div>
+                <p className="text-lg text-text-sec-l dark:text-text-sec-d">
                     Nous avons envoyé un lien pour réinitialiser votre mot de passe. Vérifiez votre email, le lien ne durera que 10 minutes.
                 </p>
-                <div className="flex justify-center items-center mb-8">
-                    <svg
-                        className="animate-spin h-16 w-16 text-primary-500"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                    >
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 0116 0A8 8 0 014 12z"></path>
-                    </svg>
+                <div className="w-full flex items-center justify-center">
+                    <Button to="https://mail.google.com" variant={'primary'}>
+                        Ouvrir Gmail
+                    </Button>
                 </div>
-                <p className="text-sm text-gray-600">
-                    <Link to="https://mail.google.com" className="text-primary-100 font-semibold hover:underline">
-                        Voir votre email
-                    </Link>
-                </p>
             </div>
         </section>
     );

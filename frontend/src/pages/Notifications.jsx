@@ -49,7 +49,7 @@ const Notifications = () => {
 
   return (
     <motion.section
-      className="flex flex-col items-center justify-center w-full gap-6"
+      className="flex flex-col items-center justify-center w-full gap-6 bg-secondary-l dark:bg-secondary-d"
       variants={appVariants}
       initial="hidden"
       whileInView="visible"
@@ -65,13 +65,13 @@ const Notifications = () => {
             size="sm"
             icon="bi bi-check"
             variant="secondary"
-            rounded="full"
+            rounded="xl"
           >
             Tout marquer comme lu
           </Button>
         }
       />
-      <div className="flex flex-col  w-full gap-2">
+      <div className="flex flex-col  w-full bg-secondary-l dark:bg-secondary-d">
         {notifications.length > 0 ? (
           notifications.map((notif) => (
             <Notification

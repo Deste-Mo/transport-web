@@ -36,7 +36,7 @@ const ForgotPassword = () => {
         </div>
 
             <form
-                className="flex flex-col items-center w-full max-w-md p-6 border bg-white-100 dark:bg-white-10 dark:border-none border-black-0 rounded-xl space-y-4"
+                className="flex flex-col items-center w-full max-w-md p-6 border bg-secondary-l dark:bg-secondary-d  dark:border-none border-black-0 rounded-xl space-y-4"
                 onSubmit={handleSubmit}
             >
                     <TextInput

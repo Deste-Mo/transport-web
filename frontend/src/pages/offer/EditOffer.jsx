@@ -202,7 +202,7 @@ const EditOffer = () => {
 
   return (
     <motion.section
-      className="space-y-6"
+      className="space-y-6 bg-secondary-l rounded-2xl   dark:bg-secondary-dè"
       variants={appVariants}
       initial="hidden"
       whileInView="visible"

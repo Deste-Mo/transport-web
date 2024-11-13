@@ -128,7 +128,7 @@ const DynamicLeftContent = ({currentLocation}) => {
             return (
                 <>
                     <SubHeader name="Suivi(s)" icon="bi bi-broadcast"/>
-                    <div className="flex flex-col gap-3 rounded-xl p-2 bg-white-100 dark:bg-white-0">
+                    <div className="flex flex-col overflow-hidden rounded-xl  bg-secondary-l dark:bg-secondary-d">
                         {friends.length > 0 ? (
                             friends.map((friend) => (
                                 <RecentlyFriends
@@ -158,9 +158,9 @@ const DynamicLeftContent = ({currentLocation}) => {
         case NAVIGATIONS.friend:
             return (
                 <>
-                    <SubHeader name="Suggestion" icon="bi bi-broadcast"/>
+                    <SubHeader name="Suggestions" icon="bi bi-broadcast"/>
                     <div
-                        className="flex flex-col items-center justify-center gap-6 p-2 w-full bg-white-100 dark:bg-white-0 rounded-xl">
+                        className="flex flex-col items-center justify-center overflow-hidden  w-full bg-secondary-l dark:bg-secondary-d  rounded-xl">
                         {users?.length > 0 ? (
                             users.map((user) => (
                                 <RecentlyFriends
@@ -185,7 +185,7 @@ const DynamicLeftContent = ({currentLocation}) => {
             return (
                 <>
                     <SubHeader name="Suivi(s)" icon="bi bi-broadcast"/>
-                    <div className="flex flex-col gap-3 rounded-xl p-2 bg-white-100 dark:bg-white-0">
+                    <div className="flex flex-col overflow-hidden rounded-xl  bg-secondary-l dark:bg-secondary-d">
                         {friends.length > 0 ? (
                             friends.map((friend) => (
                                 <RecentlyFriends

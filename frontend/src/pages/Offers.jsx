@@ -45,7 +45,7 @@ const Offers = () => {
     return (
         <motion.section
             id="offers"
-            className="flex flex-col items-center justify-center w-full gap-6"
+            className="flex flex-col items-center justify-center w-full gap-6 "
             variants={appVariants}
             initial="hidden"
             whileInView="visible"
@@ -90,7 +90,7 @@ const Offers = () => {
                 }
             />
 
-            <div className="flex flex-col items-center justify-center gap-6 w-full">
+            <div className="flex flex-col items-center justify-center gap-4 w-full">
                 {
                     filteredOffers?.length > 0 ? (
                         <Suspense fallback={<OfferCardLoading/>}>

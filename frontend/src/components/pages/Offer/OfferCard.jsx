@@ -90,7 +90,7 @@ const OfferCard = ({
     const handleDeletePost = async () => {
         // TODO :
         
-        const userConfirmed = await showConfirmPopup("Voulez vous vraiment supprimer ce message ?")
+        const userConfirmed = await showConfirmPopup("Voulez vous vraiment supprimer cette offre ?")
         if (!userConfirmed)
             return
         
@@ -132,22 +132,8 @@ const OfferCard = ({
 
     return (
         <div className="flex flex-col items-start justify-start w-full gap-2 ">
-            {
-                !njcam &&
-                <div className="flex items-center gap-x-6 gap-y-2 flex-wrap">
-                    <Badge text={sug?.title} icon="bi bi-box"/>
-                    <Badge text={sug?.depart + " vers " + sug?.dest} icon="bi bi-map"/>
-                    <Badge
-                        text={
-                            "Prévue le " + new Date(sug?.scheduleddate).toLocaleDateString()
-                        }
-                        icon="bi bi-calendar2-event"
-                    />
-                    <Badge text={sug?.capacity} icon="bi bi-truck"/>
-                </div>
-            }
             <div
-                className={`relative flex flex-col gap-3 w-full items-center ${className} bg-white-100   dark:text-white-100 dark:font-sm dark:bg-white-0 dark:border-none rounded-xl p-4 max-md:p-2 border border-black-0`}
+                className={`relative flex flex-col gap-6 w-full items-center ${className}    dark:text-white-100 bg-secondary-l dark:font-sm dark:bg-secondary-d dark:border-none rounded-xl p-4 max-md:p-2 border border-black-0`}
             >
                 {popupVisible && (
                     <div className="absolute top-10 right-10">
@@ -223,7 +209,22 @@ const OfferCard = ({
                         )}
                     </div>
                 )}
+                {
+                    !njcam &&
+                    <div className="flex items-start  w-full justify-start gap-x-4 gap-y-2 flex-wrap">
+                        <OfferDetail text={sug?.title} icon="bi bi-box"/>
+                        <OfferDetail text={sug?.depart + " vers " + sug?.dest} icon="bi bi-map"/>
+                        <OfferDetail
+                            text={
+                                "Prévue le " + new Date(sug?.scheduleddate).toLocaleDateString()
+                            }
+                            icon="bi bi-calendar2-event"
+                        />
+                        <OfferDetail text={sug?.capacity} icon="bi bi-truck"/>
+                    </div>
+                }
                 <div className="w-full flex items-center justify-between rounded-2xl">
+                    
                     <div className="flex items-center gap-2">
                         {
                             !njcam ?
@@ -244,7 +245,7 @@ const OfferCard = ({
                             {
                                 !njcam ?
                                     <p
-                                        className="text-small-1 font-md cursor-pointer hover:underline"
+                                        className="text-base font-bold  cursor-pointer hover:underline"
                                         onClick={() => navigate(`/profile/${sug.userid}`)}
                                     >
                                         {sug?.firstname + ' ' + (!sug?.lastname ? "" : sug?.lastname)}
@@ -263,7 +264,7 @@ const OfferCard = ({
                             </span>
                             {
                                 !njcam &&
-                                <div className="flex items-center gap-2  dark:text-white-100 text-black-80">
+                                <div className="flex items-center gap-2  dark:text-text-sec-d text-text-sec-l">
                                     <i className="bi bi-clock"></i>
                                     <span className="text-small-2  ">
                                         {timeSince(sug?.publicationdate, 4)}
@@ -288,8 +289,8 @@ const OfferCard = ({
                         </div>
                     }
                 </div>
-                <div className="w-full flex flex-col gap-4 items-start justify-cente  rounded-2xl  ">
-                    <p className="text-small-1 text-black-100 dark:text-white-100 dark:font-sm ">
+                <div onClick={() => setDetailed((prev) => !prev)} className="w-full flex flex-col gap-4 items-start justify-cente  rounded-2xl  ">
+                    <p className="text-small-1 text-text-sec-l dark:text-text-sec-d dark:font-sm ">
                         {!njcam ? (offerDetails.length > MAX_OFFER_DESC
                                 ? detailed
                                     ? offerDetails
@@ -303,6 +304,7 @@ const OfferCard = ({
                                 : NJCAM.Infos)
                         }
                     </p>
+                    
 
                     {offerDetails.length > MAX_OFFER_DESC && (
                         <button
@@ -342,20 +344,17 @@ const OfferCard = ({
                             !njcam ?
                                 <Button
                                     onClick={contactUser}
-                                    size="sm"
-                                    variant="secondary"
-                                    icon="bi bi-chat"
-                                    block
+                                    variant="primary"
+                                    // icon="bi bi-chat"
                                 >
                                     Contacter
                                 </Button>
                                 :
                                 <a href={NJCAM.Link}>
                                     <Button
-                                        size="sm"
-                                        variant="secondary"
-                                        icon="bi bi-chat"
-                                        block
+                                        variant="primary"
+                                        // icon="bi bi-chat"
+                                        
                                     >
                                         Contacter
                                     </Button>
@@ -368,4 +367,31 @@ const OfferCard = ({
     )
         ;
 };
+
+const OfferDetail = (
+    {
+        icon,
+        text,
+        active = false,
+        onClick = () => { },
+        badgeClassName,
+        iconClassName
+    }) => {
+    return (
+        <div
+            onClick={onClick}
+            className={` ${active && "bg-accent-l/20 dark:bg-accent-d/20"
+            } text-small-2 rounded-full cursor-pointer px-4 py-2  flex gap-2 select-none    group bg-primary-d/5 dark:bg-primary-l/10  ${badgeClassName}`}
+        >
+            {icon && (
+                <i
+                    className={`${icon} ${active && "text-black-100 dark:text-white-100"
+                    } text-primary-100  ${iconClassName}`}
+                ></i>
+            )}
+            <p>{text}</p>
+        </div>
+    );
+};
+
 export default OfferCard;

@@ -60,7 +60,7 @@ const ProfilePopup = ({className}) => {
                 icon={darkMode ? "bi bi-moon" : "bi bi-sun"}
             />
             <div className="w-full border border-black-10"/>
-            <Button onClick={handleLogout} variant="secondary" size="sm" block>
+            <Button onClick={handleLogout} variant="primary" size="sm" block>
                 Deconnexion
             </Button>
         </div>

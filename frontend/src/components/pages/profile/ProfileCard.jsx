@@ -6,7 +6,7 @@ import {useAuth} from "../../../context/AuthProvider.jsx";
 import {useAnimation} from "../../../context/AnimationProvider.jsx";
 import {useSocketContext} from "../../../context/SocketContext.jsx";
 import Icon from "../../ui/Icon.jsx";
-import { useOffer } from "../../../context/OfferProvider.jsx";
+import {useOffer} from "../../../context/OfferProvider.jsx";
 
 const ProfileCard = ({
                          id,
@@ -25,12 +25,37 @@ const ProfileCard = ({
     const {personalInformation, profileInfo, token} = useAuth();
     const [loading, setLoading] = useState(true);
     const [isFriend, setIsFriend] = useState(false);
+    const {followersCount, getFriends} = useUser();
+    const {
+        getCurrentUserOffers,
+        pubNumber
+    } = useOffer();
 
-    const { socket } = useSocketContext();
 
-    const { removeOfferInStorage } = useOffer();
+    const {socket} = useSocketContext();
+
+    const {removeOfferInStorage} = useOffer();
 
     const {setMessagePopup} = useAnimation();
+
+    const contactUser = () => {
+        localStorage.setItem(
+            "userToChat",
+            JSON.stringify({
+                id: profileInfo?.userid,
+                fullName: profileInfo?.firstname + " " + profileInfo?.lastname,
+                accounttype: profileInfo?.accounttype,
+                pic: image,
+            })
+        );
+        navigate("/message");
+    };
+    
+
+    useEffect(() => {
+        getCurrentUserOffers();
+        getFriends();
+    }, []);
 
     useEffect(() => {
         setTimeout(() => setLoading(false), 1000);
@@ -39,42 +64,65 @@ const ProfileCard = ({
 
     return (
         <div
-            className="flex flex-col gap-6 rounded-xl shadow-sm border text-black-100 dark:text-white-100 border-black-0 p-4 bg-white-100 dark:bg-white-0 dark:border-none w-full">
-            <div className="flex justify-center items-start">
-                <i className="disabled:bi-0-circle"></i>
-                <div className="flex flex-col items-center justify-center gap-4">
-                    <img
-                        src={image}
-                        alt=""
-                        className="max-md:size-[84px] size-[184px] bg-black-20 rounded-full object-cover"
-                    />
-                    <div className="flex flex-col gap-1 items-center justify-center text-subtitle-2">
-                        <span>{name}</span>
-                        <span className="text-black-60 dark:text-white-100 dark:font-sm text-small-1 font-light">
-                            {account}
-                        </span>
+            className="flex flex-col gap-10 rounded-xl shadow-sm border text-black-100 dark:text-white-100 border-black-0 p-4 bg-secondary-l dark:bg-secondary-d dark:border-none w-full">
+            <div className="flex flex-row items-center justify-evenly max-[1320px]:flex-col gap-y-6">
+                <div className="flex justify-center items-start">
+                    <i className="disabled:bi-0-circle"></i>
+                    <div className="flex flex-col items-center justify-center gap-4">
+                        <img
+                            src={image}
+                            alt=""
+                            className="max-md:size-[84px] size-[128px] bg-black-20 rounded-full object-cover"
+                        />
+                        <div className="flex flex-col gap-1 items-center justify-center text-subtitle-2">
+                            <span>{name}</span>
+                            <span className=" text-base text-text-sec-l dark:text-text-sec-d">
+                                       {account}
+                                   </span>
+                        </div>
+                    </div>
+                    {/*<i className="bi bi-three-dots-vertical"></i>*/}
+                </div>
+                <div
+                    className={`flex justify-center  gap-10 text-base text-black-80  dark:text-white-80
+                     
+                   `}
+                >
+                    <div className="flex flex-col items-center justify-between  gap-2">
+                        <span className={'text-subtitle-2 text-text-l dark:text-text-d'}>{pubNumber}</span>
+                        <span className={'text-text-sec-l dark:text-text-sec-l'}>Publications</span>
+                    </div>
+                    <div className="flex flex-col items-center justify-between  gap-2">
+                        <span className={'text-subtitle-2 text-text-l dark:text-text-d'}>{followersCount}</span>
+                        <span className={'text-text-sec-l dark:text-text-sec-l'}>Suivi(s)</span>
                     </div>
                 </div>
-                {/*<i className="bi bi-three-dots-vertical"></i>*/}
             </div>
             <div
-                className={`flex w-full text-base text-black-100 
+                className={`flex w-full text-base 
          items-center justify-between max-[1200px]:flex-col gap-y-4
       `}
             >
-                <div className="flex items-center gap-2 dark:text-white-100 dark:font-sm">
-                    <i className="bi bi-envelope-at"></i>
-                    <span>{email}</span>
+                <div className="flex flex-col items-center justify-between  gap-2">
+                    <div className="flex items-center gap-2 dark:text-white-100 dark:font-sm">
+                        <i className="bi bi-envelope-at"></i>
+                        <span>{email}</span>
+                    </div>
+                    <p className={'text-small-1 text-text-sec-l dark:text-text-sec-l'}>Email</p>
                 </div>
-
-                <div className="flex items-center  gap-2 dark:text-white-100 dark:font-sm">
-                    <i className="bi bi-phone-flip"></i>
-                    <span>{phone}</span>
+                <div className="flex flex-col items-center justify-between  gap-2">
+                    <div className="flex items-center gap-2 dark:text-white-100 dark:font-sm">
+                        <i className="bi bi-phone"></i>
+                        <span>{phone}</span>
+                    </div>
+                    <p className={'text-small-1 text-text-sec-l dark:text-text-sec-l'}>Téléphone</p>
                 </div>
-
-                <div className="flex items-center  gap-2 dark:text-white-100 dark:font-sm">
-                    <i className="bi bi-calendar"></i>
-                    <span>{date}</span>
+                <div className="flex flex-col items-center justify-between  gap-2">
+                    <div className="flex items-center gap-2 dark:text-white-100 dark:font-sm">
+                        <i className="bi bi-calendar"></i>
+                        <span>{date}</span>
+                    </div>
+                    <p className={'text-small-1 text-text-sec-l dark:text-text-sec-l'}>Date de création du compte</p>
                 </div>
             </div>
 
@@ -113,15 +161,26 @@ const ProfileCard = ({
                     </div>
                 ) :
                 isFriend ? (
-                        <Button
-                            block
-                            variant="danger"
-                            size="md"
-                            icon="bi bi-dash"
-                        onClick={() => unFollowUsers(profileInfo.id, id)}
-                        >
-                            Retirer
-                        </Button>
+                        <div className={'flex w-full justify-center gap-4'}>
+                            <Button
+                                block
+                                variant="primary"
+                                size="md"
+                                icon={'bi bi-chat'}
+                                onClick={contactUser}
+                            >
+                                Contacter
+                            </Button>
+                            <Button
+                                block
+                                variant="secondary-2"
+                                icon={'bi bi-dash'}
+                                size="md"
+                                onClick={() => unFollowUsers(profileInfo.id, id)}
+                            >
+                                Retirer
+                            </Button>
+                        </div>
                     )
                     : (
                         <Button

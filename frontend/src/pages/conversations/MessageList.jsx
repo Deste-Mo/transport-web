@@ -55,16 +55,15 @@ const MessageList = () => {
     }, [socket, countUnread])
 
     return (
-        <motion.section className="flex flex-col items-center justify-start w-full gap-6 relative  min-h-screen"
+        <motion.section className="flex flex-col items-center justify-start w-full gap-6 relative  min-h-screen bg-secondary-l dark:bg-secondary-d"
                         variants={appVariants} initial="hidden" whileInView="visible" viewport={{once: true}}>
-            <SubHeader name="Messages" icon="bi bi-chat"
+            <SubHeader name="Messages" 
                        rightContent={<ExpandableSearchBar className="max-sm:hidden" setValue={setSearch} placeholder={"Rechercher un ami"}
                                                           value={search}/>}/>
-            {/*Mobile navigation*/}
             <ExpandableSearchBar expanded className="sm:hidden sticky top-[72px] z-40" setValue={setSearch} placeholder={"Rechercher un ami"}
                                  value={search}/>
             <div
-                className="w-full h-fit bg-white-100 dark:bg-black-100 dark:border-none flex justify-start overflow-x-scroll p-4 border border-black-0 rounded-2xl scrollbar-none ">
+                className="w-full h-fit bg-secondary-l dark:bg-secondary-d dark:border-none flex justify-start overflow-x-scroll p-4  rounded-2xl scrollbar-none ">
                 {friends.length > 0 ?
                     friends.map(friend => (
                         <ActiveUser key={friend.userid} friend={friend}/>
@@ -77,11 +76,9 @@ const MessageList = () => {
                     </div>
                 }
             </div>
-
-            {/* <SearchBar variant={"fill"} block size={"lg"} value={search} setValue={setSearch} placeholder={"Rechercher un ami"} /> */}
-
+            <p className={'text-black-100  w-full px-6 dark:text-white-100 text-lead'}>Vos discussions</p>
             <div
-                className="w-full h-[60vh] scrollbar-none overflow-y-scroll bg-white-100 dark:bg-white-0 dark:border-none  flex flex-col gap-3 overflow-hidden p-2  rounded-xl border border-black-0">
+                className="w-full h-[60vh] scrollbar-none overflow-y-scroll bg-secondary-l dark:bg-secondary-d dark:border-none  flex flex-col overflow-hidden  ">
                 {
                     search ?
                         SearchFriends?.length > 0 ?

@@ -24,7 +24,7 @@ export function SubHeader({
 }) {
   return (
     <div
-      className={`flex select-none gap-10 max-md:gap-2 w-full justify-between items-center z-30  rounded-xl shadow-sm  border border-black-0 bg-white-100 sticky top-0 dark:bg-white-0  dark:backdrop-blur-sm   ${
+      className={`flex select-none gap-10 max-md:gap-2 w-full justify-between items-center z-30  rounded-xl shadow-sm  sticky top-0 bg-secondary-l border dark:border-neutral-800 dark:bg-secondary-d dark:backdrop-blur-sm   ${
         sticky && "sticky"
       } ${sizeVariants.padding[size]}`}
     >
@@ -32,7 +32,7 @@ export function SubHeader({
         <div
           className={`flex items-center gap-4 text-black-100 text-nowrap dark:text-white-100 ${sizeVariants.text[size]}`}
         >
-          <i className={icon + " text-icon"}></i>
+          {icon && <i className={icon + " text-icon"}></i>}
           <span>{name}</span>
         </div>
       )}

@@ -15,6 +15,7 @@ import Badge from "../components/ui/Badge.jsx";
 import {Suspense} from "react";
 import FriendCardLoading from "../components/loader/FriendCardLoading.jsx";
 import SearchFilter from "../components/pages/SearchFilter.jsx";
+import Button from "../components/ui/Button.jsx";
 
 const RecentlyFriends = lazy(() =>
     import("../components/pages/RecentlyFriends.jsx")
@@ -34,7 +35,7 @@ const Friends = () => {
     const [search, setSearch] = useState("");
     const [filteredUsers, setFilteredUser] = useState([]);
     const [activeUserFilters, setActiveUserFilters] = useState(USERS_FILTERS_DATAS);
-    
+
 
     const updateActiveUserFilters = (filterName) => {
         setActiveUserFilters((prevFilters) =>
@@ -51,17 +52,17 @@ const Friends = () => {
         getFriends();
         updateActiveUserFilters(activeUserFilter);
         setFilteredUser(filterUsers(search, friends, users));
-        
-        
+
+
     }, []);
-    
+
     useEffect(() => {
         setFilteredUser(filterUsers(search, friends, users));
     }, [search, users, friends]);
-    
+
     return (
         <motion.section
-            className="flex flex-col items-center justify-center gap-6 w-full "
+            className="flex flex-col items-center justify-start gap-6 w-full bg-secondary-l dark:bg-secondary-d min-h-full"
             variants={appVariants}
             initial="hidden"
             whileInView="visible"
@@ -75,23 +76,26 @@ const Friends = () => {
                 }
             />
             {/*Mobile navigation*/}
-            <ExpandableSearchBar className="sm:hidden sticky top-[72px] z-40" expanded block setValue={setSearch} value={search}/>
-            
+            <ExpandableSearchBar className="sm:hidden sticky top-[72px] z-40" expanded block setValue={setSearch}
+                                 value={search}/>
+
             <div className="flex items-center gap-4">
-                {activeUserFilters.map((userFilter) => (
-                    <Badge
+                {activeUserFilters.map((userFilter, index) => (
+                    <Button
+                        key={userFilter?.name+index}
+                        size={'sm'}
                         onClick={() => {
                             updateActiveUserFilters(userFilter?.name);
                             setFilteredUser(filterUsers(search, friends, users));
                         }}
-                        key={userFilter?.name}
-                        text={userFilter?.name}
-                        active={userFilter?.active}
-                    />
+                        className={`${userFilter?.active && 'bg-accent-d dark:bg-accent-d  text-text-l dark:text-text-l'}`}
+
+                        variant={'secondary-2'}>{userFilter?.name}
+                    </Button>
                 ))}
             </div>
             <div
-                className="flex flex-col items-center justify-center gap-6 p-2 w-full bg-white-100 dark:bg-white-0 rounded-xl">
+                className="flex flex-col items-center justify-center gap-6  w-full rounded-xl overflow-y-scroll scrollbar-none">
                 {search ? (
                     filteredUsers?.length > 0 ? (
                         filteredUsers?.map((friend) => (
@@ -100,7 +104,7 @@ const Friends = () => {
                                 key={friend.userid}
                                 spec={friend.userid}
                                 account={friend.accounttype}
-                                name={friend.firstname + " " + (friend.lastname? friend.lastname : '')}
+                                name={friend.firstname + " " + (friend.lastname ? friend.lastname : '')}
                                 image={SERVERLINK + "/" + friend.profileimage}
                                 showMessageButton
                                 showRemoveFriendButton={activeUserFilter === USERS_FILTERS.follower}
@@ -118,7 +122,7 @@ const Friends = () => {
                                 className="w-full"
                                 spec={friend.userid}
                                 account={friend.accounttype}
-                                name={friend.firstname + " " +( friend.lastname? friend.lastname : '')}
+                                name={friend.firstname + " " + (friend.lastname ? friend.lastname : '')}
                                 image={SERVERLINK + "/" + friend.profileimage}
                                 showMessageButton
                                 showRemoveFriendButton={activeUserFilter === USERS_FILTERS.follower}
@@ -128,7 +132,8 @@ const Friends = () => {
                         </Suspense>
                     ))
                 ) : (
-                    <div className="nothing-box">{activeUserFilter === USERS_FILTERS.follower ? "Aucun suivi" : "Aucune suggestion"}</div>
+                    <div
+                        className="nothing-box">{activeUserFilter === USERS_FILTERS.follower ? "Aucun suivi" : "Aucune suggestion"}</div>
                 )}
             </div>
         </motion.section>

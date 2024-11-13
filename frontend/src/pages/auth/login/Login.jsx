@@ -46,7 +46,7 @@ const Login = () => {
                 <span className="text-primary-100 "> Media Trans</span>
             </div>
             {/* Main Form */}
-            <div className="flex flex-col items-center justify-center w-full">
+            <div className="flex flex-col items-center justify-center w-full ">
                 <form
                     className="auth-form"
                     onSubmit={handleLogin}
