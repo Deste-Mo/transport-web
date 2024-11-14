@@ -1,14 +1,15 @@
 import axios from "axios";
 import {SERVERLINK} from "../constants/index.js";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 
-const useUserHook = ({token, userId = null}) => {
+const useUserHook = ({userId = null}) => {
     const [user, setUser] = useState({});
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const fetchUser = async () => {
+
+    const fetchUser = useCallback(async (token) => {
         setLoading(true);
-        axios.get(`${SERVERLINK}/api/auth/me/${userId ?? ''}`, {
+        axios.get(`${SERVERLINK}/api/auth/me/${userId || ''}`, {
             headers: {
                 token,
             }
@@ -24,14 +25,11 @@ const useUserHook = ({token, userId = null}) => {
             setLoading(false);
         });
 
-    };
+    }, []);
     
 
-    useEffect(() => {
-        fetchUser()
-    }, [])
-    
     return {
+        fetchUser,
         user,
         loading,
         error,

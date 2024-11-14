@@ -4,17 +4,20 @@ import {useAuth} from "../context/AuthProvider.jsx";
 import {appVariants} from "../animations/variants.js";
 import {motion} from "framer-motion";
 import DefaultLoader from "../components/loader/DefaultLoader.jsx";
-import axios from "axios";
-import {SERVERLINK} from "../constants/index.js";
-import useFetchUser from "../hooks/useFetchUser.js";
+import useUserHook from "../hooks/useUserHook.js";
 
 const ProtectedProfileLayout = () => {
     const {id: userIdParam} = useParams();
     const {token} = useAuth();
     const [authorized, setAuthorized] = useState(false);
     const [loadingValidation, setLoadingValidation] = useState(true);
-    const {loading, error, user} = useFetchUser({token});
+    const {loading, error, user, fetchUser} = useUserHook();
 
+    
+    useEffect(() => {
+        fetchUser(token);
+    }, [])
+    
     useEffect(() => {
         setLoadingValidation(true);
         if (!loading && user?.id && userIdParam) {

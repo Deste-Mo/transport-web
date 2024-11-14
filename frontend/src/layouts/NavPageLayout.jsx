@@ -12,12 +12,14 @@ import {useUser} from "../context/UserProvider.jsx";
 import ProfileLeftLoading from "../components/loader/ProfileLeftLoading.jsx";
 import {useAnimation} from "../context/AnimationProvider.jsx";
 import useWindowSize from "../hooks/useWindowSize.jsx";
+import {useNewUserContext} from "../context/NewUserProvider.jsx";
 
 const ProfileLeft = lazy(() => import("../components/pages/profile/ProfileLeft.jsx"));
 
 const NavPageLayout = () => {
-    const {personalInformation} = useAuth();
+    const {personalInformation, loadingInformation} = useAuth();
     const {setShowBackIcon, hideMobileNavigation, setHideMobileNavigation} = useAnimation();
+    const {fetchSuggestedUser, fetchFollowers} = useNewUserContext();
     const [width] = useWindowSize();
     const {
         savedOffers,
@@ -37,8 +39,17 @@ const NavPageLayout = () => {
         getCurrentUserOffers();
         setShowBackIcon(false);
 
-    }, []);
 
+        fetchSuggestedUser();
+    }, []);
+    
+    
+    useEffect(() => {
+        if (!loadingInformation)
+            fetchFollowers(personalInformation.id);
+    }, [personalInformation])
+    
+    
     useEffect(() => {
         setHideMobileNavigation(false);
     }, [pathname])

@@ -116,6 +116,7 @@ const AuthProvider = ({ children }) => {
                 // console.log(`New access token : ${res.data.accessToken}`);
                 setToken(res.data.accessToken);
                 getInformation(res.data.accessToken);
+                // console.log("resreshing token : ", res.data.accessToken)
             })
             .catch(e => {
                 console.log(`Erreur : ${e.response.data.error}`);
@@ -127,8 +128,7 @@ const AuthProvider = ({ children }) => {
     
     useEffect(() => {
         // setLoading(true);
-        refreshToken();
-        
+        refreshToken()
         const intervalId = setInterval(() => {
             refreshToken();
         }, REFRESH_TOKEN_INTERVAL);

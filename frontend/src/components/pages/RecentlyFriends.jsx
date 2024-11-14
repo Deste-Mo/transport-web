@@ -9,6 +9,8 @@ import {useEffect, useState} from "react";
 import FriendCardLoading from "../loader/FriendCardLoading";
 import {useUser} from "../../context/UserProvider.jsx";
 import useWindowSize from "../../hooks/useWindowSize.jsx";
+import useFollowersHook from "../../hooks/useFollowersHook.js";
+import {useNewUserContext} from "../../context/NewUserProvider.jsx";
 //import PropTypes from "prop-types";
 
 const RecentlyFriends = ({
@@ -26,14 +28,17 @@ const RecentlyFriends = ({
     const id = spec;
     const {token, personalInformation, profileInfo} = useAuth();
     const {
-        followUser,
-        unFollowUsers,// TODO : Forget the usage (empty function)
+        // followUser,
+        unFollowUsers,
     }
-        = useUser();
+    = useUser();
+    
     const {isMobile} = useApp();
     const {ActiveUsers} = useSocketContext();
     const navigate = useNavigate();
     const isOnline = ActiveUsers.includes(id);
+    const {limitTextLen, showConfirmPopup} = useApp();
+    const { followUser} = useNewUserContext();
     
     const navigateToMessage = () => {
         localStorage.setItem(
@@ -48,56 +53,6 @@ const RecentlyFriends = ({
         navigate("/message");
     };
     const goToUserProfile = () => navigate(`/profile/${id}`);
-
-
-
-    const props = {
-        id,
-        isOnline,
-        goToUserProfile,
-        navigateToMessage,
-        unFollowUsers,
-        followUser,
-        spec,
-        image,
-        name,
-        account,
-        showMessageButton,
-        showRemoveFriendButton,
-        showAddFriendButton,
-        onButtonsClick,
-        className,
-        token, personalInformation, profileInfo
-    }
-
-    return <DesktopRecentlyFriends {...props} />
-    
-};
-
-export default RecentlyFriends;
-
-
-const DesktopRecentlyFriends = ({
-                                    id,
-                                    personalInformation, profileInfo,
-                                    isOnline,
-                                    goToUserProfile,
-                                    navigateToMessage,
-                                    followUser,
-                                    unFollowUsers,
-                                    spec,
-                                    image,
-                                    name,
-                                    account,
-                                    showMessageButton = false,
-                                    showRemoveFriendButton = false,
-                                    showAddFriendButton = false,
-                                    onButtonsClick = () => {
-                                    },
-                                    withConfirmation = false,
-                                    className,
-                                }) => {
-    const {isMobile, limitTextLen, showConfirmPopup} = useApp();
     
     const showConfirm = async () => {
         const userConfirmed = await showConfirmPopup("Voulez vous vraiment supprimer ce message ?")
@@ -106,8 +61,8 @@ const DesktopRecentlyFriends = ({
 
         unFollowUsers(profileInfo.id, id);
     }
-    
-    
+
+
     return (
         <div
             className={`flex items-center  justify-between  p-4 hover:bg-primary-d/10 dark:hover:bg-primary-l/10 group  text-black-100 dark:text-white-100 ${className}`}
@@ -145,7 +100,8 @@ const DesktopRecentlyFriends = ({
                         size="sm"
                         variant={"outline"}
                         onClick={() => {
-                            followUser(profileInfo.id, id, personalInformation);
+                            followUser(profileInfo, id, personalInformation);
+                            // followUser(profileInfo.id, id, personalInformation);
                             onButtonsClick();
                         }}
                     >
@@ -167,4 +123,8 @@ const DesktopRecentlyFriends = ({
             </div>
         </div>
     );
-}
+    
+};
+
+export default RecentlyFriends;
+

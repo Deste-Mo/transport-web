@@ -17,7 +17,6 @@ const UserProvider = ({ children }) => {
     const navigate = useNavigate();
 
     const [friends, setFriends] = useState([]);
-    const [loadingFriend, setLoadingFriend] = useState(true);
     const [users, setUsers] = useState([]);
     const [profileFriends, setProfileFriends] = useState([]);
     const [followersCount, setFollowersCount] = useState(0);
@@ -96,8 +95,7 @@ const UserProvider = ({ children }) => {
     const filterUsers = (search, friends, users) => {
         // Get the active filter from localStorage or default to 'follower'
         const activeUserFilter = localStorage?.getItem("activeUserFilters") || USERS_FILTERS.follower;
-
-
+        
         switch (activeUserFilter) {
             case USERS_FILTERS.suggestion: {
                 // localStorage.setItem("activeUserFilters", USERS_FILTERS.suggestion);

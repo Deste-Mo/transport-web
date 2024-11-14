@@ -18,8 +18,13 @@ import { useOffer } from "../../context/OfferProvider.jsx";
 import { globalInputVariants } from "../../styles/globals.input.js";
 import { useAnimation } from "../../context/AnimationProvider.jsx";
 import { useNavigate, useParams } from "react-router-dom";
+import OfferForm from "./OfferForm.jsx";
 
 const EditOffer = () => {
+  return <OfferForm />;
+}
+
+/*const EditOffer = () => {
   const { handleInputChange, checkFieldError, handleError } = useForm();
   const { setShowBackIcon, setMessagePopup } = useAnimation();
   const { getCurrentUserOffers, updateOffer, setUpdateOffer } = useOffer();
@@ -213,7 +218,7 @@ const EditOffer = () => {
         className="flex flex-col gap-10 p-4  bg-white-100 rounded-2xl dark:bg-transparent"
         onSubmit={(e) => handleUpdateOffer(e)}
       >
-        {/* formulaire parties */}
+        {/!* formulaire parties *!/}
         <div className="flex flex-col gap-6">
           <div className=" flex flex-col gap-4">
             <div className="w-full  h-60 bg-black-10 rounded-xl flex flex-col justify-center items-center overflow-hidden">
@@ -240,7 +245,7 @@ const EditOffer = () => {
             />
           </div>
 
-          {/* Informations sections */}
+          {/!* Informations sections *!/}
           <div className="flex flex-col gap-4">
             <TextArea
               titleIcon="bi bi-pencil"
@@ -364,5 +369,5 @@ const EditOffer = () => {
       </form>
     </motion.section>
   );
-};
+};*/
 export default EditOffer;

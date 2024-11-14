@@ -16,32 +16,36 @@ import OfferProvider from "./context/OfferProvider.jsx";
 import NotficationProvider from "./context/NotficationProvider.jsx";
 import ProfileProvider from "./context/ProfileProvider.jsx";
 import UserProvider from "./context/UserProvider.jsx";
+import NewUserProvider from "./context/NewUserProvider.jsx";
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <Router>
+
             <AnimationProvider>
                 <AuthProvider>
                     <UserPreferenceProvider>
                         <AppProvider>
-                            <SocketContextProvider>
-                                <HomeProvider>
-                                    <DiscussionProvider>
-                                        <OfferProvider>
-                                            <UserProvider>
-                                                <NotficationProvider>
-                                                    <ProfileProvider>
-                                                        <FormProvider>
-                                                            <App/>
-                                                        </FormProvider>
-                                                    </ProfileProvider>
-                                                </NotficationProvider>
-                                            </UserProvider>                                             
-                                        </OfferProvider>
-                                    </DiscussionProvider>
-                                </HomeProvider>
-                            </SocketContextProvider>
+                            <NewUserProvider>
+                                <SocketContextProvider>
+                                    <HomeProvider>
+                                        <DiscussionProvider>
+                                            <OfferProvider>
+                                                <UserProvider>
+                                                    <NotficationProvider>
+                                                        <ProfileProvider>
+                                                            <FormProvider>
+                                                                <App/>
+                                                            </FormProvider>
+                                                        </ProfileProvider>
+                                                    </NotficationProvider>
+                                                </UserProvider>
+                                            </OfferProvider>
+                                        </DiscussionProvider>
+                                    </HomeProvider>
+                                </SocketContextProvider>
+                            </NewUserProvider>
                         </AppProvider>
                     </UserPreferenceProvider>
                 </AuthProvider>
@@ -49,3 +53,4 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </Router>
     </React.StrictMode>
 );
+

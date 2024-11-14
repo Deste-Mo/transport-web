@@ -16,6 +16,7 @@ import TemplatePopup, {
 import Filter from "../../components/ui/Filter.jsx";
 import OfferCardLoading from "../../components/loader/OfferCardLoading.jsx";
 import OtherUserOfferList from "../../components/pages/OtherUserOfferList.jsx";
+import useFollowersHook from "../../hooks/useFollowersHook.js";
 
 const ProfileCard = lazy(() =>
     import('../../components/pages/profile/ProfileCard.jsx'),
@@ -68,7 +69,7 @@ export default function Profile() {
     }, [currentUserOffers])
 
     useEffect(() => {
-        getFriends(id)
+        getFriends(id);
         if (localStorage.getItem('offerNotifId') !== null) {
             let offerid = localStorage.getItem('offerNotifId')
             getCurrentUserOffers(id, offerid)
@@ -100,7 +101,6 @@ export default function Profile() {
 
             <FollowerList friendFollowerCount={friendFollowerCount} friends={friends} profileFriends={profileFriends}
                           handleSeeUsers={handleSeeUsers} personalInformation={personalInformation}/>
-            {/*For other user*/}
             {profileInfo.id !== personalInformation.id && (
                 <div className="md:hidden visible">
                     <OtherUserOfferList/>
@@ -116,7 +116,6 @@ export default function Profile() {
                                currentUserOffers={currentUserOffers}
                                setFilteredCurrentUserOffer={setFilteredCurrentUserOffer}
                     />
-
                 </>
             )}
         </div>
@@ -125,6 +124,7 @@ export default function Profile() {
 
 const FollowerList = ({friendFollowerCount, profileFriends, friends, handleSeeUsers, personalInformation}) => {
     const {id} = useParams();
+    
     return (
         <div className="flex flex-col gap-6">
             <SubHeader
