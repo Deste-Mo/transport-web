@@ -9,6 +9,7 @@ import {useAuth} from "./AuthProvider.jsx";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import {useAnimation} from "./AnimationProvider.jsx";
+import * as res from "autoprefixer";
 
 const FriendContext = createContext({});
 
@@ -17,6 +18,7 @@ const UserProvider = ({ children }) => {
     const navigate = useNavigate();
 
     const [friends, setFriends] = useState([]);
+    const [fetchingFriends, setFetchingFriends] = useState(false);
     const [users, setUsers] = useState([]);
     const [profileFriends, setProfileFriends] = useState([]);
     const [followersCount, setFollowersCount] = useState(0);
@@ -29,18 +31,23 @@ const UserProvider = ({ children }) => {
 
     const { setMessagePopup } = useAnimation();
 
-    const getFriends = async (userId) => {
+    const getFriends = async (userId = null) => {
+        setFetchingFriends(true);
         const response = await axios.get(
-            `${SERVERLINK}/api/profile/friends/${!userId ? "" : userId}`,
+            `${SERVERLINK}/api/profile/friends/${userId || ''}`,
             {
                 headers: {token},
             }
         );
 
-        setFriends(await response?.data?.friends);
-        setFollowersCount(await response?.data.friends.length);
-        setFriendFollowerCount(await response?.data.profile.length);
-        setProfileFriends(await response?.data.profile);
+        setFriends(response?.data?.friends);
+        setFollowersCount(response?.data.friends.length);
+        setFriendFollowerCount(response?.data.profile.length);
+        setProfileFriends(response?.data.profile);
+        
+        
+        setFetchingFriends(false)
+        
     };
     const getUsers = async () => {
         const response = await axios.get(`${SERVERLINK}/api/messages/users`, {
@@ -193,7 +200,11 @@ const UserProvider = ({ children }) => {
                 handleSendEmailConf,
                 subscriptionCards,
                 getAllSubscription,
-                getUserExists
+                getUserExists,
+                
+                
+                // TEMP SOLUTION
+                fetchingFriends
             }}
         >
             {children}

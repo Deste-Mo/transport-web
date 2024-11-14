@@ -28,13 +28,13 @@ const Friends = () => {
         users,
         getFriends,
         getUsers,
-        // filterUsers,
+        filterUsers,
     } = useUser();
     const activeUserFilter = localStorage?.getItem("activeUserFilters") || USERS_FILTERS.follower
+
     const [search, setSearch] = useState("");
     const [filteredUsers, setFilteredUser] = useState([]);
     const [activeUserFilters, setActiveUserFilters] = useState(USERS_FILTERS_DATAS);
-    const {followers, suggestedUsers,filterUsers } = useNewUserContext();
 
 
     const updateActiveUserFilters = (filterName) => {
@@ -48,18 +48,20 @@ const Friends = () => {
     }
     
     const updateFilteredUser = () => {
-        setFilteredUser(filterUsers(search, followers, suggestedUsers));
+        setFilteredUser(filterUsers(search, friends, users));   
     }
 
     useEffect(() => {
-        // getUsers();
-        // getFriends();
+        getUsers();
+        getFriends();
         updateActiveUserFilters(activeUserFilter);
+        setFilteredUser(filterUsers(search, friends, users));
+        
     }, []);
 
     useEffect(() => {
-        updateFilteredUser()
-    }, [search, suggestedUsers, followers]);
+        updateFilteredUser();
+    }, [search, users, friends]);
 
     return (
         <motion.section
@@ -89,13 +91,13 @@ const Friends = () => {
 
             <div
                 className="flex flex-col items-center justify-center gap-6  w-full rounded-xl overflow-y-scroll scrollbar-none">
-                <FollowerOrSuggestionList activeUserFilter={activeUserFilter} users={filteredUsers}
-                                          onUpdateContent={() => updateFilteredUser()}/>
+                {filteredUsers?.length > 0 && <FollowerOrSuggestionList activeUserFilter={activeUserFilter} users={filteredUsers}
+                                                                        onUpdateContent={() => updateFilteredUser()}/>}
                 {
-                    search && filteredUsers?.length <= 0 && <p className="nothing-box">Aucun resultat</p>
+                    search && !(filteredUsers?.length > 0)  && <p className="nothing-box">Aucun resultat</p>
                 }
                 {
-                    !search && filteredUsers?.length <= 0 && (<div
+                    search === '' && !(filteredUsers.length > 0)  && (<div
                         className="nothing-box">{activeUserFilter === USERS_FILTERS.follower ? "Aucun suivi" : "Aucune suggestion"}</div>)
                 }
                 

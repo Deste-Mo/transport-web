@@ -14,8 +14,7 @@ const useFollowersHook = () => {
                 headers: {token},
             }
         ).then((res) => {
-            setFollowers(res?.data?.friends);
-            console.log("followers : ", res?.data)
+            setFollowers(res?.data?.profile);
         })
             .catch((err) => {
                 console.error('Error fetching followers', err?.message);

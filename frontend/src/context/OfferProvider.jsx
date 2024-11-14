@@ -43,8 +43,6 @@ const OfferProvider = ({children}) => {
                 headers: {token},
             }
         );
-        setPubNumber(await response?.data?.all.length);
-        // console.log("offer", response?.data?.all)
         setCurrentUserOffers(await response?.data?.all);
         setPubNumber(await response?.data?.all.length)
     }

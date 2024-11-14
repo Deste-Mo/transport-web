@@ -17,6 +17,8 @@ import Filter from "../../components/ui/Filter.jsx";
 import OfferCardLoading from "../../components/loader/OfferCardLoading.jsx";
 import OtherUserOfferList from "../../components/pages/OtherUserOfferList.jsx";
 import useFollowersHook from "../../hooks/useFollowersHook.js";
+import FriendCardLoading from "../../components/loader/FriendCardLoading.jsx";
+import {useNewUserContext} from "../../context/NewUserProvider.jsx";
 
 const ProfileCard = lazy(() =>
     import('../../components/pages/profile/ProfileCard.jsx'),
@@ -39,6 +41,7 @@ export default function Profile() {
         friendFollowerCount,
         profileFriends,
         friends,
+        fetchingFriends,
     } = useUser();
     const {
         getSavedOffers,
@@ -49,6 +52,9 @@ export default function Profile() {
     } = useOffer();
     const [popupVisible, setPopupVisible] = useState(false);
     const [filteredCurrentUserOffer, setFilteredCurrentUserOffer] = useState(currentUserOffers);
+
+    // WILL BE FULLY USED FOR THE UPCOMING REFACTOR
+    const {followers, fetchFollowers} = useNewUserContext();
 
     const handleSeeUsers = (userType = USERS_FILTERS.follower) => {
         updateActiveUserFilter(userType);
@@ -70,6 +76,7 @@ export default function Profile() {
 
     useEffect(() => {
         getFriends(id);
+        fetchFollowers(id);
         if (localStorage.getItem('offerNotifId') !== null) {
             let offerid = localStorage.getItem('offerNotifId')
             getCurrentUserOffers(id, offerid)
@@ -78,6 +85,7 @@ export default function Profile() {
         }
         getInformation(token, id)
     }, [id])
+
 
     return (
         <div
@@ -99,7 +107,7 @@ export default function Profile() {
                 </Suspense>
             </div>
 
-            <FollowerList friendFollowerCount={friendFollowerCount} friends={friends} profileFriends={profileFriends}
+            <FollowerList loading={fetchingFriends} friendFollowerCount={friendFollowerCount} friends={friends} profileFriends={followers}
                           handleSeeUsers={handleSeeUsers} personalInformation={personalInformation}/>
             {profileInfo.id !== personalInformation.id && (
                 <div className="md:hidden visible">
@@ -122,8 +130,11 @@ export default function Profile() {
     );
 }
 
-const FollowerList = ({friendFollowerCount, profileFriends, friends, handleSeeUsers, personalInformation}) => {
+const FollowerList = ({loading, friendFollowerCount, profileFriends, friends, handleSeeUsers, personalInformation}) => {
     const {id} = useParams();
+    
+    if (loading)
+        return <FriendCardLoading/>
     
     return (
         <div className="flex flex-col gap-6">

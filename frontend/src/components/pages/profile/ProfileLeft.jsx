@@ -52,7 +52,7 @@ const ProfileLeft = ({
                 >
                     <div className="flex flex-col items-center justify-between  gap-2">
                         <span className={'text-subtitle-2 text-text-l dark:text-text-d'}>{pubNumber}</span>
-                        <span className={'text-text-sec-l dark:text-text-sec-l'}>Publications</span>
+                        <span className={'text-text-sec-l dark:text-text-sec-l'}>Offre(s)</span>
                     </div>
                     <div className="flex flex-col items-center justify-between  gap-2">
                         <span className={'text-subtitle-2 text-text-l dark:text-text-d'}>{followersCount}</span>

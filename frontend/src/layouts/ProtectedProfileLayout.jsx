@@ -11,7 +11,7 @@ const ProtectedProfileLayout = () => {
     const {token} = useAuth();
     const [authorized, setAuthorized] = useState(false);
     const [loadingValidation, setLoadingValidation] = useState(true);
-    const {loading, error, user, fetchUser} = useUserHook();
+    const {loading, error, user, fetchUser} = useUserHook({});
 
     
     useEffect(() => {

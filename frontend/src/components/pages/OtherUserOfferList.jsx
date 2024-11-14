@@ -62,7 +62,7 @@ const OtherUserOfferList = () => {
             {/*Mobile search Filter*/}
             <SearchFilter
                 expanded
-                className="[990px]:hidden"
+                className="hidden max-[990px]:block"
                 filterResultsName="offerCardFilter"
                 filters={OFFER_CARD_FILTERS_PROFILE}
                 variant="fill"

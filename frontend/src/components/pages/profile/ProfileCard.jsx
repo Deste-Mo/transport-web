@@ -1,4 +1,4 @@
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import Button from "../../ui/Button";
 import {useUser} from "../../../context/UserProvider.jsx";
@@ -7,6 +7,7 @@ import {useAnimation} from "../../../context/AnimationProvider.jsx";
 import {useSocketContext} from "../../../context/SocketContext.jsx";
 import Icon from "../../ui/Icon.jsx";
 import {useOffer} from "../../../context/OfferProvider.jsx";
+import useFollowersHook from "../../../hooks/useFollowersHook.js";
 
 const ProfileCard = ({
                          id,
@@ -20,24 +21,21 @@ const ProfileCard = ({
                          forCurrentUser = false
                      }) => {
     const navigate = useNavigate();
+    const {id : userId} = useParams();
 
-    const {followUser, unFollowUsers, friends, handleSendEmailConf} = useUser();
+    const {followUser, unFollowUsers, friends} = useUser();
     const {personalInformation, profileInfo, token} = useAuth();
     const [loading, setLoading] = useState(true);
     const [isFriend, setIsFriend] = useState(false);
     const {followersCount, getFriends} = useUser();
     const {
         getCurrentUserOffers,
-        pubNumber,
         currentUserOffers
     } = useOffer();
-
-
-    const {socket} = useSocketContext();
-
     const {removeOfferInStorage} = useOffer();
-
-    const {setMessagePopup} = useAnimation();
+    
+    // WILL BE FULLY USER IN THE UPCOMING REFACTOR
+    const {fetchFollowers, followers, loading : fetchingFollowers} = useFollowersHook();
 
     const contactUser = () => {
         localStorage.setItem(
@@ -54,11 +52,14 @@ const ProfileCard = ({
     
 
     useEffect(() => {
-        getCurrentUserOffers();
+        getCurrentUserOffers(userId);
         getFriends();
+
+        
     }, []);
 
     useEffect(() => {
+        fetchFollowers(userId,token);
         setTimeout(() => setLoading(false), 1000);
         setIsFriend(friends.length > 0 ? friends.find(friend => friend.userid === id) : false);
     }, [friends, id])
@@ -90,11 +91,11 @@ const ProfileCard = ({
                    `}
                 >
                     <div className="flex flex-col items-center justify-between  gap-2">
-                        <span className={'text-subtitle-2 text-text-l dark:text-text-d'}>{personalInformation.id === id ? pubNumber : friends.length}</span>
-                        <span className={'text-text-sec-l dark:text-text-sec-l'}>Publications</span>
+                        <span className={'text-subtitle-2 text-text-l dark:text-text-d'}>{currentUserOffers.length > 0 ? currentUserOffers.length : 0}</span>
+                        <span className={'text-text-sec-l dark:text-text-sec-l'}>Offre(s)</span>
                     </div>
                     <div className="flex flex-col items-center justify-between  gap-2">
-                        <span className={'text-subtitle-2 text-text-l dark:text-text-d'}>{followersCount}</span>
+                        <span className={'text-subtitle-2 text-text-l dark:text-text-d'}>{fetchingFollowers ? '...' : (followers?.length > 0 ? followers?.length : 0)}</span>
                         <span className={'text-text-sec-l dark:text-text-sec-l'}>Suivi(s)</span>
                     </div>
                 </div>

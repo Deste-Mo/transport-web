@@ -55,35 +55,35 @@ export default SubscriptionSecurity;
 const PaymentSummary = ({user, montant, id}) => {
     return (
         <div
-            className="w-full bg-white rounded-2xl p-6  bg-white-100 flex flex-col gap-6"
+            className="w-full  rounded-2xl p-6  bg-secondary-l dark:bg-secondary-d flex flex-col gap-6"
         >
             <h2 className="text-subtitle-3 text-black-100">Récapitulatif</h2>
             <table className="w-full text-left border-collapse">
                 <thead>
-                <tr className="bg-gray-100 border-b border-gray-300">
-                    <th className="py-3 px-4 text-gray-700 font-medium text-sm">Libellé</th>
-                    <th className="py-3 px-4 text-gray-700 font-medium text-sm">Description</th>
+                <tr className="bg-primary-d/10 dark:bg-primary-l/10 border-b border-gray-300">
+                    <th className="py-3 px-4 text-text-l dark:text-text-d font-medium text-sm">Libellé</th>
+                    <th className="py-3 px-4 text-text-l dark:text-text-d font-medium text-sm">Description</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr className="border-b border-gray-200 hover:bg-gray-50">
-                    <td className="py-3 px-4 text-gray-900">Nom et prénom</td>
-                    <td className="py-3 px-4 text-gray-700">{user.fullName}</td>
+                <tr className="border-b border-gray-200 hover:bg-primary-d/10 dark:hover:bg-primary-l/10">
+                    <td className="py-3 px-4 text-text-l dark:text-text-d">Nom et prénom</td>
+                    <td className="py-3 px-4 text-text-sec-l dark:text-text-sec-d">{user.fullName}</td>
                 </tr>
-                <tr className="border-b border-gray-200 hover:bg-gray-50">
-                    <td className="py-3 px-4 text-gray-900">Numéro</td>
-                    <td className="py-3 px-4 text-gray-700">{user.phone}</td>
+                <tr className="border-b border-gray-200 hover:bg-primary-d/10 dark:hover:bg-primary-l/10">
+                    <td className="py-3 px-4 text-text-l dark:text-text-d">Numéro</td>
+                    <td className="py-3 px-4 text-text-sec-l dark:text-text-sec-d">{user.phone}</td>
                 </tr>
-                <tr className="border-b border-gray-200 hover:bg-gray-50">
-                    <td className="py-3 px-4 text-gray-900">Abonnement</td>
-                    <td className="py-3 px-4 text-gray-700">
+                <tr className="border-b border-gray-200 hover:bg-primary-d/10 dark:hover:bg-primary-l/10">
+                    <td className="py-3 px-4 text-text-l dark:text-text-d">Abonnement</td>
+                    <td className="py-3 px-4 text-text-sec-l dark:text-text-sec-d">
                         {id}
                     </td>
                 </tr>
 
-                <tr className="border-b border-gray-200 hover:bg-gray-50">
-                    <td className="py-3 px-4 text-gray-900">Montant à débiter</td>
-                    <td className="py-3 px-4 text-gray-700">
+                <tr className="border-b border-gray-200 hover:bg-primary-d/10 dark:hover:bg-primary-l/10">
+                    <td className="py-3 px-4 text-text-l dark:text-text-d">Montant à débiter</td>
+                    <td className="py-3 px-4 text-text-sec-l dark:text-text-sec-d">
                         {montant} Ar
                     </td>
                 </tr>
@@ -97,12 +97,12 @@ const PaymentSummary = ({user, montant, id}) => {
 const PaymentLastStep = ({location}) => {
     return (
         <div
-            className="w-full bg-white rounded-2xl p-6  bg-white-100 flex flex-col gap-6"
+            className="w-full  rounded-2xl p-6  bg-secondaryl dark:bg-secondary-d flex flex-col gap-6"
         >
-            <h2 className="text-subtitle-3 text-black-100">Finalisation Paiement {location.type}</h2>
-            <div className="space-y-4">
+            <h2 className="text-subtitle-3 text-text-l dark:text-text-d">Finalisation Paiement {location.type}</h2>
+            <div className="space-y-4 ">
                 <PaymentStep step={1}>
-                    <p className="">Veuillez cliquer et exécuter le code
+                    <p className="text-text-sec-l dark:text-text-sec-d">Veuillez cliquer et exécuter le code
                         {location.type === "Mvola" ? (
                             <a href="tel:%23 111*1*2*0385629423*50000*2*2*2 %23"
                                className="text-primary-100 underline "> *111*1*2*0385629423*50000*2*2*# </a>
@@ -113,18 +113,23 @@ const PaymentLastStep = ({location}) => {
                         sur votre mobile {location.type === "Mvola" ? (
                             <span className="text-yellow-400">sans le modifier</span>
                         ) : (
-                            <span>et valider le paiement suivant les instructions suivantes : numéro <span
-                                className="text-primary-100">033 85 244 25</span>, montant : <span
-                                className="text-primary-100">50 000</span> Ariary, référence : peu importe.</span>
+                            <p className={'text-text-sec-l dark:text-text-sec-d'}>et valider le paiement suivant les instructions suivantes : numéro 
+                                <span
+                                className="text-primary-100">033 85 244 25
+                                </span>, montant : 
+                                <span
+                                className="text-primary-100">50 000
+                                </span> 
+                                Ariary, référence : peu importe.</p>
                         )}
                     </p>
                 </PaymentStep>
                 <PaymentStep step={2}>
-                    <p className="">Une fois votre transfert effectué dans le délai imparti, le
+                    <p className="text-text-sec-l dark:text-text-sec-d">Une fois votre transfert effectué dans le délai imparti, le
                         traitement sera effectué dans les prochaines heures.</p>
                 </PaymentStep>
                 <PaymentStep step={3}>
-                    <p><span className="text-primary-100">Cf CGU Art 3.21</span>, n'exécutez le
+                    <p className={"text-text-sec-l dark:text-text-sec-d"}><span className="text-primary-100 ">Cf CGU Art 3.21</span>, n'exécutez le
                         paiement (1) à partir du numéro <span className="text-primary-100">038 05 253 83</span> que si ce numéro est validé par
                         notre système.</p>
                 </PaymentStep>
@@ -138,7 +143,7 @@ const PaymentLastStep = ({location}) => {
 const PaymentStep = ({step, children}) => {
     return (
         <div className="flex flex-col gap-2 items-start jusstify-start text-black-100">
-            <h1 className="text-small-1 text-black-60 ">Instruction {step}</h1>
+            <h1 className="text-small-1 text-text-l dark:text-text-d ">Instruction {step}</h1>
             <div>
                 {children}
             </div>

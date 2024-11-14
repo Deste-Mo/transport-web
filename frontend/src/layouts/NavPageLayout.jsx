@@ -19,7 +19,6 @@ const ProfileLeft = lazy(() => import("../components/pages/profile/ProfileLeft.j
 const NavPageLayout = () => {
     const {personalInformation, loadingInformation} = useAuth();
     const {setShowBackIcon, hideMobileNavigation, setHideMobileNavigation} = useAnimation();
-    const {fetchSuggestedUser, fetchFollowers} = useNewUserContext();
     const [width] = useWindowSize();
     const {
         savedOffers,
@@ -38,16 +37,8 @@ const NavPageLayout = () => {
         getSuggestedOffers();
         getCurrentUserOffers();
         setShowBackIcon(false);
-
-
-        fetchSuggestedUser();
     }, []);
     
-    
-    useEffect(() => {
-        if (!loadingInformation)
-            fetchFollowers(personalInformation.id);
-    }, [personalInformation])
     
     
     useEffect(() => {

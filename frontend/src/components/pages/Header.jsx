@@ -65,9 +65,9 @@ export function Header({profileImage}) {
         getUnreadNotifications();
     }, [unreadNotificationsCount]);
 
-    useEffect(() => {
+/*    useEffect(() => {
         getFriends();
-    }, []);
+    }, []);*/
 
 
     return (

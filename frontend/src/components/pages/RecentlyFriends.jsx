@@ -28,7 +28,7 @@ const RecentlyFriends = ({
     const id = spec;
     const {token, personalInformation, profileInfo} = useAuth();
     const {
-        // followUser,
+        followUser,
         unFollowUsers,
     }
     = useUser();
@@ -38,7 +38,11 @@ const RecentlyFriends = ({
     const navigate = useNavigate();
     const isOnline = ActiveUsers.includes(id);
     const {limitTextLen, showConfirmPopup} = useApp();
-    const { followUser} = useNewUserContext();
+
+    
+    // WILL BE FULLY USED FOR THE UPCOMING REFACTOR
+    const {fetchFollowers} = useNewUserContext();
+    
     
     const navigateToMessage = () => {
         localStorage.setItem(
@@ -60,6 +64,7 @@ const RecentlyFriends = ({
             return
 
         unFollowUsers(profileInfo.id, id);
+        fetchFollowers(profileInfo.id)
     }
 
 
@@ -100,8 +105,9 @@ const RecentlyFriends = ({
                         size="sm"
                         variant={"outline"}
                         onClick={() => {
-                            followUser(profileInfo, id, personalInformation);
-                            // followUser(profileInfo.id, id, personalInformation);
+                            followUser(profileInfo.id, id, personalInformation);
+                            fetchFollowers(profileInfo.id)
+                            
                             onButtonsClick();
                         }}
                     >
@@ -114,6 +120,7 @@ const RecentlyFriends = ({
                         variant="secondary-2"
                         onClick={() => {
                             showConfirm();
+                            
                             onButtonsClick();
                         }}
                     >
